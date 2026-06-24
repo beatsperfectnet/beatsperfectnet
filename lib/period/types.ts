@@ -4,6 +4,11 @@ export type PeriodBucket = {
   rejectedLaunchCount: number;
   avgModelTokensPerLaunch: number;
   avgUsdSpendPerLaunch: number;
+  totalApiCostUsd: number;
+  productApiCostUsd: number;
+  governanceApiCostUsd: number;
+  unallocatedApiCostUsd: number;
+  humanEscalations: number;
   launchTokens: number;
   governanceTokens: number;
   postLaunchSupportTokens: number;
@@ -37,6 +42,11 @@ export type PeriodState = {
     refundTokensTotal: number;
     refundCountTotal: number;
     usdTotalSpend: number;
+    totalApiCostUsd: number;
+    productApiCostUsd: number;
+    governanceApiCostUsd: number;
+    unallocatedApiCostUsd: number;
+    humanEscalationsTotal: number;
     avgModelTokensPerLaunch: number;
     avgUsdSpendPerLaunch: number;
   };

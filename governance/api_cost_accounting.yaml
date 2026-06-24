@@ -1,0 +1,25 @@
+api_cost_accounting:
+  purpose: record API platform spend from platform.openai.com when runtime token accounting is incomplete or unreliable
+  source_priority:
+    - platform_openai_cost_export_or_manual_reading
+    - openai_organization_costs_api_when_configured
+    - runtime_token_estimates
+  dashboard_policy:
+    today_uses_calendar_day_manual_api_costs: true
+    candidate_cards_use_cumulative_candidate_product_api_costs: true
+    governance_cost_includes_flow_dashboard_domain_and_accounting_work: true
+    competitor_purchase_cost_is_not_api_cost: true
+  buckets:
+    product_generation:
+      description: API cost attributable to a candidate/product build, rebuild, QA, listing, or launch gate.
+      candidate_ref_required: true
+    governance:
+      description: API cost for FLOW adjustments, dashboard/domain/deployment work, accounting, and operating rules.
+      candidate_ref_required: false
+    unallocated:
+      description: API cost not yet assigned after manual reconciliation.
+      candidate_ref_required: false
+  automation_options:
+    preferred: openai_organization_costs_api_with_admin_key
+    fallback: manual_platform_openai_reading_into_records_costs_api_cost_ledger_yaml
+    browser_tab_scraping: avoid_unless_a_browser_automation_tool_is_available_and_user_approves_account_page_access

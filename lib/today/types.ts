@@ -82,6 +82,10 @@ export type TodayState = {
     launchedCandidates: number;
     rejectedCandidates: number;
     totalSpendUsd: number;
+    productApiCostUsd: number;
+    governanceApiCostUsd: number;
+    unallocatedApiCostUsd: number;
+    humanEscalationsTotal: number;
     pipelineUsdTotal: number;
     inFlightUsdTotal: number;
     launchedUsdTotal: number;

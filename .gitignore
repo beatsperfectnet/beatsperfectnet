@@ -10,3 +10,5 @@ builds/
 records/**
 !records/
 !records/dashboard_state.yaml
+!records/costs/
+!records/costs/api_cost_ledger.yaml

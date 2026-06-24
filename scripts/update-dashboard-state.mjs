@@ -129,6 +129,57 @@ function productLaneExclusions() {
   return doc?.product_lane_exclusions?.lanes || [];
 }
 
+function apiCostLedger() {
+  return readYaml("records/costs/api_cost_ledger.yaml")?.api_cost_ledger || {
+    entries: [],
+    human_escalations: [],
+  };
+}
+
+function ledgerEntries() {
+  return apiCostLedger().entries || [];
+}
+
+function humanEscalations() {
+  return apiCostLedger().human_escalations || [];
+}
+
+function ledgerEntryDate(entry) {
+  return String(entry.date || "").slice(0, 10);
+}
+
+function sumLedger(entries) {
+  return Number(entries.reduce((total, entry) => total + Number(entry.amount_usd || 0), 0).toFixed(2));
+}
+
+function productApiCostForCandidate(candidateId) {
+  return sumLedger(
+    ledgerEntries().filter((entry) => entry.bucket === "product_generation" && entry.candidate_id === candidateId),
+  );
+}
+
+function todayLedgerEntries() {
+  const today = todayBerlinDate();
+  return ledgerEntries().filter((entry) => ledgerEntryDate(entry) === today);
+}
+
+function todayHumanEscalations() {
+  const today = todayBerlinDate();
+  return humanEscalations().filter((entry) => ledgerEntryDate(entry) === today);
+}
+
+function costBreakdown(entries) {
+  const productEntries = entries.filter((entry) => entry.bucket === "product_generation");
+  const governanceEntries = entries.filter((entry) => entry.bucket === "governance");
+  const unallocatedEntries = entries.filter((entry) => !["product_generation", "governance"].includes(entry.bucket));
+  return {
+    productApiCostUsd: sumLedger(productEntries),
+    governanceApiCostUsd: sumLedger(governanceEntries),
+    unallocatedApiCostUsd: sumLedger(unallocatedEntries),
+    totalApiCostUsd: sumLedger(entries),
+  };
+}
+
 function candidateSearchText(candidate) {
   return [
     candidate.candidate_id,
@@ -226,7 +277,7 @@ function publicCandidateSnapshot(candidate) {
     ...(currentStepId ? { currentStepId } : {}),
     ...(currentStageGroup ? { currentStageGroup } : {}),
     totalTokensUsed: Number(candidate.cumulative_total_tokens || 0),
-    totalUsdSpent: Number(candidate.cumulative_api_cost_usd || 0) + Number(candidate.competitor_purchase_cost_usd || candidate.external_purchase_cost_usd || 0),
+    totalUsdSpent: productApiCostForCandidate(candidate.candidate_id),
     launchTokens: 0,
     governanceTokens: 0,
     postLaunchSupportTokens: 0,
@@ -251,12 +302,18 @@ function sum(items, getter) {
 }
 
 function bucketTotals(candidates) {
+  const todayCosts = costBreakdown(todayLedgerEntries());
+  const todayEscalations = todayHumanEscalations();
   return {
     pipelineCandidates: candidates.filter((candidate) => candidate.outcomeStatus === "pipeline").length,
     inFlightCandidates: candidates.filter((candidate) => candidate.outcomeStatus === "in_flight").length,
     launchedCandidates: candidates.filter((candidate) => candidate.outcomeStatus === "launched").length,
     rejectedCandidates: candidates.filter((candidate) => candidate.outcomeStatus === "rejected_before_launch").length,
-    totalSpendUsd: sum(candidates, (candidate) => candidate.totalUsdSpent),
+    totalSpendUsd: todayCosts.totalApiCostUsd,
+    productApiCostUsd: todayCosts.productApiCostUsd,
+    governanceApiCostUsd: todayCosts.governanceApiCostUsd,
+    unallocatedApiCostUsd: todayCosts.unallocatedApiCostUsd,
+    humanEscalationsTotal: todayEscalations.length,
     pipelineUsdTotal: sum(candidates.filter((candidate) => candidate.outcomeStatus === "pipeline"), (candidate) => candidate.totalUsdSpent),
     inFlightUsdTotal: sum(candidates.filter((candidate) => candidate.outcomeStatus === "in_flight"), (candidate) => candidate.totalUsdSpent),
     launchedUsdTotal: sum(candidates.filter((candidate) => candidate.outcomeStatus === "launched"), (candidate) => candidate.totalUsdSpent),
@@ -298,14 +355,19 @@ function latestRejectedLaunch() {
 function periodState() {
   const rejectedLaunch = latestRejectedLaunch();
   const today = todayBerlinDate();
-  const bucketDate = rejectedLaunch?.reviewedAt || today;
+  const allCosts = costBreakdown(ledgerEntries());
+  const dates = Array.from(new Set([
+    ...(rejectedLaunch?.reviewedAt ? [rejectedLaunch.reviewedAt] : []),
+    ...ledgerEntries().map(ledgerEntryDate).filter(Boolean),
+    today,
+  ])).sort();
   const rejectedCount = rejectedLaunch ? 1 : 0;
   const modelTokens = rejectedLaunch ? 31800 : 0;
   const usdSpend = rejectedLaunch ? 24.96 : 0;
 
   return {
-    from: bucketDate,
-    to: bucketDate,
+    from: dates[0] || today,
+    to: dates[dates.length - 1] || today,
     dataMode: "event-log",
     flowVersion: "FLOW-005",
     ...(rejectedLaunch ? { rejectedLaunch } : {}),
@@ -319,23 +381,36 @@ function periodState() {
       refundTokensTotal: 0,
       refundCountTotal: 0,
       usdTotalSpend: usdSpend,
+      totalApiCostUsd: allCosts.totalApiCostUsd,
+      productApiCostUsd: allCosts.productApiCostUsd,
+      governanceApiCostUsd: allCosts.governanceApiCostUsd,
+      unallocatedApiCostUsd: allCosts.unallocatedApiCostUsd,
+      humanEscalationsTotal: humanEscalations().length,
       avgModelTokensPerLaunch: rejectedCount ? modelTokens : 0,
       avgUsdSpendPerLaunch: rejectedCount ? usdSpend : 0,
     },
-    buckets: [
-      {
-        date: bucketDate,
+    buckets: dates.map((date) => {
+      const dateCosts = costBreakdown(ledgerEntries().filter((entry) => ledgerEntryDate(entry) === date));
+      const dateEscalations = humanEscalations().filter((entry) => ledgerEntryDate(entry) === date).length;
+      const rejectedOnDate = rejectedLaunch?.reviewedAt === date;
+      return {
+        date,
         launchedCount: 0,
-        rejectedLaunchCount: rejectedCount,
-        avgModelTokensPerLaunch: rejectedCount ? modelTokens : 0,
-        avgUsdSpendPerLaunch: rejectedCount ? usdSpend : 0,
-        launchTokens: rejectedLaunch ? 420 : 0,
-        governanceTokens: rejectedLaunch ? 140 : 0,
+        rejectedLaunchCount: rejectedOnDate ? 1 : 0,
+        avgModelTokensPerLaunch: rejectedOnDate ? modelTokens : 0,
+        avgUsdSpendPerLaunch: rejectedOnDate ? usdSpend : 0,
+        totalApiCostUsd: dateCosts.totalApiCostUsd,
+        productApiCostUsd: dateCosts.productApiCostUsd,
+        governanceApiCostUsd: dateCosts.governanceApiCostUsd,
+        unallocatedApiCostUsd: dateCosts.unallocatedApiCostUsd,
+        humanEscalations: dateEscalations,
+        launchTokens: rejectedOnDate ? 420 : 0,
+        governanceTokens: rejectedOnDate ? 140 : 0,
         postLaunchSupportTokens: 0,
         refundTokens: 0,
         refundCount: 0,
-      },
-    ],
+      };
+    }),
   };
 }
 

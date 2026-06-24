@@ -103,6 +103,7 @@ export function validateFlow005Contracts() {
   const budget = loadYaml("governance/08_product_generation_budget_005.yaml").product_generation_budget;
   const dispatch = loadYaml("governance/09_stage_dispatch_005.yaml").stage_dispatch;
   const exclusions = loadYaml("governance/product_lane_exclusions.yaml").product_lane_exclusions;
+  const costAccounting = loadYaml("governance/api_cost_accounting.yaml").api_cost_accounting;
   const active = loadYaml("config/active-flow.yaml");
   const brandbook = loadYaml("brandbook/beatsperfect-brandbook.v1.yaml").brandbook;
 
@@ -157,6 +158,8 @@ export function validateFlow005Contracts() {
   assert(budget?.generation_budget_usd === 25.0, "Budget ceiling must remain 25");
   assert(dispatch?.enforcement?.exact_model_match_required === true, "Stage dispatch must require exact model match");
   assert(dispatch?.stage_model_map?.["02_mandatory_competitor_purchase"]?.dispatch_action === "human_gate", "Purchase approval must be human-gated");
+  assert(costAccounting?.dashboard_policy?.governance_cost_includes_flow_dashboard_domain_and_accounting_work === true, "Governance API cost policy must include FLOW/dashboard/domain/accounting work");
+  assert(costAccounting?.dashboard_policy?.competitor_purchase_cost_is_not_api_cost === true, "Competitor purchase cost must not be counted as API cost");
   assert(exclusions?.enforcement?.applies_to_future_idea_runs === true, "Product lane exclusions must apply to future idea runs");
   assert(exclusions?.enforcement?.applies_to_candidate_admission === true, "Product lane exclusions must apply to candidate admission");
   assert(
@@ -234,8 +237,13 @@ export function validateActiveAppState() {
   assert(today?.totals?.inFlightCandidates === (today?.inFlightCandidates || []).length, "Dashboard in-flight total mismatch");
   assert(today?.totals?.launchedCandidates === (today?.launchedCandidates || []).length, "Dashboard launched total mismatch");
   assert(today?.totals?.rejectedCandidates === (today?.rejectedCandidates || []).length, "Dashboard rejected total mismatch");
+  assert(typeof today?.totals?.productApiCostUsd === "number", "Dashboard today product API cost must be numeric");
+  assert(typeof today?.totals?.governanceApiCostUsd === "number", "Dashboard today governance API cost must be numeric");
+  assert(typeof today?.totals?.humanEscalationsTotal === "number", "Dashboard today human escalation count must be numeric");
   assert(Array.isArray(period?.buckets) && period.buckets.length >= 1, "Dashboard period buckets must contain entries");
   assert(typeof period?.totals?.rejectedLaunchCount === "number", "Dashboard period rejected launch count must be numeric");
+  assert(typeof period?.totals?.totalApiCostUsd === "number", "Dashboard period total API cost must be numeric");
+  assert(typeof period?.totals?.governanceApiCostUsd === "number", "Dashboard period governance API cost must be numeric");
   assert(today?.activeEscalation?.governanceFile === "governance/09_stage_dispatch_005.yaml", "Dashboard escalation must point to FLOW-005 dispatch");
   return true;
 }

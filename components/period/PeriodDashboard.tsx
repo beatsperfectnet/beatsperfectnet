@@ -137,6 +137,10 @@ export function PeriodDashboard({ state = mockPeriodState }: { state?: PeriodSta
         />
         <MetricCard label="Refunds count / Tokens" value={`${state.totals.refundCountTotal} / ${state.totals.refundTokensTotal.toLocaleString()}`} tone="danger" />
         <MetricCard label="USD Total Spend" value={`$${state.totals.usdTotalSpend.toFixed(2)}`} tone="neutral" />
+        <MetricCard label="API Cost Total" value={`$${state.totals.totalApiCostUsd.toFixed(2)}`} tone="neutral" />
+        <MetricCard label="Product API Cost" value={`$${state.totals.productApiCostUsd.toFixed(2)}`} tone="success" />
+        <MetricCard label="Governance API Cost" value={`$${state.totals.governanceApiCostUsd.toFixed(2)}`} tone="accent" />
+        <MetricCard label="Human escalations" value={state.totals.humanEscalationsTotal} tone="warning" />
         <MetricCard label="Avg USD spend / rejected launch" value={`$${state.totals.avgUsdSpendPerLaunch.toFixed(2)}`} tone="success" />
       </section>
 

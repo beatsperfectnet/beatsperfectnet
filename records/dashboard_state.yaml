@@ -1,5 +1,5 @@
 today:
-  asOf: 2026-06-24 19:12 GMT+2
+  asOf: 2026-06-24 19:27 GMT+2
   dataMode: event-log
   flowVersion: FLOW-005
   flowTimeline:
@@ -55,9 +55,13 @@ today:
     inFlightCandidates: 1
     launchedCandidates: 0
     rejectedCandidates: 0
-    totalSpendUsd: 3.44
+    totalSpendUsd: 36.66
+    productApiCostUsd: 22
+    governanceApiCostUsd: 14.66
+    unallocatedApiCostUsd: 0
+    humanEscalationsTotal: 2
     pipelineUsdTotal: 0
-    inFlightUsdTotal: 3.44
+    inFlightUsdTotal: 28
     launchedUsdTotal: 0
     rejectedUsdTotal: 0
     pipelineTokensTotal: 0
@@ -78,7 +82,7 @@ today:
       currentStepId: 11_delivery_launch
       currentStageGroup: launch
       totalTokensUsed: 0
-      totalUsdSpent: 3.44
+      totalUsdSpent: 28
       launchTokens: 0
       governanceTokens: 0
       postLaunchSupportTokens: 0
@@ -99,7 +103,7 @@ today:
     governanceFile: governance/09_stage_dispatch_005.yaml
 period:
   from: 2026-06-22
-  to: 2026-06-22
+  to: 2026-06-24
   dataMode: event-log
   flowVersion: FLOW-005
   rejectedLaunch:
@@ -132,6 +136,11 @@ period:
     refundTokensTotal: 0
     refundCountTotal: 0
     usdTotalSpend: 24.96
+    totalApiCostUsd: 42.66
+    productApiCostUsd: 28
+    governanceApiCostUsd: 14.66
+    unallocatedApiCostUsd: 0
+    humanEscalationsTotal: 2
     avgModelTokensPerLaunch: 31800
     avgUsdSpendPerLaunch: 24.96
   buckets:
@@ -140,8 +149,43 @@ period:
       rejectedLaunchCount: 1
       avgModelTokensPerLaunch: 31800
       avgUsdSpendPerLaunch: 24.96
+      totalApiCostUsd: 0
+      productApiCostUsd: 0
+      governanceApiCostUsd: 0
+      unallocatedApiCostUsd: 0
+      humanEscalations: 0
       launchTokens: 420
       governanceTokens: 140
+      postLaunchSupportTokens: 0
+      refundTokens: 0
+      refundCount: 0
+    - date: 2026-06-23
+      launchedCount: 0
+      rejectedLaunchCount: 0
+      avgModelTokensPerLaunch: 0
+      avgUsdSpendPerLaunch: 0
+      totalApiCostUsd: 6
+      productApiCostUsd: 6
+      governanceApiCostUsd: 0
+      unallocatedApiCostUsd: 0
+      humanEscalations: 0
+      launchTokens: 0
+      governanceTokens: 0
+      postLaunchSupportTokens: 0
+      refundTokens: 0
+      refundCount: 0
+    - date: 2026-06-24
+      launchedCount: 0
+      rejectedLaunchCount: 0
+      avgModelTokensPerLaunch: 0
+      avgUsdSpendPerLaunch: 0
+      totalApiCostUsd: 36.66
+      productApiCostUsd: 22
+      governanceApiCostUsd: 14.66
+      unallocatedApiCostUsd: 0
+      humanEscalations: 2
+      launchTokens: 0
+      governanceTokens: 0
       postLaunchSupportTokens: 0
       refundTokens: 0
       refundCount: 0

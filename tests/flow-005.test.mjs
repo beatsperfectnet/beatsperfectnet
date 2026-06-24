@@ -84,6 +84,20 @@ test("product lane exclusions block rejected and published duplicate lanes", () 
   );
 });
 
+test("API cost accounting separates product and governance spend", () => {
+  const accounting = load("governance/api_cost_accounting.yaml").api_cost_accounting;
+  const dashboard = load("records/dashboard_state.yaml");
+  assert.equal(accounting.dashboard_policy.competitor_purchase_cost_is_not_api_cost, true);
+  assert.equal(dashboard.today.totals.totalSpendUsd, 36.66);
+  assert.equal(dashboard.today.totals.productApiCostUsd, 22);
+  assert.equal(dashboard.today.totals.governanceApiCostUsd, 14.66);
+  assert.equal(dashboard.today.totals.humanEscalationsTotal, 2);
+  assert.equal(dashboard.today.inFlightCandidates[0].totalUsdSpent, 28);
+  assert.equal(dashboard.period.totals.totalApiCostUsd, 42.66);
+  assert.equal(dashboard.period.totals.productApiCostUsd, 28);
+  assert.equal(dashboard.period.totals.governanceApiCostUsd, 14.66);
+});
+
 test("active app state points at FLOW-005", () => {
   assert.equal(validateActiveAppState(), true);
 });
@@ -105,8 +119,8 @@ test("period snapshot stores the real rejected launch", () => {
   assert.equal(dashboard.period.rejectedLaunch.reviewId, "LR-C-001-001");
   assert.equal(dashboard.period.totals.rejectedLaunchCount, 1);
   assert.equal(dashboard.period.from, "2026-06-22");
-  assert.equal(dashboard.period.to, "2026-06-22");
-  assert.equal(dashboard.period.buckets.length, 1);
+  assert.equal(dashboard.period.to, "2026-06-24");
+  assert.equal(dashboard.period.buckets.length, 3);
 });
 
 test("runtime launcher resolves FLOW-005 defaults", () => {
