@@ -1,5 +1,5 @@
 today:
-  asOf: "2026-06-23 13:20 CET"
+  asOf: 2026-06-24 18:57 GMT+2
   dataMode: event-log
   flowVersion: FLOW-005
   flowTimeline:
@@ -47,30 +47,17 @@ today:
         - 15_resource_allocation_rules
         - 16_company_metrics
   sourceRefs:
-    ideaRun: records/ideas/R-001.yaml
-    candidateRun: records/candidates/R-001.yaml
-    productAnalysis: records/product_analysis/PA-C-001-001.yaml
-    listingAnalysis: records/listing_analysis/LA-C-001-001.yaml
-    candidateDomainBrief: records/candidate_domain_briefs/CDB-C-001-001.yaml
-    purchaseApproval: records/competitive_purchase_approval/CPA-C-001-001.yaml
-    purchasedCompetitorInspection: records/purchased_competitor_inspection/PCI-C-001-002.yaml
-    listingSpec: records/listing_specs/LS-C-001-001.yaml
-    productSpec: records/product_specs/PS-C-001-001.yaml
-    deliverySpec: records/delivery_specs/DS-C-001-001.yaml
-    goodEnoughForHumans: records/good_enough_for_humans/GEH-C-001-001.yaml
-    buildManifest: builds/C-001-001/manifest.yaml
-    productSurfaceSpec: records/product_surfaces/RPSS-C-001-001.yaml
-    qaResult: records/validation/QA-C-001-003.yaml
-    launchReview: records/validation/LR-C-001-004.yaml
-    marketplacePublishEscalation: records/escalations/ESC-C-001-002.yaml
+    activeFlow: config/active-flow.yaml
+    candidateRecords: records/candidates/*.yaml
+    validationRecords: records/validation/*.yaml
   totals:
-    pipelineCandidates: 0
-    inFlightCandidates: 0
+    pipelineCandidates: 1
+    inFlightCandidates: 1
     launchedCandidates: 0
     rejectedCandidates: 0
-    totalSpendUsd: 0
-    pipelineUsdTotal: 0
-    inFlightUsdTotal: 0
+    totalSpendUsd: 5.41
+    pipelineUsdTotal: 1.97
+    inFlightUsdTotal: 3.44
     launchedUsdTotal: 0
     rejectedUsdTotal: 0
     pipelineTokensTotal: 0
@@ -82,8 +69,38 @@ today:
     postLaunchSupportTokensTotal: 0
     refundTokensTotal: 0
     refundCountTotal: 0
-  pipelineCandidates: []
-  inFlightCandidates: []
+  pipelineCandidates:
+    - candidateId: C-002-001
+      candidateLabel: I-001
+      candidateTitle: Weekly meal planner spreadsheet with auto grocery list, pantry tracking, and calorie support
+      outcomeStatus: pipeline
+      currentStepId: 02_mandatory_competitor_purchase
+      currentStageGroup: purchase
+      totalTokensUsed: 0
+      totalUsdSpent: 1.97
+      launchTokens: 0
+      governanceTokens: 0
+      postLaunchSupportTokens: 0
+      refundTokens: 0
+      refundCount: 0
+      budgetHealth: green
+      processHealth: yellow
+  inFlightCandidates:
+    - candidateId: C-003-001
+      candidateLabel: I-001
+      candidateTitle: Budget Planner Studio
+      outcomeStatus: in_flight
+      currentStepId: 11_delivery_launch
+      currentStageGroup: launch
+      totalTokensUsed: 0
+      totalUsdSpent: 3.44
+      launchTokens: 0
+      governanceTokens: 0
+      postLaunchSupportTokens: 0
+      refundTokens: 0
+      refundCount: 0
+      budgetHealth: green
+      processHealth: green
   launchedCandidates: []
   rejectedCandidates: []
   activeEscalation:
@@ -95,27 +112,31 @@ today:
     reason: ""
     recommendedAction: ""
     governanceFile: governance/09_stage_dispatch_005.yaml
-
 period:
-  from: "2026-06-22"
-  to: "2026-06-22"
+  from: 2026-06-22
+  to: 2026-06-22
   dataMode: event-log
   flowVersion: FLOW-005
-  sourceRefs:
-    launchReview: records/validation/LR-C-001-001.yaml
-    marketplacePublishEscalation: records/escalations/ESC-C-001-001.yaml
   rejectedLaunch:
     reviewId: LR-C-001-001
     candidateId: C-001-001
     candidateTitle: Meal Planner Studio
-    reviewedAt: "2026-06-22"
+    reviewedAt: 2026-06-22
     flowContractRef: workflows/FLOW-004.yaml
     status: revision_requested_after_human_review
-    decisionSummary: Human review rejected the build before marketplace publishing.
-    blockerSummary: Insufficient visible input cells, missing protection, unclear row and column behavior, and non-screenshot listing assets.
+    decisionSummary: Human review rejected the current build before marketplace publishing.
+    blockerSummary: "Human review found the workbook is not publishable as-is: insufficient visible input cells, missing protection, missing per-tab instructions, embedded grocery unit prices, unclear row/column behavior, and non-screenshot listing assets."
     evidenceRefs:
       - records/validation/LR-C-001-001.yaml
-      - records/escalations/ESC-C-001-001.yaml
+      - records/competitive_purchase_approval/CPA-C-001-001.yaml
+      - records/purchased_competitor_inspection/PCI-C-001-001.yaml
+      - records/listing_specs/LS-C-001-001.yaml
+      - records/product_specs/PS-C-001-001.yaml
+      - records/delivery_specs/DS-C-001-001.yaml
+      - records/good_enough_for_humans/GEH-C-001-001.yaml
+      - records/product_surfaces/RPSS-C-001-001.yaml
+      - records/validation/QA-C-001-001.yaml
+      - builds/C-001-001/manifest.yaml
   totals:
     launchedCount: 0
     rejectedLaunchCount: 1
@@ -129,7 +150,7 @@ period:
     avgModelTokensPerLaunch: 31800
     avgUsdSpendPerLaunch: 24.96
   buckets:
-    - date: "2026-06-22"
+    - date: 2026-06-22
       launchedCount: 0
       rejectedLaunchCount: 1
       avgModelTokensPerLaunch: 31800

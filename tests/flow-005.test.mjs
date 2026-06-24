@@ -73,10 +73,17 @@ test("active app state points at FLOW-005", () => {
   assert.equal(validateActiveAppState(), true);
 });
 
-test("today snapshot does not invent in-flight candidates", () => {
+test("today snapshot is generated from active FLOW-005 records", () => {
   const dashboard = load("records/dashboard_state.yaml");
-  assert.equal(dashboard.today.inFlightCandidates.length, 0);
+  assert.equal(dashboard.today.dataMode, "event-log");
+  assert.equal(dashboard.today.pipelineCandidates.length, 1);
+  assert.equal(dashboard.today.inFlightCandidates.length, 1);
   assert.equal(dashboard.today.rejectedCandidates.length, 0);
+  assert.equal(dashboard.today.pipelineCandidates[0].candidateId, "C-002-001");
+  assert.equal(dashboard.today.pipelineCandidates[0].currentStepId, "02_mandatory_competitor_purchase");
+  assert.equal(dashboard.today.inFlightCandidates[0].candidateId, "C-003-001");
+  assert.equal(dashboard.today.inFlightCandidates[0].candidateTitle, "Budget Planner Studio");
+  assert.equal(dashboard.today.inFlightCandidates[0].currentStepId, "11_delivery_launch");
   assert.equal(dashboard.today.activeEscalation.status, "none");
 });
 

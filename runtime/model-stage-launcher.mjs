@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import { createRequire } from 'node:module';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, realpathSync, writeFileSync } from 'node:fs';
@@ -8,19 +7,50 @@ import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
-const require = createRequire(import.meta.url);
-const {
-  r: startCodexConversationThread,
-  h: setCodexConversationModel,
-} = require('/opt/homebrew/lib/node_modules/openclaw/dist/conversation-binding-DhxO7Wl0.js');
-const {
-  o: readCodexAppServerBinding,
-} = require('/opt/homebrew/lib/node_modules/openclaw/dist/session-binding-4NA-iGh7.js');
+const openClawDist = '/opt/homebrew/lib/node_modules/openclaw/dist';
+let openClawBindingsPromise = null;
+
+function resolveOpenClawDistModule(prefix, requiredExportKeys) {
+  const candidates = readdirSync(openClawDist)
+    .filter((name) => name.startsWith(prefix) && name.endsWith('.js'))
+    .map((name) => path.join(openClawDist, name))
+    .sort();
+
+  for (const candidate of candidates) {
+    const source = readFileSync(candidate, 'utf8');
+    if (requiredExportKeys.every((key) => source.includes(key))) {
+      return candidate;
+    }
+  }
+
+  throw new Error(`Unable to find OpenClaw dist module ${prefix} with exports ${requiredExportKeys.join(', ')}`);
+}
+
+async function loadOpenClawBindings() {
+  if (!openClawBindingsPromise) {
+    openClawBindingsPromise = (async () => {
+      const conversationModule = await import(resolveOpenClawDistModule('conversation-binding-', [
+        'startCodexConversationThread',
+        'setCodexConversationModel',
+      ]));
+      const sessionModule = await import(resolveOpenClawDistModule('session-binding-', [
+        'readCodexAppServerBinding',
+      ]));
+      return {
+        startCodexConversationThread: conversationModule.r,
+        setCodexConversationModel: conversationModule.h,
+        readCodexAppServerBinding: sessionModule.o,
+      };
+    })();
+  }
+  return openClawBindingsPromise;
+}
 
 function parseArgs(argv) {
   const out = {
     dryRun: false,
     includePublish: false,
+    publishDashboardState: false,
     stopAt: null,
   };
 
@@ -32,6 +62,10 @@ function parseArgs(argv) {
     }
     if (arg === '--include-publish') {
       out.includePublish = true;
+      continue;
+    }
+    if (arg === '--publish-dashboard-state') {
+      out.publishDashboardState = true;
       continue;
     }
     if (arg === '--run-id') {
@@ -82,9 +116,10 @@ function printHelp() {
     '  --dispatch-contract <path> Stage dispatch contract to use',
     '  --workspace <path>       Workspace directory for OpenClaw sessions',
     '  --session-root <path>     Root directory for session binding files',
-    '  --stop-at <step_id>      Stop after the named step',
-    '  --include-publish        Include the human publish gate stage',
-    '  --dry-run                Read and plan only, do not start sessions',
+  '  --stop-at <step_id>      Stop after the named step',
+  '  --include-publish        Include the human publish gate stage',
+  '  --publish-dashboard-state Regenerate, commit, and push records/dashboard_state.yaml after the run',
+  '  --dry-run                Read and plan only, do not start sessions',
   ].join('\n'));
   process.stdout.write('\n');
 }
@@ -768,6 +803,11 @@ async function startStageSession({ sessionFile, workspaceDir, requestedModel }) 
   if (String(requestedModel || '').trim().toLowerCase() === 'human') {
     return { model: 'human', modelProvider: 'human-gate', threadId: 'human-gate' };
   }
+  const {
+    startCodexConversationThread,
+    setCodexConversationModel,
+    readCodexAppServerBinding,
+  } = await loadOpenClawBindings();
   ensureDir(path.dirname(sessionFile));
   const existing = await readCodexAppServerBinding(sessionFile);
   if (!existing?.threadId) {
@@ -1324,6 +1364,28 @@ async function main() {
     writeFileSync(dispatchLogPath, rubyDumpYaml(dispatchLog), 'utf8');
   }
 
+  let dashboardPublish = null;
+  if (args.publishDashboardState && !args.dryRun) {
+    const lastCompletedStage = stageResults[stageResults.length - 1]?.stepId || lastPlannedStageId || 'unknown_stage';
+    const result = spawnSync('node', [
+      'scripts/publish-dashboard-state.mjs',
+      '--message',
+      `Update dashboard after ${args.runId} ${lastCompletedStage}`,
+    ], {
+      cwd: repoRoot,
+      encoding: 'utf8',
+      maxBuffer: 1024 * 1024 * 10,
+    });
+    dashboardPublish = {
+      status: result.status === 0 ? 'ok' : 'failed',
+      stdout: result.stdout,
+      stderr: result.stderr,
+    };
+    if (result.status !== 0) {
+      throw new Error(`Dashboard publish failed after ${lastCompletedStage}: ${result.stderr || result.stdout || 'unknown error'}`);
+    }
+  }
+
   const summary = {
     runId: args.runId,
     buildManifest: path.relative(repoRoot, buildManifestPath),
@@ -1337,6 +1399,7 @@ async function main() {
     sessionRoot: path.relative(repoRoot, sessionRoot),
     manifestStatus: manifest.status,
     assetReport,
+    dashboardPublish,
   };
 
   process.stdout.write(`${JSON.stringify(summary, null, 2)}\n`);

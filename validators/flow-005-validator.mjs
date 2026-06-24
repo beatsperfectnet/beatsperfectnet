@@ -25,6 +25,19 @@ function assertPassStatus(value, message) {
   assert(value === true || value === "pass", message);
 }
 
+function validCandidateSnapshot(candidate, label) {
+  assert(candidate?.candidateId, `${label} candidate id missing`);
+  assert(candidate?.candidateTitle, `${label} candidate title missing`);
+  assert(
+    ["pipeline", "in_flight", "launched", "rejected_before_launch"].includes(candidate?.outcomeStatus),
+    `${label} outcome status invalid`,
+  );
+  assert(typeof candidate?.totalTokensUsed === "number", `${label} token count must be numeric`);
+  assert(typeof candidate?.totalUsdSpent === "number", `${label} USD spend must be numeric`);
+  assert(["green", "yellow", "red"].includes(candidate?.budgetHealth), `${label} budget health invalid`);
+  assert(["green", "yellow", "red"].includes(candidate?.processHealth), `${label} process health invalid`);
+}
+
 function validateQualityEvidence(record, label) {
   const qa = record?.qa_result;
   const launch = record?.launch_package;
@@ -196,12 +209,21 @@ export function validateActiveAppState() {
 
   assert(today?.flowVersion === "FLOW-005", "Dashboard today flow version must be FLOW-005");
   assert(period?.flowVersion === "FLOW-005", "Dashboard period flow version must be FLOW-005");
-  assert(today?.inFlightCandidates?.length === 0, "Dashboard today must not invent in-flight candidates");
-  assert(today?.rejectedCandidates?.length === 0, "Dashboard today must stay empty when nothing is in flight");
-  assert(today?.activeEscalation?.status === "none", "Dashboard today escalation must be empty for the current snapshot");
-  assert(period?.rejectedLaunch?.reviewId === "LR-C-001-001", "Dashboard period must store the real rejected launch");
-  assert(period?.totals?.rejectedLaunchCount === 1, "Dashboard period must count one rejected launch");
-  assert(Array.isArray(period?.buckets) && period.buckets.length === 1, "Dashboard period buckets must contain the real entry");
+  assert(today?.dataMode === "event-log", "Dashboard today must be generated from event logs");
+  assert(Array.isArray(today?.flowTimeline) && today.flowTimeline.length === 13, "Dashboard must expose the FLOW-005 stage timeline");
+  const allCandidates = [
+    ...(today?.pipelineCandidates || []),
+    ...(today?.inFlightCandidates || []),
+    ...(today?.launchedCandidates || []),
+    ...(today?.rejectedCandidates || []),
+  ];
+  allCandidates.forEach((candidate, index) => validCandidateSnapshot(candidate, `Dashboard candidate ${index}`));
+  assert(today?.totals?.pipelineCandidates === (today?.pipelineCandidates || []).length, "Dashboard pipeline total mismatch");
+  assert(today?.totals?.inFlightCandidates === (today?.inFlightCandidates || []).length, "Dashboard in-flight total mismatch");
+  assert(today?.totals?.launchedCandidates === (today?.launchedCandidates || []).length, "Dashboard launched total mismatch");
+  assert(today?.totals?.rejectedCandidates === (today?.rejectedCandidates || []).length, "Dashboard rejected total mismatch");
+  assert(Array.isArray(period?.buckets) && period.buckets.length >= 1, "Dashboard period buckets must contain entries");
+  assert(typeof period?.totals?.rejectedLaunchCount === "number", "Dashboard period rejected launch count must be numeric");
   assert(today?.activeEscalation?.governanceFile === "governance/09_stage_dispatch_005.yaml", "Dashboard escalation must point to FLOW-005 dispatch");
   return true;
 }
