@@ -1,0 +1,58 @@
+BLS-005:
+  purpose: build_lifecycle_specification
+  candidate_stages:
+    - candidate_admission
+    - public_shelf_read
+    - mandatory_competitor_purchase
+    - hidden_buyer_experience_inspection
+    - alignment_synthesis
+    - one_promise_propagation_system_spec
+    - first_pass_connected_build
+    - propagation_buyer_experience_product_visual_qa
+    - optional_supporting_feature_pass
+    - listing_creative_assembly
+    - listing_quality_gate
+    - delivery_launch
+    - monthly_outcomes
+    - competitor_purchase_accounting
+    - kill_rules
+    - resource_allocation_rules
+    - company_metrics
+  pre_launch_tracking:
+    - current_stage
+    - stage_iteration
+    - cumulative_prompt_tokens
+    - cumulative_completion_tokens
+    - cumulative_total_tokens
+    - cumulative_api_cost_usd
+    - competitive_purchase_approval_ref
+    - purchase_status
+    - purchased_competitor_inspection_ref
+    - inspection_status
+    - alignment_chain_ref
+    - propagation_system_spec_ref
+    - qa_result
+    - listing_hook_ref
+    - listing_creative_assembly_ref
+    - listing_quality_gate_ref
+    - launch_package_ref
+  stage_loop_limits:
+    building_medium_qa_loops: 1
+    fixing_medium_qa_loops: 1
+    frontier_qa_loops: 1
+  launch_requires:
+    - candidate_admission_passed
+    - purchase_completed
+    - hidden_inspection_completed
+    - alignment_chain_complete
+    - propagation_system_spec_complete
+    - first_pass_connected_build_complete
+    - artifact_integrity_audit_passed
+    - formula_truth_table_passed_or_not_applicable_with_reason
+    - period_continuity_passed_or_not_applicable_with_reason
+    - protection_truthfulness_passed
+    - qa_passed
+    - listing_creatives_completed
+    - listing_quality_passed
+    - publish_blockers_absent
+    - delivery_launch_ready

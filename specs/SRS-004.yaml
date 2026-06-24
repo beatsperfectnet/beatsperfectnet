@@ -1,0 +1,37 @@
+SRS-004:
+  purpose: versioned_spreadsheet_resilience_standard_for_simple_marketplace_templates
+  scope: spreadsheet_template_products_intended_for_etsy
+  rule: every_applicable_standard_item_requires_a_defined_and_tested_strategy_or_a_not_applicable_with_reason_entry
+
+  standard_items:
+    - item_id: input_formula_separation
+      requirement: User input areas and formula or output areas must be structurally and visually distinguishable.
+    - item_id: formula_protection_strategy
+      requirement: Define whether formulas are protected, isolated, recoverable, or otherwise kept outside normal editing behavior.
+    - item_id: editable_area_marking
+      requirement: Editable areas must be obvious to a non-technical buyer.
+    - item_id: realistic_growth_strategy
+      requirement: Define how the product behaves when realistic data volume exceeds the starter state.
+    - item_id: structural_edit_policy
+      requirement: Define supported and unsupported behavior for adding or deleting rows, inserting columns, and renaming or deleting critical tabs.
+    - item_id: category_change_strategy
+      requirement: Define controlled category editing where categories are part of the buyer workflow.
+    - item_id: sorting_filtering_policy
+      requirement: Define whether sorting and filtering are supported and under what conditions.
+    - item_id: copy_paste_tolerance
+      requirement: Define expected behavior for ordinary copy and paste, blanks, invalid values, and dirty data in input areas.
+    - item_id: sample_or_demo_state
+      requirement: Provide sample data or another clear demo state unless evidence shows it is inappropriate.
+    - item_id: backup_reset_recovery_strategy
+      requirement: Delivery must tell the buyer how to keep an untouched original, create a working copy, reset, or recover.
+    - item_id: mobile_use_expectation
+      requirement: Define whether mobile use is supported, limited, or not recommended.
+    - item_id: platform_specific_behavior
+      requirement: Google Sheets and Excel behavior must not be assumed identical. Claims must match the platform actually built and tested.
+
+  allowed_dispositions:
+    - applicable
+    - not_applicable_with_reason
+    - not_testable_with_reason
+
+  qa_rule: a_not_testable_entry_requires_a_conservative_product_spec_requirement_and_corresponding_qa_test

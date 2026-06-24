@@ -1,0 +1,514 @@
+MODEL-004:
+  purpose: deterministic_model_routing_for_bootstrap_execution_with_competitor_purchase_and_inspection
+  pricing_snapshot_ref: specs/PRICING-004.yaml
+  generation_budget_contract_ref: governance/08_product_generation_budget_004.yaml
+
+  model_catalog:
+    mini:
+      provider: openai
+      model_id: gpt-5.4-mini
+      runtime_model_id: openai/gpt-5.4-mini
+      reasoning_effort: none
+      text_verbosity: low
+      purpose:
+        - deterministic_extraction
+        - rule_application
+        - state_updates
+        - record_creation
+        - mechanical_publishing
+        - post_launch_ledger_work
+      normal_flow_allowed: true
+    medium:
+      provider: openai
+      model_id: gpt-5.4
+      runtime_model_id: openai/gpt-5.4
+      reasoning_effort: low_to_medium
+      text_verbosity: low
+      purpose:
+        - bounded_market_analysis
+        - candidate_domain_analysis
+        - competitor_selection
+        - verification
+        - localized_corrections
+      normal_flow_allowed: true
+    frontier:
+      provider: openai
+      model_id: gpt-5.5
+      runtime_model_id: openai/gpt-5.5
+      reasoning_effort: medium
+      text_verbosity: low
+      purpose:
+        - purchased_product_forensic_inspection
+        - final_specification_synthesis
+        - core_product_implementation
+        - buyer_facing_listing_asset_creation
+        - adversarial_qa
+        - launch_readiness_review
+      normal_flow_allowed: true
+    gpt-5.5-pro:
+      provider: openai
+      model_id: gpt-5.5-pro
+      runtime_model_id: openai/gpt-5.5-pro
+      reasoning_effort: high
+      text_verbosity: low
+      purpose:
+        - explicit_human_approved_exception_only
+      normal_flow_allowed: false
+      disabled_for_normal_flow: true
+      approval_required: explicit_human_approval
+
+  research:
+    governed_model_tier: mini
+    default_model: gpt-5.4-mini
+    fallback_model: gpt-5.4
+    escalation_model: gpt-5.5
+    reasoning_effort: low
+    text_verbosity: low
+    processing_mode: standard
+    quality_critical: false
+    default_max_output_tokens: 8000
+    purpose: early_market_research_and_structural_screening
+    rule: research_must_collect_only_observable_marketplace_evidence
+    output_must_include:
+      - ideas
+      - observed_new_entrants_above_threshold
+
+  listing_analysis:
+    governed_model_tier: medium
+    default_model: gpt-5.4
+    escalation_model: gpt-5.5
+    reasoning_effort: low
+    text_verbosity: low
+    processing_mode: standard
+    quality_critical: true
+    default_max_output_tokens: 16000
+    purpose: create_listing_evidence_packet_from_observable_benchmark_bestseller_evidence
+    rule: listing_analysis_must_only_collect_observable_marketplace_evidence_and_must_not_infer_intent_hierarchy_conversion_strategy_or_product_scope
+    output_must_include:
+      - primary_buyer_jtbd
+      - bestseller_listing_promise
+      - bestseller_buyer_expectations
+      - evidence_refs_for_jtbd_and_promise
+      - listing_evidence_packet
+      - bestseller_visual_grammar
+      - benchmark_screenshot_expectations
+
+  product_analysis:
+    governed_model_tier: medium
+    default_model: gpt-5.4
+    escalation_model: gpt-5.5
+    reasoning_effort: medium
+    text_verbosity: low
+    processing_mode: standard
+    quality_critical: true
+    default_max_output_tokens: 16000
+    purpose: create_evidence_based_product_analysis_with_successful_new_entrant_scope_and_visual_surface_patterns
+    rule: product_analysis_must_compare_successful_new_entrants_and_extract_tabs_features_workflows_formulas_dashboards_sample_data_visual_surface_patterns_buyer_decision_bearing_charts_chart_units_thresholds_and_recurring_actionable_complaints_only_no_product_generation
+    output_must_include:
+      - primary_buyer_jtbd
+      - bestseller_listing_promise
+      - bestseller_buyer_expectations
+      - evidence_refs_for_jtbd_and_promise
+      - search_queries_used
+      - evidence_sources
+      - successful_new_entrant_sources
+      - eligible_purchased_reference_set
+      - observed_product_type
+      - observed_tabs_components
+      - observed_workflows
+      - observed_formulas_features
+      - observed_dashboards
+      - observed_visual_surface_patterns
+      - observed_buyer_decision_bearing_charts
+      - observed_chart_unit_and_threshold_semantics
+      - observed_sample_data_examples
+      - recurring_actionable_complaints
+      - product_scope_recommendations
+
+  candidate_domain_brief_creation:
+    governed_model_tier: medium
+    default_model: gpt-5.4
+    escalation_model: gpt-5.5
+    reasoning_effort: medium
+    text_verbosity: low
+    processing_mode: standard
+    quality_critical: true
+    default_max_output_tokens: 16000
+    purpose: create_a_candidate_specific_domain_brief_for_bounded_reasoning_inside_locked_scope
+    rule: candidate_domain_brief_creation_must_consume_listing_analysis_product_analysis_governance_constraints_and_marketplace_adapter_evidence_then_record_one_primary_buyer_jtbd_one_primary_product_type_domain_correctness_questions_likely_failure_modes_professional_boundaries_terminology_constraints_unsupported_scope_expansions_and_stage_applicability_without_reopening_scope_or_creating_a_role_based_agent
+    output_must_include:
+      - candidate_domain_brief_ref
+      - candidate_domain_brief_status
+      - candidate_domain_brief_locked_at
+      - marketplace_adapter_ref
+      - authoritative_evidence_refs
+      - domain_identity
+      - primary_buyer_jtbd
+      - primary_product_type
+      - promised_platform
+      - domain_considerations
+      - evidence_missing
+      - escalation
+
+  competitor_selection:
+    governed_model_tier: medium
+    default_model: gpt-5.4
+    escalation_model: gpt-5.5
+    reasoning_effort: low
+    text_verbosity: low
+    processing_mode: standard
+    quality_critical: true
+    default_max_output_tokens: 8000
+    purpose: deterministically_select_one_eligible_competitor_for_purchase
+    rule: competitor_selection_must_use_match_tiers_and_tie_breakers_not_vague_scoring
+    output_must_include:
+      - competitive_purchase_approval_ref
+      - candidate_domain_brief_ref
+      - applied_domain_consideration_ids
+
+  purchase_approval_and_acquisition:
+    default_model: human
+    model_call_required: false
+    mechanical_state_writer_if_needed: gpt-5.4-mini
+    reasoning_effort: none
+    text_verbosity: low
+    processing_mode: standard
+    quality_critical: false
+    purpose: wait_for_human_approval_and_record_completed_acquisition
+    rule: purchase_requires_human_decision_and_must_not_spend_without_approval
+    output_must_include:
+      - competitive_purchase_approval_ref
+
+  purchased_competitor_inspection:
+    governed_model_tier: frontier
+    default_model: gpt-5.5
+    escalation_model: gpt-5.5
+    reasoning_effort: medium
+    text_verbosity: low
+    processing_mode: standard
+    quality_critical: true
+    automatic_downward_fallback_allowed: false
+    default_max_output_tokens: 24000
+    purpose: inspect_purchased_competitor_on_disposable_copy_and_derive_independent_requirements
+    rule: inspection_must_record_normal_and_stress_results_without_reproducing_reconstructable_blueprints
+    output_must_include:
+      - purchased_competitor_inspection_ref
+      - candidate_domain_brief_ref
+      - applied_domain_consideration_ids
+      - derived_requirements
+      - support_risks
+      - originality_boundary
+
+  listing_spec_creation:
+    governed_model_tier: frontier
+    default_model: gpt-5.5
+    reasoning_effort: medium
+    text_verbosity: low
+    processing_mode: standard
+    quality_critical: true
+    automatic_downward_fallback_allowed: false
+    default_max_output_tokens: 24000
+    purpose: create_verifiable_listing_led_but_not_listing_invented_spec_from_listing_evidence_packet
+    rule: listing_spec_generation_must_consume_listing_evidence_packet_and_purchased_competitor_inspection_and_define_marketplace_promise_buyer_expectations_objections_visual_grammar_gallery_roles_and_required_screenshot_moments_while_forbidding_product_internals_that_cannot_be_verified_against_the_delivered_product
+    output_must_include:
+      - domain_brief_application
+      - listing_evidence_packet
+      - purchased_competitor_inspection_ref
+      - applied_inspection_requirement_ids
+      - title_requirements
+      - thumbnail_requirements
+      - image_sequence_requirements
+      - image_roles
+      - promise_requirements
+      - buyer_expectation_requirements
+      - buyer_success_expectations
+      - buyer_failure_expectations
+      - promise_to_product_alignment_requirements
+      - negative_review_prevention_requirements
+      - trust_signal_requirements
+      - objection_handler_requirements
+      - buyer_visible_contents_requirements
+      - compatibility_claim_requirements
+      - bonus_visibility_requirements
+      - description_requirements
+      - pricing_position_requirements
+      - benchmark_gap_closure_requirements
+      - claim_to_product_verification_requirements
+      - bestseller_visual_grammar
+      - required_screenshot_moments
+      - real_product_surface_dependencies
+      - image_to_product_fidelity_requirements
+      - no_listing_only_fake_surfaces
+      - forbidden_listing_claims
+
+  product_spec_creation:
+    governed_model_tier: frontier
+    default_model: gpt-5.5
+    reasoning_effort: medium
+    text_verbosity: low
+    processing_mode: standard
+    quality_critical: true
+    automatic_downward_fallback_allowed: false
+    default_max_output_tokens: 24000
+    purpose: create_mini_executable_product_spec_from_listing_spec_product_analysis_buyer_safe_outcomes_and_observed_product_evidence
+    rule: product_spec_generation_must_consume_listing_spec_product_analysis_purchased_competitor_inspection_buyer_safe_outcome_requirements_and_observed_competitor_product_evidence_not_listing_claims_alone_and_must_define_the_real_workbook_surfaces_needed_for_listing_screenshots
+    output_must_include:
+      - domain_brief_application
+      - market_gap_summary
+      - purchased_competitor_inspection_ref
+      - applied_inspection_requirement_ids
+      - spreadsheet_resilience_standard_ref
+      - support_by_design_standard_ref
+      - buyer_outcome_requirements
+      - correct_logic_requirements
+      - unsafe_state_requirements
+      - required_warning_requirements
+      - expected_output_requirements
+      - negative_review_trigger_requirements
+      - workbook_requirements
+      - tab_requirements
+      - workflow_requirements
+      - formula_requirements
+      - dashboard_requirements
+      - product_visual_surface_requirements
+      - dashboard_surface_requirements
+      - chart_quality_requirements
+      - buyer_decision_bearing_charts
+      - chart_unit_and_threshold_semantics
+      - screenshot_eligible_surface_requirements
+      - no_listing_only_fake_surfaces
+      - editable_area_requirements
+      - sample_data_requirements
+      - output_requirements
+      - complaint_fix_requirements
+      - forbidden_product_features
+      - compatibility_requirements
+      - listing_verification_requirements
+      - spreadsheet_resilience_strategies
+      - support_by_design_requirements
+
+  delivery_spec_creation:
+    governed_model_tier: frontier
+    default_model: gpt-5.5
+    reasoning_effort: medium
+    text_verbosity: low
+    processing_mode: standard
+    quality_critical: true
+    automatic_downward_fallback_allowed: false
+    default_max_output_tokens: 24000
+    purpose: create_mini_executable_delivery_spec_from_listing_and_product_requirements
+    rule: delivery_spec_generation_must_focus_on_time_to_first_successful_use_support_reduction_buyer_confusion_prevention_and_understanding_of_dashboard_chart_table_control_and_sample_state_surfaces
+    output_must_include:
+      - domain_brief_application
+      - purchased_competitor_inspection_ref
+      - applied_inspection_requirement_ids
+      - first_success_requirements
+      - buyer_confusion_prevention_requirements
+      - buyer_risk_explanation_requirements
+      - support_ticket_prevention_requirements
+      - support_scope_statement_requirements
+      - visual_surface_comprehension_requirements
+      - quick_start_requirements
+      - setup_guide_requirements
+      - backup_reset_recovery_requirements
+      - faq_requirements
+      - example_requirements
+      - troubleshooting_requirements
+      - compatibility_help_requirements
+      - platform_specific_limitations_help
+      - support_reduction_requirements
+
+  good_enough_for_humans_spec_creation:
+    governed_model_tier: frontier
+    default_model: gpt-5.5
+    reasoning_effort: medium
+    text_verbosity: low
+    processing_mode: standard
+    quality_critical: true
+    automatic_downward_fallback_allowed: false
+    default_max_output_tokens: 24000
+    purpose: create_benchmark_derived_good_enough_for_non_technical_human_buyers_spec
+    rule: good_enough_for_humans_spec_must_translate_listing_product_delivery_and_visual_surface_requirements_into_measurable_buyer_readiness_acceptance_tests_gap_closing_rules_buyer_safety_outcomes_and_image_to_product_fidelity_gates
+    output_must_include:
+      - domain_brief_application
+      - purchased_competitor_inspection_ref
+      - applied_inspection_requirement_ids
+      - listing_spec_ref
+      - product_analysis_ref
+      - product_spec_ref
+      - delivery_spec_ref
+      - benchmark_listing_refs
+      - buyer_success_definition
+      - buyer_failure_definition
+      - negative_review_triggers
+      - buyer_safety_requirements
+      - stop_building_when
+      - listing_quality_pass
+      - product_quality_pass
+      - delivery_quality_pass
+      - good_enough_pass
+      - visual_surface_readiness
+      - image_to_product_fidelity
+      - no_listing_only_fake_surfaces
+      - non_technical_buyer_task_acceptance_tests
+      - inspection_derived_acceptance_tests
+      - spreadsheet_resilience_acceptance_tests
+      - support_by_design_acceptance_tests
+      - publish_blocking_human_readiness_defects
+
+  verify_product_surfaces:
+    governed_model_tier: medium
+    default_model: gpt-5.4
+    escalation_model: gpt-5.5
+    reasoning_effort: medium
+    text_verbosity: low
+    processing_mode: standard
+    quality_critical: true
+    default_max_output_tokens: 16000
+    purpose: extract_capture_and_verify_real_workbook_surfaces_after_the_product_asset_exists
+    rule: verify_product_surfaces_must_record_real_tabs_ranges_charts_dashboard_states_controls_labels_units_sample_data_states_screenshot_eligible_surfaces_chart_decision_value_and_image_to_product_fidelity_constraints_without_inventing_or_improving_product_internals
+    output_must_include:
+      - real_product_surface_spec
+      - verified_product_surfaces
+      - screenshot_eligible_surfaces
+      - real_tabs
+      - real_ranges
+      - real_charts
+      - real_dashboard_states
+      - real_controls
+      - chart_unit_and_threshold_semantics
+      - buyer_decision_bearing_charts
+      - sample_data_states
+      - image_to_product_fidelity
+      - no_listing_only_fake_surfaces
+
+  build_listing_assets:
+    governed_model_tier: frontier
+    default_model: gpt-5.5
+    escalation_model: gpt-5.5
+    reasoning_effort: low
+    text_verbosity: low
+    processing_mode: standard
+    quality_critical: true
+    automatic_downward_fallback_allowed: false
+    default_max_output_tokens: 24000
+    rule: build_listing_assets_must_consume_the_locked_listing_spec_and_real_product_surface_spec_and_may_add_framing_callouts_badges_annotations_crops_and_marketplace_composition_but_must_not_fabricate_or_visually_upgrade_product_ui_charts_tables_controls_formatting_states_or_data
+
+  build_product_asset:
+    governed_model_tier: frontier
+    default_model: gpt-5.5
+    escalation_model: gpt-5.5
+    reasoning_effort: medium
+    text_verbosity: low
+    processing_mode: standard
+    quality_critical: true
+    automatic_downward_fallback_allowed: false
+    default_max_output_tokens: 32000
+    rule: build_product_asset_must_follow_locked_product_spec_no_feature_bloat_and_must_create_bestseller_grade_screenshot_ready_internal_visual_surfaces_including_dashboards_decision_bearing_charts_readable_units_polished_formatting_summary_panels_clean_controls_realistic_sample_states_tabs_ranges_and_states_promised_by_listing_spec
+
+  build_delivery_assets:
+    governed_model_tier: medium
+    default_model: gpt-5.4
+    escalation_model: gpt-5.5
+    reasoning_effort: medium
+    text_verbosity: low
+    processing_mode: standard
+    quality_critical: false
+    default_max_output_tokens: 16000
+    rule: build_delivery_assets_must_follow_locked_delivery_spec_and_reduce_setup_friction
+
+  qa:
+    governed_model_tier: frontier
+    default_model: gpt-5.5
+    escalation_model: gpt-5.5
+    reasoning_effort: medium
+    text_verbosity: low
+    processing_mode: standard
+    quality_critical: true
+    automatic_downward_fallback_allowed: false
+    fresh_context_required: true
+    default_max_output_tokens: 24000
+    rule: qa_must_verify_listing_quality_product_quality_delivery_quality_good_enough_pass_buyer_safe_outcomes_real_product_surface_fidelity_chart_usefulness_chart_readability_units_threshold_semantics_buyer_decision_value_and_absence_of_fake_spreadsheet_ui_without_allowing_unverified_growth
+
+  launch_review:
+    governed_model_tier: frontier
+    default_model: gpt-5.5
+    reasoning_effort: low
+    text_verbosity: low
+    processing_mode: standard
+    quality_critical: true
+    automatic_downward_fallback_allowed: false
+    fresh_context_required: true
+    default_max_output_tokens: 16000
+    purpose: independently_confirm_launch_readiness_against_locked_specs_telemetry_and_budget_gates
+    rule: launch_review_must_independently_verify_purchase_completion_inspection_completion_traceability_domain_qa_pass_and_generation_budget_pass_before_marketplace_publication
+
+  fixing:
+    governed_model_tier: mixed
+    default_model: gpt-5.4-mini
+    reasoning_effort: low
+    text_verbosity: low
+    processing_mode: standard
+    quality_critical: true
+    default_max_output_tokens: 24000
+    dispatch_by_defect_class:
+      mechanical_or_cosmetic:
+        model: gpt-5.4-mini
+        reasoning_effort: low
+        text_verbosity: low
+      localized_logic_or_compatibility:
+        model: gpt-5.4
+        reasoning_effort: medium
+        text_verbosity: low
+      architecture_promise_or_systemic_logic:
+        model: gpt-5.5
+        reasoning_effort: medium
+        text_verbosity: low
+        human_or_budget_preflight_required: true
+    rules:
+      - fix_only_reported_defects
+      - do_not_regenerate_unaffected_assets
+      - do_not_expand_scope
+      - record_defect_class_and_routing_reason
+
+  marketplace_listing:
+    governed_model_tier: mini
+    default_model: gpt-5.4-mini
+    reasoning_effort: low
+    text_verbosity: low
+    processing_mode: standard
+    quality_critical: false
+    default_max_output_tokens: 8000
+    rule: listing_must_match_locked_listing_spec_locked_product_spec_locked_delivery_spec_and_good_enough_requirements
+
+  post_launch_ledger:
+    governed_model_tier: mini
+    default_model: gpt-5.4-mini
+    reasoning_effort: none
+    text_verbosity: low
+    processing_mode: standard
+    quality_critical: false
+    default_max_output_tokens: 8000
+    purpose: record_monthly_outcomes_kill_rules_resource_allocation_and_company_metrics
+    rule: post_launch_recording_must_count_external_purchase_cost_once_and_preserve_existing_cost_accounting
+
+  frontier_usage:
+    allowed_only_for:
+      - blocked_build_escalation
+      - qa_escalation
+      - ambiguous_market_evidence
+      - human_requested_review
+      - competitor_selection
+      - purchased_competitor_inspection
+      - listing_spec_creation
+      - product_spec_creation
+      - delivery_spec_creation
+      - good_enough_for_humans_spec_creation
+      - build_product_asset
+      - build_listing_assets
+      - verify_product_surfaces
+      - qa
+      - launch_review
+      - candidate_domain_brief_creation
+      - fixing
+    default: avoid

@@ -1,0 +1,10 @@
+TOOL-001:
+ market_demand_tool:
+  tool_name: EverBee
+  required_export_fields:
+   - listing_title
+   - estimated_monthly_revenue
+   - reviews_count
+   - listing_age_or_created_at
+  output_used_by_BM_001:
+   - observed_new_entrants_above_threshold

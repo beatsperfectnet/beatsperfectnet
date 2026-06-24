@@ -1,0 +1,5 @@
+flow_id: FLOW-004
+record_id: MEAL-PLAN-REJECT-001
+status: rejected_by_human
+read_only: true
+reason: broad_scope_and_meal_planner_category_rejected

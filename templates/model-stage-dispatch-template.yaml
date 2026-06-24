@@ -1,0 +1,40 @@
+model_stage_dispatch:
+  run_id:
+  created_at:
+  workflow_contract_ref:
+  contract_ref: governance/09_stage_dispatch_005.yaml
+  exact_model_match_required: true
+  overall_dispatch_match:
+  notes:
+    - ""
+  stages:
+    - step_id:
+      model_policy_ref:
+      requested_model:
+      requested_model_resolved:
+      governed_model_tier:
+      functional_mandate:
+      candidate_domain_brief_ref:
+      applied_domain_consideration_ids:
+        - ""
+      stage_execution_context_hash:
+      runtime_resolved_model_id:
+      provider_reported_model_id:
+      reasoning_effort:
+      text_verbosity:
+      processing_mode:
+      quality_critical:
+      automatic_downward_fallback_allowed:
+      fresh_context_required:
+      independence_required:
+      model_call_required:
+      mechanical_state_writer_if_needed:
+      execution_status:
+      session_model_observed:
+      dispatch_match:
+      fallback_used:
+      escalation_used:
+      output_artifact_id:
+      session_file:
+      evidence:
+        - ""

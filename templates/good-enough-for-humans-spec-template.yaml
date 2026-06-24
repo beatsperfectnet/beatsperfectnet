@@ -1,0 +1,79 @@
+good_enough_for_humans_spec:
+  spec_id:
+  candidate_ref:
+  product_name:
+  marketplace:
+  listing_spec_ref:
+  product_analysis_ref:
+  product_spec_ref:
+  delivery_spec_ref:
+  purchased_competitor_inspection_ref:
+  domain_brief_application:
+    candidate_domain_brief_ref:
+    applied_consideration_ids:
+      - 
+    excluded_considerations:
+      - consideration_id:
+        reason:
+  applied_inspection_requirement_ids:
+    - 
+  benchmark_listing_refs:
+    - listing_url:
+      evidence_summary:
+  buyer_success_definition:
+    - 
+  buyer_failure_definition:
+    - 
+  negative_review_triggers:
+    - 
+  buyer_safety_requirements:
+    - 
+  stop_building_when:
+    - 
+  listing_quality_pass:
+    - 
+  product_quality_pass:
+    - 
+  delivery_quality_pass:
+    - 
+  good_enough_pass:
+    require:
+      - listing_sets_correct_expectations
+      - product_delivers_promise
+      - buyer_can_reach_first_success
+      - unsafe_states_are_visible
+      - major_negative_review_triggers_removed
+  listing_expectations:
+    - 
+  product_promise:
+    - 
+  delivery_friction_reduction:
+    - 
+  visual_surface_readiness:
+    - 
+  image_to_product_fidelity:
+    - 
+  no_listing_only_fake_surfaces:
+    - 
+  non_technical_buyer_task_acceptance_tests:
+    - task:
+      expected_human_observable_result:
+      fail_if:
+  inspection_derived_acceptance_tests:
+    - requirement_id:
+      test:
+      expected_human_observable_result:
+      fail_if:
+  spreadsheet_resilience_acceptance_tests:
+    - test_id:
+      applicability:
+      test:
+      expected_result:
+      safe_failure_result:
+      fail_if:
+  support_by_design_acceptance_tests:
+    - test:
+      expected_human_observable_result:
+      fail_if:
+  publish_blocking_human_readiness_defects:
+    - 

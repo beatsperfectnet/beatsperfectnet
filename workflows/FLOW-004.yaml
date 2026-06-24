@@ -1,0 +1,858 @@
+FLOW-004:
+  purpose: deterministic_bootstrap_company_flow_with_purchased_competitor_evidence
+  rule: no_creativity_outside_assigned_task
+
+  required_inputs:
+    - company.md
+    - specs/SCHEMA-004.yaml
+    - specs/TOOL-001.yaml
+    - specs/METRICS-001.yaml
+    - specs/PA-002.yaml
+    - specs/SRS-004.yaml
+    - specs/SDS-004.yaml
+    - governance/01_objective.yaml
+    - governance/02_constraints.yaml
+    - governance/03_admission_rules.yaml
+    - governance/04_kill_rules.yaml
+    - governance/05_governance_rules.yaml
+    - governance/06_resource_allocation.yaml
+    - governance/07_capacity_model.yaml
+    - governance/09_stage_dispatch_004.yaml
+    - specs/BM-001.yaml
+    - specs/BLS-004.yaml
+    - specs/MODEL-004.yaml
+
+  run_telemetry:
+    runtime_launcher_ref: runtime/model-stage-launcher.mjs
+    model_usage_ledger_required: true
+    model_usage_ledger_path_template: records/model_runs/<run_id>.yaml
+    stage_dispatch_log_required: true
+    stage_dispatch_log_path_template: records/model_dispatches/<run_id>.yaml
+    stage_dispatch_contract_ref: governance/09_stage_dispatch_004.yaml
+    exact_model_match_required: true
+    required_model_usage_fields:
+      - step_id
+      - step_name
+      - model_policy_ref
+      - governed_default_model
+      - governed_fallback_model
+      - governed_escalation_model
+      - actual_model_used
+      - prompt_tokens
+      - completion_tokens
+      - total_tokens
+      - exact_match
+      - notes
+    required_stage_dispatch_fields:
+      - step_id
+      - model_policy_ref
+      - requested_model
+      - execution_status
+      - session_model_observed
+      - dispatch_match
+
+  flow:
+    - step_id: 01_generate_ideas
+      agent_tier: mini
+      model_policy_ref: MODEL-004.research
+      action:
+        - generate_digital_product_ideas
+        - exclude_obviously_prohibited_categories
+        - exclude_obviously_prohibited_business_models
+        - write_to_ideas_run_file
+      output_file: records/ideas/<run_id>.yaml
+
+    - step_id: 02_tier_1_structural_screen
+      agent_tier: mini
+      model_policy_ref: MODEL-004.research
+      action:
+        - check_prohibited_category
+        - check_prohibited_business_model
+        - write_tier_1_result
+      output_file: records/ideas/<run_id>.yaml
+      allowed_results:
+        - passed
+        - rejected
+      escalation:
+        if_unclear: medium
+
+    - step_id: 03_collect_market_data
+      agent_tier: mini
+      model_policy_ref: MODEL-004.research
+      tool_ref: TOOL-001
+      action:
+        - process_only_ideas_with_tier_1_result_passed
+        - use_EverBee_export_contract
+        - collect_new_entrant_data
+        - write_observed_new_entrants_above_threshold
+      output_file: records/ideas/<run_id>.yaml
+      escalation:
+        if_tool_output_missing_or_ambiguous: medium
+
+    - step_id: 04_apply_BM_001
+      agent_tier: mini
+      model_policy_ref: MODEL-004.research
+      action:
+        - compare_observed_new_entrants_above_threshold_to_minimum_new_entrant_count
+        - write_tier_2_result
+      allowed_results:
+        - passed
+        - rejected
+      output_file: records/ideas/<run_id>.yaml
+
+    - step_id: 05_create_candidates
+      agent_tier: mini
+      action:
+        - create_candidate_for_each_idea_with_tier_1_passed_and_tier_2_passed
+        - preserve_FIFO_order_from_ideas_file
+      output_file: records/candidates/<run_id>.yaml
+
+    - step_id: 06_listing_analysis
+      agent_tier: mini
+      model_policy_ref: MODEL-004.listing_analysis
+      functional_mandate: marketplace_evidence_analyst
+      action:
+        - take_next_candidate_by_FIFO
+        - set_current_stage_to_listing_analysis
+        - search_benchmark_bestseller_listings
+        - collect_listing_evidence_packet
+        - collect_thumbnail_evidence
+        - collect_image_breakdown_evidence
+        - collect_trust_signal_evidence
+        - collect_objection_handler_evidence
+        - collect_buyer_visible_contents_evidence
+        - collect_compatibility_claim_evidence
+        - collect_bonus_visibility_evidence
+        - collect_description_evidence
+        - collect_pricing_evidence
+        - extract_primary_buyer_jtbd_from_observable_marketplace_evidence
+        - extract_bestseller_listing_promise
+        - extract_bestseller_buyer_expectations
+        - extract_objection_handling_patterns
+        - extract_bestseller_visual_grammar
+        - extract_gallery_image_roles_and_sequence
+        - extract_screenshot_expectations_from_real_listing_images
+        - record_evidence_refs_for_jtbd_and_promise
+        - record_evidence_missing_when_listing_evidence_is_missing
+        - cite_only_marketplace_evidence
+        - write_listing_analysis_ref
+        - update_stage_iteration
+        - update_cumulative_token_usage
+        - update_cumulative_api_cost_usd
+      output_file_template: records/listing_analysis/LA-XXXX.yaml
+      rule:
+        - listing_analysis_must_be_evidence_based
+        - listing_analysis_must_only_collect_observable_marketplace_evidence
+        - listing_analysis_must_not_infer_missing_claims
+        - listing_analysis_must_record_evidence_missing_when_observable_data_is_absent
+        - listing_analysis_must_capture_bestseller_expectations_not_product_scope
+        - listing_analysis_must_capture_primary_buyer_jtbd_promise_buyer_expectations_and_visual_grammar
+        - listing_analysis_must_not_generate_listings
+
+    - step_id: 07_product_analysis
+      agent_tier: mini
+      model_policy_ref: MODEL-004.product_analysis
+      functional_mandate: observable_product_scope_analyst
+      action:
+        - take_next_candidate_by_FIFO
+        - set_current_stage_to_product_analysis
+        - search_successful_new_entrant_listings
+        - capture_product_type_tabs_components_workflows_formulas_dashboards_sample_data_and_visible_buyer_pain_points
+        - capture_real_product_workbook_dashboard_chart_table_control_formatting_tab_range_and_sample_state_patterns
+        - capture_buyer_decision_bearing_chart_patterns
+        - capture_chart_unit_and_threshold_semantics_patterns
+        - extract_successful_new_entrant_scope_from_observable_evidence
+        - extract_recurring_actionable_complaints_from_review_or_visible_buyer_pain_point_evidence
+        - identify_eligible_purchased_reference_set_from_successful_new_entrant_evidence
+        - record_complaint_frequency_and_supporting_evidence
+        - record_evidence_missing_when_new_entrant_or_complaint_evidence_is_missing
+        - cite_only_marketplace_evidence
+        - write_product_analysis_ref
+        - update_stage_iteration
+        - update_cumulative_token_usage
+        - update_cumulative_api_cost_usd
+      output_file_template: records/product_analysis/PA-XXXX.yaml
+      rule:
+        - product_analysis_must_be_evidence_based
+        - product_analysis_must_only_extract_successful_new_entrant_evidence
+        - product_analysis_must_extract_scope_before_spec_generation
+        - product_analysis_must_extract_real_product_visual_surface_patterns_before_spec_generation
+        - product_analysis_must_identify_buyer_decision_bearing_charts_units_and_threshold_semantics_from_evidence
+        - product_analysis_must_trace_each_spec_recommendation_to_marketplace_evidence
+        - product_analysis_must_identify_eligible_purchased_reference_set_without_selecting_it
+        - product_analysis_must_not_generate_products
+
+    - step_id: 08_create_candidate_domain_brief
+      agent_tier: medium
+      model_policy_ref: MODEL-004.candidate_domain_brief_creation
+      functional_mandate: domain_correctness_analyst
+      action:
+        - take_next_candidate_by_FIFO
+        - consume_listing_analysis_ref
+        - consume_product_analysis_ref
+        - consume_governance_constraints
+        - consume_marketplace_adapter_ref
+        - identify_one_primary_buyer_jtbd
+        - identify_one_primary_product_type
+        - create_normalized_candidate_domain_label
+        - identify_domain_correctness_questions
+        - identify_likely_domain_failure_modes
+        - identify_professional_or_claim_boundaries
+        - identify_domain_terminology_constraints
+        - identify_unsupported_scope_expansions
+        - assign_consideration_dispositions
+        - assign_applicable_downstream_stages
+        - record_market_evidence_refs_where_available
+        - distinguish_evidence_from_bounded_domain_reasoning
+        - write_candidate_domain_brief_ref
+        - update_candidate_record
+        - update_stage_iteration
+        - update_cumulative_token_usage
+        - update_cumulative_api_cost_usd
+      output_file_template: records/candidate_domain_briefs/CDB-XXXX.yaml
+      allowed_results:
+        - complete
+        - needs_revision
+        - escalated
+      next_step: 09_select_competitor_for_purchase
+      escalation:
+        if_primary_jtbd_unclear: frontier
+        if_multiple_material_buyer_jobs: frontier
+        if_listing_analysis_and_product_analysis_conflict: frontier
+        if_regulated_boundary_unclear: frontier
+        if_correctness_requirement_may_materially_expand_scope: frontier
+        if_primary_product_type_unclear: frontier
+        if_authoritative_terminology_or_calculation_cannot_be_resolved: frontier
+        if_medium_blocked_after_retry_limit: frontier
+
+    - step_id: 09_select_competitor_for_purchase
+      agent_tier: medium
+      model_policy_ref: MODEL-004.competitor_selection
+      functional_mandate: competitive_reference_selector
+      purchase_mandatory: true
+      default_purchase_quantity: exactly_one_competitor_product
+      action:
+        - take_next_candidate_by_FIFO
+        - consume_candidate_domain_brief_ref
+        - consume_marketplace_adapter_ref
+        - require_candidate_domain_brief_complete
+        - consume_product_analysis_eligible_purchased_reference_set
+        - evaluate_match_tier_1_same_jtbd_same_product_type_same_platform_comparable_scope
+        - evaluate_match_tier_2_same_jtbd_same_product_type_comparable_scope
+        - evaluate_match_tier_3_same_jtbd_same_product_type
+        - select_highest_available_match_tier
+        - apply_deterministic_tie_breakers_in_order
+        - record_match_tier
+        - record_alternatives_considered
+        - record_tie_break_result
+        - immediately_before_writing_competitive_purchase_approval_live_verify_marketplace_listing
+        - verify_selected_competitor_product_url_is_canonical_buyable_marketplace_url
+        - verify_selected_competitor_title_from_live_listing
+        - verify_selected_competitor_seller_name_from_live_listing
+        - verify_selected_competitor_current_sale_price_from_live_listing
+        - verify_selected_competitor_original_or_list_price_if_visible_from_live_listing
+        - verify_selected_competitor_currency_from_live_listing
+        - verify_selected_competitor_discount_summary_if_visible_from_live_listing
+        - record_live_purchase_observation_timestamp_or_date
+        - record_live_purchase_evidence_or_proof_reference
+        - refuse_to_write_competitive_purchase_approval_if_live_purchase_verification_missing_or_incomplete
+        - write_competitive_purchase_approval_ref
+      output_file_template: records/competitive_purchase_approval/CPA-XXXX.yaml
+      next_step: 10_human_purchase_approval_and_acquisition
+      escalation:
+        if_no_eligible_successful_new_entrant_reference: frontier
+        if_conflicting_or_incomplete_evidence: frontier
+        if_only_fallback_bestseller_available: frontier
+        if_selected_product_could_materially_distort_candidate_scope: frontier
+        if_purchase_price_or_scope_conflicts_with_governance: frontier
+
+    - step_id: 10_human_purchase_approval_and_acquisition
+      agent_tier: human
+      model_policy_ref: MODEL-004.purchase_approval_and_acquisition
+      action:
+        - validate_competitive_purchase_approval_artifact_against_SCHEMA_004_before_presenting
+        - refuse_to_present_approval_if_selected_competitor_product_url_missing_or_not_buyable
+        - refuse_to_present_approval_if_required_selected_competitor_spend_human_decision_or_purchase_execution_fields_missing
+        - refuse_to_present_approval_if_live_purchase_verification_absent_incomplete_or_stale
+        - refuse_to_present_approval_if_live_verification_product_url_title_seller_price_currency_or_evidence_mismatch_artifact_fields
+        - present_competitive_purchase_approval_artifact_to_human
+        - pause_candidate_processing
+        - do_not_create_listing_spec_or_product_spec
+        - do_not_spend_money_without_recorded_approval
+        - on_request_alternative_return_to_step_09_select_competitor_for_purchase
+        - on_reject_candidate_record_rejection_and_move_to_next_fifo_candidate
+        - on_approve_purchase_wait_until_purchase_status_is_completed
+        - record_purchased_asset_private_refs
+      output_file_template: records/competitive_purchase_approval/CPA-XXXX.yaml
+      bootstrap_execution_mode: human_purchase
+
+    - step_id: 11_purchased_competitor_inspection
+      agent_tier: frontier
+      model_policy_ref: MODEL-004.purchased_competitor_inspection
+      functional_mandate: purchased_product_forensic_analyst
+      action:
+        - inspect_purchased_competitor_on_disposable_copy_only
+        - consume_candidate_domain_brief_ref
+        - consume_marketplace_adapter_ref
+        - consume_applied_domain_consideration_ids
+        - record_not_testable_considerations_with_reason
+        - record_normal_inspection_and_stress_inspection_in_one_artifact
+        - derive_independent_downstream_requirements
+        - write_purchased_competitor_inspection_ref
+      output_file_template: records/purchased_competitor_inspection/PCI-XXXX.yaml
+      rule:
+        - purchased_competitor_inspection_must_consume_candidate_domain_brief
+        - purchased_competitor_inspection_must_only_apply_applicable_domain_considerations
+        - purchased_competitor_inspection_must_record_not_testable_considerations_with_reason
+        - purchased_competitor_inspection_must_not_rewrite_the_domain_brief
+      escalation:
+        if_material_contradiction_with_broader_market_evidence: frontier
+        if_inspection_implies_candidate_rejection: frontier
+        if_resilience_requirement_appears_disproportionately_expensive: frontier
+        if_expected_support_may_exceed_company_constraint: frontier
+        if_promise_delivery_mismatch_changes_candidate_promise: frontier
+        if_platform_behavior_cannot_be_determined: frontier
+        if_possible_originality_or_legal_risk_concern: frontier
+
+    - step_id: 12_listing_spec
+      agent_tier: frontier
+      model_policy_ref: MODEL-004.listing_spec_creation
+      functional_mandate: marketplace_offer_architect
+      action:
+        - take_next_candidate_by_FIFO
+        - consume_candidate_domain_brief_ref
+        - consume_marketplace_adapter_ref
+        - consume_listing_analysis_ref
+        - consume_product_analysis_ref
+        - consume_purchased_competitor_inspection_ref
+        - consume_applied_domain_consideration_ids
+        - apply_listing_targeted_inspection_requirement_ids
+        - transform_listing_evidence_packet_into_listing_spec
+        - derive_buyer_expectation_requirements
+        - derive_buyer_success_expectations
+        - derive_buyer_failure_expectations
+        - derive_promise_to_product_alignment_requirements
+        - derive_negative_review_prevention_requirements
+        - derive_image_roles_from_evidence
+        - derive_required_trust_visibility_from_evidence
+        - derive_required_objection_visibility_from_evidence
+        - derive_required_buyer_visible_contents_from_evidence
+        - derive_benchmark_gap_closures_from_evidence
+        - define_bestseller_visual_grammar
+        - define_required_screenshot_moments_the_product_must_support
+        - define_real_product_surface_dependencies_for_each_gallery_image_role
+        - define_image_to_product_fidelity_requirements
+        - require_every_listing_claim_to_be_verifiable_against_the_delivered_product
+        - forbid_unsupported_listing_claims
+        - forbid_seller_specific_copy_branding_naming_and_visual_identity
+        - forbid_listing_only_fake_product_surfaces
+        - write_listing_spec_ref
+        - update_stage_iteration
+        - update_cumulative_token_usage
+        - update_cumulative_api_cost_usd
+      output_file_template: records/listing_specs/LS-XXXX.yaml
+      rule:
+        - listing_spec_must_be_mini_executable
+        - listing_spec_must_consume_listing_evidence_packet
+        - listing_spec_must_consume_purchased_competitor_inspection
+        - listing_spec_must_consume_candidate_domain_brief_for_traceability
+        - listing_spec_must_be_the_only_listing_reasoning_layer
+        - listing_spec_must_translate_benchmark_bestseller_evidence_into_verifiable_requirements
+        - listing_spec_must_require_claim_to_product_verification
+        - listing_spec_must_define_buyer_expectation_requirements
+        - listing_spec_must_define_buyer_success_expectations
+        - listing_spec_must_define_buyer_failure_expectations
+        - listing_spec_must_define_promise_to_product_alignment_requirements
+        - listing_spec_must_define_negative_review_prevention_requirements
+        - listing_spec_must_define_bestseller_visual_grammar
+        - listing_spec_must_define_required_screenshot_moments
+        - listing_spec_must_define_product_surface_dependencies_without_inventing_product_scope
+        - listing_spec_must_forbid_listing_only_fake_surfaces
+        - listing_spec_must_not_add_features_without_market_evidence
+        - no_product_build_before_listing_spec_exists
+
+    - step_id: 13_product_spec
+      agent_tier: frontier
+      model_policy_ref: MODEL-004.product_spec_creation
+      functional_mandate: spreadsheet_systems_architect
+      action:
+        - take_next_candidate_by_FIFO
+        - consume_candidate_domain_brief_ref
+        - consume_marketplace_adapter_ref
+        - consume_listing_spec_ref
+        - consume_product_analysis_ref
+        - consume_purchased_competitor_inspection_ref
+        - consume_applied_domain_consideration_ids
+        - consume_spreadsheet_resilience_standard
+        - consume_company_support_constraint
+        - apply_product_targeted_inspection_requirement_ids
+        - derive_market_gap_summary_from_product_analysis
+        - derive_independent_product_architecture
+        - derive_product_scope_from_successful_new_entrant_evidence
+        - derive_buyer_outcome_requirements
+        - derive_primary_buyer_decision_requirements
+        - derive_buyer_success_state_requirements
+        - derive_buyer_failure_state_requirements
+        - derive_correct_logic_requirements
+        - derive_unsafe_state_requirements
+        - derive_required_warning_requirements
+        - derive_expected_output_requirements
+        - derive_negative_review_trigger_requirements
+        - derive_dashboard_decision_bearing_chart_requirements
+        - derive_threshold_semantics_requirements
+        - derive_product_visual_surface_requirements_from_listing_spec_and_product_analysis
+        - derive_dashboard_surface_requirements
+        - derive_chart_quality_requirements
+        - derive_screenshot_eligible_surface_requirements
+        - define_real_tabs_ranges_charts_controls_dashboard_states_and_sample_states_needed_for_listing_images
+        - define_resilience_strategy_for_each_applicable_standard
+        - define_support_risk_prevention_inside_the_product
+        - define_safe_behavior_or_clear_limitation_for_unsupported_structural_edits
+        - prohibit_direct_use_of_purchased_competitor_assets
+        - limit_complaint_fixes_to_recurring_actionable_complaints_supporting_the_primary_promise
+        - forbid_feature_bloat_without_market_evidence
+        - define_workbook_tabs_workflows_formulas_dashboards_editable_areas_sample_data_outputs_and_forbidden_features
+        - write_product_spec_ref
+        - update_stage_iteration
+        - update_cumulative_token_usage
+        - update_cumulative_api_cost_usd
+      output_file_template: records/product_specs/PS-XXXX.yaml
+      rule:
+        - product_spec_must_be_mini_executable
+        - product_spec_must_consume_successful_new_entrant_evidence
+        - product_spec_must_consume_purchased_competitor_inspection
+        - product_spec_must_consume_candidate_domain_brief_for_traceability
+        - product_spec_must_be_derived_after_listing_spec_exists
+        - product_spec_must_limit_scope_to_market_evidence
+        - product_spec_must_define_market_gap_summary
+        - product_spec_must_define_buyer_outcome_requirements
+        - product_spec_must_define_primary_buyer_decision_requirements
+        - product_spec_must_define_buyer_success_state_requirements
+        - product_spec_must_define_buyer_failure_state_requirements
+        - product_spec_must_define_correct_logic_requirements
+        - product_spec_must_define_unsafe_state_requirements
+        - product_spec_must_define_required_warning_requirements
+        - product_spec_must_define_expected_output_requirements
+        - product_spec_must_define_negative_review_trigger_requirements
+        - product_spec_must_define_dashboard_decision_bearing_chart_requirements
+        - product_spec_must_define_threshold_semantics_requirements
+        - product_spec_must_define_bestseller_grade_product_visual_surface_requirements
+        - product_spec_must_define_dashboard_surface_requirements
+        - product_spec_must_define_chart_quality_requirements
+        - product_spec_must_define_screenshot_eligible_surface_requirements
+        - product_spec_must_define_independent_product_architecture
+        - product_spec_must_define_resilience_strategies_for_each_applicable_standard
+        - product_spec_must_define_support_risk_prevention
+        - product_spec_must_not_use_purchased_competitor_assets
+        - product_spec_must_combine_listing_spec_product_analysis_buyer_safe_outcomes_and_observed_product_evidence
+        - product_spec_must_not_be_generated_from_listing_claims_alone
+        - product_spec_must_define_actual_workbook_surfaces_needed_for_listing_images
+        - product_spec_must_limit_complaint_fixes_to_recurring_actionable_complaints
+        - product_spec_must_forbid_additions_without_market_evidence
+        - no_delivery_build_before_product_spec_exists
+
+    - step_id: 14_delivery_spec
+      agent_tier: frontier
+      model_policy_ref: MODEL-004.delivery_spec_creation
+      functional_mandate: buyer_onboarding_and_self_support_architect
+      action:
+        - take_next_candidate_by_FIFO
+        - consume_candidate_domain_brief_ref
+        - consume_marketplace_adapter_ref
+        - consume_listing_spec_ref
+        - consume_product_spec_ref
+        - consume_purchased_competitor_inspection_ref
+        - consume_applied_domain_consideration_ids
+        - apply_delivery_targeted_inspection_requirement_ids
+        - define_quick_start_setup_guide_faq_examples_troubleshooting_and_compatibility_help
+        - define_backup_reset_and_recovery_guidance
+        - define_product_specific_support_scope
+        - define_platform_specific_limitations_help
+        - derive_first_success_requirements
+        - derive_buyer_confusion_prevention_requirements
+        - derive_buyer_risk_explanation_requirements
+        - derive_support_ticket_prevention_requirements
+        - derive_visual_surface_comprehension_requirements
+        - define_first_successful_use_and_setup_friction_reduction_requirements
+        - define_support_reduction_requirements
+        - prevent_support_heavy_customization_expectations
+        - write_delivery_spec_ref
+        - update_stage_iteration
+        - update_cumulative_token_usage
+        - update_cumulative_api_cost_usd
+      output_file_template: records/delivery_specs/DS-XXXX.yaml
+      rule:
+        - delivery_spec_must_be_mini_executable
+        - delivery_spec_must_be_derived_from_listing_and_product_specs
+        - delivery_spec_must_consume_purchased_competitor_inspection
+        - delivery_spec_must_consume_candidate_domain_brief_for_traceability
+        - delivery_spec_must_reduce_time_to_first_successful_use
+        - delivery_spec_must_define_first_success_requirements
+        - delivery_spec_must_define_buyer_confusion_prevention_requirements
+        - delivery_spec_must_define_buyer_risk_explanation_requirements
+        - delivery_spec_must_define_support_ticket_prevention_requirements
+        - delivery_spec_must_define_backup_reset_and_recovery_guidance
+        - delivery_spec_must_define_product_specific_support_scope
+        - delivery_spec_must_define_platform_specific_limitations_help
+        - delivery_spec_must_help_buyers_understand_dashboard_chart_table_control_and_sample_state_surfaces
+        - delivery_spec_must_not_add_unverifiable_support_assets
+        - no_build_before_delivery_spec_exists
+
+    - step_id: 15_create_good_enough_for_humans_spec
+      agent_tier: frontier
+      model_policy_ref: MODEL-004.good_enough_for_humans_spec_creation
+      functional_mandate: buyer_readiness_acceptance_architect
+      action:
+        - consume_candidate_domain_brief_ref
+        - consume_marketplace_adapter_ref
+        - consume_listing_spec_ref
+        - consume_product_analysis_ref
+        - consume_product_spec_ref
+        - consume_delivery_spec_ref
+        - consume_purchased_competitor_inspection_ref
+        - consume_applied_domain_consideration_ids
+        - apply_inspection_requirement_ids
+        - derive_buyer_success_definition
+        - derive_buyer_failure_definition
+        - derive_negative_review_triggers
+        - derive_buyer_safety_requirements
+        - derive_stop_building_when
+        - derive_good_enough_is_meet_expectations_deliver_listing_promise_and_avoid_major_complaints
+        - derive_listing_quality_pass_requirements
+        - derive_product_quality_pass_requirements
+        - derive_delivery_quality_pass_requirements
+        - derive_visual_surface_readiness_requirements
+        - derive_image_to_product_fidelity_requirements
+        - derive_no_listing_only_fake_surface_requirements
+        - derive_inspection_derived_acceptance_tests
+        - derive_spreadsheet_resilience_acceptance_tests
+        - derive_support_by_design_acceptance_tests
+        - write_good_enough_for_humans_spec_ref
+        - update_stage_iteration
+        - update_cumulative_token_usage
+        - update_cumulative_api_cost_usd
+      output_file_template: records/good_enough_for_humans/GEH-XXXX.yaml
+      rule:
+        - good_enough_for_humans_spec_must_be_derived_from_listing_product_and_delivery_specs
+        - good_enough_for_humans_spec_must_consume_purchased_competitor_inspection
+        - good_enough_for_humans_spec_must_apply_candidate_domain_brief_to_acceptance_tests
+        - good_enough_for_humans_spec_must_define_measurable_buyer_readiness_acceptance_tests
+        - good_enough_for_humans_spec_must_frame_bad_review_prevention_as_gap_closing
+        - good_enough_for_humans_spec_must_define_buyer_success
+        - good_enough_for_humans_spec_must_define_buyer_failure
+        - good_enough_for_humans_spec_must_define_negative_review_triggers
+        - good_enough_for_humans_spec_must_define_buyer_safety_requirements
+        - good_enough_for_humans_spec_must_define_stop_building_when
+        - good_enough_for_humans_spec_must_verify_visual_surfaces_are_understandable_and_useful
+        - good_enough_for_humans_spec_must_verify_listing_images_reuse_real_product_surfaces
+        - good_enough_for_humans_spec_must_include_inspection_derived_resilience_and_support_tests
+        - no_build_handoff_before_good_enough_for_humans_spec_exists
+
+    - step_id: 16_build_product_asset
+      agent_tier: frontier
+      model_policy_ref: MODEL-004.build_product_asset
+      functional_mandate: spreadsheet_implementation_engineer
+      action:
+        - write_build_manifest
+        - consume_listing_spec_ref
+        - consume_product_spec_ref
+        - consume_good_enough_for_humans_spec_ref
+        - consume_locked_inspection_derived_product_requirements
+        - build_full_product_workbook_from_locked_product_specification
+        - do_not_add_features_without_market_evidence
+        - create_core_asset
+        - implement_applicable_spreadsheet_resilience_strategies
+        - implement_support_risk_prevention_required_by_product_spec
+        - create_bestseller_grade_dashboard_views
+        - create_decision_bearing_charts_with_readable_labels_units_and_threshold_semantics
+        - create_polished_workbook_formatting_summary_panels_tabs_ranges_and_screenshot_ready_states
+        - create_editable_areas
+        - create_sample_data_or_examples_when_needed
+        - implement_buyer_controls_as_clean_native_controls
+        - create_realistic_sample_states_for_listing_screenshots
+        - make_promised_screenshot_moments_real_inside_the_workbook
+        - verify_formula_outputs_and_dashboard_values
+        - never_access_purchased_competitor_private_assets
+        - build_independently_from_locked_specs_only
+        - update_cumulative_token_usage
+        - update_cumulative_api_cost_usd
+      next_step: 17_verify_product_surfaces
+      escalation:
+        if_build_blocked: medium
+        if_medium_blocked: frontier
+        if_cumulative_api_cost_usd_exceeds_25: frontier
+
+    - step_id: 17_verify_product_surfaces
+      agent_tier: medium
+      model_policy_ref: MODEL-004.verify_product_surfaces
+      action:
+        - consume_listing_spec_ref
+        - consume_product_spec_ref
+        - consume_built_product_asset
+        - extract_real_tabs_ranges_charts_dashboard_states_controls_labels_units_and_sample_data_states
+        - capture_verified_product_surfaces
+        - identify_screenshot_eligible_surfaces_for_required_screenshot_moments
+        - verify_chart_unit_and_threshold_semantics
+        - verify_buyer_decision_bearing_charts
+        - verify_surfaces_are_readable_useful_and_present_in_delivered_product
+        - record_allowed_listing_treatments_for_each_surface
+        - record_forbidden_listing_treatments_for_each_surface
+        - write_real_product_surface_spec_ref
+        - update_cumulative_token_usage
+        - update_cumulative_api_cost_usd
+      output_file_template: records/product_surfaces/RPSS-XXXX.yaml
+      rule:
+        - real_product_surface_spec_must_be_created_after_product_asset_exists
+        - verified_product_surfaces_must_reference_real_workbook_tabs_ranges_charts_controls_states_and_sample_data
+        - screenshot_eligible_surfaces_must_map_to_required_screenshot_moments_from_listing_spec
+        - chart_unit_and_threshold_semantics_must_be_clear
+        - buyer_decision_bearing_charts_must_support_specific_buyer_decisions
+        - no_surface_may_be_invented_or_visually_improved_for_listing_only
+        - fail_if_promised_screenshot_moment_is_missing_from_delivered_product
+      next_step: 18_build_listing_assets
+      escalation:
+        if_surface_verification_fails: medium
+        if_medium_blocked: frontier
+        if_cumulative_api_cost_usd_exceeds_25: frontier
+
+    - step_id: 18_build_listing_assets
+      agent_tier: frontier
+      model_policy_ref: MODEL-004.build_listing_assets
+      action:
+        - consume_listing_spec_ref
+        - consume_good_enough_for_humans_spec_ref
+        - consume_real_product_surface_spec_ref
+        - build_listing_assets_from_listing_spec_and_verified_product_surfaces
+        - build_required_thumbnail
+        - build_required_image_sequence
+        - build_required_trust_visibility
+        - build_required_objection_handlers
+        - build_required_buyer_visible_contents
+        - build_required_bonus_visibility
+        - build_required_compatibility_visibility
+        - build_required_description
+        - add_only_allowed_framing_callouts_badges_annotations_crops_and_marketplace_composition
+        - reuse_real_workbook_surface_content_for_all_shown_charts_tables_controls_formatting_states_and_data
+        - verify_every_claim_is_product_verifiable
+        - verify_no_listing_only_fake_surfaces
+        - verify_listing_assets_do_not_visually_improve_product_beyond_buyer_delivery
+        - update_cumulative_token_usage
+        - update_cumulative_api_cost_usd
+      next_step: 19_build_delivery_assets
+      rule:
+        - listing_assets_must_consume_verified_product_surfaces
+        - listing_assets_must_not_show_charts_tables_controls_states_tabs_ranges_or_formatting_absent_from_delivered_product
+        - listing_assets_may_frame_annotate_crop_or_badge_real_product_surfaces
+        - listing_assets_must_not_fabricate_or_upgrade_product_internals
+      escalation:
+        if_build_blocked: medium
+        if_medium_blocked: frontier
+        if_cumulative_api_cost_usd_exceeds_25: frontier
+
+    - step_id: 19_build_delivery_assets
+      agent_tier: medium
+      model_policy_ref: MODEL-004.build_delivery_assets
+      action:
+        - consume_delivery_spec_ref
+        - consume_good_enough_for_humans_spec_ref
+        - build_quick_start_setup_guide_faq_examples_troubleshooting_and_compatibility_help_assets
+        - build_required_backup_reset_and_recovery_guidance
+        - build_required_support_scope_statement
+        - explain_supported_and_unsupported_structural_edits
+        - explain_platform_specific_behavior
+        - reduce_setup_friction
+        - explain_dashboard_chart_table_control_and_sample_state_surfaces_without_overpromising
+        - verify_delivery_assets_reduce_time_to_first_successful_use
+        - never_access_purchased_competitor_private_assets
+        - update_cumulative_token_usage
+        - update_cumulative_api_cost_usd
+      next_step: 20_quality_qa
+      escalation:
+        if_build_blocked: medium
+        if_medium_blocked: frontier
+        if_cumulative_api_cost_usd_exceeds_25: frontier
+
+    - step_id: 20_quality_qa
+      agent_tier: frontier
+      model_policy_ref: MODEL-004.qa
+      functional_mandate: adversarial_spreadsheet_qa_analyst
+      action:
+        - consume_candidate_domain_brief_ref
+        - consume_marketplace_adapter_ref
+        - consume_applied_domain_consideration_ids
+        - consume_geh_domain_derived_acceptance_tests
+        - qa_listing_quality_pass
+        - qa_product_quality_pass
+        - qa_delivery_quality_pass
+        - qa_good_enough_pass
+        - qa_check_all_applied_inspection_requirement_ids
+        - qa_check_candidate_domain_brief_traceability
+        - qa_check_all_required_domain_considerations_accounted_for
+        - qa_execute_domain_correctness_acceptance_tests
+        - qa_check_prohibited_scope_expansions_absent
+        - qa_check_domain_terminology_consistent
+        - qa_check_professional_boundaries_not_overclaimed
+        - qa_check_domain_failure_modes_fail_safely
+        - qa_check_promise_delivery_truthfulness
+        - qa_check_first_use_clarity
+        - qa_execute_applicable_spreadsheet_resilience_tests
+        - qa_check_formula_protection_or_safe_formula_strategy
+        - qa_check_editable_areas_are_clear
+        - qa_check_recovery_guidance
+        - qa_check_platform_specific_behavior
+        - qa_check_support_scope_and_support_risk
+        - qa_check_no_seller_specific_content
+        - qa_check_builder_did_not_use_private_competitor_assets
+        - qa_check_buyer_expectation_requirements
+        - qa_check_buyer_success_expectations
+        - qa_check_buyer_failure_expectations
+        - qa_check_promise_to_product_alignment_requirements
+        - qa_check_negative_review_prevention_requirements
+        - qa_check_buyer_outcome_requirements
+        - qa_check_primary_buyer_decision_requirements
+        - qa_check_buyer_success_state_requirements
+        - qa_check_buyer_failure_state_requirements
+        - qa_check_correct_logic_requirements
+        - qa_check_unsafe_state_requirements
+        - qa_check_required_warning_requirements
+        - qa_check_expected_output_requirements
+        - qa_check_negative_review_trigger_requirements
+        - qa_check_market_gap_summary
+        - qa_check_dashboard_decision_bearing_chart_requirements
+        - qa_check_threshold_semantics_requirements
+        - qa_check_product_visual_surface_requirements
+        - qa_check_dashboard_surface_requirements
+        - qa_check_chart_quality_requirements
+        - qa_check_real_product_surface_spec
+        - qa_check_verified_product_surfaces
+        - qa_check_screenshot_eligible_surfaces
+        - qa_check_required_screenshot_moments_present_in_product
+        - qa_check_image_to_product_fidelity
+        - qa_check_no_listing_only_fake_surfaces
+        - qa_check_listing_images_do_not_improve_product_beyond_buyer_delivery
+        - qa_check_chart_units_threshold_semantics_and_buyer_decision_value
+        - qa_check_first_success_requirements
+        - qa_check_buyer_confusion_prevention_requirements
+        - qa_check_buyer_risk_explanation_requirements
+        - qa_check_support_ticket_prevention_requirements
+        - qa_check_buyer_success_definition
+        - qa_check_buyer_failure_definition
+        - qa_check_buyer_safety_requirements
+        - qa_check_stop_building_when
+        - qa_check_formula_outputs_and_supported_engine_recalc
+        - qa_check_no_unsupported_listing_claims
+        - qa_check_no_feature_bloat_without_market_evidence
+        - qa_check_no_clipped_truncated_overlapping_or_squeezed_text
+        - qa_check_no_visible_TRUE_FALSE_text_for_buyer_checkbox_workflows
+        - qa_check_product_images_match_delivered_asset
+        - qa_check_price_assigned
+        - qa_check_delivery_method_defined
+        - qa_check_marketplace_publish_complete
+        - qa_check_product_accessible_from_marketplace
+        - qa_check_listing_url_recorded
+        - qa_check_launch_date_recorded
+        - qa_check_no_listing_only_fake_surfaces
+        - qa_check_purchased_competitor_paths_are_gitignored
+        - qa_check_private_competitor_assets_excluded
+        - update_cumulative_token_usage
+        - update_cumulative_api_cost_usd
+      next_step: 21_fixing
+      escalation:
+        if_qa_blocked: medium
+        if_medium_blocked: frontier
+
+    - step_id: 21_fixing
+      agent_tier: mini
+      model_policy_ref: MODEL-004.fixing
+      action:
+        - fix_product_asset_from_qa_findings
+        - fix_listing_assets_from_qa_findings
+        - fix_delivery_assets_from_qa_findings
+        - update_cumulative_token_usage
+        - update_cumulative_api_cost_usd
+      next_step: 22_launch_review
+      escalation:
+        if_blocked: medium
+        if_medium_blocked: frontier
+
+    - step_id: 22_launch_review
+      agent_tier: frontier
+      model_policy_ref: MODEL-004.launch_review
+      functional_mandate: launch_readiness_reviewer
+      action:
+        - consume_candidate_domain_brief_ref
+        - consume_marketplace_adapter_ref
+        - independently_verify_purchase_approval_and_completed_acquisition
+        - independently_verify_inspection_completion
+        - independently_verify_inspection_requirement_traceability
+        - independently_verify_candidate_domain_brief_lock_and_traceability
+        - independently_verify_promise_delivery_truthfulness
+        - independently_verify_resilience_qa_pass
+        - independently_verify_support_by_design_qa_pass
+        - independently_verify_reference_based_originality
+        - independently_verify_no_private_competitor_asset_in_committed_or_delivery_paths
+        - write_launch_review_ref
+        - update_cumulative_token_usage
+        - update_cumulative_api_cost_usd
+      next_step: 23_marketplace_publish
+      escalation:
+        if_review_blocked: frontier
+
+    - step_id: 23_marketplace_publish
+      agent_tier: mini
+      model_policy_ref: MODEL-004.marketplace_listing
+      action:
+        - create_marketplace_listing
+        - attach_delivery_assets
+        - record_listing_url
+        - verify_product_access_from_listing
+        - update_cumulative_token_usage
+        - update_cumulative_api_cost_usd
+      next_step: 24_create_product_v1_0
+
+    - step_id: 24_create_product_v1_0
+      agent_tier: mini
+      model_policy_ref: MODEL-004.marketplace_listing
+      action:
+        - record_initial_product_version
+        - preserve_permanent_traceability
+        - update_cumulative_token_usage
+        - update_cumulative_api_cost_usd
+      next_step: 25_monthly_outcome_recording
+
+    - step_id: 25_monthly_outcome_recording
+      agent_tier: mini
+      model_policy_ref: MODEL-004.post_launch_ledger
+      action:
+        - record_monthly_outcomes
+        - count_external_purchase_cost_once
+        - update_cumulative_token_usage
+        - update_cumulative_api_cost_usd
+      next_step: 26_apply_kill_rules
+
+    - step_id: 26_apply_kill_rules
+      agent_tier: mini
+      model_policy_ref: MODEL-004.post_launch_ledger
+      action:
+        - evaluate_kill_rules_against_monthly_outcomes
+        - update_cumulative_token_usage
+        - update_cumulative_api_cost_usd
+      next_step: 27_apply_resource_allocation
+
+    - step_id: 27_apply_resource_allocation
+      agent_tier: mini
+      model_policy_ref: MODEL-004.post_launch_ledger
+      action:
+        - evaluate_resource_allocation_rules
+        - update_cumulative_token_usage
+        - update_cumulative_api_cost_usd
+      next_step: 28_company_metrics
+
+    - step_id: 28_company_metrics
+      agent_tier: mini
+      model_policy_ref: MODEL-004.post_launch_ledger
+      action:
+        - aggregate_company_metrics
+        - update_cumulative_token_usage
+        - update_cumulative_api_cost_usd
+      output_file: records/company_metrics/<month>.yaml

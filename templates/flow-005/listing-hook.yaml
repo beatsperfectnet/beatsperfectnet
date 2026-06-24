@@ -1,0 +1,20 @@
+listing_hook:
+  candidate_id:
+  final_artifact_version:
+  passed_qa_ref:
+  final_kpp:
+  final_hook:
+  title:
+  thumbnail:
+  image_sequence:
+  description:
+  claim_map:
+  insight_kpp_rtb_alignment:
+    insight:
+    kpp:
+    rtb:
+    evidence_refs:
+  unverified_claim_exclusions:
+    compatibility_claims_removed:
+    protection_claims_removed:
+    automation_claims_removed:

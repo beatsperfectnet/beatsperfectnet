@@ -1,0 +1,47 @@
+product:
+ product_id:
+ candidate_ref:
+ idea_ref:
+ flow_contract_ref:
+ product_name:
+ marketplace:
+ competitive_purchase_approval_ref:
+ purchased_competitor_inspection_ref:
+ external_purchase_cost_usd:
+ listing_assets:
+  - 
+ product_assets:
+  - 
+ delivery_assets:
+  - 
+ listing_url:
+ product_launch_date:
+ cumulative_prompt_tokens:
+ cumulative_completion_tokens:
+ cumulative_total_tokens:
+ cumulative_api_cost_usd:
+ current_version: V1.0
+ status: active
+
+ price_history:
+  - date:
+    price:
+
+ version_history:
+  - version: V1.0
+    date:
+    event: launch
+
+ double_down_dates: []
+
+ monthly_outcomes:
+  - reporting_month:
+    actual_monthly_revenue:
+    actual_monthly_cost:
+    actual_monthly_profit:
+    actual_support_hours_per_month:
+    promotion_cost_usd:
+    total_reviews_count:
+    negative_reviews_count:
+    refunds_count:
+    bug_fixes_after_launch_count:

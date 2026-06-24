@@ -1,0 +1,87 @@
+product_generation_budget:
+  budget_id: PGB-004
+  flow_contract_ref: workflows/FLOW-004.yaml
+  pricing_snapshot_ref: specs/PRICING-004.yaml
+  generation_budget_usd: 25.00
+  budget_window:
+    start_step_id: 01_generate_ideas
+    end_step_id: 24_create_product_v1_0
+    excludes_post_launch_monthly_stages: true
+    excludes_competitor_purchase_spend: true
+    excludes_human_time: true
+    includes_attributable_model_api_costs: true
+    includes_paid_tool_usage_when_present: true
+    includes_retries_and_fix_loops: true
+    includes_shared_discovery_cost_allocation: true
+  shared_cost_allocation:
+    rule: total_shared_run_generation_cost_usd_divided_by_number_of_candidates_created_from_that_run
+    allocate_to_each_created_candidate: true
+    if_no_candidate_is_created:
+      record_as_company_research_expense: true
+      do_not_allocate_to_nonexistent_product: true
+    do_not_double_count_shared_cost: true
+  cost_buckets:
+    competitor_purchase_cost_usd:
+      separate_from_generation_budget: true
+      counted_in_company_burn: true
+    generation_api_and_tool_cost_usd:
+      separate_from_competitor_purchase_cost_usd: true
+      counted_in_company_burn: true
+  phase_budget_plan:
+    discovery_and_evidence:
+      stages:
+        - 01_generate_ideas
+        - 02_tier_1_structural_screen
+        - 03_collect_market_data
+        - 04_apply_BM_001
+        - 05_create_candidates
+        - 06_listing_analysis
+        - 07_product_analysis
+        - 08_create_candidate_domain_brief
+      soft_budget_usd: 3.00
+    competitor_selection_and_inspection:
+      stages:
+        - 09_select_competitor_for_purchase
+        - 10_human_purchase_approval_and_acquisition
+        - 11_purchased_competitor_inspection
+      soft_budget_usd: 3.00
+      competitor_purchase_excluded: true
+    final_specs:
+      stages:
+        - 12_listing_spec
+        - 13_product_spec
+        - 14_delivery_spec
+        - 15_create_good_enough_for_humans_spec
+      soft_budget_usd: 5.00
+    build_and_buyer_assets:
+      stages:
+        - 16_build_product_asset
+        - 17_verify_product_surfaces
+        - 18_build_listing_assets
+        - 19_build_delivery_assets
+      soft_budget_usd: 6.00
+    qa_fix_launch:
+      stages:
+        - 20_quality_qa
+        - 21_fixing
+        - 22_launch_review
+        - 23_marketplace_publish
+        - 24_create_product_v1_0
+      soft_budget_usd: 5.00
+    protected_contingency:
+      soft_budget_usd: 3.00
+  total_hard_budget_usd: 25.00
+  protected_qa_and_fix_reserve_usd: 5.00
+  hard_stop_rules:
+    projected_total_above_budget_blocks_paid_call: true
+    missing_pricing_information_blocks_paid_call: true
+    unknown_requested_model_blocks_paid_call: true
+    missing_candidate_cost_ledger_blocks_after_candidate_creation: true
+    quality_critical_stage_must_not_downgrade_automatically: true
+    launch_must_not_proceed_when_recorded_generation_cost_exceeds_budget: true
+    budget_failure_must_not_be_converted_into_qa_pass: true
+  generation_budget_pass:
+    actual_generation_cost_usd:
+    budget_usd: 25.00
+    competitor_purchase_excluded: true
+    result:

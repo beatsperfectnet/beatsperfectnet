@@ -1,0 +1,84 @@
+governance_rules:
+ active_rule_contracts:
+  flow: FLOW-005
+  product_analysis: PA-002
+  schema: SCHEMA-005
+  build_lifecycle: BLS-005
+  model_routing: MODEL-005
+  stage_dispatch: governance/09_stage_dispatch_005.yaml
+ superseded_rule_contracts:
+  - FLOW-001
+  - FLOW-002
+  - FLOW-003
+  - PA-001
+  - SCHEMA-001
+  - SCHEMA-002
+  - SCHEMA-003
+  - BLS-001
+  - BLS-002
+  - BLS-003
+  - MODEL-001
+  - MODEL-002
+  - MODEL-003
+  - governance/09_stage_dispatch_003.yaml
+ human_owned:
+  - objective
+  - constraints
+  - admission_rules
+  - kill_rules
+  - governance_rules
+  - resource_allocation
+  - capacity_model
+  - BM-001
+  - FLOW-005
+  - SCHEMA-005
+  - BLS-005
+  - MODEL-005
+  - governance/09_stage_dispatch_005.yaml
+
+ agent_owned:
+  - workflow_execution
+  - artifact_generation
+  - outcome_recording
+  - file_updates_inside_existing_schema
+
+ agent_forbidden:
+  - rule_changes
+  - autonomous_spending
+  - product_scope_invention_after_spec_lock
+  - marketplace_publish_without_required_human_approval
+
+ flow_rules:
+  - FLOW_005_remains_stage_based
+  - functional_mandates_are_static_flow_metadata
+  - models_must_not_assign_their_own_mandates
+  - candidate_domain_brief_is_required_before_competitor_selection
+  - candidate_domain_brief_default_model_is_medium
+  - frontier_domain_brief_review_is_escalation_only
+  - market_evidence_controls_offer_and_scope
+  - domain_expertise_controls_correctness_within_locked_scope
+  - domain_reasoning_must_not_invent_market_demand
+  - domain_reasoning_must_not_change_primary_buyer_jtbd
+  - domain_reasoning_must_not_override_governance
+  - correctness_requirements_must_not_create_new_buyer_workflows
+  - prohibited_scope_expansions_must_not_enter_specs
+  - build_agents_build_only_from_locked_specs
+  - generic_best_in_class_persona_language_is_forbidden
+  - domain_considerations_must_be_traceable_by_ID
+  - incomplete_domain_brief_blocks_downstream_reasoning
+  - material_domain_brief_revision_requires_downstream_rerun
+  - gpt_5_mini_is_not_a_current_alias_for_gpt_5_4_mini
+  - gpt_5_5_pro_is_disabled_for_normal_flow
+  - quality_critical_stages_must_not_downgrade_automatically
+  - generation_budget_covers_attributable_api_and_tool_costs_only
+  - competitor_purchase_spend_is_separate_external_spend
+  - shared_generation_cost_is_allocated_deterministically
+  - budget_preflight_must_block_paid_calls_before_execution
+  - launch_requires_generation_budget_pass
+  - responses_api_is_preferred_when_supported_safely
+  - structured_outputs_must_be_schema_validated_when_supported
+
+ real_launched_products_require_real_marketplace_listing_url: true
+
+ human_override:
+  always_allowed: true

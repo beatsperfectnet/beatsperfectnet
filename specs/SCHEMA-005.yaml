@@ -1,0 +1,250 @@
+SCHEMA-005:
+  purpose: exact_required_fields_for_flow_005_artifacts
+  candidate_admission:
+    required_top_level_fields:
+      - candidate_id
+      - market_evidence_ref
+      - marketplace
+      - product_type
+      - primary_platform_candidate
+      - admitted
+      - reason
+      - competitor_purchase_required
+      - competitor_purchase_approval_required
+      - api_budget_ceiling_usd
+  public_shelf_read:
+    required_top_level_fields:
+      - candidate_id
+      - evidence_refs
+      - evidence_missing
+      - insight_signals
+      - kpp_signals
+      - complaint_signals
+      - hook_signals
+      - visible_rtb_signals
+      - bestseller_visual_reference
+      - competitor_candidates
+      - domain_constraints
+      - risk_of_false_scope
+  competitor_purchase:
+    required_top_level_fields:
+      - candidate_id
+      - selection
+      - approval
+      - acquisition
+      - originality_boundary_required
+    selection_required_fields:
+      - selected_competitor_ref
+      - selection_reason
+      - match_tier
+      - alternatives_considered
+      - tie_break_result
+      - live_verification
+  hidden_buyer_experience_inspection:
+    required_top_level_fields:
+      - purchase_ref
+      - inspected_asset_private_ref
+      - inspected_on_disposable_copy
+      - inspection_environment
+      - delivery_path
+      - actual_product_depth
+      - limits_and_stress
+      - purchased_product_visual_reference
+      - rtb_risks
+      - support_traps
+      - hidden_hook_or_value_stack
+      - originality_boundary
+      - classified_findings
+      - rtb_evidence_classification
+      - downstream_artifact_audit_requirements
+      - formula_protection_and_recovery_risks
+      - period_continuity_observations
+  alignment_chain:
+    required_top_level_fields:
+      - candidate_id
+      - evidence_refs
+      - insight
+      - kpp
+      - rtb
+      - hook_hypothesis
+      - excluded_scope
+      - kpp_quality_check
+      - rtb_quality_check
+      - evidence_to_claim_map
+  propagation_system_spec:
+    required_top_level_fields:
+      - candidate_id
+      - alignment_chain_ref
+      - promise_supported
+      - system_name
+      - system_type
+      - primary_platform
+      - supported_domain_boundaries
+      - supported_platform_boundaries
+      - first_success_scenario
+      - support_prevention
+      - protection_and_recovery
+      - stated_limits
+      - hook_surface
+      - visual_reference_contract
+      - category_quality_floor
+      - required_product_surfaces
+      - visual_acceptance_requirements
+      - originality_boundary
+      - forbidden_architecture
+      - excluded_scope
+      - formula_protection_mode
+      - artifact_integrity_audit_requirements
+      - formula_truth_table_tests
+      - boundary_mutation_tests
+      - time_horizon_model
+      - period_model
+      - carry_forward_model
+      - renewal_or_rollover_path
+      - publish_blockers
+  first_pass_build_manifest:
+    required_top_level_fields:
+      - candidate_id
+      - propagation_system_spec_ref
+      - product_artifacts
+      - artifact_version
+      - implemented_system_name
+      - system_type
+      - primary_platform
+      - input_or_start_surfaces
+      - canonical_sources_or_structure
+      - transformations_or_use_path
+      - output_or_completion_surfaces
+      - hook_surface
+      - visual_reference_contract_applied
+      - brandbook_ref
+      - protection_and_recovery
+      - known_limits
+      - excluded_scope_confirmed
+      - stage_api_cost_usd
+      - cumulative_api_cost_usd
+      - budget_remaining_usd
+      - artifact_integrity_manifest
+      - formula_inventory
+      - editable_range_inventory
+      - protection_truthfulness
+      - period_continuity_manifest
+  qa_result:
+    required_top_level_fields:
+      - candidate_id
+      - artifact_tested
+      - artifact_version
+      - primary_platform_tested
+      - system_type
+      - functional_system
+      - dynamic_mutation_results
+      - static_completion_results
+      - buyer_experience_checks
+      - product_visual_quality
+      - verified_product_surfaces
+      - hook_surface_consistency
+      - failure_classification
+      - product_repair_count
+      - artifact_integrity_audit
+      - formula_truth_table_results
+      - boundary_mutation_results
+      - period_continuity_results
+      - protection_truthfulness
+      - publish_blockers
+  listing_hook:
+    required_top_level_fields:
+      - candidate_id
+      - final_artifact_version
+      - passed_qa_ref
+      - final_kpp
+      - final_hook
+      - title
+      - thumbnail
+      - image_sequence
+      - description
+      - claim_map
+      - insight_kpp_rtb_alignment
+      - unverified_claim_exclusions
+  listing_creative_assembly:
+    required_top_level_fields:
+      - candidate_id
+      - listing_hook_ref
+      - passed_qa_ref
+      - source_surface_refs
+      - creative_assets
+      - creative_claim_map
+      - no_fabricated_product_surfaces
+      - output_format
+      - listing_upload_sequence
+      - artifact_fidelity_check
+      - publish_blockers
+  listing_quality_gate:
+    required_top_level_fields:
+      - listing_creative_assembly_ref
+      - thumbnail_click_strength
+      - first_image_clarity
+      - promise_visible_under_2_seconds
+      - visual_proof_of_rtb
+      - title_keyword_fit
+      - competitor_shelf_communication_parity
+      - hidden_objection_handling
+      - trust_signal_strength
+      - value_stack_clarity
+      - real_product_surface_quality
+      - product_surface_fidelity
+      - claim_truthfulness
+      - failure_source
+      - product_repair_count
+      - listing_repair_count
+      - decision
+      - kpp_quality
+      - rtb_quality
+      - artifact_audit_dependency
+      - creative_asset_dependency
+      - publish_blockers
+  launch_package:
+    required_top_level_fields:
+      - candidate_id
+      - product_artifacts
+      - artifact_version
+      - delivery_asset
+      - listing_assets
+      - passed_system
+      - passed_buyer_experience_checks
+      - passed_product_visual_quality
+      - passed_listing_gate
+      - supported_platforms
+      - stated_limits
+      - unsupported_actions
+      - editable_areas
+      - protected_or_generated_areas
+      - recovery_method
+      - originality_check
+      - private_asset_exclusion_check
+      - prepublish_validation
+      - publish_status
+      - listing_url
+      - launch_date
+      - initial_product_version_ref
+      - artifact_integrity_audit_ref
+      - formula_truth_table_ref
+      - period_continuity_ref
+      - protection_truthfulness_ref
+      - publish_blockers
+      - external_publish_approval
+    allowed_publish_statuses:
+      - blocked_missing_evidence
+      - blocked_failed_audit
+      - pass_pending_marketplace_publish
+      - ready_for_marketplace_publish
+      - published
+    ready_for_marketplace_publish_requires:
+      - artifact_integrity_audit_pass
+      - formula_truth_table_pass_or_not_applicable_with_reason
+      - period_continuity_pass_or_not_applicable_with_reason
+      - protection_truthfulness_pass
+      - buyer_experience_pass
+      - product_visual_quality_pass
+      - listing_quality_gate_pass
+      - delivery_package_pass
+      - publish_blockers_absent

@@ -1,0 +1,156 @@
+branding:
+  brand_name: BeatsPerfect
+  source_scope:
+    - beatsperfect.shop
+    - beatsperfect.net
+  extraction_basis:
+    fonts:
+      - /Users/andreyeremichev/beatsperfect/app/layout.tsx
+      - /Users/andreyeremichev/shop/app/assets/styles.css
+    colors:
+      - /Users/andreyeremichev/beatsperfect/lib/brand/tokens.ts
+      - /Users/andreyeremichev/beatsperfect/app/globals.css
+      - /Users/andreyeremichev/shop/app/assets/styles.css
+    voice:
+      - /Users/andreyeremichev/beatsperfect/company.md
+      - /Users/andreyeremichev/beatsperfect/specs/beatsperfect-sites.v1.0.md
+      - /Users/andreyeremichev/beatsperfect/records/listing_specs/LS-C-008-001.yaml
+      - /Users/andreyeremichev/beatsperfect/records/delivery_specs/DS-C-008-001.yaml
+      - /Users/andreyeremichev/beatsperfect/records/product_analysis/PA-C-008-001.yaml
+      - /Users/andreyeremichev/shop/app/assets/data.js
+  typography:
+    ui_font:
+      family: Inter
+      stack: '"Inter", system-ui, sans-serif'
+      usage:
+        - primary interface text
+        - headings
+        - body copy
+        - product listing copy
+    mono_font:
+      family: IBM Plex Mono
+      stack: '"IBM Plex Mono", ui-monospace, SFMono-Regular, monospace'
+      usage:
+        - metrics
+        - labels
+        - status chips
+        - technical notes
+        - timestamps
+  color_system:
+    background: "#F3F6F4"
+    surface: "#FFFFFF"
+    surface_soft: "#F8FAFC"
+    border: "#D9E2EC"
+    text: "#102A43"
+    muted_text: "#475569"
+    pipeline: "#1F6F8B"
+    success: "#5C7A52"
+    warning: "#F2B84B"
+    accent: "#F47C57"
+    danger: "#BE123C"
+    shadows:
+      soft: "0 12px 30px rgba(16, 42, 67, 0.08)"
+    gradients:
+      page:
+        - "radial-gradient(circle at top left, rgba(31, 111, 139, 0.08), transparent 30%)"
+        - "radial-gradient(circle at top right, rgba(244, 124, 87, 0.08), transparent 28%)"
+        - "#F3F6F4"
+      shop:
+        - "radial-gradient(circle at top left, rgba(31, 111, 139, 0.05), transparent 30%)"
+        - "linear-gradient(180deg, #F5F7F5, #F3F6F4)"
+  visual_system:
+    feel:
+      - clean
+      - calm
+      - evidence-led
+      - operational
+      - lightly tactile
+      - high-trust
+    layout_traits:
+      - rounded cards
+      - pill nav
+      - readable tables
+      - visible status colors
+      - soft shadows
+      - subtle atmospheric gradients
+    dashboard_character:
+      - report-like
+      - transparent
+      - metric-first
+      - technical but readable
+    shop_character:
+      - buyer-friendly
+      - commercial but restrained
+      - product-first
+      - preview-led
+  tone_of_voice:
+    shared_principles:
+      - Use plain English.
+      - Lead with the buyer outcome or operator outcome.
+      - Keep claims verifiable.
+      - Prefer short, concrete sentences.
+      - Avoid hype, gimmicks, and inflated certainty.
+      - Explain setup, compatibility, and limits clearly.
+      - Show proof instead of promising magic.
+    shop_voice:
+      - Focus on one clear job.
+      - Sound helpful and commercial, not salesy.
+      - Explain what is included, who it is for, and how it is used.
+      - Make compatibility and first success obvious.
+      - Prefer phrases like "ready to use", "no recurring fee", and "built from evidence".
+    net_voice:
+      - Sound operational and factual.
+      - Use metrics, states, and timestamps plainly.
+      - Show process without theatrics.
+      - Treat human involvement as a real input, not a vanity metric.
+      - Prefer phrases like "AI-operated. Human-accountable." and "good enough beats perfect."
+    avoid:
+      - marketing fluff
+      - vague inspiration language
+      - synthetic urgency
+      - exaggerated guarantees
+      - hidden caveats
+      - fake real-time theatrics
+  copy_rules:
+    listing_product_delivery_artifacts:
+      - State the one clear job in the first line or headline.
+      - Make the buyer-visible contents explicit.
+      - Call out compatibility and setup path early.
+      - Keep support assets visible and named.
+      - Use real surface names for screenshots, tabs, and deliverables.
+      - Never imply SaaS behavior when the product is a download.
+      - Never invent a control, chart, or state that is not shipped.
+    preferred_phrases:
+      - one clear job
+      - ready to use
+      - built from evidence
+      - no recurring fee
+      - clear scope
+      - first success
+      - AI-operated. Human-accountable.
+      - good enough beats perfect
+    banned_phrases:
+      - revolutionary
+      - game-changing
+      - guaranteed results
+      - instant wealth
+      - fully automated business
+      - secret hack
+      - limited-time urgency unless it is a real marketplace constraint
+  artifact_defaults:
+    title_style:
+      - sentence case preferred
+      - short, literal, and searchable
+    description_style:
+      - 1 short paragraph for the promise
+      - 1 short paragraph for what is included
+      - 1 short paragraph for setup and compatibility
+    support_style:
+      - answer the first-use question first
+      - name tabs, files, and steps explicitly
+      - keep troubleshooting concrete
+    visual_style:
+      - use the shared palette
+      - use Inter for prose and IBM Plex Mono for technical labels
+      - preserve calm whitespace and soft borders
+      - surface proof before polish

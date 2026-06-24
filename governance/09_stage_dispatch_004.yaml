@@ -1,0 +1,418 @@
+stage_dispatch:
+  purpose: exact_model_selection_per_flow_stage
+  rule: every stage must run in a session pinned to the governed model before stage actions begin
+
+  source_of_truth:
+    - workflows/FLOW-004.yaml
+    - specs/MODEL-004.yaml
+    - governance/07_capacity_model.yaml
+
+  dispatch_strategy:
+    - resolve model_policy_ref for the stage
+    - select the governed default model, or fallback or escalation model when the policy allows it
+    - start or switch into a session pinned to the requested model
+    - record the session model before stage execution
+    - write the stage dispatch log before and after execution
+    - halt and escalate if the exact model cannot be used
+
+  enforcement:
+    exact_model_match_required: true
+    if_model_unavailable: stop_and_escalate
+    if_dispatch_mismatch_detected: mark_run_noncompliant_and_stop_future_stages
+    if_stage_is_not_run: record_not_run_and_do_not_fake_match
+
+  allowed_runtime_actions:
+    - spawn_child_session_with_model_override
+    - switch_session_model
+    - record_stage_dispatch_log
+    - halt_and_escalate
+    - human_gate
+
+  stage_model_map:
+    01_generate_ideas:
+      model_policy_ref: MODEL-004.research
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+      requested_model_id: gpt-5.4-mini
+      runtime_resolved_model_id: openai/gpt-5.4-mini
+      reasoning_effort: low
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: false
+      fallback_model: gpt-5.4
+      escalation_model: gpt-5.5
+      dispatch_action: switch_session_model
+    02_tier_1_structural_screen:
+      model_policy_ref: MODEL-004.research
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+      requested_model_id: gpt-5.4-mini
+      runtime_resolved_model_id: openai/gpt-5.4-mini
+      reasoning_effort: none
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: false
+      fallback_model: gpt-5.4
+      escalation_model: gpt-5.5
+      dispatch_action: switch_session_model
+    03_collect_market_data:
+      model_policy_ref: MODEL-004.research
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+      requested_model_id: gpt-5.4-mini
+      runtime_resolved_model_id: openai/gpt-5.4-mini
+      reasoning_effort: low
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: false
+      fallback_model: gpt-5.4
+      escalation_model: gpt-5.5
+      dispatch_action: switch_session_model
+    04_apply_BM_001:
+      model_policy_ref: MODEL-004.research
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+      requested_model_id: gpt-5.4-mini
+      runtime_resolved_model_id: openai/gpt-5.4-mini
+      reasoning_effort: none
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: false
+      fallback_model: gpt-5.4
+      escalation_model: gpt-5.5
+      dispatch_action: switch_session_model
+    05_create_candidates:
+      model_policy_ref: implicit_mini
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+      requested_model_id: gpt-5.4-mini
+      runtime_resolved_model_id: openai/gpt-5.4-mini
+      reasoning_effort: none
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: false
+      fallback_model:
+      escalation_model:
+      dispatch_action: switch_session_model
+    06_listing_analysis:
+      model_policy_ref: MODEL-004.listing_analysis
+      requested_model: gpt-5.4
+      requested_model_id: gpt-5.4
+      runtime_resolved_model_id: openai/gpt-5.4
+      governed_model_tier: medium
+      reasoning_effort: low
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: true
+      fallback_model:
+      escalation_model: gpt-5.5
+      dispatch_action: switch_session_model
+    07_product_analysis:
+      model_policy_ref: MODEL-004.product_analysis
+      requested_model: gpt-5.4
+      requested_model_id: gpt-5.4
+      runtime_resolved_model_id: openai/gpt-5.4
+      governed_model_tier: medium
+      reasoning_effort: medium
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: true
+      fallback_model:
+      escalation_model: gpt-5.5
+      dispatch_action: switch_session_model
+    08_create_candidate_domain_brief:
+      model_policy_ref: MODEL-004.candidate_domain_brief_creation
+      requested_model: gpt-5.4
+      requested_model_id: gpt-5.4
+      runtime_resolved_model_id: openai/gpt-5.4
+      governed_model_tier: medium
+      reasoning_effort: medium
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: true
+      fallback_model:
+      escalation_model: gpt-5.5
+      dispatch_action: switch_session_model
+    09_select_competitor_for_purchase:
+      model_policy_ref: MODEL-004.competitor_selection
+      requested_model: gpt-5.4
+      requested_model_id: gpt-5.4
+      runtime_resolved_model_id: openai/gpt-5.4
+      governed_model_tier: medium
+      reasoning_effort: low
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: true
+      fallback_model:
+      escalation_model: gpt-5.5
+      dispatch_action: switch_session_model
+    10_human_purchase_approval_and_acquisition:
+      model_policy_ref: MODEL-004.purchase_approval_and_acquisition
+      requested_model: human
+      requested_model_id: human
+      runtime_resolved_model_id: human
+      model_call_required: false
+      mechanical_state_writer_if_needed: gpt-5.4-mini
+      reasoning_effort: none
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: false
+      fallback_model:
+      escalation_model:
+      dispatch_action: human_gate
+    11_purchased_competitor_inspection:
+      model_policy_ref: MODEL-004.purchased_competitor_inspection
+      requested_model: gpt-5.5
+      requested_model_id: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      governed_model_tier: frontier
+      reasoning_effort: medium
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: true
+      automatic_downward_fallback_allowed: false
+      fallback_model:
+      escalation_model: gpt-5.5
+      dispatch_action: switch_session_model
+    12_listing_spec:
+      model_policy_ref: MODEL-004.listing_spec_creation
+      requested_model: gpt-5.5
+      requested_model_id: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      governed_model_tier: frontier
+      reasoning_effort: medium
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: true
+      automatic_downward_fallback_allowed: false
+      fallback_model:
+      escalation_model: gpt-5.5
+      dispatch_action: spawn_child_session_with_model_override
+    13_product_spec:
+      model_policy_ref: MODEL-004.product_spec_creation
+      requested_model: gpt-5.5
+      requested_model_id: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      governed_model_tier: frontier
+      reasoning_effort: medium
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: true
+      automatic_downward_fallback_allowed: false
+      fallback_model:
+      escalation_model: gpt-5.5
+      dispatch_action: spawn_child_session_with_model_override
+    14_delivery_spec:
+      model_policy_ref: MODEL-004.delivery_spec_creation
+      requested_model: gpt-5.5
+      requested_model_id: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      governed_model_tier: frontier
+      reasoning_effort: medium
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: true
+      automatic_downward_fallback_allowed: false
+      fallback_model:
+      escalation_model: gpt-5.5
+      dispatch_action: spawn_child_session_with_model_override
+    15_create_good_enough_for_humans_spec:
+      model_policy_ref: MODEL-004.good_enough_for_humans_spec_creation
+      requested_model: gpt-5.5
+      requested_model_id: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      governed_model_tier: frontier
+      reasoning_effort: medium
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: true
+      automatic_downward_fallback_allowed: false
+      fallback_model:
+      escalation_model: gpt-5.5
+      dispatch_action: spawn_child_session_with_model_override
+    16_build_product_asset:
+      model_policy_ref: MODEL-004.build_product_asset
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      requested_model_id: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      reasoning_effort: medium
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: true
+      automatic_downward_fallback_allowed: false
+      fallback_model:
+      escalation_model: gpt-5.5
+      dispatch_action: switch_session_model
+    17_verify_product_surfaces:
+      model_policy_ref: MODEL-004.verify_product_surfaces
+      requested_model: gpt-5.4
+      requested_model_id: gpt-5.4
+      runtime_resolved_model_id: openai/gpt-5.4
+      governed_model_tier: medium
+      reasoning_effort: medium
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: true
+      fallback_model:
+      escalation_model: gpt-5.5
+      dispatch_action: switch_session_model
+    18_build_listing_assets:
+      model_policy_ref: MODEL-004.build_listing_assets
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      requested_model_id: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      reasoning_effort: low
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: true
+      automatic_downward_fallback_allowed: false
+      fallback_model:
+      escalation_model: gpt-5.5
+      dispatch_action: switch_session_model
+    19_build_delivery_assets:
+      model_policy_ref: MODEL-004.build_delivery_assets
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+      requested_model_id: gpt-5.4
+      runtime_resolved_model_id: openai/gpt-5.4
+      reasoning_effort: medium
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: false
+      fallback_model: gpt-5.4
+      escalation_model: gpt-5.5
+      dispatch_action: switch_session_model
+    20_quality_qa:
+      model_policy_ref: MODEL-004.qa
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      requested_model_id: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      reasoning_effort: medium
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: true
+      automatic_downward_fallback_allowed: false
+      fresh_context_required: true
+      fallback_model:
+      escalation_model: gpt-5.5
+      dispatch_action: switch_session_model
+    21_fixing:
+      model_policy_ref: MODEL-004.fixing
+      governed_model_tier: mixed
+      requested_model: gpt-5.4-mini
+      requested_model_id: gpt-5.4-mini
+      runtime_resolved_model_id: openai/gpt-5.4-mini
+      reasoning_effort: low
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: true
+      dispatch_by_defect_class:
+        mechanical_or_cosmetic:
+          model: gpt-5.4-mini
+          reasoning_effort: low
+        localized_logic_or_compatibility:
+          model: gpt-5.4
+          reasoning_effort: medium
+        architecture_promise_or_systemic_logic:
+          model: gpt-5.5
+          reasoning_effort: medium
+          human_or_budget_preflight_required: true
+      fallback_model:
+      escalation_model: gpt-5.5
+      dispatch_action: switch_session_model
+    22_launch_review:
+      model_policy_ref: MODEL-004.launch_review
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      requested_model_id: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      reasoning_effort: low
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: true
+      automatic_downward_fallback_allowed: false
+      fresh_context_required: true
+      fallback_model:
+      escalation_model: gpt-5.5
+      dispatch_action: switch_session_model
+    23_marketplace_publish:
+      model_policy_ref: MODEL-004.marketplace_listing
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+      requested_model_id: gpt-5.4-mini
+      runtime_resolved_model_id: openai/gpt-5.4-mini
+      reasoning_effort: low
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: false
+      fallback_model: gpt-5.4
+      escalation_model: gpt-5.5
+      dispatch_action: switch_session_model
+    24_create_product_v1_0:
+      model_policy_ref: MODEL-004.marketplace_listing
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+      requested_model_id: gpt-5.4-mini
+      runtime_resolved_model_id: openai/gpt-5.4-mini
+      reasoning_effort: none
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: false
+      fallback_model: gpt-5.4
+      escalation_model: gpt-5.5
+      dispatch_action: switch_session_model
+    25_monthly_outcome_recording:
+      model_policy_ref: MODEL-004.post_launch_ledger
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+      requested_model_id: gpt-5.4-mini
+      runtime_resolved_model_id: openai/gpt-5.4-mini
+      reasoning_effort: none
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: false
+      fallback_model:
+      escalation_model:
+      dispatch_action: switch_session_model
+    26_apply_kill_rules:
+      model_policy_ref: MODEL-004.post_launch_ledger
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+      requested_model_id: gpt-5.4-mini
+      runtime_resolved_model_id: openai/gpt-5.4-mini
+      reasoning_effort: none
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: false
+      fallback_model:
+      escalation_model:
+      dispatch_action: switch_session_model
+    27_apply_resource_allocation:
+      model_policy_ref: MODEL-004.post_launch_ledger
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+      requested_model_id: gpt-5.4-mini
+      runtime_resolved_model_id: openai/gpt-5.4-mini
+      reasoning_effort: low
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: false
+      fallback_model:
+      escalation_model:
+      dispatch_action: switch_session_model
+    28_company_metrics:
+      model_policy_ref: MODEL-004.post_launch_ledger
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+      requested_model_id: gpt-5.4-mini
+      runtime_resolved_model_id: openai/gpt-5.4-mini
+      reasoning_effort: none
+      text_verbosity: low
+      processing_mode: standard
+      quality_critical: false
+      fallback_model:
+      escalation_model:
+      dispatch_action: switch_session_model

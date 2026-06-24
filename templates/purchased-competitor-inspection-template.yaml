@@ -1,0 +1,135 @@
+purchased_competitor_inspection:
+  inspection_id:
+  flow_contract_ref:
+  candidate_ref:
+  competitive_purchase_approval_ref:
+  candidate_domain_brief_ref:
+  applied_domain_consideration_ids:
+    - 
+  status:
+
+  competitor_product:
+    title:
+    marketplace:
+    seller_name_if_visible:
+    product_url:
+    purchase_date:
+    purchase_price:
+    selection_match_tier:
+
+  inspection_environment:
+    private_asset_refs:
+    disposable_working_copy_used:
+    file_or_platform_type:
+    application_used:
+    application_version_if_known:
+    inspection_date:
+    limitations:
+
+  delivered_assets:
+    - asset_id:
+      filename_or_label:
+      asset_type:
+      file_format:
+      observable_purpose:
+      buyer_action_required:
+      evidence_locator:
+
+  first_use_observations:
+    first_open_asset:
+    start_point_clear:
+    setup_steps_observed:
+    sample_or_demo_state_present:
+    buyer_inputs_required_before_value:
+    observed_friction:
+      - observation:
+        evidence_locator:
+
+  spreadsheet_architecture:
+    tab_count:
+    tabs:
+      - tab_id:
+        visible_name:
+        generic_function:
+        role:
+        evidence_locator:
+    primary_user_flow:
+    data_entry_strategy:
+    output_or_dashboard_strategy:
+    setup_strategy:
+    category_strategy:
+    formula_dependency_observations:
+    evidence_missing:
+
+  formula_and_automation_observations:
+    formulas_present:
+    formula_visibility:
+    editable_areas_marked:
+    formula_protection_observed:
+    listing_automation_claims:
+      - claim_summary:
+    delivery_status:
+    evidence_locator:
+    manual_work_observed:
+    likely_breakage_risks:
+
+  listing_promise_delivery_checks:
+    - check_id:
+      listing_claim_summary:
+      delivery_status:
+      observed_result:
+      evidence_locator:
+
+  complaint_checks:
+    - complaint_id:
+      complaint_summary:
+      inspection_status:
+      observed_cause:
+      evidence_locator:
+      downstream_action_required:
+
+  stress_tests:
+    - test_id:
+      applicability:
+      reason_if_not_applicable_or_not_testable:
+      test_action:
+      observed_result:
+      result:
+      failure_mode:
+      evidence_locator:
+      downstream_requirement:
+
+  support_risks:
+    - risk_id:
+      observed_risk:
+      likely_support_trigger:
+      prevention_requirement:
+      evidence_locator:
+
+  originality_boundary:
+    generic_category_behaviors_observed:
+      -
+    seller_specific_elements_forbidden:
+      -
+    independent_implementation_requirements:
+      -
+    buyer_relevant_improvement_opportunities:
+      -
+
+  derived_requirements:
+    - requirement_id:
+      disposition:
+      target_artifact:
+      requirement:
+      reason:
+      source_observation_ref:
+      acceptance_test:
+
+  scope_decision:
+    recommendation:
+    reason:
+    escalation_required:
+    escalation_reason:
+
+  evidence_missing:
+    -

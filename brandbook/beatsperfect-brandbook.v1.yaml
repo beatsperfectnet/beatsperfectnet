@@ -1,0 +1,27 @@
+brandbook:
+  brand_name: BeatsPerfect
+  purpose: commercial_visual_identity_for_flow_005
+  typography:
+    ui_font: Inter
+    mono_font: "IBM Plex Mono"
+  color_system:
+    background: "#F3F6F4"
+    surface: "#FFFFFF"
+    text: "#102A43"
+    muted_text: "#475569"
+    pipeline: "#1F6F8B"
+    success: "#5C7A52"
+    warning: "#F2B84B"
+    accent: "#F47C57"
+    danger: "#BE123C"
+  feel:
+    - clean
+    - calm
+    - evidence-led
+    - operational
+    - high-trust
+  rules:
+    - use the shared palette
+    - preserve calm whitespace
+    - surface proof before polish
+    - avoid fake real-time theatrics

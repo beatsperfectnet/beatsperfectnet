@@ -1,0 +1,67 @@
+real_product_surface_spec:
+  spec_id:
+  candidate_ref:
+  product_name:
+  marketplace:
+  listing_spec_ref:
+  product_spec_ref:
+  product_asset_ref:
+  verified_product_surfaces:
+    - surface_id:
+      tab:
+      range_or_object_ref:
+      surface_type:
+      buyer_decision_supported:
+      screenshot_eligible:
+      evidence_summary:
+  screenshot_eligible_surfaces:
+    - surface_id:
+      listing_image_role:
+      required_screenshot_moment_ref:
+      eligibility_reason:
+      allowed_listing_treatments:
+        - crop
+        - framing
+        - callout
+        - badge
+        - annotation
+      forbidden_listing_treatments:
+        - fabricated_chart
+        - fabricated_table
+        - fabricated_control
+        - fabricated_state
+        - improved_formatting_not_present_in_product
+  real_tabs:
+    - 
+  real_ranges:
+    - 
+  real_charts:
+    - chart_id:
+      tab:
+      source_range:
+      buyer_decision_supported:
+      units:
+      threshold_semantics:
+      readability_status:
+  real_dashboard_states:
+    - 
+  real_controls:
+    - control_id:
+      tab:
+      control_type:
+      buyer_visible_label:
+      clean_human_control_status:
+  chart_unit_and_threshold_semantics:
+    - 
+  buyer_decision_bearing_charts:
+    - 
+  sample_data_states:
+    - 
+  image_to_product_fidelity:
+    - 
+  no_listing_only_fake_surfaces:
+    - 
+  verification_failures:
+    - 
+  evidence_missing:
+    - 

@@ -1,0 +1,44 @@
+METRICS-001:
+ purpose: monthly_metric_and_double_down_contract
+
+ field_mappings:
+  calendar_month_value: actual_monthly_revenue
+  calendar_month_cost: actual_monthly_cost
+
+ formulas:
+  actual_monthly_prompt_tokens:
+   formula: sum(cumulative_prompt_tokens across all products)
+  actual_monthly_completion_tokens:
+   formula: sum(cumulative_completion_tokens across all products)
+  actual_monthly_total_tokens:
+   formula: sum(cumulative_total_tokens across all products)
+  actual_monthly_profit:
+   formula: actual_monthly_revenue - actual_monthly_cost
+  monthly_net_profit_usd:
+   formula: sum(actual_monthly_profit across active products)
+
+ aggregation_rules:
+  active_products:
+   definition: product.status == active
+  total_support_hours:
+   formula: sum(actual_support_hours_per_month across all products)
+  total_prompt_tokens:
+   formula: sum(cumulative_prompt_tokens across all products)
+  total_completion_tokens:
+   formula: sum(cumulative_completion_tokens across all products)
+  total_tokens:
+   formula: sum(cumulative_total_tokens across all products)
+  total_reviews_count:
+   formula: sum(total_reviews_count across all products)
+  negative_reviews_count:
+   formula: sum(negative_reviews_count across all products)
+  refunds_count:
+   formula: sum(refunds_count across all products)
+  bug_fixes_after_launch_count:
+   formula: sum(bug_fixes_after_launch_count across all products)
+  total_api_cost_usd:
+   formula: sum(cumulative_api_cost_usd across all products)
+  total_generation_cost_usd:
+   formula: sum(generation_api_and_tool_cost_usd across all products)
+  total_competitor_purchase_cost_usd:
+   formula: sum(competitor_purchase_cost_usd across all products)

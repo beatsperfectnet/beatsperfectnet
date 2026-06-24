@@ -1,0 +1,15 @@
+admission_rules:
+ tier_1:
+  reject_if:
+   - prohibited_category
+   - prohibited_business_model
+
+ tier_2:
+  model: BM-001
+  reject_if:
+   observed_new_entrants_above_threshold < minimum_new_entrant_count
+
+ candidate_creation:
+  requires:
+   - tier_1_passed
+   - tier_2_passed

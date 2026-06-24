@@ -1,0 +1,11 @@
+candidate_admission:
+  candidate_id:
+  market_evidence_ref:
+  marketplace:
+  product_type:
+  primary_platform_candidate:
+  admitted:
+  reason:
+  competitor_purchase_required: true
+  competitor_purchase_approval_required: true
+  api_budget_ceiling_usd: 25

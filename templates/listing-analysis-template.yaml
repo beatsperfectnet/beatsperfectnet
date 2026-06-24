@@ -1,0 +1,63 @@
+listing_analysis:
+  analysis_id:
+  candidate_ref:
+  idea_ref:
+  marketplace:
+  primary_buyer_jtbd:
+  bestseller_listing_promise:
+  bestseller_buyer_expectations:
+  evidence_refs_for_jtbd_and_promise:
+    - 
+  listing_evidence_packet:
+    benchmark_listings:
+      - listing_url:
+        evidence_summary:
+    benchmark_titles:
+      - listing_url:
+        title:
+    benchmark_thumbnails:
+      - listing_url:
+        image_ref:
+        visible_text:
+        visible_elements:
+    benchmark_image_breakdowns:
+      - listing_url:
+        image_1:
+        image_2:
+        image_3:
+        image_4:
+        image_5:
+        image_6:
+    benchmark_trust_signals:
+      - listing_url:
+        signal:
+    benchmark_objection_handlers:
+      - listing_url:
+        handler:
+    benchmark_buyer_visible_contents:
+      - listing_url:
+        content:
+    benchmark_compatibility_claims:
+      - listing_url:
+        claim:
+    benchmark_bonus_visibility:
+      - listing_url:
+        bonus:
+    benchmark_descriptions:
+      - listing_url:
+        description_summary:
+    benchmark_pricing:
+      - listing_url:
+        current_price:
+        sale_price:
+        sale_visible:
+    bestseller_visual_grammar:
+      - listing_url:
+        observed_visual_pattern:
+        evidence_summary:
+    benchmark_screenshot_expectations:
+      - listing_url:
+        expected_surface:
+        evidence_summary:
+  evidence_missing:
+    - 

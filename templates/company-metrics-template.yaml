@@ -1,0 +1,17 @@
+company_metrics:
+ reporting_month: 2026-07
+ total_products:
+ active_products:
+ killed_products:
+ monthly_net_profit_usd:
+ total_prompt_tokens:
+ total_completion_tokens:
+ total_tokens:
+ total_reviews_count:
+ negative_reviews_count:
+ refunds_count:
+ bug_fixes_after_launch_count:
+ total_support_hours:
+ total_api_cost_usd:
+ total_generation_cost_usd:
+ total_competitor_purchase_cost_usd:

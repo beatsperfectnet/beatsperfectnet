@@ -1,0 +1,29 @@
+listing_creative_assembly:
+  candidate_id:
+  listing_hook_ref:
+  passed_qa_ref:
+  source_surface_refs:
+  creative_assets:
+    - path:
+      role:
+      source_surface_ref:
+      claim:
+      transformation_allowed:
+      fabricated_product_surface_absent:
+  creative_claim_map:
+    - claim:
+      creative_path:
+      proof_ref:
+      source_surface_ref:
+  no_fabricated_product_surfaces:
+  output_format:
+    width_px:
+    height_px:
+    file_type:
+  listing_upload_sequence:
+  artifact_fidelity_check:
+    status:
+    notes:
+  publish_blockers:
+    status:
+    blockers:

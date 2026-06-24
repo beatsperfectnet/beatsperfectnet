@@ -1,0 +1,29 @@
+constraints:
+ financial:
+  max_monthly_burn_usd: 500
+  autonomous_spending_usd: 0
+
+ human:
+  max_total_support_hours_per_month: 3
+  max_total_manual_operations_hours_per_month: 3
+
+ prohibited_business_models:
+  - consulting
+  - agency
+  - freelancing
+  - custom_client_work
+  - done_for_you_services
+
+ prohibited_categories:
+  - regulated_or_high_liability
+
+ learning:
+  outcome_real_data: required
+  finding_evidence_based: required
+
+ approvals_required:
+  - purchases
+  - advertising_spend
+  - governance_changes
+  - external_contracts
+  - marketplace_publish_when_human_required

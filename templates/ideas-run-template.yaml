@@ -1,0 +1,13 @@
+idea_run:
+ run_id:
+ created_at:
+
+ideas:
+ - idea_id:
+   product_thesis:
+   marketplace:
+   category:
+   business_model:
+   tier_1_result:
+   tier_2_result:
+   observed_new_entrants_above_threshold:

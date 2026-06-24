@@ -1,0 +1,289 @@
+candidate_id: C-VALID-STA-001
+marketplace: Etsy
+product_type: checklist_template
+system_name: Client Kickoff Navigator
+system_type: static_completion_path
+primary_platform: PDF
+buyer_job: freelancer_kickoff_completion
+kpp: one_guided_checklist_takes_a_kickoff_from_blank_to_complete_with_zero_guesswork
+alignment_chain_ref: alignment_chain.valid_static_product
+propagation_system_spec_ref: propagation_system_spec.valid_static_product
+buyer_task: complete_the_client_kickoff_packet
+starting_state: blank_kickoff_checklist
+ordered_use_path:
+  - step: open_checklist
+    required_asset_or_surface: kickoff_checklist
+    buyer_action: open_the_checklist
+    expected_result: starting_state_visible
+  - step: fill_required_sections
+    required_asset_or_surface: kickoff_checklist
+    buyer_action: fill_the_sections_in_order
+    expected_result: packet_progresses
+  - step: finalize_packet
+    required_asset_or_surface: completion_summary
+    buyer_action: mark_complete
+    expected_result: completed_packet
+canonical_content_or_structure:
+  completed_outcome: completed_client_kickoff_packet
+completion_tests:
+  - test: representative_completion
+    expected_result: completed_packet
+confusion_or_misuse_tests:
+  - test: skip_section
+    expected_prevention_or_guidance: missing_section_flagged_before_completion
+visual_reference_contract_applied: true
+brandbook_ref: brandbook/beatsperfect-brandbook.v1.yaml
+protection_and_recovery:
+  editable_areas:
+    - kickoff_checklist
+  protected_or_generated_areas:
+    - completion_summary
+  reset_or_recovery_method: restart_from_the_beginning
+artifact_integrity_manifest:
+  artifact_paths:
+    - builds/C-VALID-STA-001/kickoff_checklist
+    - builds/C-VALID-STA-001/completion_summary
+  generated_from_real_product_surfaces: true
+  listing_assets_source_artifacts:
+    - builds/C-VALID-STA-001/completion_summary
+formula_inventory:
+  formulas_present: false
+  formula_ranges: []
+  external_or_unsupported_formula_markers: []
+editable_range_inventory:
+  buyer_editable_ranges:
+    - kickoff_checklist
+  generated_or_formula_ranges:
+    - completion_summary
+protection_truthfulness:
+  formula_protection_mode: not_applicable
+  sheet_or_range_protection_enabled: false
+  recovery_only_labeling_used: false
+  unsupported_claims_absent: true
+period_continuity_manifest:
+  applicable: false
+  period_type: not_applicable
+  start_period_controls: []
+  carry_forward_ranges_or_logic: []
+  closeout_or_handoff_surface: null
+  next_cycle_seed_values: []
+known_limits:
+  - checklist_not_live_workflow_engine
+excluded_scope_confirmed:
+  - second_platform
+  - dashboard_first
+stage_api_cost_usd: 5.10
+cumulative_api_cost_usd: 16.90
+budget_remaining_usd: 8.10
+qa_result:
+  candidate_id: C-VALID-STA-001
+  artifact_tested: builds/C-VALID-STA-001/manifest.yaml
+  artifact_version: v1.0.0
+  primary_platform_tested: PDF
+  system_type: static_completion_path
+  functional_system:
+    first_success_status: pass
+    expected: complete_the_packet_from_starting_state
+    observed: complete_the_packet_from_starting_state
+    evidence_locator: evidence/valid_static/functional
+  dynamic_mutation_results: []
+  static_completion_results:
+    - test: representative_completion
+      expected_result: completed_packet
+      observed_result: completed_packet
+      status: pass
+      evidence_locator: evidence/valid_static/completion-01
+  buyer_experience_checks:
+    access_path_clear: pass
+    first_open_clear: pass
+    first_action_clear: pass
+    editable_areas_obvious: pass
+    generated_or_protected_areas_safe: pass
+    hidden_support_traps_avoided: pass
+    warnings_or_permissions_absent_or_disclosed: pass
+    reset_or_recovery_available: pass
+    supported_limits_visible: pass
+    unsupported_actions_stated: pass
+    domain_correctness_passed: pass
+    platform_specific_checks_passed: pass
+  product_visual_quality:
+    bestseller_quality_floor_met: pass
+    purchased_product_quality_reference_met: pass
+    brandbook_compliance: pass
+    information_hierarchy: pass
+    primary_action_clarity: pass
+    primary_result_clarity: pass
+    input_output_distinction: pass
+    typography_readability: pass
+    spacing_and_alignment: pass
+    format_consistency: pass
+    color_semantics: pass
+    chart_readability: not_applicable
+    chart_units_labels_and_legends: not_applicable
+    visual_clutter_absent: pass
+    default_template_appearance_absent: pass
+    real_surface_screenshot_readiness: pass
+  artifact_integrity_audit:
+    status: pass
+    artifact_open_check: pass
+    required_surfaces_check: pass
+    formula_inventory_check: not_applicable
+    editable_range_check: pass
+    listing_surface_fidelity_check: pass
+    evidence_locator: evidence/valid_static/artifact-audit
+  formula_truth_table_results:
+    applicable: false
+    status: not_applicable_with_reason
+    reason: static_pdf_completion_path_has_no_formulas
+    test_cases: []
+  boundary_mutation_results:
+    applicable: false
+    status: not_applicable_with_reason
+    reason: static_pdf_completion_path_has_no_formula_boundaries
+    test_cases: []
+  period_continuity_results:
+    applicable: false
+    status: not_applicable_with_reason
+    reason: static_client_kickoff_checklist_is_not_a_periodic_tracker
+    test_cases: []
+  protection_truthfulness:
+    status: pass
+    formula_protection_mode: not_applicable
+    sheet_or_range_protection_verified: false
+    recovery_only_labeling_truthful: true
+    unsupported_protection_claims_absent: true
+  publish_blockers:
+    status: pass
+    blockers: []
+  verified_product_surfaces:
+    - surface_id: kickoff_checklist
+      real_artifact_locator: builds/C-VALID-STA-001/kickoff_checklist
+      supports: buyer_task
+      buyer_visible_state: starting
+      listing_eligible: true
+    - surface_id: completion_summary
+      real_artifact_locator: builds/C-VALID-STA-001/completion_summary
+      supports: completed_outcome
+      buyer_visible_state: generated
+      listing_eligible: true
+  hook_surface_consistency:
+    status: pass
+    expected: real_completion_surface_shown
+    observed: real_completion_surface_shown
+    evidence_locator: evidence/valid_static/hook
+  failure_classification:
+    defect_type: none
+    reason: none
+  product_repair_count:
+    decision: pass
+listing_hook:
+  candidate_id: C-VALID-STA-001
+  final_artifact_version: v1.0.0
+  passed_qa_ref: qa_result.valid_static_product
+  final_kpp: one_guided_checklist_takes_a_kickoff_from_blank_to_complete_with_zero_guesswork
+  final_hook: finish_the_client_kickoff_in_one_guided_path
+  title: Client Kickoff Navigator
+  thumbnail:
+    message: blank_checklist_to_complete_packet
+    real_product_surface_id: completion_summary
+    treatment: tight_crop_on_completion_summary
+  image_sequence:
+    - image_id: img-1
+      role: insight
+      message: start_with_a_blank_packet
+      real_product_surface_id: kickoff_checklist
+      aligned_to: insight
+    - image_id: img-2
+      role: kpp
+      message: follow_one_guided_path_to_completion
+      real_product_surface_id: kickoff_checklist
+      aligned_to: kpp
+    - image_id: img-3
+      role: rtb
+      message: finished_packet_is_the_verified_result
+      real_product_surface_id: completion_summary
+      aligned_to: rtb
+  description:
+    trust_signals:
+      - real_completion_path
+      - recovery_guidance
+      - visible_limits
+    objection_handlers:
+      - the_checklist_shows_what_counts_as_done
+    value_stack:
+      - ordered_checklist
+      - clear_completion_state
+      - recovery_instructions
+    compatibility_claims:
+      - PDF
+  claim_map:
+    - claim: the_buyer_can_finish_the_kickoff_packet
+      proof_type: passed_qa
+      proof_ref: qa_result.valid_static_product.static_completion_results[0]
+      aligned_chain_element: rtb
+    - claim: the_completion_state_is_clearly_shown
+      proof_type: real_product_surface
+      proof_ref: builds/C-VALID-STA-001/completion_summary
+      aligned_chain_element: hook_proof_surface
+  insight_kpp_rtb_alignment:
+    insight: freelancers_need_a_clear_start_to_finish_kickoff_path
+    kpp: one_guided_checklist_takes_a_kickoff_from_blank_to_complete_with_zero_guesswork
+    rtb: passed_static_completion_and_surface_fidelity_tests
+    evidence_refs:
+      - qa_result.valid_static_product.static_completion_results[0]
+      - qa_result.valid_static_product.artifact_integrity_audit
+  unverified_claim_exclusions:
+    compatibility_claims_removed: []
+    protection_claims_removed:
+      - protected_formulas
+    automation_claims_removed: []
+launch_package:
+  candidate_id: C-VALID-STA-001
+  product_artifacts:
+    - builds/C-VALID-STA-001/kickoff_checklist
+    - builds/C-VALID-STA-001/completion_summary
+  artifact_version: v1.0.0
+  delivery_asset: builds/C-VALID-STA-001/delivery_package
+  listing_assets:
+    - builds/C-VALID-STA-001/listing
+  passed_system: Client Kickoff Navigator
+  passed_buyer_experience_checks:
+    access_path_clear: true
+    first_open_clear: true
+  passed_product_visual_quality:
+    brandbook_compliance: true
+  passed_listing_gate: true
+  supported_platforms:
+    - PDF
+  stated_limits:
+    - kickoff_checklist_not_a_live_workflow_engine
+  unsupported_actions:
+    - do_not_treat_the_checklist_as_automation
+  editable_areas:
+    - kickoff_checklist
+  protected_or_generated_areas:
+    - completion_summary
+  recovery_method: restart_the_checklist_from_the_beginning
+  originality_check: pass
+  private_asset_exclusion_check: pass
+  prepublish_validation:
+    status: pass
+    artifact_integrity_audit: pass
+    formula_truth_table: not_applicable_with_reason
+    protection_truthfulness: pass
+    publish_blockers_absent: true
+  publish_status: pass_pending_marketplace_publish
+  listing_url: https://example.invalid/listings/client-kickoff-navigator
+  launch_date: "2026-06-23"
+  initial_product_version_ref: v1.0.0
+  artifact_integrity_audit_ref: qa_result.valid_static_product.artifact_integrity_audit
+  formula_truth_table_ref: qa_result.valid_static_product.formula_truth_table_results
+  period_continuity_ref: qa_result.valid_static_product.period_continuity_results
+  protection_truthfulness_ref: qa_result.valid_static_product.protection_truthfulness
+  publish_blockers:
+    status: pass
+    blockers: []
+  external_publish_approval:
+    required: true
+    decision: pending
+    evidence_ref: null

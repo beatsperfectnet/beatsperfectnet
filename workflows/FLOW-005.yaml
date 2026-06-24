@@ -1,0 +1,243 @@
+FLOW-005:
+  purpose: insight_kpp_rtb_hook_flow_for_verified_product_builds
+  rule: no_creativity_outside_assigned_task
+  required_inputs:
+    - company.md
+    - governance/05_governance_rules.yaml
+    - governance/06_resource_allocation.yaml
+    - governance/07_capacity_model.yaml
+    - governance/08_product_generation_budget_005.yaml
+    - governance/09_stage_dispatch_005.yaml
+    - specs/SCHEMA-005.yaml
+    - specs/MODEL-005.yaml
+    - specs/BLS-005.yaml
+  run_telemetry:
+    runtime_launcher_ref: runtime/model-stage-launcher.mjs
+    model_usage_ledger_required: true
+    stage_dispatch_log_required: true
+    exact_model_match_required: true
+    required_model_usage_fields:
+      - step_id
+      - step_name
+      - requested_model
+      - requested_model_resolved
+      - actual_model_used
+      - prompt_tokens
+      - completion_tokens
+      - total_tokens
+      - exact_match
+      - notes
+    required_stage_dispatch_fields:
+      - step_id
+      - requested_model
+      - requested_model_resolved
+      - session_model_observed
+      - dispatch_match
+  flow:
+    - step_id: 00_candidate_admission
+      agent_tier: mini
+      model_policy_ref: MODEL-005.candidate_admission
+      action:
+        - confirm_allowed_category
+        - confirm_no_prohibited_or_regulated_category
+        - confirm_no_material_legal_risk
+        - confirm_no_service_heavy_product
+        - confirm_no_prohibited_external_api_dependency
+        - confirm_no_subscription_required_product
+        - confirm_expected_support_within_constraints
+        - confirm_market_demand_threshold_passed
+        - confirm_marketplace_identified
+        - confirm_product_type_identified
+      output_file_template: records/candidate_admission/CA-XXXX.yaml
+      gate:
+        admitted_required: true
+        competitor_purchase_required: true
+        competitor_purchase_approval_required: true
+        api_budget_ceiling_usd: 25
+    - step_id: 01_public_shelf_read
+      agent_tier: mini
+      model_policy_ref: MODEL-005.public_evidence_extraction
+      action:
+        - collect_public_listing_evidence
+        - collect_titles_thumbnails_images_descriptions_pricing_trust_signals_reviews
+        - record_evidence_missing
+        - identify_insight_kpp_hook_signals
+        - identify_visible_rtb_signals
+        - record_risk_of_false_scope
+      output_file_template: records/public_shelf_read/PSR-XXXX.yaml
+    - step_id: 02_mandatory_competitor_purchase
+      agent_tier: medium
+      model_policy_ref: MODEL-005.competitor_selection
+      action:
+        - deterministically_select_one_competitor
+        - verify_live_listing_url_title_seller_price_currency_discount_timestamp
+        - request_human_purchase_approval
+        - complete_purchase_after_approval
+      gate:
+        purchase_mandatory: true
+        approval_required: true
+        acquisition_required: true
+        exactly_one_competitor_by_default: true
+      output_file_template: records/competitive_purchase_approval/CPA-XXXX.yaml
+    - step_id: 03_hidden_buyer_experience_inspection
+      agent_tier: medium
+      model_policy_ref: MODEL-005.purchased_competitor_inspection
+      action:
+        - inspect_purchased_asset_on_disposable_copy
+        - record_delivery_path_first_open_normal_use_limits_stress_recovery
+        - record_actual_delivered_visual_quality
+        - record_support_traps_and_originality_boundary
+        - separate_marketplace_trust_signals_from_product_rtb_signals
+        - record_formula_protection_recovery_and_breakage_risks_as_testable_requirements
+        - record_boundary_rows_ranges_calculation_paths_and_platform_claim_risks_for_spreadsheets
+        - record_period_model_horizon_carry_forward_and_handoff_expectations_for_periodic_products
+      output_file_template: records/purchased_competitor_inspection/PCI-XXXX.yaml
+    - step_id: 04_alignment_synthesis
+      agent_tier: frontier
+      model_policy_ref: MODEL-005.alignment_synthesis
+      action:
+        - compress_public_and_hidden_evidence_into_one_chain
+        - reject_scope_lists_as_kpp
+        - reject_marketplace_trust_signals_as_rtb
+        - identify_one_primary_buyer_job
+        - identify_one_kpp_as_buyer_decision_promise
+        - identify_one_rtb_system_as_product_specific_proof_mechanism
+        - identify_one_hook_hypothesis
+        - record_excluded_scope
+      output_file_template: records/alignment_chain/AC-XXXX.yaml
+    - step_id: 05_one_promise_propagation_system_spec
+      agent_tier: frontier
+      model_policy_ref: MODEL-005.one_promise_propagation_system_spec
+      action:
+        - define_one_system_name
+        - define_supported_platform_boundaries
+        - define_support_prevention
+        - define_formula_protection_mode_and_recovery
+        - define_stated_limits
+        - define_required_product_surfaces
+        - define_visual_reference_contract
+        - define_artifact_integrity_audit_requirements
+        - define_formula_truth_table_and_boundary_mutation_tests
+        - define_time_horizon_model_before_build
+        - define_period_model_carry_forward_and_handoff_requirements
+        - require_rolling_horizon_for_calendar_sensitive_spreadsheets_unless_marketplace_evidence_requires_fixed_year
+        - define_publish_blockers_for_missing_or_prose_only_evidence
+      output_file_template: records/propagation_system_spec/PSS-XXXX.yaml
+    - step_id: 06_first_pass_connected_build
+      agent_tier: medium
+      model_policy_ref: MODEL-005.first_pass_connected_build
+      action:
+        - build_minimum_connected_product
+        - implement_real_hook_surface
+        - apply_brandbook_visual_identity
+        - keep_editable_generated_and_protected_areas_clear
+        - produce_machine_checkable_artifact_manifest
+        - record_formula_ranges_editable_ranges_protection_mode_and_platform_claims
+        - record_time_horizon_carry_forward_and_rollover_surfaces
+        - do_not_label_recovery_only_areas_as_protected
+      output_file_template: builds/<candidate_id>/manifest.yaml
+    - step_id: 07_propagation_buyer_experience_product_visual_qa
+      agent_tier: medium
+      model_policy_ref: MODEL-005.qa_execution
+      action:
+        - run_deterministic_artifact_integrity_audit
+        - run_formula_truth_table_tests
+        - run_boundary_mutation_tests
+        - run_period_continuity_and_handoff_tests_when_applicable
+        - fail_if_start_period_mutation_does_not_shift_displayed_period_labels
+        - fail_if_next_period_opening_balance_does_not_link_to_prior_closing_balance
+        - fail_if_final_period_has_no_next_workbook_seed_or_closeout_state
+        - fail_if_tab_names_or_listing_copy_imply_stale_fixed_year_without_explicit_evidence
+        - verify_formula_protection_or_truthful_recovery_only_labeling
+        - verify_listing_eligible_surfaces_are_from_delivered_artifacts
+        - test_propagation
+        - test_buyer_experience
+        - test_product_visual_quality
+        - allow_one_total_product_repair
+      gate:
+        artifact_integrity_audit_required: true
+        spreadsheet_formula_audit_required_when_applicable: true
+        period_continuity_audit_required_when_applicable: true
+        protection_truthfulness_required: true
+        prose_only_qa_forbidden: true
+      output_file_template: records/validation/QA-XXXX.yaml
+    - step_id: 08_optional_supporting_feature_pass
+      agent_tier: medium
+      model_policy_ref: MODEL-005.optional_supporting_feature_pass
+      action:
+        - consider_one_supporting_feature_only_after_qa_pass
+      gate:
+        optional_feature_attempts_max: 1
+    - step_id: 09_listing_creative_assembly
+      agent_tier: mini
+      model_policy_ref: MODEL-005.listing_title_description_and_claim_map_assembly
+      action:
+        - assemble_listing_from_verified_surfaces
+        - map_each_claim_to_proof
+        - map_each_insight_kpp_rtb_claim_to_verified_artifact_evidence
+        - exclude_unverified_compatibility_or_protection_claims
+        - generate_final_etsy_ready_creatives_from_verified_product_surfaces
+        - record_source_surface_claim_map_for_each_final_creative
+        - forbid_fabricated_product_screens_or_unverified_ui_states
+      output_file_template: records/listing_creatives/LC-XXXX.yaml
+    - step_id: 10_listing_quality_gate
+      agent_tier: frontier
+      model_policy_ref: MODEL-005.listing_quality_gate
+      action:
+        - judge_shelf_communication_parity
+        - verify_kpp_is_buyer_decision_promise_not_feature_scope
+        - verify_rtb_is_product_specific_evidence_not_marketplace_trust_signal
+        - verify_claim_map_targets_passed_artifact_audit_evidence
+        - verify_final_creatives_are_built_from_verified_surfaces
+        - fail_if_visuals_are_mediocre_or_default_looking
+        - fail_if_product_surface_fidelity_or_formula_truthfulness_is_unverified
+      output_file_template: records/validation/LQ-XXXX.yaml
+    - step_id: 11_delivery_launch
+      agent_tier: mini
+      model_policy_ref: MODEL-005.delivery_assembly
+      action:
+        - assemble_delivery_package
+        - prepublish_validate
+        - block_publish_when_any_required_audit_is_missing_failed_or_prose_only
+        - set_ready_for_marketplace_publish_only_after_artifact_listing_delivery_and_blocker_gates_pass
+        - stop_before_external_marketplace_publish_unless_human_approval_is_present
+        - verify_buyer_access_after_publish_when_human_approved
+        - continue_to_post_launch_flow
+      gate:
+        ready_status_requires:
+          - artifact_integrity_audit_pass
+          - formula_truth_table_pass_or_not_applicable_with_reason
+          - period_continuity_pass_or_not_applicable_with_reason
+          - protection_truthfulness_pass
+          - buyer_experience_pass
+          - product_visual_quality_pass
+          - listing_quality_gate_pass
+          - delivery_package_pass
+          - publish_blockers_absent
+        external_publish_requires_human_approval: true
+      output_file_template: records/validation/LR-XXXX.yaml
+    - step_id: 12_monthly_outcomes
+      agent_tier: mini
+      model_policy_ref: MODEL-005.post_launch_ledgers_and_rules
+      action:
+        - record_monthly_outcomes
+    - step_id: 13_competitor_purchase_accounting
+      agent_tier: mini
+      model_policy_ref: MODEL-005.post_launch_ledgers_and_rules
+      action:
+        - count_competitor_purchase_cost_once
+    - step_id: 14_kill_rules
+      agent_tier: mini
+      model_policy_ref: MODEL-005.post_launch_ledgers_and_rules
+      action:
+        - apply_kill_rules
+    - step_id: 15_resource_allocation_rules
+      agent_tier: mini
+      model_policy_ref: MODEL-005.post_launch_ledgers_and_rules
+      action:
+        - apply_resource_allocation_rules
+    - step_id: 16_company_metrics
+      agent_tier: mini
+      model_policy_ref: MODEL-005.post_launch_ledgers_and_rules
+      action:
+        - aggregate_company_metrics

@@ -1,0 +1,6 @@
+active_flow_id: FLOW-005
+workflow_contract_ref: workflows/FLOW-005.yaml
+model_policy_ref: specs/MODEL-005.yaml
+stage_dispatch_ref: governance/09_stage_dispatch_005.yaml
+schema_ref: specs/SCHEMA-005.yaml
+build_lifecycle_ref: specs/BLS-005.yaml

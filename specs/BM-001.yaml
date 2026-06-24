@@ -1,0 +1,13 @@
+BM-001:
+ purpose: evidence_based_market_viability_screen
+
+ minimum_monthly_revenue_threshold: 100
+ minimum_new_entrant_count: 5
+
+ new_entrant_definition:
+  - low_review_listing
+  - monthly_revenue >= 100
+
+output:
+  - passed
+  - rejected

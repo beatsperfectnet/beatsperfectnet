@@ -1,0 +1,328 @@
+candidate_id: C-VALID-DYN-001
+marketplace: Etsy
+product_type: spreadsheet_template
+system_name: Weekly Cashflow Pulse
+system_type: dynamic_propagation
+primary_platform: Google Sheets
+buyer_job: solo_consultant_cash_tracking
+kpp: one_connected_tracker_turns_raw_transactions_into_a_weekly_cashflow_view
+alignment_chain_ref: alignment_chain.valid_dynamic_product
+propagation_system_spec_ref: propagation_system_spec.valid_dynamic_product
+input_or_start_surfaces:
+  - surface_id: input_sheet
+    buyer_visible_state: editable
+canonical_sources_or_structure:
+  - source: raw_transactions
+    buyer_editable: true
+transformations_or_use_path:
+  - from: raw_transactions
+    to: weekly_summary
+    rule: normalize_then_roll_up_by_week
+output_or_completion_surfaces:
+  - surface_id: weekly_view
+    buyer_visible_result: generated_summary
+hook_surface:
+  surface_id: weekly_view
+  must_show:
+    - real_summary
+    - clear_input_output_distinction
+visual_reference_contract_applied: true
+brandbook_ref: brandbook/beatsperfect-brandbook.v1.yaml
+protection_and_recovery:
+  editable_areas:
+    - input_sheet
+  protected_or_generated_areas:
+    - weekly_view
+  reset_or_recovery_method: clear_the_input_sheet
+artifact_integrity_manifest:
+  artifact_paths:
+    - builds/C-VALID-DYN-001/input_sheet
+    - builds/C-VALID-DYN-001/weekly_view
+  generated_from_real_product_surfaces: true
+  listing_assets_source_artifacts:
+    - builds/C-VALID-DYN-001/weekly_view
+formula_inventory:
+  formulas_present: true
+  formula_ranges:
+    - weekly_view!B2:F32
+  external_or_unsupported_formula_markers: []
+editable_range_inventory:
+  buyer_editable_ranges:
+    - input_sheet!A2:E500
+  generated_or_formula_ranges:
+    - weekly_view!B2:F32
+protection_truthfulness:
+  formula_protection_mode: range_protection
+  sheet_or_range_protection_enabled: true
+  recovery_only_labeling_used: false
+  unsupported_claims_absent: true
+period_continuity_manifest:
+  applicable: true
+  period_type: weekly
+  start_period_controls:
+    - start_week
+  carry_forward_ranges_or_logic:
+    - prior_week_closing_cash_feeds_next_week_opening_cash
+  closeout_or_handoff_surface: next_cycle_seed
+  next_cycle_seed_values:
+    - closing_cash
+    - category_setup
+known_limits:
+  - designed_for_weekly_tracking_not_enterprise_accounting
+excluded_scope_confirmed:
+  - second_platform
+  - dashboard_first
+stage_api_cost_usd: 6.40
+cumulative_api_cost_usd: 18.20
+budget_remaining_usd: 6.80
+mutation_tests:
+  - mutation: add_valid_transaction
+    expected_downstream_change: weekly_totals_update
+  - mutation: change_category
+    expected_downstream_change: affected_bucket_updates
+  - mutation: clear_inputs
+    expected_downstream_change: outputs_clear
+qa_result:
+  candidate_id: C-VALID-DYN-001
+  artifact_tested: builds/C-VALID-DYN-001/manifest.yaml
+  artifact_version: v1.0.0
+  primary_platform_tested: Google Sheets
+  system_type: dynamic_propagation
+  functional_system:
+    first_success_status: pass
+    expected: buyer_input_propagates_to_weekly_output
+    observed: buyer_input_propagates_to_weekly_output
+    evidence_locator: evidence/valid_dynamic/functional
+  dynamic_mutation_results:
+    - mutation: add_valid_transaction
+      expected_downstream_change: weekly_totals_update
+      observed_downstream_change: weekly_totals_update
+      status: pass
+      evidence_locator: evidence/valid_dynamic/mutation-01
+    - mutation: change_category
+      expected_downstream_change: affected_bucket_updates
+      observed_downstream_change: affected_bucket_updates
+      status: pass
+      evidence_locator: evidence/valid_dynamic/mutation-02
+    - mutation: clear_inputs
+      expected_downstream_change: outputs_clear
+      observed_downstream_change: outputs_clear
+      status: pass
+      evidence_locator: evidence/valid_dynamic/mutation-03
+  static_completion_results: []
+  buyer_experience_checks:
+    access_path_clear: pass
+    first_open_clear: pass
+    first_action_clear: pass
+    editable_areas_obvious: pass
+    generated_or_protected_areas_safe: pass
+    hidden_support_traps_avoided: pass
+    warnings_or_permissions_absent_or_disclosed: pass
+    reset_or_recovery_available: pass
+    supported_limits_visible: pass
+    unsupported_actions_stated: pass
+    domain_correctness_passed: pass
+    platform_specific_checks_passed: pass
+  product_visual_quality:
+    bestseller_quality_floor_met: pass
+    purchased_product_quality_reference_met: pass
+    brandbook_compliance: pass
+    information_hierarchy: pass
+    primary_action_clarity: pass
+    primary_result_clarity: pass
+    input_output_distinction: pass
+    typography_readability: pass
+    spacing_and_alignment: pass
+    format_consistency: pass
+    color_semantics: pass
+    chart_readability: pass
+    chart_units_labels_and_legends: pass
+    visual_clutter_absent: pass
+    default_template_appearance_absent: pass
+    real_surface_screenshot_readiness: pass
+  artifact_integrity_audit:
+    status: pass
+    artifact_open_check: pass
+    required_surfaces_check: pass
+    formula_inventory_check: pass
+    editable_range_check: pass
+    listing_surface_fidelity_check: pass
+    evidence_locator: evidence/valid_dynamic/artifact-audit
+  formula_truth_table_results:
+    applicable: true
+    status: pass
+    test_cases:
+      - test: valid_transaction_rolls_into_weekly_total
+        expected: weekly_total_changes
+        observed: weekly_total_changes
+        status: pass
+        evidence_locator: evidence/valid_dynamic/formula-01
+  boundary_mutation_results:
+    applicable: true
+    status: pass
+    test_cases:
+      - test: first_input_row_rolls_up
+        expected: weekly_total_changes
+        observed: weekly_total_changes
+        status: pass
+      - test: last_input_row_rolls_up
+        expected: weekly_total_changes
+        observed: weekly_total_changes
+        status: pass
+  period_continuity_results:
+    applicable: true
+    status: pass
+    reason: weekly_cashflow_product_has_a_periodic_horizon_and_carry_forward_state
+    test_cases:
+      - test: start_week_changes_displayed_period_labels
+        expected: weekly_labels_shift_from_configured_start_week
+        observed: weekly_labels_shift_from_configured_start_week
+        status: pass
+      - test: prior_week_closing_feeds_next_week_opening
+        expected: next_week_opening_cash_updates
+        observed: next_week_opening_cash_updates
+        status: pass
+      - test: final_week_closeout_creates_next_cycle_seed
+        expected: seed_values_available_for_next_tracker_copy
+        observed: seed_values_available_for_next_tracker_copy
+        status: pass
+  protection_truthfulness:
+    status: pass
+    formula_protection_mode: range_protection
+    sheet_or_range_protection_verified: true
+    recovery_only_labeling_truthful: true
+    unsupported_protection_claims_absent: true
+  publish_blockers:
+    status: pass
+    blockers: []
+  verified_product_surfaces:
+    - surface_id: input_sheet
+      real_artifact_locator: builds/C-VALID-DYN-001/input_sheet
+      supports: buyer_input
+      buyer_visible_state: editable
+      listing_eligible: true
+    - surface_id: weekly_view
+      real_artifact_locator: builds/C-VALID-DYN-001/weekly_view
+      supports: verified_output
+      buyer_visible_state: generated
+      listing_eligible: true
+  hook_surface_consistency:
+    status: pass
+    expected: real_output_surface_shown
+    observed: real_output_surface_shown
+    evidence_locator: evidence/valid_dynamic/hook
+  failure_classification:
+    defect_type: none
+    reason: none
+  product_repair_count:
+    decision: pass
+listing_hook:
+  candidate_id: C-VALID-DYN-001
+  final_artifact_version: v1.0.0
+  passed_qa_ref: qa_result.valid_dynamic_product
+  final_kpp: one_connected_tracker_turns_raw_transactions_into_a_weekly_cashflow_view
+  final_hook: see_your_weekly_cashflow_update_the_moment_you_enter_transactions
+  title: Weekly Cashflow Pulse
+  thumbnail:
+    message: one_clean_weekly_summary
+    real_product_surface_id: weekly_view
+    treatment: tight_crop_on_real_summary_panel
+  image_sequence:
+    - image_id: img-1
+      role: insight
+      message: messy_transactions_become_one_weekly_picture
+      real_product_surface_id: input_sheet
+      aligned_to: insight
+    - image_id: img-2
+      role: kpp
+      message: one_tracker_one_clear_weekly_view
+      real_product_surface_id: weekly_view
+      aligned_to: kpp
+    - image_id: img-3
+      role: rtb
+      message: verified_propagation_from_input_to_output
+      real_product_surface_id: weekly_view
+      aligned_to: rtb
+  description:
+    trust_signals:
+      - real_surface
+      - verified_propagation
+      - clear_limits
+    objection_handlers:
+      - editable_rows_are_separate_from_generated_output
+    value_stack:
+      - weekly_rollup
+      - protected_formulas
+      - recovery_guidance
+    compatibility_claims:
+      - Google Sheets
+  claim_map:
+    - claim: transactions_update_the_weekly_view
+      proof_type: passed_qa
+      proof_ref: qa_result.valid_dynamic_product.functional_system
+      aligned_chain_element: rtb
+    - claim: editable_rows_are_separate_from_generated_output
+      proof_type: real_product_surface
+      proof_ref: builds/C-VALID-DYN-001/input_sheet
+      aligned_chain_element: support_prevention
+  insight_kpp_rtb_alignment:
+    insight: consultants_need_weekly_cash_visibility_without_rebuilding_reports
+    kpp: one_connected_tracker_turns_raw_transactions_into_a_weekly_cashflow_view
+    rtb: passed_formula_truth_table_and_boundary_mutation_tests
+    evidence_refs:
+      - qa_result.valid_dynamic_product.formula_truth_table_results
+      - qa_result.valid_dynamic_product.boundary_mutation_results
+  unverified_claim_exclusions:
+    compatibility_claims_removed: []
+    protection_claims_removed: []
+    automation_claims_removed: []
+launch_package:
+  candidate_id: C-VALID-DYN-001
+  product_artifacts:
+    - builds/C-VALID-DYN-001/input_sheet
+    - builds/C-VALID-DYN-001/weekly_view
+  artifact_version: v1.0.0
+  delivery_asset: builds/C-VALID-DYN-001/delivery_package
+  listing_assets:
+    - builds/C-VALID-DYN-001/listing
+  passed_system: Weekly Cashflow Pulse
+  passed_buyer_experience_checks:
+    access_path_clear: true
+    first_open_clear: true
+  passed_product_visual_quality:
+    brandbook_compliance: true
+  passed_listing_gate: true
+  supported_platforms:
+    - Google Sheets
+  stated_limits:
+    - weekly_tracking_only
+  unsupported_actions:
+    - do_not_delete_generated_formulas
+  editable_areas:
+    - input_sheet
+  protected_or_generated_areas:
+    - weekly_view
+  recovery_method: clear_the_input_sheet
+  originality_check: pass
+  private_asset_exclusion_check: pass
+  prepublish_validation:
+    status: pass
+    artifact_integrity_audit: pass
+    formula_truth_table: pass
+    protection_truthfulness: pass
+    publish_blockers_absent: true
+  publish_status: pass_pending_marketplace_publish
+  listing_url: https://example.invalid/listings/weekly-cashflow-pulse
+  launch_date: "2026-06-23"
+  initial_product_version_ref: v1.0.0
+  artifact_integrity_audit_ref: qa_result.valid_dynamic_product.artifact_integrity_audit
+  formula_truth_table_ref: qa_result.valid_dynamic_product.formula_truth_table_results
+  period_continuity_ref: qa_result.valid_dynamic_product.period_continuity_results
+  protection_truthfulness_ref: qa_result.valid_dynamic_product.protection_truthfulness
+  publish_blockers:
+    status: pass
+    blockers: []
+  external_publish_approval:
+    required: true
+    decision: pending
+    evidence_ref: null

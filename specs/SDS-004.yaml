@@ -1,0 +1,31 @@
+SDS-004:
+  purpose: versioned_support_by_design_standard_for_spreadsheet_products
+  scope: support_boundary_and_support_reduction_for_marketplace_downloads
+  rule: support_requirements_must_reduce_predictable_manual_support_without_promising_unlimited_help
+
+  required_support_outcomes:
+    - clear_first_use_start_point
+    - setup_guidance_proportionate_to_product_complexity
+    - troubleshooting_for_predictable_failures
+    - backup_reset_recovery_guidance
+    - clear_editable_area_and_protected_structure_guidance
+    - buyer_visible_support_scope_statement
+    - manual_support_within_company_hour_constraint
+
+  default_supported_manual_support_scope:
+    - access_and_download_problems
+    - basic_setup_questions
+    - clarification_of_documented_use
+
+  default_unsupported_manual_support_scope:
+    - custom_formula_creation
+    - spreadsheet_redesign
+    - custom_data_import_or_data_entry_service
+    - product_customization
+    - business_consulting
+    - professional_tax_accounting_legal_or_financial_advice_where_relevant
+
+  prohibited_promises:
+    - unlimited_personal_support
+    - chatbot_support
+    - help_site_as_part_of_flow_four_without_separate_evidence_and_approval

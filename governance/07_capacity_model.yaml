@@ -1,0 +1,28 @@
+capacity_model:
+ model_id: CM-001
+
+ monthly_api_burn_limit_usd: 500
+ generation_budget_usd: 25.00
+ pricing_snapshot_ref: specs/PRICING-004.yaml
+ generation_budget_contract_ref: governance/08_product_generation_budget_004.yaml
+
+ monthly_research_runs:
+  target: ">=100"
+
+ monthly_launched_products:
+  target: ">=20"
+
+ candidate_queue_ordering: FIFO
+
+ research_policy:
+  deterministic_mini_model_compatible
+
+ build_policy:
+  max_api_cost_per_launched_product_usd: 25
+  competitor_purchase_cost_excluded_from_generation_budget: true
+  generation_api_and_tool_costs_included: true
+  shared_cost_allocation_deterministic: true
+  protected_qa_and_fix_reserve_usd: 5.00
+  cumulative_token_tracking: required
+  cumulative_stage_cost_tracking: required
+  escalation_before_human: frontier_model

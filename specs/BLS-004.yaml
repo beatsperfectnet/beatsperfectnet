@@ -1,0 +1,246 @@
+BLS-004:
+  purpose: build_lifecycle_specification
+
+  candidate_stages:
+    - queued
+    - listing_analysis
+    - product_analysis
+    - candidate_domain_brief
+    - competitor_selection
+    - purchase_approval_and_acquisition
+    - purchased_competitor_inspection
+    - listing_spec
+    - product_spec
+    - delivery_spec
+    - good_enough_for_humans_review
+    - building_product_asset
+    - verifying_product_surfaces
+    - building_listing_assets
+    - building_delivery_assets
+    - qa
+    - fixing
+    - launch_review
+    - marketplace_publish
+    - launched
+
+  pre_launch_tracking:
+    - current_stage
+    - stage_iteration
+    - cumulative_prompt_tokens
+    - cumulative_completion_tokens
+    - cumulative_total_tokens
+    - cumulative_api_cost_usd
+    - competitive_purchase_approval_ref
+    - purchase_status
+    - purchased_competitor_inspection_ref
+    - inspection_status
+    - candidate_domain_brief_ref
+    - candidate_domain_brief_status
+    - candidate_domain_brief_locked_at
+    - applied_inspection_requirement_ids
+    - external_purchase_cost_usd
+    - qa_result
+    - listing_spec_ref
+    - product_spec_ref
+    - delivery_spec_ref
+    - good_enough_for_humans_spec_ref
+    - real_product_surface_spec_ref
+
+  stage_loop_limits:
+    building_medium_qa_loops: 3
+    fixing_medium_qa_loops: 3
+    frontier_qa_loops: 2
+
+  buyer_practical_use_requires:
+    - good_enough_for_humans_spec_exists
+    - good_enough_for_humans_spec_passed
+    - buyer_can_access_marketplace_listing
+    - buyer_understands_listing_promise
+    - buyer_can_access_delivered_files
+    - buyer_can_follow_onboarding_or_instructions_without_agent_help
+    - buyer_can_complete_primary_use_case
+    - buyer_receives_expected_output
+    - buyer_can_identify_what_each_file_is_for
+    - workbook_recalculates_in_supported_spreadsheet_engines
+    - buyer_facing_workbook_views_are_readable_without_manual_resizing_on_first_open
+    - buyer_facing_instructions_headers_tables_and_dashboards_have_no_clipped_truncated_overlapping_or_squeezed_text
+    - buyer_checkbox_boolean_or_toggle_workflows_render_as_clean_native_human_controls_not_visible_TRUE_FALSE_text
+    - buyer_facing_thresholds_are_explained_as_supporting_signals_not_primary_safety_rules
+    - buyer_facing_dashboard_charts_answer_a_specific_buyer_decision
+    - buyer_facing_dashboard_charts_do_not_mix_incompatible_units_on_one_axis
+    - workbook_contains_bestseller_grade_dashboard_chart_table_control_formatting_tab_range_and_sample_state_surfaces_before_listing_images_are_created
+    - promised_screenshot_moments_from_listing_spec_are_present_as_real_product_surfaces
+    - real_product_surface_spec_exists_after_product_asset_build
+    - screenshot_eligible_surfaces_are_verified_from_the_delivered_product
+    - product_images_or_screenshots_match_the_delivered_asset_controls_content_states_and_visual_behavior
+    - product_images_or_screenshots_are_polished_clean_and_free_of_active_selection_handles_editor_borders_or_working_state_artifacts
+    - product_images_or_screenshots_are_readable_in_marketplace_thumbnail_and_mobile_preview_contexts
+    - sample_formula_outputs_match_expected_values
+    - row_by_row_formula_expected_outputs_documented
+    - no_formula_errors_in_sample_data
+
+  critical_defect_if:
+    - candidate_domain_brief_missing_before_competitor_selection
+    - candidate_domain_brief_incomplete_before_competitor_selection
+    - domain_considerations_not_applied
+    - prohibited_domain_scope_expansion_entered_spec
+    - professional_boundary_claims_overstated
+    - good_enough_for_humans_spec_missing
+    - good_enough_for_humans_spec_not_derived_from_current_analyzed_marketplace_listings
+    - benchmark_listing_parity_requirements_not_met
+    - product_spec_missing_market_gap_summary
+    - product_spec_missing_buyer_outcome_requirements
+    - marketplace_listing_promise_does_not_match_delivered_product
+    - delivered_files_missing
+    - product_cannot_be_accessed
+    - primary_use_case_cannot_be_completed
+    - expected_output_not_generated
+    - onboarding_or_instructions_missing_or_unusable
+    - buyer_instructions_missing_or_unusable
+    - product_file_corrupt_or_broken
+    - formula_recalculation_fails
+    - sample_outputs_do_not_match_expected_values
+    - row_by_row_formula_expected_outputs_missing
+    - formula_errors_appear_in_sample_rows
+    - buyer_cannot_identify_how_to_start
+    - buyer_facing_workbook_view_has_clipped_truncated_overlapping_or_squeezed_text
+    - product_image_or_screenshot_has_active_selection_handles_editor_borders_or_raw_working_state_artifacts
+    - product_image_or_screenshot_is_not_readable_in_marketplace_thumbnail_or_mobile_preview_context
+    - buyer_checkbox_workflow_exposes_TRUE_FALSE_text_instead_of_clean_checkbox_controls
+    - buyer_facing_thresholds_are_hidden_or_mislabeled_as_primary_safety_rules
+    - buyer_facing_dashboard_chart_fails_to_support_a_buyer_decision
+    - buyer_facing_dashboard_chart_mixes_incompatible_units_or_uses_an_unreadable_axis
+    - product_image_or_screenshot_shows_controls_content_states_or_visual_behavior_not_present_in_delivered_asset
+    - listing_image_shows_chart_table_control_state_tab_range_or_formatting_not_present_in_delivered_product
+    - workbook_dashboards_are_too_weak_to_support_bestseller_class_listing_images
+    - workbook_chart_is_decorative_rather_than_buyer_decision_bearing
+    - workbook_chart_units_or_threshold_semantics_are_unclear
+    - listing_image_fakes_spreadsheet_formatting_controls_states_or_data
+    - listing_asset_visually_improves_product_beyond_what_buyer_receives
+    - product_lacks_promised_screenshot_moment_from_listing_spec
+    - real_product_surface_spec_missing_after_product_asset_build
+    - listing_assets_generated_without_verified_product_surfaces
+    - ready_for_publish_status_set_without_passing_human_readiness_review
+
+  listing_ready_requires:
+    - title_exists
+    - thumbnail_exists
+    - required_image_sequence_exists
+    - image_roles_present
+    - listing_promise_present
+    - trust_signals_present
+    - objection_handlers_present
+    - buyer_visible_contents_match_delivered_product
+    - compatibility_claims_match_delivered_product
+    - benchmark_gap_closures_present
+    - all_listing_claims_are_product_verifiable
+    - no_unsupported_claims
+    - dashboard_charts_support_a_buyer_decision
+    - threshold_semantics_are_clear
+    - required_screenshot_moments_defined
+    - required_screenshot_moments_are_backed_by_product_surface_requirements
+    - listing_images_use_verified_real_product_surfaces
+    - no_listing_only_fake_surfaces
+
+  launch_parity_requires:
+    - good_enough_for_humans_spec_passed
+    - listing_quality_pass
+    - product_quality_pass
+    - delivery_quality_pass
+    - good_enough_pass
+    - benchmark_listing_structure_pass
+    - required_thumbnail_present
+    - required_image_sequence_present
+    - trust_signal_visibility_pass
+    - objection_handler_visibility_pass
+    - buyer_visible_contents_visibility_pass
+    - compatibility_visibility_pass
+    - bonus_visibility_pass
+    - benchmark_gap_closures_present
+    - buyer_objection_handling_present
+    - dashboard_charts_present
+    - dashboard_charts_support_a_buyer_decision
+    - chart_units_and_axes_are_readable
+    - threshold_semantics_are_clear
+    - formatting_priority_and_hierarchy_present
+    - workbook_first_viewport_human_readiness_passed
+    - listing_image_human_readiness_passed
+    - buyer_controls_human_readiness_passed
+    - listing_image_to_delivered_asset_fidelity_passed
+    - real_product_surface_spec_passed
+    - required_screenshot_moments_present_in_delivered_product
+    - listing_images_reuse_verified_product_surfaces_without_fake_product_internals
+    - image_to_product_fidelity_passed
+    - screenshot_eligible_surfaces_passed
+    - formula_validation_passed
+    - row_by_row_formula_expected_outputs_documented
+
+  marketplace_publish_done_if:
+    - listing_created_on_marketplace
+    - product_file_uploaded_or_delivery_link_attached
+    - price_visible
+    - listing_url_recorded
+    - product_access_tested_from_listing
+
+  marketplace_publish_mode:
+    bootstrap: human_publish
+    future: agent_publish_when_allowed
+
+  product_versioning:
+    V1.0: first_launchable_version
+    V1.x: bug_fix
+    V2.0: first_double_down
+    V3.0: second_double_down
+
+  launch_requires:
+    - candidate_domain_brief_complete
+    - domain_considerations_applied
+    - domain_correctness_qa_passed
+    - prohibited_domain_scope_absent
+    - professional_boundary_claims_passed
+    - product_practical_use_passed
+    - good_enough_for_humans_spec_passed
+    - non_technical_buyer_task_acceptance_tests_passed
+    - listing_quality_pass
+    - product_quality_pass
+    - delivery_quality_pass
+    - good_enough_pass
+    - competitor_purchase_completed
+    - purchased_competitor_inspection_complete
+    - inspection_requirements_applied
+    - promise_delivery_truthfulness_pass
+    - spreadsheet_resilience_qa_pass
+    - support_by_design_qa_pass
+    - reference_based_originality_pass
+    - private_competitor_assets_excluded
+    - no_critical_defects
+    - core_asset_complete
+    - onboarding_or_instructions_complete
+    - listing_ready
+    - product_images_or_screenshots_ready
+    - real_product_surface_spec_complete
+    - verified_product_surfaces_complete
+    - screenshot_eligible_surfaces_complete
+    - human_readiness_review_passed
+    - no_buyer_facing_visual_defects
+    - no_visible_TRUE_FALSE_text_for_buyer_checkbox_workflows
+    - product_images_match_delivered_asset
+    - price_assigned
+    - delivery_method_defined
+    - marketplace_publish_complete
+    - product_accessible_from_marketplace
+    - listing_url_recorded
+    - launch_date_recorded
+    - launched_requires_real_listing_url
+    - buyer_can_identify_primary_action_quickly
+    - unsafe_states_are_visible_before_buyer_action_is_required
+    - dashboard_charts_support_a_buyer_decision
+    - chart_units_and_axes_are_readable
+    - threshold_semantics_are_clear
+    - image_to_product_fidelity_passed
+    - no_listing_only_fake_surfaces
+
+  budget_rule:
+    soft_limit_usd: 25
+    if_exceeded: escalate_to_frontier_model
+    human_escalation_after_frontier_failure: true

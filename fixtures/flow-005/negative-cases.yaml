@@ -1,0 +1,112 @@
+cases:
+  - name: broad_promise_bundle
+    violations:
+      - multi_buyer_jobs
+      - multi_kpp
+  - name: visible_competitor_components_converted_into_scope
+    violations:
+      - competitor_has_it
+      - screenshot_only
+  - name: successful_new_entrant_breadth_converted_to_feature_list
+    violations:
+      - feature_breadth
+      - screenshot_only
+  - name: stale_or_mixed_purchase_references
+    violations:
+      - mixed_purchase_refs
+  - name: skipped_purchase
+    violations:
+      - purchase_skipped
+  - name: missing_approval
+    violations:
+      - approval_missing
+  - name: incomplete_acquisition
+    violations:
+      - acquisition_incomplete
+  - name: missing_hidden_inspection
+    violations:
+      - inspection_missing
+  - name: listing_requirements_before_rtb
+    violations:
+      - listing_before_product
+  - name: disconnected_propagated_output
+    violations:
+      - disconnected_output
+  - name: disconnected_dashboard
+    violations:
+      - disconnected_dashboard
+  - name: manual_output_presented_as_automatic
+    violations:
+      - manual_as_generated
+  - name: optional_features_before_primary_pass
+    violations:
+      - optional_feature_before_pass
+  - name: multiple_sources_of_truth
+    violations:
+      - duplicate_sources
+  - name: second_platform_before_qa
+    violations:
+      - second_platform
+  - name: listing_claim_before_product_qa
+    violations:
+      - claim_before_qa
+  - name: fake_listing_surface
+    violations:
+      - fake_listing_surface
+  - name: generic_structural_fixing_loop
+    violations:
+      - generic_fixing_loop
+  - name: more_than_one_product_repair
+    violations:
+      - second_product_repair
+  - name: mediocre_default_visuals
+    violations:
+      - mediocre_visuals
+  - name: unreadable_charts
+    violations:
+      - unreadable_chart
+  - name: listing_mockups_conceal_weak_delivery
+    violations:
+      - listing_mockup_concealment
+  - name: visual_repair_changes_logic
+    violations:
+      - visual_repair_logic_change
+  - name: listing_refers_to_pre_repair_artifact
+    violations:
+      - stale_artifact_reference
+  - name: prepublish_qa_requires_live_listing
+    violations:
+      - chronology_violation
+  - name: prose_only_qa_without_artifact_audit
+    violations:
+      - missing_artifact_integrity_audit
+      - prose_only_qa
+  - name: formula_boundary_rows_not_tested
+    violations:
+      - missing_boundary_mutation
+      - formula_truth_table_incomplete
+  - name: recovery_only_claimed_as_protected
+    violations:
+      - protection_truthfulness_failure
+  - name: marketplace_trust_signal_used_as_rtb
+    violations:
+      - rtb_not_product_specific
+  - name: feature_scope_list_used_as_kpp
+    violations:
+      - kpp_not_buyer_decision_promise
+  - name: ready_status_with_pending_blockers
+    violations:
+      - ready_status_despite_publish_blockers
+  - name: periodic_product_without_start_period_control
+    violations:
+      - missing_time_horizon_model
+      - missing_period_model
+      - fixed_calendar_lock_without_evidence
+  - name: periodic_product_without_carry_forward_check
+    violations:
+      - missing_carry_forward_model
+      - period_continuity_incomplete
+  - name: periodic_product_without_next_cycle_handoff
+    violations:
+      - missing_renewal_or_rollover_path
+      - customer_continuity_gap

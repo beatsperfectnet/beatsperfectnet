@@ -1,0 +1,37 @@
+hidden_buyer_experience_inspection:
+  purchase_ref:
+  inspected_asset_private_ref:
+  inspected_on_disposable_copy: true
+  inspection_environment:
+  delivery_path:
+  actual_product_depth:
+  limits_and_stress:
+  purchased_product_visual_reference:
+  rtb_risks:
+  support_traps:
+  hidden_hook_or_value_stack:
+  originality_boundary:
+  classified_findings:
+  rtb_evidence_classification:
+    product_specific_rtb_signals:
+    marketplace_trust_signals_not_rtb:
+    unsupported_or_unverified_signals:
+  formula_protection_and_recovery_risks:
+    formulas_present:
+    protection_observed:
+    recovery_observed:
+    likely_formula_breakage_risks:
+  period_continuity_observations:
+    periodic_product:
+    period_type:
+    horizon_length:
+    configurable_start_period_observed:
+    carry_forward_or_opening_closing_balance_observed:
+    next_cycle_handoff_observed:
+    buyer_risk_if_missing:
+  downstream_artifact_audit_requirements:
+    required_formula_tests:
+    required_boundary_mutations:
+    required_protection_checks:
+    required_platform_checks:
+    required_period_continuity_checks:

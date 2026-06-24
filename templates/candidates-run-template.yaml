@@ -1,0 +1,44 @@
+candidate_run:
+  run_id:
+  source_idea_run:
+  queue_ordering: FIFO
+
+  candidates:
+    - candidate_id:
+      idea_ref:
+      product_thesis:
+      marketplace:
+      current_stage: queued
+      stage_iteration: 0
+      cumulative_prompt_tokens: 0
+      cumulative_completion_tokens: 0
+      cumulative_total_tokens: 0
+      cumulative_api_cost_usd: 0
+      pricing_snapshot_ref:
+      generation_budget_usd:
+      shared_research_cost_usd:
+      generation_api_and_tool_cost_usd:
+      competitor_purchase_cost_usd:
+      remaining_generation_budget_usd:
+      generation_budget_pass:
+      competitive_purchase_approval_ref:
+      purchase_status:
+      purchased_competitor_inspection_ref:
+      inspection_status:
+      applied_inspection_requirement_ids:
+        - 
+      external_purchase_cost_usd:
+      candidate_domain_brief_ref:
+      candidate_domain_brief_status:
+      candidate_domain_brief_locked_at:
+      listing_analysis_ref:
+      listing_spec_ref:
+      product_analysis_ref:
+      product_spec_ref:
+      delivery_spec_ref:
+      good_enough_for_humans_spec_ref:
+      real_product_surface_spec_ref:
+      listing_quality_pass:
+      product_quality_pass:
+      delivery_quality_pass:
+      qa_result:

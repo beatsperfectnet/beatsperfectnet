@@ -1,0 +1,13 @@
+supporting_feature_pass:
+  considered:
+  feature:
+  explicit_same_chain_gap:
+  reason_it_supports_same_chain:
+  connection_to_existing_system:
+  requirement_reason:
+  added_test:
+  full_stage_7_regression_required: true
+  full_stage_7_regression_status:
+  budget_before:
+  budget_after:
+  decision:

@@ -1,0 +1,116 @@
+PRICING-004:
+  purpose: versioned_model_pricing_and_identity_contract_for_flow_004
+  effective_date: 2026-06-22
+  currency: USD
+  unit: per_1_million_tokens
+  provider: openai
+  source_refs:
+    - openai/api/pricing
+    - openai/api/docs/models
+    - openai/api/docs/pricing
+    - openai/index/introducing-gpt-5-5
+
+  model_catalog:
+    mini:
+      provider: openai
+      model_id: gpt-5.4-mini
+      runtime_model_id: openai/gpt-5.4-mini
+      reasoning_effort: none
+      text_verbosity: low
+      purpose:
+        - deterministic_extraction
+        - rule_application
+        - state_updates
+        - record_creation
+        - mechanical_publishing
+        - post_launch_ledger_work
+      normal_flow_allowed: true
+
+    medium:
+      provider: openai
+      model_id: gpt-5.4
+      runtime_model_id: openai/gpt-5.4
+      reasoning_effort: medium
+      text_verbosity: low
+      purpose:
+        - bounded_market_analysis
+        - candidate_domain_analysis
+        - competitor_selection
+        - verification
+        - localized_corrections
+      normal_flow_allowed: true
+
+    frontier:
+      provider: openai
+      model_id: gpt-5.5
+      runtime_model_id: openai/gpt-5.5
+      reasoning_effort: medium
+      text_verbosity: low
+      purpose:
+        - purchased_product_forensic_inspection
+        - final_specification_synthesis
+        - core_product_implementation
+        - buyer_facing_listing_asset_creation
+        - adversarial_qa
+        - launch_readiness_review
+      normal_flow_allowed: true
+
+    gpt-5.5-pro:
+      provider: openai
+      model_id: gpt-5.5-pro
+      runtime_model_id: openai/gpt-5.5-pro
+      reasoning_effort: high
+      text_verbosity: low
+      purpose:
+        - explicit_human_approved_exception_only
+      normal_flow_allowed: false
+      disabled_for_normal_flow: true
+      approval_required: explicit_human_approval
+
+  pricing_snapshot:
+    gpt-5.4-mini:
+      input: 0.75
+      cached_input: 0.075
+      output: 4.50
+    gpt-5.4:
+      input: 2.50
+      cached_input: 0.25
+      output: 15.00
+    gpt-5.5:
+      input: 5.00
+      cached_input: 0.50
+      output: 30.00
+    gpt-5.5-pro:
+      input: 30.00
+      cached_input:
+      output: 180.00
+      normal_flow_allowed: false
+
+  processing_modes:
+    standard:
+      enabled: true
+      priority: false
+      batch: false
+      flex: false
+    priority:
+      enabled: false
+      reason: not_used_in_flow_004
+    batch:
+      enabled: false
+      reason: not_introduced_for_sequential_flow_004
+    flex:
+      enabled: false
+      reason: only_allowed_after_separate_evaluation_and_validation
+
+  tool_cost_policy:
+    local_deterministic_generation:
+      usd: 0
+    paid_web_search:
+      usd_per_call:
+      status: not_integrated_in_this_runtime
+    hosted_container:
+      usd_per_minute:
+      status: not_integrated_in_this_runtime
+    image_generation:
+      usd_per_call:
+      status: not_used_by_default

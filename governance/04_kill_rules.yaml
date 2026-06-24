@@ -1,0 +1,7 @@
+kill_rules:
+ launched_product:
+  evaluation_start:
+   first_month: launch_month_plus_2
+
+  kill_if:
+   calendar_month_cost > calendar_month_value

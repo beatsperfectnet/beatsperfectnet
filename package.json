@@ -1,0 +1,28 @@
+{
+  "name": "beatsperfect-net",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "validate:competitive-purchase": "node scripts/validate-competitive-purchase-approvals.mjs",
+    "validate:flow-005": "node validators/flow-005-validator.mjs",
+    "test:flow-005": "node --test tests/flow-005.test.mjs"
+  },
+  "dependencies": {
+    "next": "^15.3.3",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "yaml": "^2.9.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "@types/react": "^19.1.4",
+    "@types/react-dom": "^19.1.4",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^15.5.19",
+    "typescript": "^5.8.3"
+  }
+}

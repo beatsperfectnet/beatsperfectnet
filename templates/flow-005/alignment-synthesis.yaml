@@ -1,0 +1,20 @@
+alignment_chain:
+  candidate_id:
+  evidence_refs:
+  insight:
+  kpp:
+  rtb:
+  hook_hypothesis:
+  excluded_scope:
+  kpp_quality_check:
+    is_single_buyer_decision_promise:
+    is_not_feature_scope_list:
+    evidence_ref:
+  rtb_quality_check:
+    is_product_specific_proof_mechanism:
+    excludes_marketplace_trust_signals:
+    evidence_ref:
+  evidence_to_claim_map:
+    insight_refs:
+    kpp_refs:
+    rtb_refs:

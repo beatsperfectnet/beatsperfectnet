@@ -1,0 +1,141 @@
+today:
+  asOf: "2026-06-23 13:20 CET"
+  dataMode: event-log
+  flowVersion: FLOW-005
+  flowTimeline:
+    - stageGroup: admission
+      stepIds:
+        - 00_candidate_admission
+    - stageGroup: read
+      stepIds:
+        - 01_public_shelf_read
+    - stageGroup: purchase
+      stepIds:
+        - 02_mandatory_competitor_purchase
+    - stageGroup: inspect
+      stepIds:
+        - 03_hidden_buyer_experience_inspection
+    - stageGroup: synthesis
+      stepIds:
+        - 04_alignment_synthesis
+    - stageGroup: spec
+      stepIds:
+        - 05_one_promise_propagation_system_spec
+    - stageGroup: build
+      stepIds:
+        - 06_first_pass_connected_build
+    - stageGroup: qa
+      stepIds:
+        - 07_propagation_buyer_experience_product_visual_qa
+    - stageGroup: optional
+      stepIds:
+        - 08_optional_supporting_feature_pass
+    - stageGroup: listing
+      stepIds:
+        - 09_listing_creative_assembly
+    - stageGroup: gate
+      stepIds:
+        - 10_listing_quality_gate
+    - stageGroup: launch
+      stepIds:
+        - 11_delivery_launch
+    - stageGroup: post_launch
+      stepIds:
+        - 12_monthly_outcomes
+        - 13_competitor_purchase_accounting
+        - 14_kill_rules
+        - 15_resource_allocation_rules
+        - 16_company_metrics
+  sourceRefs:
+    ideaRun: records/ideas/R-001.yaml
+    candidateRun: records/candidates/R-001.yaml
+    productAnalysis: records/product_analysis/PA-C-001-001.yaml
+    listingAnalysis: records/listing_analysis/LA-C-001-001.yaml
+    candidateDomainBrief: records/candidate_domain_briefs/CDB-C-001-001.yaml
+    purchaseApproval: records/competitive_purchase_approval/CPA-C-001-001.yaml
+    purchasedCompetitorInspection: records/purchased_competitor_inspection/PCI-C-001-002.yaml
+    listingSpec: records/listing_specs/LS-C-001-001.yaml
+    productSpec: records/product_specs/PS-C-001-001.yaml
+    deliverySpec: records/delivery_specs/DS-C-001-001.yaml
+    goodEnoughForHumans: records/good_enough_for_humans/GEH-C-001-001.yaml
+    buildManifest: builds/C-001-001/manifest.yaml
+    productSurfaceSpec: records/product_surfaces/RPSS-C-001-001.yaml
+    qaResult: records/validation/QA-C-001-003.yaml
+    launchReview: records/validation/LR-C-001-004.yaml
+    marketplacePublishEscalation: records/escalations/ESC-C-001-002.yaml
+  totals:
+    pipelineCandidates: 0
+    inFlightCandidates: 0
+    launchedCandidates: 0
+    rejectedCandidates: 0
+    totalSpendUsd: 0
+    pipelineUsdTotal: 0
+    inFlightUsdTotal: 0
+    launchedUsdTotal: 0
+    rejectedUsdTotal: 0
+    pipelineTokensTotal: 0
+    inFlightTokensTotal: 0
+    launchedTokensTotal: 0
+    rejectedTokensTotal: 0
+    launchTokensTotal: 0
+    governanceTokensTotal: 0
+    postLaunchSupportTokensTotal: 0
+    refundTokensTotal: 0
+    refundCountTotal: 0
+  pipelineCandidates: []
+  inFlightCandidates: []
+  launchedCandidates: []
+  rejectedCandidates: []
+  activeEscalation:
+    status: none
+    scope: build
+    candidateId: ""
+    candidateLabel: ""
+    candidateTitle: ""
+    reason: ""
+    recommendedAction: ""
+    governanceFile: governance/09_stage_dispatch_005.yaml
+
+period:
+  from: "2026-06-22"
+  to: "2026-06-22"
+  dataMode: event-log
+  flowVersion: FLOW-005
+  sourceRefs:
+    launchReview: records/validation/LR-C-001-001.yaml
+    marketplacePublishEscalation: records/escalations/ESC-C-001-001.yaml
+  rejectedLaunch:
+    reviewId: LR-C-001-001
+    candidateId: C-001-001
+    candidateTitle: Meal Planner Studio
+    reviewedAt: "2026-06-22"
+    flowContractRef: workflows/FLOW-004.yaml
+    status: revision_requested_after_human_review
+    decisionSummary: Human review rejected the build before marketplace publishing.
+    blockerSummary: Insufficient visible input cells, missing protection, unclear row and column behavior, and non-screenshot listing assets.
+    evidenceRefs:
+      - records/validation/LR-C-001-001.yaml
+      - records/escalations/ESC-C-001-001.yaml
+  totals:
+    launchedCount: 0
+    rejectedLaunchCount: 1
+    modelTokensTotal: 31800
+    launchTokensTotal: 420
+    governanceTokensTotal: 140
+    postLaunchSupportTokensTotal: 0
+    refundTokensTotal: 0
+    refundCountTotal: 0
+    usdTotalSpend: 24.96
+    avgModelTokensPerLaunch: 31800
+    avgUsdSpendPerLaunch: 24.96
+  buckets:
+    - date: "2026-06-22"
+      launchedCount: 0
+      rejectedLaunchCount: 1
+      avgModelTokensPerLaunch: 31800
+      avgUsdSpendPerLaunch: 24.96
+      launchTokens: 420
+      governanceTokens: 140
+      postLaunchSupportTokens: 0
+      refundTokens: 0
+      refundCount: 0

@@ -1,0 +1,63 @@
+build_manifest:
+  build_id:
+  candidate_ref:
+  process_dir: process
+  runtime_launcher_ref:
+  flow_contract_ref:
+  model_policy_ref:
+  pricing_snapshot_ref:
+  generation_budget_usd:
+  shared_research_cost_usd:
+  generation_api_and_tool_cost_usd:
+  competitor_purchase_cost_usd:
+  competitor_purchase_excluded_from_generation_budget: true
+  remaining_generation_budget_usd:
+  generation_budget_pass:
+  candidate_domain_brief_ref:
+  applied_domain_consideration_ids:
+    - 
+  good_enough_for_humans_spec_ref:
+  real_product_surface_spec_ref:
+  competitive_purchase_approval_ref:
+  purchased_competitor_inspection_ref:
+  applied_inspection_requirement_ids:
+    - 
+  branding_ref:
+  delivery_method: digital_download
+  competitive_standard:
+  benchmark_sources:
+    - 
+  status:
+  listing_assets:
+    - path:
+      role:
+  product_assets:
+    - path:
+      role:
+  delivery_assets:
+    - path:
+      role:
+  internal_process_artifacts:
+    - path:
+      role:
+  ready_for_publish_requires:
+    - listing_quality_pass
+    - product_quality_pass
+    - delivery_quality_pass
+    - good_enough_pass
+    - candidate_domain_brief_complete
+    - domain_considerations_applied
+    - domain_correctness_qa_pass
+    - prohibited_domain_scope_absent
+    - professional_boundary_claims_pass
+    - generation_budget_pass
+    - competitor_purchase_completed
+    - purchased_competitor_inspection_complete
+    - inspection_requirements_applied
+    - promise_delivery_truthfulness_pass
+    - spreadsheet_resilience_qa_pass
+    - support_by_design_qa_pass
+    - reference_based_originality_pass
+    - private_competitor_assets_excluded
+    - qa_result_pass
+    - launch_review_result_pass

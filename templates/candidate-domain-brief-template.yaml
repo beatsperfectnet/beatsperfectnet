@@ -1,0 +1,52 @@
+candidate_domain_brief:
+  brief_id:
+  flow_contract_ref:
+  candidate_ref:
+  status:
+  candidate_domain_brief_status:
+
+  marketplace:
+  marketplace_adapter_ref:
+
+  authoritative_evidence_refs:
+    listing_analysis_ref:
+    product_analysis_ref:
+    governance_refs:
+      - 
+    external_authoritative_reference_refs:
+      - 
+
+  domain_identity:
+    domain_label:
+
+  primary_buyer_jtbd:
+    value:
+    evidence_ref:
+
+  primary_product_type:
+    value:
+    evidence_ref:
+
+  promised_platform:
+    value:
+    evidence_ref:
+
+  domain_considerations:
+    - consideration_id:
+      consideration_type:
+      statement:
+      risk_if_ignored:
+      source_basis:
+      source_ref:
+      basis_reason:
+      applicable_stages:
+        - 
+      disposition:
+
+  evidence_missing:
+    - 
+
+  escalation:
+    required:
+    trigger:
+    notes:

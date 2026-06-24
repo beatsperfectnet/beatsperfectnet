@@ -1,0 +1,116 @@
+MODEL-005:
+  purpose: governed_model_routing_for_flow_005
+  model_catalog:
+    mini:
+      runtime_model_id: openai/gpt-5.4-mini
+      purpose:
+        - candidate_admission
+        - public_evidence_extraction
+        - listing_title_description_and_claim_map_assembly
+        - delivery_assembly
+        - post_launch_ledgers_and_rules
+      normal_flow_allowed: true
+    medium:
+      runtime_model_id: openai/gpt-5.4
+      purpose:
+        - public_shelf_read_synthesis
+        - competitor_selection
+        - purchased_competitor_inspection
+        - first_pass_connected_build
+        - qa_execution
+        - optional_supporting_feature_pass
+        - listing_repair
+      normal_flow_allowed: true
+    deterministic:
+      runtime_model_id: deterministic
+      purpose:
+        - artifact_integrity_audit
+        - formula_truth_table_validation
+        - period_continuity_validation
+        - protection_truthfulness_validation
+        - prepublish_validation
+      normal_flow_allowed: true
+    frontier:
+      runtime_model_id: openai/gpt-5.5
+      purpose:
+        - alignment_synthesis
+        - one_promise_propagation_system_spec
+        - listing_quality_gate
+      normal_flow_allowed: true
+    human:
+      runtime_model_id: human
+      purpose:
+        - purchase_approval_and_acquisition
+      normal_flow_allowed: true
+  stage_routing:
+    candidate_admission:
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+    public_evidence_extraction:
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+    public_shelf_read_synthesis:
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+    competitor_selection:
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+    purchase_approval_and_acquisition:
+      governed_model_tier: human
+      requested_model: human
+    purchased_competitor_inspection:
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+    alignment_synthesis:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    one_promise_propagation_system_spec:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    first_pass_connected_build:
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+    qa_execution:
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+    artifact_integrity_audit:
+      governed_model_tier: deterministic
+      requested_model: deterministic
+    formula_truth_table_validation:
+      governed_model_tier: deterministic
+      requested_model: deterministic
+    period_continuity_validation:
+      governed_model_tier: deterministic
+      requested_model: deterministic
+    protection_truthfulness_validation:
+      governed_model_tier: deterministic
+      requested_model: deterministic
+    optional_supporting_feature_pass:
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+    listing_title_description_and_claim_map_assembly:
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+    listing_visual_composition:
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+    listing_quality_gate:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    listing_repair:
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+    delivery_assembly:
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+    prepublish_validation:
+      governed_model_tier: deterministic
+      requested_model: deterministic
+    publishing_and_version_recording:
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+    post_launch_ledgers_and_rules:
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+  exact_requested_vs_actual_validation: true
+  runtime_launcher_ref: runtime/model-stage-launcher.mjs

@@ -1,0 +1,13 @@
+resource_allocation:
+ double_down_threshold_multiplier: 3
+
+ double_down_candidate_if:
+  - calendar_month_value > calendar_month_cost
+  - calendar_month_value >= BM-001.minimum_monthly_revenue_threshold * double_down_threshold_multiplier
+
+ product_identity_rule:
+  product_id_never_changes_after_double_down
+
+ double_down_recording:
+  store_double_down_date_on_product
+  increment_major_version

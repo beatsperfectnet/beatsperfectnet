@@ -1,0 +1,960 @@
+SCHEMA-004:
+  purpose: exact_required_fields_for_runtime_records_with_purchased_competitor_traceability
+
+  idea_run:
+    required_top_level_fields:
+      - run_id
+      - created_at
+      - ideas
+    idea_record_required_fields:
+      - idea_id
+      - product_thesis
+      - marketplace
+      - category
+      - business_model
+      - tier_1_result
+      - tier_2_result
+      - observed_new_entrants_above_threshold
+
+  candidate_run:
+    required_top_level_fields:
+      - run_id
+      - source_idea_run
+      - queue_ordering
+      - candidates
+    candidate_record_required_fields:
+      - candidate_id
+      - idea_ref
+      - product_thesis
+      - marketplace
+      - current_stage
+      - stage_iteration
+      - cumulative_prompt_tokens
+      - cumulative_completion_tokens
+      - cumulative_total_tokens
+      - cumulative_api_cost_usd
+      - competitive_purchase_approval_ref
+      - purchase_status
+      - purchased_competitor_inspection_ref
+      - inspection_status
+      - applied_inspection_requirement_ids
+      - external_purchase_cost_usd
+      - candidate_domain_brief_ref
+      - candidate_domain_brief_status
+      - candidate_domain_brief_locked_at
+      - listing_analysis_ref
+      - listing_spec_ref
+      - product_analysis_ref
+      - product_spec_ref
+      - delivery_spec_ref
+      - good_enough_for_humans_spec_ref
+      - real_product_surface_spec_ref
+      - listing_quality_pass
+      - product_quality_pass
+      - delivery_quality_pass
+      - qa_result
+    candidate_record_budget_fields:
+      - pricing_snapshot_ref
+      - generation_budget_usd
+      - shared_research_cost_usd
+      - generation_api_and_tool_cost_usd
+      - competitor_purchase_cost_usd
+      - remaining_generation_budget_usd
+      - generation_budget_pass
+
+  candidate_domain_brief:
+    required_top_level_fields:
+      - brief_id
+      - flow_contract_ref
+      - candidate_ref
+      - status
+      - marketplace
+      - marketplace_adapter_ref
+      - authoritative_evidence_refs
+      - domain_identity
+      - primary_buyer_jtbd
+      - primary_product_type
+      - promised_platform
+      - domain_considerations
+      - evidence_missing
+      - escalation
+    authoritative_evidence_refs_required_fields:
+      - listing_analysis_ref
+      - product_analysis_ref
+      - governance_refs
+      - external_authoritative_reference_refs
+    domain_identity_required_fields:
+      - domain_label
+    jtbd_required_fields:
+      - value
+      - evidence_ref
+    product_type_required_fields:
+      - value
+      - evidence_ref
+    platform_required_fields:
+      - value
+      - evidence_ref
+    domain_consideration_required_fields:
+      - consideration_id
+      - consideration_type
+      - statement
+      - risk_if_ignored
+      - source_basis
+      - source_ref
+      - basis_reason
+      - applicable_stages
+      - disposition
+    escalation_required_fields:
+      - required
+      - trigger
+      - notes
+    allowed_status_values:
+      - complete
+      - needs_revision
+      - escalated
+    allowed_consideration_types:
+      - correctness_question
+      - likely_failure_mode
+      - professional_boundary
+      - terminology_constraint
+      - prohibited_scope_expansion
+    allowed_source_basis:
+      - marketplace_evidence
+      - complaint_evidence
+      - governance
+      - authoritative_external_reference
+      - bounded_domain_reasoning
+    allowed_dispositions:
+      - market_required
+      - correctness_required
+      - acceptance_test_only
+      - prohibited_scope_expansion
+      - informational_only
+    allowed_applicable_stages:
+      - competitor_selection_for_purchase
+      - purchased_competitor_inspection
+      - listing_spec
+      - product_spec
+      - delivery_spec
+      - good_enough_for_humans
+      - quality_qa
+
+  listing_analysis:
+    required_top_level_fields:
+      - analysis_id
+      - candidate_ref
+      - idea_ref
+      - marketplace
+      - primary_buyer_jtbd
+      - bestseller_listing_promise
+      - bestseller_buyer_expectations
+      - evidence_refs_for_jtbd_and_promise
+      - listing_evidence_packet
+      - evidence_missing
+    listing_evidence_packet_required_fields:
+      - benchmark_listings
+      - benchmark_titles
+      - benchmark_thumbnails
+      - benchmark_image_breakdowns
+      - benchmark_trust_signals
+      - benchmark_objection_handlers
+      - benchmark_buyer_visible_contents
+      - benchmark_compatibility_claims
+      - benchmark_bonus_visibility
+      - benchmark_descriptions
+      - benchmark_pricing
+      - bestseller_visual_grammar
+      - benchmark_screenshot_expectations
+      - evidence_missing
+    benchmark_listing_record_required_fields:
+      - listing_url
+      - evidence_summary
+    benchmark_title_record_required_fields:
+      - listing_url
+      - title
+    benchmark_thumbnail_record_required_fields:
+      - listing_url
+      - image_ref
+      - visible_text
+      - visible_elements
+    benchmark_image_breakdown_record_required_fields:
+      - listing_url
+      - image_1
+      - image_2
+      - image_3
+      - image_4
+      - image_5
+      - image_6
+    benchmark_image_record_required_fields:
+      - visible_text
+      - visible_elements
+    benchmark_trust_signal_record_required_fields:
+      - listing_url
+      - signal
+    benchmark_objection_handler_record_required_fields:
+      - listing_url
+      - handler
+    benchmark_buyer_visible_contents_record_required_fields:
+      - listing_url
+      - content
+    benchmark_compatibility_claim_record_required_fields:
+      - listing_url
+      - claim
+    benchmark_bonus_visibility_record_required_fields:
+      - listing_url
+      - bonus
+    benchmark_description_record_required_fields:
+      - listing_url
+      - description_summary
+    benchmark_pricing_record_required_fields:
+      - listing_url
+      - current_price
+      - sale_price
+      - sale_visible
+    visual_grammar_record_required_fields:
+      - listing_url
+      - observed_visual_pattern
+      - evidence_summary
+    screenshot_expectation_record_required_fields:
+      - listing_url
+      - expected_surface
+      - evidence_summary
+
+  competitive_purchase_approval:
+    required_top_level_fields:
+      - approval_id
+      - flow_contract_ref
+      - candidate_ref
+      - candidate_domain_brief_ref
+      - applied_domain_consideration_ids
+      - status
+      - selected_competitor
+      - alternatives_considered
+      - selection_rule_applied
+      - spend
+      - human_decision
+      - purchase_execution
+    selected_competitor_required_fields:
+      - title
+      - marketplace
+      - seller_name_if_visible
+      - product_url
+      - current_price
+      - original_price_if_visible
+      - currency
+      - discount_summary_if_visible
+      - live_purchase_verification
+      - observed_monthly_revenue
+      - revenue_evidence_date
+      - revenue_evidence_ref
+      - observable_listing_age_or_launch_date
+      - match_tier
+      - primary_jtbd_match
+      - product_type_match
+      - platform_match
+      - scope_match
+      - selection_reason
+    live_purchase_verification_required_fields:
+      - verification_status
+      - observed_at
+      - max_age_hours_for_approval
+      - product_url
+      - title
+      - seller_name_if_visible
+      - current_price
+      - original_price_if_visible
+      - currency
+      - discount_summary_if_visible
+      - evidence_ref
+      - verification_method
+    alternative_required_fields:
+      - product_url
+      - match_tier
+      - observed_monthly_revenue
+      - current_price
+      - reason_not_selected
+    spend_required_fields:
+      - approval_required
+      - requested_amount
+      - approved_amount
+      - existing_budget_rule_ref
+    human_decision_required_fields:
+      - decision
+      - decision_date
+      - notes
+    purchase_execution_required_fields:
+      - execution_mode
+      - purchase_status
+      - purchase_date
+      - actual_price
+      - receipt_private_ref
+      - purchased_asset_private_refs
+      - acquisition_notes
+
+  listing_spec:
+    required_top_level_fields:
+      - spec_id
+      - candidate_ref
+      - idea_ref
+      - product_name
+      - branding_ref
+      - marketplace
+      - listing_analysis_ref
+      - purchased_competitor_inspection_ref
+      - domain_brief_application
+      - applied_inspection_requirement_ids
+      - listing_evidence_packet
+      - buyer_expectation_requirements
+      - buyer_success_expectations
+      - buyer_failure_expectations
+      - promise_to_product_alignment_requirements
+      - negative_review_prevention_requirements
+      - title_requirements
+      - thumbnail_requirements
+      - image_sequence_requirements
+      - image_roles
+      - bestseller_visual_grammar
+      - required_screenshot_moments
+      - real_product_surface_dependencies
+      - image_to_product_fidelity_requirements
+      - no_listing_only_fake_surfaces
+      - promise_requirements
+      - trust_signal_requirements
+      - objection_handler_requirements
+      - buyer_visible_contents_requirements
+      - compatibility_claim_requirements
+      - bonus_visibility_requirements
+      - description_requirements
+      - pricing_position_requirements
+      - benchmark_gap_closure_requirements
+      - claim_to_product_verification_requirements
+      - forbidden_listing_claims
+      - evidence_missing
+    domain_brief_application_required_fields:
+      - candidate_domain_brief_ref
+      - applied_consideration_ids
+      - excluded_considerations
+    excluded_consideration_required_fields:
+      - consideration_id
+      - reason
+
+  purchased_competitor_inspection:
+    required_top_level_fields:
+      - inspection_id
+      - flow_contract_ref
+      - candidate_ref
+      - competitive_purchase_approval_ref
+      - candidate_domain_brief_ref
+      - applied_domain_consideration_ids
+      - status
+      - competitor_product
+      - inspection_environment
+      - delivered_assets
+      - first_use_observations
+      - spreadsheet_architecture
+      - formula_and_automation_observations
+      - listing_promise_delivery_checks
+      - complaint_checks
+      - stress_tests
+      - support_risks
+      - originality_boundary
+      - derived_requirements
+      - scope_decision
+      - evidence_missing
+    competitor_product_required_fields:
+      - title
+      - marketplace
+      - seller_name_if_visible
+      - product_url
+      - purchase_date
+      - purchase_price
+      - selection_match_tier
+    inspection_environment_required_fields:
+      - private_asset_refs
+      - disposable_working_copy_used
+      - file_or_platform_type
+      - application_used
+      - application_version_if_known
+      - inspection_date
+      - limitations
+    delivered_asset_required_fields:
+      - asset_id
+      - filename_or_label
+      - asset_type
+      - file_format
+      - observable_purpose
+      - buyer_action_required
+      - evidence_locator
+    first_use_required_fields:
+      - first_open_asset
+      - start_point_clear
+      - setup_steps_observed
+      - sample_or_demo_state_present
+      - buyer_inputs_required_before_value
+      - observed_friction
+    first_use_friction_required_fields:
+      - observation
+      - evidence_locator
+    spreadsheet_architecture_required_fields:
+      - tab_count
+      - tabs
+      - primary_user_flow
+      - data_entry_strategy
+      - output_or_dashboard_strategy
+      - setup_strategy
+      - category_strategy
+      - formula_dependency_observations
+      - evidence_missing
+    tab_required_fields:
+      - tab_id
+      - visible_name
+      - generic_function
+      - role
+      - evidence_locator
+    formula_and_automation_required_fields:
+      - formulas_present
+      - formula_visibility
+      - editable_areas_marked
+      - formula_protection_observed
+      - listing_automation_claims
+      - delivery_status
+      - evidence_locator
+      - manual_work_observed
+      - likely_breakage_risks
+    claim_check_required_fields:
+      - check_id
+      - listing_claim_summary
+      - delivery_status
+      - observed_result
+      - evidence_locator
+    complaint_check_required_fields:
+      - complaint_id
+      - complaint_summary
+      - inspection_status
+      - observed_cause
+      - evidence_locator
+      - downstream_action_required
+    stress_test_required_fields:
+      - test_id
+      - applicability
+      - reason_if_not_applicable_or_not_testable
+      - test_action
+      - observed_result
+      - result
+      - failure_mode
+      - evidence_locator
+      - downstream_requirement
+    support_risk_required_fields:
+      - risk_id
+      - observed_risk
+      - likely_support_trigger
+      - prevention_requirement
+      - evidence_locator
+    originality_boundary_required_fields:
+      - generic_category_behaviors_observed
+      - seller_specific_elements_forbidden
+      - independent_implementation_requirements
+      - buyer_relevant_improvement_opportunities
+    derived_requirement_required_fields:
+      - requirement_id
+      - disposition
+      - target_artifact
+      - requirement
+      - reason
+      - source_observation_ref
+      - acceptance_test
+    scope_decision_required_fields:
+      - recommendation
+      - reason
+      - escalation_required
+      - escalation_reason
+
+  product_analysis:
+    required_top_level_fields:
+      - analysis_id
+      - candidate_ref
+      - idea_ref
+      - marketplace
+      - primary_buyer_jtbd
+      - bestseller_listing_promise
+      - bestseller_buyer_expectations
+      - evidence_refs_for_jtbd_and_promise
+      - search_queries_used
+      - evidence_sources
+      - successful_new_entrant_sources
+      - eligible_purchased_reference_set
+      - observed_product_type
+      - observed_tabs_components
+      - observed_workflows
+      - observed_formulas_features
+      - observed_dashboards
+      - observed_visual_surface_patterns
+      - observed_buyer_decision_bearing_charts
+      - observed_chart_unit_and_threshold_semantics
+      - observed_sample_data_examples
+      - recurring_actionable_complaints
+      - complaint_frequency
+      - complaint_evidence
+      - scope_gap_summary
+      - product_scope_recommendations
+      - forbidden_feature_inference
+      - evidence_missing
+    successful_new_entrant_source_record_required_fields:
+      - listing_url
+      - evidence_summary
+    observed_item_record_required_fields:
+      - value
+      - evidence_summary
+    complaint_record_required_fields:
+      - complaint
+      - complaint_frequency
+      - evidence
+
+  product_spec:
+    required_top_level_fields:
+      - spec_id
+      - candidate_ref
+      - idea_ref
+      - product_name
+      - marketplace
+      - listing_spec_ref
+      - product_analysis_ref
+      - purchased_competitor_inspection_ref
+      - domain_brief_application
+      - applied_inspection_requirement_ids
+      - spreadsheet_resilience_standard_ref
+      - support_by_design_standard_ref
+      - market_gap_summary
+      - successful_new_entrant_sources
+      - buyer_outcome_requirements
+      - correct_logic_requirements
+      - unsafe_state_requirements
+      - required_warning_requirements
+      - expected_output_requirements
+      - negative_review_trigger_requirements
+      - workbook_requirements
+      - tab_requirements
+      - workflow_requirements
+      - formula_requirements
+      - dashboard_requirements
+      - product_visual_surface_requirements
+      - dashboard_surface_requirements
+      - chart_quality_requirements
+      - buyer_decision_bearing_charts
+      - chart_unit_and_threshold_semantics
+      - screenshot_eligible_surface_requirements
+      - no_listing_only_fake_surfaces
+      - editable_area_requirements
+      - sample_data_requirements
+      - output_requirements
+      - complaint_fix_requirements
+      - forbidden_product_features
+      - files_to_create
+      - compatibility_requirements
+      - listing_verification_requirements
+      - spreadsheet_resilience_strategies
+      - support_by_design_requirements
+      - evidence_missing
+    successful_new_entrant_source_record_required_fields:
+      - listing_url
+      - evidence_summary
+    buyer_outcome_requirements_required_fields:
+      - primary_buyer_decision
+      - buyer_success_state
+      - buyer_failure_state
+    spreadsheet_resilience_strategy_record_required_fields:
+      - standard_item_id
+      - applicability
+      - strategy
+      - reason
+      - source_inspection_requirement_id
+      - acceptance_test
+    support_by_design_requirement_record_required_fields:
+      - requirement_id
+      - strategy
+      - reason
+    domain_brief_application_required_fields:
+      - candidate_domain_brief_ref
+      - applied_consideration_ids
+      - excluded_considerations
+    excluded_consideration_required_fields:
+      - consideration_id
+      - reason
+
+  delivery_spec:
+    required_top_level_fields:
+      - spec_id
+      - candidate_ref
+      - idea_ref
+      - product_name
+      - branding_ref
+      - marketplace
+      - listing_spec_ref
+      - product_spec_ref
+      - purchased_competitor_inspection_ref
+      - domain_brief_application
+      - applied_inspection_requirement_ids
+      - first_success_requirements
+      - buyer_confusion_prevention_requirements
+      - buyer_risk_explanation_requirements
+      - support_ticket_prevention_requirements
+      - support_scope_statement_requirements
+      - visual_surface_comprehension_requirements
+      - quick_start_requirements
+      - setup_guide_requirements
+      - backup_reset_recovery_requirements
+      - faq_requirements
+      - example_requirements
+      - troubleshooting_requirements
+      - compatibility_help_requirements
+      - platform_specific_limitations_help
+      - support_reduction_requirements
+      - evidence_missing
+    domain_brief_application_required_fields:
+      - candidate_domain_brief_ref
+      - applied_consideration_ids
+      - excluded_considerations
+    excluded_consideration_required_fields:
+      - consideration_id
+      - reason
+
+  good_enough_for_humans_spec:
+    required_top_level_fields:
+      - spec_id
+      - candidate_ref
+      - product_name
+      - marketplace
+      - listing_spec_ref
+      - product_analysis_ref
+      - product_spec_ref
+      - delivery_spec_ref
+      - purchased_competitor_inspection_ref
+      - domain_brief_application
+      - applied_inspection_requirement_ids
+      - benchmark_listing_refs
+      - buyer_success_definition
+      - buyer_failure_definition
+      - negative_review_triggers
+      - buyer_safety_requirements
+      - stop_building_when
+      - listing_quality_pass
+      - product_quality_pass
+      - delivery_quality_pass
+      - good_enough_pass
+      - listing_expectations
+      - product_promise
+      - delivery_friction_reduction
+      - visual_surface_readiness
+      - image_to_product_fidelity
+      - no_listing_only_fake_surfaces
+      - non_technical_buyer_task_acceptance_tests
+      - inspection_derived_acceptance_tests
+      - spreadsheet_resilience_acceptance_tests
+      - support_by_design_acceptance_tests
+      - publish_blocking_human_readiness_defects
+    benchmark_listing_ref_required_fields:
+      - listing_url
+      - evidence_summary
+    good_enough_pass_required_fields:
+      - require
+    non_technical_buyer_task_required_fields:
+      - task
+      - expected_human_observable_result
+      - fail_if
+    inspection_derived_acceptance_test_required_fields:
+      - requirement_id
+      - test
+      - expected_human_observable_result
+      - fail_if
+    spreadsheet_resilience_acceptance_test_required_fields:
+      - test_id
+      - applicability
+      - test
+      - expected_result
+      - safe_failure_result
+      - fail_if
+    support_by_design_acceptance_test_required_fields:
+      - test
+      - expected_human_observable_result
+      - fail_if
+    domain_brief_application_required_fields:
+      - candidate_domain_brief_ref
+      - applied_consideration_ids
+      - excluded_considerations
+    excluded_consideration_required_fields:
+      - consideration_id
+      - reason
+
+  real_product_surface_spec:
+    required_top_level_fields:
+      - spec_id
+      - candidate_ref
+      - product_name
+      - marketplace
+      - listing_spec_ref
+      - product_spec_ref
+      - product_asset_ref
+      - verified_product_surfaces
+      - screenshot_eligible_surfaces
+      - real_tabs
+      - real_ranges
+      - real_charts
+      - real_dashboard_states
+      - real_controls
+      - chart_unit_and_threshold_semantics
+      - buyer_decision_bearing_charts
+      - sample_data_states
+      - image_to_product_fidelity
+      - no_listing_only_fake_surfaces
+      - verification_failures
+      - evidence_missing
+    verified_product_surface_record_required_fields:
+      - surface_id
+      - tab
+      - range_or_object_ref
+      - surface_type
+      - buyer_decision_supported
+      - screenshot_eligible
+      - evidence_summary
+    screenshot_eligible_surface_record_required_fields:
+      - surface_id
+      - listing_image_role
+      - required_screenshot_moment_ref
+      - eligibility_reason
+      - allowed_listing_treatments
+      - forbidden_listing_treatments
+    chart_record_required_fields:
+      - chart_id
+      - tab
+      - source_range
+      - buyer_decision_supported
+      - units
+      - threshold_semantics
+      - readability_status
+    control_record_required_fields:
+      - control_id
+      - tab
+      - control_type
+      - buyer_visible_label
+      - clean_human_control_status
+
+  product:
+    required_top_level_fields:
+      - product_id
+      - candidate_ref
+      - idea_ref
+      - flow_contract_ref
+      - product_name
+      - marketplace
+      - competitive_purchase_approval_ref
+      - purchased_competitor_inspection_ref
+      - external_purchase_cost_usd
+      - listing_assets
+      - product_assets
+      - delivery_assets
+      - listing_url
+      - product_launch_date
+      - cumulative_prompt_tokens
+      - cumulative_completion_tokens
+      - cumulative_total_tokens
+      - cumulative_api_cost_usd
+      - current_version
+      - status
+      - price_history
+      - version_history
+      - double_down_dates
+      - monthly_outcomes
+    price_history_record_required_fields:
+      - date
+      - price
+    version_history_record_required_fields:
+      - version
+      - date
+      - event
+    monthly_outcomes_record_required_fields:
+      - reporting_month
+      - actual_monthly_revenue
+      - actual_monthly_cost
+      - actual_monthly_profit
+      - actual_support_hours_per_month
+      - promotion_cost_usd
+      - total_reviews_count
+      - negative_reviews_count
+      - refunds_count
+      - bug_fixes_after_launch_count
+
+  model_run_ledger:
+    required_top_level_fields:
+      - run_id
+      - created_at
+      - workflow_contract_ref
+      - dispatch_contract_ref
+      - dispatch_log_ref
+      - session_model_observed
+      - exact_model_match_required
+      - overall_exact_match
+      - notes
+      - stages
+    stage_record_required_fields:
+      - step_id
+      - step_name
+      - model_policy_ref
+      - governed_default_model
+      - governed_fallback_model
+      - governed_escalation_model
+      - functional_mandate
+      - candidate_domain_brief_ref
+      - applied_domain_consideration_ids
+      - stage_execution_context_hash
+      - execution_status
+      - requested_model
+      - actual_model_used
+      - prompt_tokens
+      - completion_tokens
+      - total_tokens
+      - exact_match
+      - evidence
+    stage_record_traceability_fields:
+      - governed_model_tier
+      - requested_model_id
+      - requested_model_resolved
+      - runtime_resolved_model_id
+      - provider_reported_model_id
+      - reasoning_effort
+      - text_verbosity
+      - processing_mode
+      - input_tokens
+      - cached_input_tokens
+      - output_tokens
+      - reasoning_tokens_if_reported
+      - paid_tool_calls
+      - paid_tool_cost_usd
+      - container_cost_usd
+      - image_generation_cost_usd
+      - stage_model_cost_usd
+      - stage_total_cost_usd
+      - candidate_shared_cost_allocation_usd
+      - cumulative_generation_cost_usd
+      - remaining_generation_budget_usd
+      - projected_remaining_cost_usd
+      - pricing_snapshot_ref
+      - fallback_used
+      - escalation_used
+      - output_artifact_id
+
+  model_stage_dispatch:
+    required_top_level_fields:
+      - run_id
+      - created_at
+      - workflow_contract_ref
+      - contract_ref
+      - exact_model_match_required
+      - overall_dispatch_match
+      - notes
+      - stages
+    stage_record_required_fields:
+      - step_id
+      - model_policy_ref
+      - requested_model
+      - functional_mandate
+      - candidate_domain_brief_ref
+      - applied_domain_consideration_ids
+      - stage_execution_context_hash
+      - execution_status
+      - session_model_observed
+      - dispatch_match
+      - evidence
+    stage_record_traceability_fields:
+      - governed_model_tier
+      - requested_model_id
+      - runtime_resolved_model_id
+      - provider_reported_model_id
+      - reasoning_effort
+      - text_verbosity
+      - processing_mode
+      - quality_critical
+      - automatic_downward_fallback_allowed
+      - fresh_context_required
+      - independence_required
+      - model_call_required
+      - mechanical_state_writer_if_needed
+      - fallback_used
+      - escalation_used
+      - output_artifact_id
+
+  build_manifest:
+    required_top_level_fields:
+      - build_id
+      - candidate_ref
+      - candidate_domain_brief_ref
+      - process_dir
+      - runtime_launcher_ref
+      - flow_contract_ref
+      - model_policy_ref
+      - pricing_snapshot_ref
+      - generation_budget_usd
+      - shared_research_cost_usd
+      - generation_api_and_tool_cost_usd
+      - competitor_purchase_cost_usd
+      - competitor_purchase_excluded_from_generation_budget
+      - remaining_generation_budget_usd
+      - generation_budget_pass
+      - good_enough_for_humans_spec_ref
+      - real_product_surface_spec_ref
+      - competitive_purchase_approval_ref
+      - purchased_competitor_inspection_ref
+      - applied_inspection_requirement_ids
+      - applied_domain_consideration_ids
+      - competitive_standard
+      - benchmark_sources
+      - status
+      - listing_assets
+      - product_assets
+      - delivery_assets
+      - internal_process_artifacts
+      - ready_for_publish_requires
+    artifact_record_required_fields:
+      - path
+      - role
+
+  company_metrics:
+    required_top_level_fields:
+      - reporting_month
+      - total_products
+      - active_products
+      - killed_products
+      - monthly_net_profit_usd
+      - total_prompt_tokens
+      - total_completion_tokens
+      - total_tokens
+      - total_reviews_count
+      - negative_reviews_count
+      - refunds_count
+      - bug_fixes_after_launch_count
+      - total_support_hours
+      - total_api_cost_usd
+
+  escalation:
+    required_top_level_fields:
+      - escalation_id
+      - created_at
+      - candidate_ref
+      - product_ref
+      - reason
+      - current_stage
+      - cumulative_prompt_tokens
+      - cumulative_completion_tokens
+      - cumulative_total_tokens
+      - cumulative_api_cost_usd
+      - approval_artifact
+      - approval_scope
+      - required_human_decision
+      - human_decision
+      - status
+    required_human_decision_values:
+      - approve_continue
+      - reject_candidate
+      - request_revision
+      - approve_marketplace_publish
+      - approve_purchase
+      - request_alternative

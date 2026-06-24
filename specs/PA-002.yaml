@@ -1,0 +1,49 @@
+PA-002:
+  purpose: create_product_package_analysis_from_marketplace_evidence
+
+  product_analysis_required_fields:
+    - analysis_id
+    - candidate_ref
+    - idea_ref
+    - marketplace
+    - primary_buyer_jtbd
+    - bestseller_listing_promise
+    - bestseller_buyer_expectations
+    - evidence_refs_for_jtbd_and_promise
+    - search_queries_used
+    - evidence_sources
+    - successful_new_entrant_sources
+    - eligible_purchased_reference_set
+    - observed_product_type
+    - observed_tabs_components
+    - observed_workflows
+    - observed_formulas_features
+    - observed_dashboards
+    - observed_visual_surface_patterns
+    - observed_buyer_decision_bearing_charts
+    - observed_chart_unit_and_threshold_semantics
+    - observed_sample_data_examples
+    - recurring_actionable_complaints
+    - complaint_frequency
+    - complaint_evidence
+    - scope_gap_summary
+    - product_scope_recommendations
+    - forbidden_feature_inference
+    - evidence_missing
+
+  rules:
+    - analysis_must_be_evidence_based
+    - analysis_must_not_generate_products
+    - analysis_must_only_extract_marketplace_observations
+    - analysis_must_only_include_marketplace_comparables_listing_features_review_signals_pricing_signals_trust_signals_packaging_signals_negative_reviews_and_gap_findings
+    - analysis_must_extract_primary_jtbd_and_secondary_jtbds_from_marketplace_evidence
+    - analysis_must_extract_primary_promise_and_supporting_evidence_from_marketplace_evidence
+    - analysis_must_extract_actionable_complaints_frequency_and_evidence_from_marketplace_evidence
+    - analysis_must_translate_market_evidence_into_spec_inputs_without_creating_a_product
+    - analysis_must_extract_package_components_and_package_level_gap_findings
+    - analysis_must_extract_current_listing_image_count_type_quality_and_buyer_objection_coverage
+    - analysis_must_extract_non_technical_buyer_usability_signals_from_listing_images_copy_onboarding_and_reviews
+    - analysis_must_extract_setup_instruction_sample_data_dashboard_formatting_editable_area_and_control_expectations
+    - analysis_must_extract_good_enough_for_humans_criteria_without_creating_a_product
+    - analysis_must_identify_eligible_purchased_reference_set_without_selecting_the_purchase_target
+    - no_creativity

@@ -1,0 +1,65 @@
+product_analysis:
+  analysis_id:
+  candidate_ref:
+  idea_ref:
+  marketplace:
+  primary_buyer_jtbd:
+  bestseller_listing_promise:
+  bestseller_buyer_expectations:
+  evidence_refs_for_jtbd_and_promise:
+    - 
+  successful_new_entrant_sources:
+    - listing_url:
+      evidence_summary:
+  eligible_purchased_reference_set:
+    - listing_url:
+      evidence_summary:
+  search_queries_used:
+    - 
+  evidence_sources:
+    - source_type:
+      source_ref:
+      evidence_summary:
+  observed_product_type:
+    - value:
+      evidence_summary:
+  observed_tabs_components:
+    - value:
+      evidence_summary:
+  observed_workflows:
+    - value:
+      evidence_summary:
+  observed_formulas_features:
+    - value:
+      evidence_summary:
+  observed_dashboards:
+    - value:
+      evidence_summary:
+  observed_visual_surface_patterns:
+    - value:
+      evidence_summary:
+  observed_buyer_decision_bearing_charts:
+    - value:
+      evidence_summary:
+  observed_chart_unit_and_threshold_semantics:
+    - value:
+      evidence_summary:
+  observed_sample_data_examples:
+    - value:
+      evidence_summary:
+  recurring_actionable_complaints:
+    - complaint:
+      complaint_frequency:
+      evidence:
+  complaint_frequency:
+  complaint_evidence:
+    - 
+  scope_gap_summary:
+  product_scope_recommendations:
+    - value:
+      evidence_summary:
+  forbidden_feature_inference:
+    - value:
+      evidence_summary:
+  evidence_missing:
+    - 

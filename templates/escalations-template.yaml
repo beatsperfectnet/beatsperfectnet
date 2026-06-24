@@ -1,0 +1,25 @@
+escalations:
+ - escalation_id:
+   created_at:
+   candidate_ref:
+   product_ref:
+   reason:
+   current_stage:
+   cumulative_prompt_tokens:
+   cumulative_completion_tokens:
+   cumulative_total_tokens:
+   cumulative_api_cost_usd:
+   generation_budget_usd:
+   generation_budget_pass:
+   budget_exception_requested:
+   budget_exception_reason:
+   approval_artifact:
+   approval_scope:
+   required_human_decision:
+    - approve_continue
+    - reject_candidate
+    - request_revision
+    - approve_marketplace_publish
+    - approve_budget_exception
+   human_decision:
+   status:

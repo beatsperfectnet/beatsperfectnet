@@ -1,0 +1,12 @@
+.DS_Store
+
+node_modules/
+.next/
+out/
+
+private/
+builds/
+
+records/**
+!records/
+!records/dashboard_state.yaml

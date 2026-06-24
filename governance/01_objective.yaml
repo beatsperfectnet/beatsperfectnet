@@ -1,0 +1,16 @@
+objective:
+ primary_metric:
+  monthly_net_profit_usd:
+   target: ">=10000"
+
+ milestones:
+  month_3_after_launch:
+   monthly_net_profit_usd:
+    target: ">=3000"
+
+  month_6_after_launch:
+   monthly_net_profit_usd:
+    target: ">=10000"
+
+ maintenance_rule:
+  maximum_consecutive_months_below_target: 1

@@ -1,0 +1,80 @@
+competitive_purchase_approval:
+  approval_id:
+  flow_contract_ref:
+  candidate_ref:
+  candidate_domain_brief_ref:
+  applied_domain_consideration_ids:
+    - 
+  status:
+
+  selected_competitor:
+    title:
+    marketplace:
+    seller_name_if_visible:
+    product_url:
+    current_price:
+    original_price_if_visible:
+    currency:
+    discount_summary_if_visible:
+    live_purchase_verification:
+      verification_status:
+      observed_at:
+      max_age_hours_for_approval:
+      product_url:
+      title:
+      seller_name_if_visible:
+      current_price:
+      original_price_if_visible:
+      currency:
+      discount_summary_if_visible:
+      evidence_ref:
+      verification_method:
+    observed_monthly_revenue:
+    revenue_evidence_date:
+    revenue_evidence_ref:
+    observable_listing_age_or_launch_date:
+    match_tier:
+    primary_jtbd_match:
+    product_type_match:
+    platform_match:
+    scope_match:
+    selection_reason:
+
+  alternatives_considered:
+    - product_url:
+      match_tier:
+      observed_monthly_revenue:
+      current_price:
+      reason_not_selected:
+
+  selection_rule_applied:
+    expected_inspection_scope:
+      - delivered_assets
+      - first_use_experience
+      - spreadsheet_architecture
+      - formula_and_automation_behavior
+      - listing_promise_delivery_truthfulness
+      - recurring_complaint_mapping
+      - spreadsheet_stress_behavior
+      - resilience_risks
+      - support_risks
+
+  spend:
+    approval_required:
+    requested_amount:
+    approved_amount:
+    existing_budget_rule_ref:
+
+  human_decision:
+    decision:
+    decision_date:
+    notes:
+
+  purchase_execution:
+    execution_mode:
+    purchase_status:
+    purchase_date:
+    actual_price:
+    receipt_private_ref:
+    purchased_asset_private_refs:
+    acquisition_notes:
