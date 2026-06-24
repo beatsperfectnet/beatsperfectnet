@@ -1,6 +1,7 @@
 idea_run:
  run_id:
  created_at:
+ exclusion_ref: governance/product_lane_exclusions.yaml
 
 ideas:
  - idea_id:
@@ -8,6 +9,11 @@ ideas:
    marketplace:
    category:
    business_model:
+   product_lane_id:
+   exclusion_check:
+     status:
+     matched_exclusion_lane:
+     action:
    tier_1_result:
    tier_2_result:
    observed_new_entrants_above_threshold:

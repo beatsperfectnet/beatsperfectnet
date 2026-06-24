@@ -102,6 +102,7 @@ export function validateFlow005Contracts() {
   const bls = loadYaml("specs/BLS-005.yaml")["BLS-005"];
   const budget = loadYaml("governance/08_product_generation_budget_005.yaml").product_generation_budget;
   const dispatch = loadYaml("governance/09_stage_dispatch_005.yaml").stage_dispatch;
+  const exclusions = loadYaml("governance/product_lane_exclusions.yaml").product_lane_exclusions;
   const active = loadYaml("config/active-flow.yaml");
   const brandbook = loadYaml("brandbook/beatsperfect-brandbook.v1.yaml").brandbook;
 
@@ -156,6 +157,16 @@ export function validateFlow005Contracts() {
   assert(budget?.generation_budget_usd === 25.0, "Budget ceiling must remain 25");
   assert(dispatch?.enforcement?.exact_model_match_required === true, "Stage dispatch must require exact model match");
   assert(dispatch?.stage_model_map?.["02_mandatory_competitor_purchase"]?.dispatch_action === "human_gate", "Purchase approval must be human-gated");
+  assert(exclusions?.enforcement?.applies_to_future_idea_runs === true, "Product lane exclusions must apply to future idea runs");
+  assert(exclusions?.enforcement?.applies_to_candidate_admission === true, "Product lane exclusions must apply to candidate admission");
+  assert(
+    exclusions?.lanes?.some((lane) => lane.lane_id === "meal_planner_spreadsheet" && lane.status === "excluded_by_human_rejection"),
+    "Meal planner lane must remain excluded after human rejection",
+  );
+  assert(
+    exclusions?.lanes?.some((lane) => lane.lane_id === "budget_planner_spreadsheet" && lane.status === "pending_exclusion_after_marketplace_publish"),
+    "Budget planner lane must have a post-publish exclusion trigger",
+  );
   assertIncludes(
     dispatch?.stage_model_map?.["07_propagation_buyer_experience_product_visual_qa"]?.deterministic_subgates,
     "artifact_integrity_audit",
@@ -218,6 +229,7 @@ export function validateActiveAppState() {
     ...(today?.rejectedCandidates || []),
   ];
   allCandidates.forEach((candidate, index) => validCandidateSnapshot(candidate, `Dashboard candidate ${index}`));
+  assert(!allCandidates.some((candidate) => /meal planner/i.test(candidate.candidateTitle)), "Dashboard Today must not show excluded meal-planner candidates as active");
   assert(today?.totals?.pipelineCandidates === (today?.pipelineCandidates || []).length, "Dashboard pipeline total mismatch");
   assert(today?.totals?.inFlightCandidates === (today?.inFlightCandidates || []).length, "Dashboard in-flight total mismatch");
   assert(today?.totals?.launchedCandidates === (today?.launchedCandidates || []).length, "Dashboard launched total mismatch");

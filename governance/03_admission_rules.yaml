@@ -3,6 +3,9 @@ admission_rules:
   reject_if:
    - prohibited_category
    - prohibited_business_model
+   - excluded_product_lane
+   - prior_human_rejected_product_lane
+  exclusion_ref: governance/product_lane_exclusions.yaml
 
  tier_2:
   model: BM-001
@@ -13,3 +16,7 @@ admission_rules:
   requires:
    - tier_1_passed
    - tier_2_passed
+   - product_lane_exclusion_check_passed
+  reject_if:
+   - idea_matches_excluded_lane
+   - idea_duplicates_published_lane

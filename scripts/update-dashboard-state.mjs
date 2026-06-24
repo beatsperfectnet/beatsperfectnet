@@ -124,6 +124,46 @@ function launchRecord(candidate) {
   return doc?.launch_package || doc?.launch_review || null;
 }
 
+function productLaneExclusions() {
+  const doc = readYaml("governance/product_lane_exclusions.yaml");
+  return doc?.product_lane_exclusions?.lanes || [];
+}
+
+function candidateSearchText(candidate) {
+  return [
+    candidate.candidate_id,
+    candidate.product_thesis,
+    candidateTitle(candidate),
+    candidate.current_stage,
+    candidate.terminal_status,
+    candidate.terminal_reason,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+}
+
+function laneMatchesCandidate(lane, candidate) {
+  if ((lane.source_candidate_refs || []).includes(candidate.candidate_id)) return true;
+  const searchText = candidateSearchText(candidate);
+  return (lane.keyword_match_terms || []).some((term) => searchText.includes(String(term).toLowerCase()));
+}
+
+function laneIsCurrentlyExcluded(lane, candidate) {
+  if (lane.status === "excluded_by_human_rejection") return true;
+  if (lane.status === "pending_exclusion_after_marketplace_publish") {
+    const record = launchRecord(candidate);
+    return isPublished(record) || String(candidate.current_stage || "").toLowerCase() === "published";
+  }
+  return Boolean(lane.excluded_from_future_idea_runs || lane.excluded_from_candidate_admission);
+}
+
+function isExcludedFromActiveDashboard(candidate) {
+  if (String(candidate.exclusion_check?.status || "").startsWith("rejected_excluded")) return true;
+  if (String(candidate.terminal_status || "") === "rejected_before_launch") return true;
+  return productLaneExclusions().some((lane) => laneMatchesCandidate(lane, candidate) && laneIsCurrentlyExcluded(lane, candidate));
+}
+
 function isRejectedLaunch(record) {
   const status = String(record?.status || record?.result || "").toLowerCase();
   return status.includes("revision_required") || status.includes("revision_requested") || status.includes("rejected");
@@ -202,7 +242,8 @@ function activeFlow005Candidates() {
   return readYamlFiles("records/candidates")
     .flatMap((entry) => entry.doc?.candidates || [])
     .filter((candidate) => candidate?.candidate_id)
-    .filter((candidate) => String(candidate.original_flow_contract_ref || "").includes("FLOW-005"));
+    .filter((candidate) => String(candidate.original_flow_contract_ref || "").includes("FLOW-005"))
+    .filter((candidate) => !isExcludedFromActiveDashboard(candidate));
 }
 
 function sum(items, getter) {

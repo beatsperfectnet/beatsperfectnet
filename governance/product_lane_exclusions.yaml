@@ -1,0 +1,49 @@
+product_lane_exclusions:
+  purpose: prevent rejected or already-launched product lanes from re-entering future idea and candidate runs unless reopened by human approval
+  enforcement:
+    applies_to_future_idea_runs: true
+    applies_to_candidate_admission: true
+    matching_mode: conservative_keyword_and_explicit_candidate_refs
+    reopen_requires_human_approval: true
+  lanes:
+    - lane_id: meal_planner_spreadsheet
+      status: excluded_by_human_rejection
+      excluded_from_future_idea_runs: true
+      excluded_from_candidate_admission: true
+      source_candidate_refs:
+        - C-001-001
+        - C-002-001
+      source_refs:
+        - records/validation/LR-C-001-001.yaml
+        - memory/2026-06-22.md
+      reason: Meal Planner Studio was rejected after human review because the unit economics and quality gap did not justify launch; do not generate meal-planner variants unless Andrey explicitly reopens the lane.
+      keyword_match_terms:
+        - meal planner
+        - meal-planner
+        - grocery list
+        - pantry inventory
+        - calorie tracker
+        - macro meal
+        - recipe planner
+        - food budget
+    - lane_id: budget_planner_spreadsheet
+      status: pending_exclusion_after_marketplace_publish
+      excluded_from_future_idea_runs: false
+      excluded_from_candidate_admission: false
+      source_candidate_refs:
+        - C-003-001
+      source_refs:
+        - records/validation/LR-C-003-001.yaml
+      activation_trigger: marketplace_publish_complete_or_publish_status_published
+      activation_effect:
+        excluded_from_future_idea_runs: true
+        excluded_from_candidate_admission: true
+      reason: Budget Planner Studio may remain active until external marketplace publication; after publish, do not generate duplicate budget-planner variants unless Andrey explicitly reopens the lane.
+      keyword_match_terms:
+        - budget planner
+        - paycheck budget
+        - annual budget
+        - debt payoff
+        - bill calendar
+        - savings tracker
+        - daily spend tracker

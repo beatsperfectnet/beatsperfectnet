@@ -1,5 +1,5 @@
 today:
-  asOf: 2026-06-24 18:57 GMT+2
+  asOf: 2026-06-24 19:12 GMT+2
   dataMode: event-log
   flowVersion: FLOW-005
   flowTimeline:
@@ -51,12 +51,12 @@ today:
     candidateRecords: records/candidates/*.yaml
     validationRecords: records/validation/*.yaml
   totals:
-    pipelineCandidates: 1
+    pipelineCandidates: 0
     inFlightCandidates: 1
     launchedCandidates: 0
     rejectedCandidates: 0
-    totalSpendUsd: 5.41
-    pipelineUsdTotal: 1.97
+    totalSpendUsd: 3.44
+    pipelineUsdTotal: 0
     inFlightUsdTotal: 3.44
     launchedUsdTotal: 0
     rejectedUsdTotal: 0
@@ -69,22 +69,7 @@ today:
     postLaunchSupportTokensTotal: 0
     refundTokensTotal: 0
     refundCountTotal: 0
-  pipelineCandidates:
-    - candidateId: C-002-001
-      candidateLabel: I-001
-      candidateTitle: Weekly meal planner spreadsheet with auto grocery list, pantry tracking, and calorie support
-      outcomeStatus: pipeline
-      currentStepId: 02_mandatory_competitor_purchase
-      currentStageGroup: purchase
-      totalTokensUsed: 0
-      totalUsdSpent: 1.97
-      launchTokens: 0
-      governanceTokens: 0
-      postLaunchSupportTokens: 0
-      refundTokens: 0
-      refundCount: 0
-      budgetHealth: green
-      processHealth: yellow
+  pipelineCandidates: []
   inFlightCandidates:
     - candidateId: C-003-001
       candidateLabel: I-001

@@ -69,6 +69,21 @@ test("FLOW-005 schema blocks prose-only QA and unverified protection claims", ()
   assert.ok(schema.launch_package.ready_for_marketplace_publish_requires.includes("protection_truthfulness_pass"));
 });
 
+test("product lane exclusions block rejected and published duplicate lanes", () => {
+  const rules = load("governance/03_admission_rules.yaml").admission_rules;
+  const exclusions = load("governance/product_lane_exclusions.yaml").product_lane_exclusions;
+  assert.ok(rules.tier_1.reject_if.includes("excluded_product_lane"));
+  assert.ok(rules.candidate_creation.requires.includes("product_lane_exclusion_check_passed"));
+  assert.equal(
+    exclusions.lanes.find((lane) => lane.lane_id === "meal_planner_spreadsheet").status,
+    "excluded_by_human_rejection",
+  );
+  assert.equal(
+    exclusions.lanes.find((lane) => lane.lane_id === "budget_planner_spreadsheet").activation_trigger,
+    "marketplace_publish_complete_or_publish_status_published",
+  );
+});
+
 test("active app state points at FLOW-005", () => {
   assert.equal(validateActiveAppState(), true);
 });
@@ -76,11 +91,9 @@ test("active app state points at FLOW-005", () => {
 test("today snapshot is generated from active FLOW-005 records", () => {
   const dashboard = load("records/dashboard_state.yaml");
   assert.equal(dashboard.today.dataMode, "event-log");
-  assert.equal(dashboard.today.pipelineCandidates.length, 1);
+  assert.equal(dashboard.today.pipelineCandidates.length, 0);
   assert.equal(dashboard.today.inFlightCandidates.length, 1);
   assert.equal(dashboard.today.rejectedCandidates.length, 0);
-  assert.equal(dashboard.today.pipelineCandidates[0].candidateId, "C-002-001");
-  assert.equal(dashboard.today.pipelineCandidates[0].currentStepId, "02_mandatory_competitor_purchase");
   assert.equal(dashboard.today.inFlightCandidates[0].candidateId, "C-003-001");
   assert.equal(dashboard.today.inFlightCandidates[0].candidateTitle, "Budget Planner Studio");
   assert.equal(dashboard.today.inFlightCandidates[0].currentStepId, "11_delivery_launch");
