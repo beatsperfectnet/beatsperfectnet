@@ -204,7 +204,12 @@ export function TodayDashboard({ state = mockTodayState }: { state?: TodayState 
         <MetricCard label="Rejected" value={state.totals.rejectedCandidates} tone="danger" />
         <MetricCard label="API spend today" value={`$${state.totals.totalSpendUsd.toFixed(2)}`} tone="neutral" />
         <MetricCard label="Product API" value={`$${state.totals.productApiCostUsd.toFixed(2)}`} tone="success" />
-        <MetricCard label="Governance API" value={`$${state.totals.governanceApiCostUsd.toFixed(2)}`} tone="accent" />
+        <MetricCard
+          label="Governance API"
+          value={`$${state.totals.governanceApiCostUsd.toFixed(2)}`}
+          note={`Current API costs for government for Today is $${state.totals.governanceApiCostUsd.toFixed(2)}.`}
+          tone="accent"
+        />
         <MetricCard label="Human escalations" value={state.totals.humanEscalationsTotal} tone="warning" />
       </section>
 
