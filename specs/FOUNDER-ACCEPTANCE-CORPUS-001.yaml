@@ -13,6 +13,9 @@ founder_acceptance_corpus:
         - add_realistic_inventory_or_transaction_volume_when_spreadsheet_applicable
         - verify_formula_ranges_totals_dashboards_charts_and_protection_after_capacity_pressure
         - fail_if_seed_rows_are_the_only_coherent_workflow
+        - fail_if_visible_workbook_capacity_matches_or_barely_exceeds_prior_demo_version
+        - fail_if_realistic_capacity_exists_only_as_hidden_formula_range_not_as_buyer_usable_rows_tables_or_expansion_path
+        - compare_row_counts_visible_tables_and_input_capacity_against_previous_failed_version_before_passing
     - lane_id: product_logic_review
       purpose: verify_the_artifact_matches_the_buyer_workflow_without_founder_explanation
       required_checks:
@@ -20,6 +23,7 @@ founder_acceptance_corpus:
         - inputs_outputs_and_generated_areas_are_visually_distinct
         - buyer_decision_outputs_answer_the_primary_jtbd
         - no_hidden_assumptions_only_the_builder_understands
+        - real_buyer_capacity_is_obvious_without_builder_explanation
     - lane_id: in_product_human_wording_review
       purpose: remove_developer_agent_language_from_buyer_facing_product_text
       required_checks:
@@ -32,8 +36,17 @@ founder_acceptance_corpus:
       required_checks:
         - listing_images_have_visual_hook_not_report_slide_layout
         - each_image_has_one_buyer_promise_and_matching_reason_to_believe
+        - each_listing_image_has_a_specific_visual_hook_that_would_stop_grid_browsing
+        - fail_if_the_hook_is_only_clean_layout_generic_headline_or_screenshot_presence
         - product_surface_is_large_enough_to_prove_the_claim
         - delivery_readme_feels_like_customer_handoff_not_internal_documentation
+    - lane_id: cost_outcome_accountability_review
+      purpose: reject_runs_that_spend_more_without_materially_improving_the_shipped_product_or_listing
+      required_checks:
+        - compare_current_artifact_to_previous_version_for_material_product_delta
+        - compare_current_listing_assets_to_previous_version_for_hook_delta
+        - record_api_cost_or_estimated_run_cost_for_the_iteration
+        - fail_if_spend_produces_same_demo_scale_product_or_same_hookless_listing_outcome
   rejection_patterns:
     - pattern_id: demo_scale_rows
       severity: blocker
@@ -42,7 +55,18 @@ founder_acceptance_corpus:
         - formulas_or_totals_do_not_cover_realistic_buyer_capacity
         - adding_rows_beyond_sample_breaks_outputs_or_requires_structural_edits
         - QA_only_tests_seed_rows
+        - visible_buyer_rows_match_the_previous_demo_version
+        - workbook_has_no_clear_real_use_capacity_floor_for_inventory_purchases_sales_and_price_history
       repair_expectation: expand_capacity_ranges_tables_and_tests_to_realistic_buyer_use
+    - pattern_id: same_demo_workbook_after_rerun
+      severity: blocker
+      description: A rerun claims FLOW progress but ships substantially the same demo-scale workbook as the previously rejected version.
+      reject_when:
+        - visible_inventory_purchase_sales_or_pricing_row_counts_are_unchanged_from_the_prior_failed_artifact
+        - new_records_describe_capacity_but_the_buyer_visible_workbook_does_not_materially_change
+        - regenerated_file_timestamps_are_used_as_evidence_of_improvement_without_artifact_delta
+        - founder_review_would_still_call_it_good_enough_demo_not_a_real_workbook_humans_will_use
+      repair_expectation: rebuild_the_product_from_the_failed_step_with_material_human_scale_capacity_and_record_before_after_delta
     - pattern_id: formula_logic_not_stress_tested
       severity: blocker
       description: Formula or workflow logic passes only superficial happy-path checks.
@@ -82,6 +106,15 @@ founder_acceptance_corpus:
         - no_clear_visual_focal_point_exists
         - composition_would_blend_into_similar_search_results
       repair_expectation: create_a_grid_browsing_hook_with_stronger_visual_hierarchy_and_real_product_proof
+    - pattern_id: clean_listing_without_real_hook
+      severity: blocker
+      description: Listing assets are visually clean and technically correct but do not create a strong reason to stop, click, or remember the product.
+      reject_when:
+        - image_only_states_a_feature_or_surface_without_a_surprising_specific_buyer_outcome
+        - every_image_uses_the_same_template_hierarchy_without_a_distinct_visual_hook
+        - screenshot_presence_is_treated_as_the_hook
+        - image_would_be_acceptable_as_documentation_but_weak_in_an_Etsy_search_grid
+      repair_expectation: give_each_image_a_specific_hook_angle_with_a_visible_before_after_risk_opportunity_or_decision_payoff
     - pattern_id: feature_list_instead_of_promise
       severity: blocker
       description: Copy lists features instead of a human buyer promise.
@@ -105,6 +138,23 @@ founder_acceptance_corpus:
         - new_entrant_counts_or_revenue_strength_are_unverifiable
         - public_shelf_read_has_missing_gallery_or_metrics_without_escalation
       repair_expectation: stop_for_tool_readiness_human_override_or_additional_market_evidence
+    - pattern_id: paid_rerun_same_outcome
+      severity: blocker
+      description: A paid rerun consumes material budget but produces the same founder-rejected outcome.
+      reject_when:
+        - run_cost_is_material_and_the_product_remains_demo_scale
+        - run_cost_is_material_and_listing_assets_remain_hookless_or_only_cosmetically_improved
+        - records_show_passes_but_the_artifact_delta_does_not_support_the_spend
+        - model_upgrade_is_treated_as_quality_improvement_without_stronger_artifact_or_listing_delta
+      repair_expectation: stop_the_flow_mark_the_iteration_failed_record_cost_waste_and_restart_from_the_earliest_artifact_step_that_can_change_the_outcome
+    - pattern_id: record_pass_without_artifact_proof
+      severity: blocker
+      description: YAML records claim gates passed while the actual workbook or listing assets still fail founder inspection.
+      reject_when:
+        - acceptance_record_says_pass_based_on_described_tests_not_direct_artifact_comparison
+        - dashboard_or_schema_validation_passes_are_used_as_publish_readiness_evidence
+        - ignored_local_records_are_updated_more_than_the_shipped_artifact
+      repair_expectation: require_direct_artifact_inspection_before_acceptance_and_make_schema_validation_only_a_structure_check
   output_contract:
     status_values:
       - pass
