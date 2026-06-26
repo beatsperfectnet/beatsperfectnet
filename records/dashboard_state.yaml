@@ -1,5 +1,5 @@
 today:
-  asOf: 2026-06-26 13:42 GMT+2
+  asOf: 2026-06-26 14:22 GMT+2
   dataMode: event-log
   flowVersion: FLOW-006
   flowTimeline:
@@ -56,14 +56,24 @@ today:
   todayLog:
     - id: API-2026-06-26-C004-flow005-product
       kind: product_cost
-      label: FLOW-005 product cost
+      label: Inventory Tracker Studio product API
       detail: Product API cost for FLOW-005 work before switching to FLOW-006.
       amountUsd: 5
+    - id: API-2026-06-26-C004-flow006-product-rerun
+      kind: product_cost
+      label: Inventory Tracker Studio product API
+      detail: Additional product API cost for FLOW-006 C-004 run that still produced a good-enough-demo workbook outcome.
+      amountUsd: 11
     - id: API-2026-06-26-governance-flow006
       kind: governance_cost
       label: Governance cost
       detail: Governance API cost for FLOW-006 model routing, dashboard update, validation, and publish preparation.
       amountUsd: 8
+    - id: API-2026-06-26-governance-flow006-hardening
+      kind: governance_cost
+      label: Governance cost
+      detail: Additional governance API cost for founder corpus updates and FLOW-006 hardening after the good-enough-demo failure.
+      amountUsd: 5
     - id: FLOW-2026-06-26-005-to-006
       kind: flow_transition
       label: FLOW-005 to FLOW-006
@@ -74,13 +84,13 @@ today:
     inFlightCandidates: 1
     launchedCandidates: 0
     rejectedCandidates: 0
-    totalSpendUsd: 13
-    productApiCostUsd: 5
-    governanceApiCostUsd: 8
+    totalSpendUsd: 29
+    productApiCostUsd: 16
+    governanceApiCostUsd: 13
     unallocatedApiCostUsd: 0
-    humanEscalationsTotal: 0
+    humanEscalationsTotal: 5
     pipelineUsdTotal: 0
-    inFlightUsdTotal: 9.5
+    inFlightUsdTotal: 20.5
     launchedUsdTotal: 0
     rejectedUsdTotal: 0
     pipelineTokensTotal: 0
@@ -101,7 +111,7 @@ today:
       currentStepId: 12_delivery_launch
       currentStageGroup: launch
       totalTokensUsed: 0
-      totalUsdSpent: 9.5
+      totalUsdSpent: 20.5
       launchTokens: 0
       governanceTokens: 0
       postLaunchSupportTokens: 0
@@ -155,11 +165,11 @@ period:
     refundTokensTotal: 0
     refundCountTotal: 0
     usdTotalSpend: 24.96
-    totalApiCostUsd: 64.66
-    productApiCostUsd: 37.5
-    governanceApiCostUsd: 27.16
+    totalApiCostUsd: 80.66
+    productApiCostUsd: 48.5
+    governanceApiCostUsd: 32.16
     unallocatedApiCostUsd: 0
-    humanEscalationsTotal: 2
+    humanEscalationsTotal: 7
     avgModelTokensPerLaunch: 31800
     avgUsdSpendPerLaunch: 24.96
   buckets:
@@ -228,11 +238,11 @@ period:
       rejectedLaunchCount: 0
       avgModelTokensPerLaunch: 0
       avgUsdSpendPerLaunch: 0
-      totalApiCostUsd: 13
-      productApiCostUsd: 5
-      governanceApiCostUsd: 8
+      totalApiCostUsd: 29
+      productApiCostUsd: 16
+      governanceApiCostUsd: 13
       unallocatedApiCostUsd: 0
-      humanEscalations: 0
+      humanEscalations: 5
       launchTokens: 0
       governanceTokens: 0
       postLaunchSupportTokens: 0

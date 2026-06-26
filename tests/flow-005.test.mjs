@@ -88,14 +88,14 @@ test("API cost accounting separates product and governance spend", () => {
   const accounting = load("governance/api_cost_accounting.yaml").api_cost_accounting;
   const dashboard = load("records/dashboard_state.yaml");
   assert.equal(accounting.dashboard_policy.competitor_purchase_cost_is_not_api_cost, true);
-  assert.equal(dashboard.today.totals.totalSpendUsd, 13);
-  assert.equal(dashboard.today.totals.productApiCostUsd, 5);
-  assert.equal(dashboard.today.totals.governanceApiCostUsd, 8);
-  assert.equal(dashboard.today.totals.humanEscalationsTotal, 0);
+  assert.equal(dashboard.today.totals.totalSpendUsd, 29);
+  assert.equal(dashboard.today.totals.productApiCostUsd, 16);
+  assert.equal(dashboard.today.totals.governanceApiCostUsd, 13);
+  assert.equal(dashboard.today.totals.humanEscalationsTotal, 5);
   assert.equal(dashboard.today.todayLog.some((entry) => entry.id === "FLOW-2026-06-26-005-to-006"), true);
-  assert.equal(dashboard.period.totals.totalApiCostUsd, 64.66);
-  assert.equal(dashboard.period.totals.productApiCostUsd, 37.5);
-  assert.equal(dashboard.period.totals.governanceApiCostUsd, 27.16);
+  assert.equal(dashboard.period.totals.totalApiCostUsd, 80.66);
+  assert.equal(dashboard.period.totals.productApiCostUsd, 48.5);
+  assert.equal(dashboard.period.totals.governanceApiCostUsd, 32.16);
 });
 
 test("active app state points at configured flow", () => {

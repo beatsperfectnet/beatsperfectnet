@@ -199,7 +199,7 @@ function todayLogEntries() {
       label: isFlowTransition
         ? "FLOW-005 to FLOW-006"
         : bucket === "product_generation"
-          ? "FLOW-005 product cost"
+          ? `${entry.product_name || "Product"} product API`
           : "Governance cost",
       detail: String(entry.notes || entry.product_name || entry.source || ""),
       amountUsd: Number(amount.toFixed(2)),
