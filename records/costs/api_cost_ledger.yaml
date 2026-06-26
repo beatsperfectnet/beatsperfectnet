@@ -4,12 +4,12 @@ api_cost_ledger:
   accounting_ref: governance/api_cost_accounting.yaml
   source_mode: manual_platform_openai_reading
   source_quality: manually_estimated_from_platform_openai_spend_page
-  as_of: 2026-06-25 00:00 Europe/Berlin
+  as_of: 2026-06-26 00:00 Europe/Berlin
   notes:
     - Runtime token-derived cost accounting is incomplete for current Codex/OpenClaw sessions; platform spend is treated as the controlling source for now.
     - Andrey reported total Budget Planner API cost as approximately 28 USD: 6 USD on 2026-06-23 and 22 USD on 2026-06-24.
     - Andrey reported 2026-06-24 total API spend as 36.66 USD, with approximately 22 USD for Budget Planner rebuilds and the remainder under governance.
-    - Current API costs for Today build is 9.00 USD total: 4.50 USD product and 4.50 USD governance.
+    - Current API costs for Today are 13.00 USD total: 5.00 USD product for FLOW-005 work and 8.00 USD governance for FLOW-006/dashboard preparation.
   entries:
     - entry_id: API-2026-06-23-C003-product
       date: 2026-06-23
@@ -65,6 +65,33 @@ api_cost_ledger:
       source: manual_platform_openai_reading
       confidence: estimated
       notes: Current API costs for Today governance.
+    - entry_id: API-2026-06-26-C004-flow005-product
+      date: 2026-06-26
+      bucket: product_generation
+      candidate_id: C-004-001
+      product_name: Inventory Tracker Studio
+      amount_usd: 5.00
+      source: manual_platform_openai_reading
+      confidence: estimated
+      notes: Product API cost for FLOW-005 work before switching to FLOW-006.
+    - entry_id: API-2026-06-26-governance-flow006
+      date: 2026-06-26
+      bucket: governance
+      candidate_id:
+      product_name:
+      amount_usd: 8.00
+      source: manual_platform_openai_reading
+      confidence: estimated
+      notes: Governance API cost for FLOW-006 model routing, dashboard update, validation, and publish preparation.
+    - entry_id: FLOW-2026-06-26-005-to-006
+      date: 2026-06-26
+      bucket: governance
+      candidate_id:
+      product_name:
+      amount_usd: 0.00
+      source: governance_record
+      confidence: recorded
+      notes: Active flow changed from FLOW-005 to FLOW-006 before running the new flow.
   human_escalations:
     - escalation_id: HE-2026-06-24-C003-001
       date: 2026-06-24

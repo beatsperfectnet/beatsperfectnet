@@ -117,12 +117,12 @@ function FlowTimelineCard({ state }: { state: TodayState }) {
     <section className="card panel">
       <div className="sectionHeader">
         <div>
-          <p className="eyebrow">Flow 005</p>
+          <p className="eyebrow">{state.flowVersion}</p>
           <h2>Current step map</h2>
         </div>
         <div className="mono muted">{flowTimeline.reduce((count, stage) => count + stage.stepIds.length, 0)} steps</div>
       </div>
-      <p className="panelNote">This panel mirrors the current FLOW-005 contract so dashboard entries stay aligned with the live sequence.</p>
+      <p className="panelNote">This panel mirrors the current flow contract so dashboard entries stay aligned with the live sequence.</p>
       <div className="flowTimeline">
         {flowTimeline.map((stage) => (
           <div className="flowStage" key={stage.stageGroup}>
@@ -139,6 +139,37 @@ function FlowTimelineCard({ state }: { state: TodayState }) {
             </div>
           </div>
         ))}
+      </div>
+    </section>
+  );
+}
+
+function TodayLogCard({ state }: { state: TodayState }) {
+  const entries = state.todayLog ?? [];
+
+  return (
+    <section className="card panel">
+      <div className="sectionHeader">
+        <div>
+          <p className="eyebrow">Today log</p>
+          <h2>Cost and flow changes</h2>
+        </div>
+        <div className="mono muted">{entries.length}</div>
+      </div>
+      <div className="todayLogList">
+        {entries.length > 0 ? (
+          entries.map((entry) => (
+            <div className={`todayLogItem ${entry.kind}`} key={entry.id}>
+              <div>
+                <div className="candidateId">{entry.label}</div>
+                <div className="candidateLabel">{entry.detail}</div>
+              </div>
+              <div className="mono muted">{entry.amountUsd > 0 ? `$${entry.amountUsd.toFixed(2)}` : "recorded"}</div>
+            </div>
+          ))
+        ) : (
+          <div className="panelNote">No entries today.</div>
+        )}
       </div>
     </section>
   );
@@ -223,6 +254,7 @@ export function TodayDashboard({ state = mockTodayState }: { state?: TodayState 
         </div>
 
         <FlowTimelineCard state={state} />
+        <TodayLogCard state={state} />
 
         <div className="bucketStack">
           <Bucket

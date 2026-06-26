@@ -78,6 +78,13 @@ export type TodayState = {
     stageGroup: StageGroup;
     stepIds: FlowStepId[];
   }>;
+  todayLog?: Array<{
+    id: string;
+    kind: "product_cost" | "governance_cost" | "flow_transition" | "other";
+    label: string;
+    detail: string;
+    amountUsd: number;
+  }>;
   totals: {
     pipelineCandidates: number;
     inFlightCandidates: number;

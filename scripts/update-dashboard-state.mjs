@@ -181,6 +181,32 @@ function costBreakdown(entries) {
   };
 }
 
+function todayLogEntries() {
+  return todayLedgerEntries().map((entry) => {
+    const bucket = String(entry.bucket || "");
+    const entryId = String(entry.entry_id || "");
+    const isFlowTransition = entryId.startsWith("FLOW-");
+    const amount = Number(entry.amount_usd || 0);
+    return {
+      id: entryId,
+      kind: isFlowTransition
+        ? "flow_transition"
+        : bucket === "product_generation"
+          ? "product_cost"
+          : bucket === "governance"
+            ? "governance_cost"
+            : "other",
+      label: isFlowTransition
+        ? "FLOW-005 to FLOW-006"
+        : bucket === "product_generation"
+          ? "FLOW-005 product cost"
+          : "Governance cost",
+      detail: String(entry.notes || entry.product_name || entry.source || ""),
+      amountUsd: Number(amount.toFixed(2)),
+    };
+  });
+}
+
 function candidateSearchText(candidate) {
   return [
     candidate.candidate_id,
@@ -431,6 +457,7 @@ function buildDashboardState() {
         candidateRecords: "records/candidates/*.yaml",
         validationRecords: "records/validation/*.yaml",
       },
+      todayLog: todayLogEntries(),
       totals: bucketTotals(candidates),
       pipelineCandidates: byStatus("pipeline"),
       inFlightCandidates: byStatus("in_flight"),

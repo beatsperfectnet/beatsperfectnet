@@ -9,6 +9,15 @@ export const mockTodayState: TodayState = {
     stageGroup: label,
     stepIds: steps
   })),
+  todayLog: [
+    {
+      id: "FLOW-2026-06-26-005-to-006",
+      kind: "flow_transition",
+      label: "FLOW-005 to FLOW-006",
+      detail: "Active flow changed before the next run.",
+      amountUsd: 0
+    }
+  ],
   totals: {
     pipelineCandidates: 0,
     inFlightCandidates: 0,

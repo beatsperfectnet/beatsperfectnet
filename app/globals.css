@@ -499,7 +499,8 @@ input {
 }
 
 .escalationBlock,
-.listStack {
+.listStack,
+.todayLogList {
   margin-top: 16px;
   display: grid;
   gap: 10px;
@@ -519,6 +520,26 @@ input {
   border-radius: var(--bp-radius-md);
   background: var(--bp-surface-soft);
   border: 1px solid var(--bp-border);
+}
+
+.todayLogItem {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  border-radius: var(--bp-radius-md);
+  background: var(--bp-surface-soft);
+  border: 1px solid var(--bp-border);
+}
+
+.todayLogItem.product_cost {
+  border-color: rgba(92, 122, 82, 0.28);
+}
+
+.todayLogItem.governance_cost,
+.todayLogItem.flow_transition {
+  border-color: rgba(244, 124, 87, 0.3);
 }
 
 .bucketGrid {
