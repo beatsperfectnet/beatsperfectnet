@@ -1,5 +1,5 @@
 today:
-  asOf: 2026-06-26 12:27 GMT+2
+  asOf: 2026-06-26 13:42 GMT+2
   dataMode: event-log
   flowVersion: FLOW-006
   flowTimeline:
@@ -71,7 +71,7 @@ today:
       amountUsd: 0
   totals:
     pipelineCandidates: 0
-    inFlightCandidates: 0
+    inFlightCandidates: 1
     launchedCandidates: 0
     rejectedCandidates: 0
     totalSpendUsd: 13
@@ -80,7 +80,7 @@ today:
     unallocatedApiCostUsd: 0
     humanEscalationsTotal: 0
     pipelineUsdTotal: 0
-    inFlightUsdTotal: 0
+    inFlightUsdTotal: 9.5
     launchedUsdTotal: 0
     rejectedUsdTotal: 0
     pipelineTokensTotal: 0
@@ -93,7 +93,22 @@ today:
     refundTokensTotal: 0
     refundCountTotal: 0
   pipelineCandidates: []
-  inFlightCandidates: []
+  inFlightCandidates:
+    - candidateId: C-004-001
+      candidateLabel: I-001
+      candidateTitle: Inventory tracker spreadsheet for small business stock, purchases, sales, and reorder alerts
+      outcomeStatus: in_flight
+      currentStepId: 12_delivery_launch
+      currentStageGroup: launch
+      totalTokensUsed: 0
+      totalUsdSpent: 9.5
+      launchTokens: 0
+      governanceTokens: 0
+      postLaunchSupportTokens: 0
+      refundTokens: 0
+      refundCount: 0
+      budgetHealth: green
+      processHealth: green
   launchedCandidates: []
   rejectedCandidates: []
   activeEscalation:

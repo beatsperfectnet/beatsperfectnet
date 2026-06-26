@@ -108,8 +108,10 @@ test("today snapshot is generated from active records", () => {
   assert.equal(dashboard.today.dataMode, "event-log");
   assert.equal(dashboard.today.flowVersion, activeFlow.active_flow_id);
   assert.equal(dashboard.today.pipelineCandidates.length, 0);
-  assert.equal(dashboard.today.inFlightCandidates.length, 0);
+  assert.equal(dashboard.today.inFlightCandidates.length, 1);
   assert.equal(dashboard.today.rejectedCandidates.length, 0);
+  assert.equal(dashboard.today.inFlightCandidates[0].candidateId, "C-004-001");
+  assert.equal(dashboard.today.inFlightCandidates[0].currentStepId, "12_delivery_launch");
   assert.equal(dashboard.today.activeEscalation.status, "none");
   assert.equal(dashboard.today.activeEscalation.governanceFile, activeFlow.stage_dispatch_ref);
 });
