@@ -142,6 +142,8 @@ FLOW-006:
         - define_stated_limits
         - define_required_product_surfaces
         - define_working_capacity_requirements_not_demo_sample_only
+        - define_visible_human_scale_capacity_floor_for_each_core_table
+        - define_prior_failed_artifact_baseline_and_material_delta_requirements
         - define_row_expansion_and_formula_range_acceptance_requirements_for_spreadsheets
         - define_visual_reference_contract
         - define_artifact_integrity_audit_requirements
@@ -159,14 +161,21 @@ FLOW-006:
       action:
         - build_minimum_connected_product
         - build_working_capacity_product_not_demo_scale_sample
+        - build_visible_buyer_usable_rows_tables_and_expansion_path_not_hidden_capacity_only
+        - materially_change_any_prior_failed_good_enough_demo_artifact_before_continuing
         - implement_real_hook_surface
         - apply_brandbook_visual_identity
         - keep_editable_generated_and_protected_areas_clear
         - produce_machine_checkable_artifact_manifest
         - record_formula_ranges_editable_ranges_protection_mode_and_platform_claims
         - record_working_capacity_row_limits_and_expansion_behavior
+        - record_visible_row_counts_table_capacity_and_prior_artifact_delta
         - record_time_horizon_carry_forward_and_rollover_surfaces
         - do_not_label_recovery_only_areas_as_protected
+      gate:
+        visible_human_scale_capacity_required: true
+        material_delta_against_prior_failed_artifact_required: true
+        regenerated_timestamps_do_not_count_as_artifact_delta: true
       output_file_template: builds/<candidate_id>/manifest.yaml
     - step_id: 07_propagation_buyer_experience_product_visual_qa
       agent_tier: medium
@@ -176,6 +185,8 @@ FLOW-006:
         - run_formula_truth_table_tests
         - run_boundary_mutation_tests
         - run_working_capacity_and_row_expansion_tests_for_spreadsheets
+        - run_visible_capacity_floor_tests_for_core_buyer_tables
+        - compare_visible_capacity_against_prior_failed_artifact
         - run_period_continuity_and_handoff_tests_when_applicable
         - fail_if_start_period_mutation_does_not_shift_displayed_period_labels
         - fail_if_next_period_opening_balance_does_not_link_to_prior_closing_balance
@@ -192,6 +203,8 @@ FLOW-006:
         artifact_integrity_audit_required: true
         spreadsheet_formula_audit_required_when_applicable: true
         spreadsheet_capacity_audit_required_when_applicable: true
+        visible_capacity_floor_required_when_applicable: true
+        artifact_delta_against_prior_failed_version_required: true
         period_continuity_audit_required_when_applicable: true
         protection_truthfulness_required: true
         prose_only_qa_forbidden: true
@@ -204,12 +217,18 @@ FLOW-006:
       action:
         - consume_founder_rejection_corpus
         - simulate_founder_product_inspection_before_publication
+        - directly_inspect_current_artifact_not_only_records
+        - compare_current_product_to_prior_failed_artifact_for_material_delta
         - pressure_test_real_human_use_beyond_seed_demo_rows
         - test_formula_logic_workflow_logic_and_buyer_decision_outputs
         - inspect_in_product_wording_for_human_language_not_developer_or_agent_language
         - inspect_delivery_copy_for_customer_handoff_clarity
+        - define_listing_hook_rejection_criteria_before_asset_assembly
+        - run_cost_outcome_accountability_review
         - classify_rejection_patterns_by_corpus_id
         - fail_if_product_requires_founder_feedback_to_be_publishable
+        - fail_if_current_artifact_is_same_demo_workbook_after_rerun
+        - fail_if_paid_rerun_produced_same_outcome
         - define_required_repair_scope_and_rerun_from_step
         - allow_human_override_only_when_explicitly_recorded
       gate:
@@ -217,6 +236,9 @@ FLOW-006:
         adversarial_rejection_attempt_required: true
         corpus_pattern_check_required: true
         real_human_use_pressure_required: true
+        direct_artifact_inspection_required: true
+        material_artifact_delta_required: true
+        cost_outcome_accountability_required: true
         in_product_copy_human_review_required: true
         delivery_copy_human_review_required: true
       output_file_template: records/validation/FA-XXXX.yaml
@@ -234,9 +256,11 @@ FLOW-006:
         - consume_founder_acceptance_ref
         - assemble_listing_from_verified_surfaces
         - define_visual_hook_strategy_for_listing_grid_browsing
+        - define_specific_real_hook_for_each_listing_image
         - map_each_claim_to_proof
         - map_each_insight_kpp_rtb_claim_to_verified_artifact_evidence
         - align_each_image_promise_to_jtbd_and_each_rtb_to_that_promise
+        - record_grid_stop_reason_and_hook_delta_for_each_image
         - exclude_unverified_compatibility_or_protection_claims
         - generate_final_etsy_ready_creatives_from_verified_product_surfaces
         - use_real_product_surface_zoom_mockup_or_composition_as_eye_stopper_not_report_slide
@@ -250,12 +274,15 @@ FLOW-006:
         - consume_founder_acceptance_ref
         - judge_shelf_communication_parity
         - judge_visual_hook_strength_against_real_marketplace_grid
+        - judge_each_image_has_real_hook_not_only_clean_layout_or_screenshot_presence
+        - compare_listing_hook_strength_against_prior_hookless_assets
         - verify_kpp_is_buyer_decision_promise_not_feature_scope
         - verify_each_creative_has_one_promise_and_aligned_reason_to_believe
         - verify_rtb_is_product_specific_evidence_not_marketplace_trust_signal
         - verify_claim_map_targets_passed_artifact_audit_evidence
         - verify_final_creatives_are_built_from_verified_surfaces
         - fail_if_text_overlaps_clips_or_product_surface_is_too_small_to_prove_claim
+        - fail_if_clean_assets_lack_real_hook
         - fail_if_visuals_are_mediocre_or_default_looking
         - fail_if_product_surface_fidelity_or_formula_truthfulness_is_unverified
       output_file_template: records/validation/LQ-XXXX.yaml
@@ -265,6 +292,7 @@ FLOW-006:
       action:
         - assemble_delivery_package
         - prepublish_validate
+        - run_total_cost_outcome_accountability_before_ready_status
         - block_publish_when_any_required_audit_is_missing_failed_or_prose_only
         - set_ready_for_marketplace_publish_only_after_artifact_listing_delivery_and_blocker_gates_pass
         - stop_before_external_marketplace_publish_unless_human_approval_is_present
@@ -275,11 +303,15 @@ FLOW-006:
           - artifact_integrity_audit_pass
           - formula_truth_table_pass_or_not_applicable_with_reason
           - working_capacity_pass_or_not_applicable_with_reason
+          - visible_human_scale_capacity_pass
+          - material_artifact_delta_pass
           - period_continuity_pass_or_not_applicable_with_reason
           - protection_truthfulness_pass
           - founder_acceptance_pass
+          - cost_outcome_accountability_pass
           - buyer_experience_pass
           - product_visual_quality_pass
+          - per_image_real_hook_pass
           - listing_quality_gate_pass
           - delivery_package_pass
           - publish_blockers_absent

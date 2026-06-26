@@ -38,6 +38,9 @@ BLS-006:
     - additional_purchase_escalation_ref
     - alignment_chain_ref
     - propagation_system_spec_ref
+    - prior_artifact_baseline_ref
+    - material_artifact_delta_status
+    - visible_capacity_gate_status
     - qa_result
     - founder_acceptance_ref
     - founder_acceptance_status
@@ -45,6 +48,8 @@ BLS-006:
     - listing_hook_ref
     - listing_creative_assembly_ref
     - visual_hook_quality_gate
+    - per_image_real_hook_gate
+    - cost_outcome_accountability_status
     - listing_quality_gate_ref
     - launch_package_ref
   stage_loop_limits:
@@ -65,12 +70,16 @@ BLS-006:
     - artifact_integrity_audit_passed
     - formula_truth_table_passed_or_not_applicable_with_reason
     - working_capacity_passed_or_not_applicable_with_reason
+    - visible_human_scale_capacity_passed
+    - material_artifact_delta_passed
     - period_continuity_passed_or_not_applicable_with_reason
     - protection_truthfulness_passed
     - qa_passed
     - founder_acceptance_passed_or_explicit_human_override_recorded
     - listing_creatives_completed
     - visual_hook_quality_passed
+    - per_image_real_hook_passed
+    - cost_outcome_accountability_passed
     - listing_quality_passed
     - publish_blockers_absent
     - delivery_launch_ready

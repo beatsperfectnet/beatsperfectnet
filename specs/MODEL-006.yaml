@@ -163,6 +163,9 @@ MODEL-006:
       rule: define_real_working_capacity_and_keep_competitor_failures_separate_from_our_artifact_blockers
       spreadsheet_required_outputs:
         - working_capacity_requirements
+        - human_scale_capacity_floor
+        - prior_artifact_baseline
+        - material_delta_requirements
         - row_expansion_requirements
         - formula_range_acceptance_requirements
         - competitor_failure_handling
@@ -170,13 +173,26 @@ MODEL-006:
       rule: build_a_working_product_not_a_tiny_demo
       spreadsheet_required_outputs:
         - working_capacity_manifest
+        - visible_capacity_manifest
+        - artifact_delta_against_prior
+        - human_scale_capacity_evidence
         - formula_ranges_covering_working_capacity
         - editable_ranges_covering_working_capacity
+      fail_if:
+        - visible_buyer_rows_tables_or_expansion_path_match_prior_failed_artifact
+        - capacity_exists_only_in_hidden_formula_ranges
+        - regenerated_timestamps_are_the_only_material_change
     qa_execution:
       rule: qa_must_fail_demo_scale_only_artifacts_and_test_outside_seed_sample_rows
       required_results:
         - working_capacity_results
+        - visible_capacity_results
+        - prior_artifact_delta_results
+        - artifact_delta_gate
         - row_expansion_or_capacity_boundary_mutations
+      fail_if:
+        - core_table_visible_capacity_matches_prior_failed_version
+        - qa_record_passes_without_direct_workbook_capacity_counts
     founder_acceptance_simulation:
       rule: adversarially_simulate_founder_review_and_fail_any_product_that_still_needs_founder_feedback
       corpus_ref: specs/FOUNDER-ACCEPTANCE-CORPUS-001.yaml
@@ -185,8 +201,13 @@ MODEL-006:
         - product_logic_review
         - in_product_human_wording_review
         - listing_delivery_readiness_review
+        - cost_outcome_accountability_review
       required_outputs:
         - founder_acceptance_status
+        - direct_artifact_inspection_evidence
+        - artifact_delta_review
+        - listing_hook_review
+        - cost_outcome_accountability
         - adversarial_rejection_attempts
         - corpus_pattern_results
         - rejection_reasons
@@ -196,22 +217,37 @@ MODEL-006:
       pass_rule: pass_only_when_no_blocking_rejection_patterns_remain_or_explicit_human_override_is_recorded
       fail_if:
         - formulas_or_logic_only_work_for_seed_demo_rows
+        - product_visible_capacity_matches_prior_failed_demo_version
+        - artifact_delta_is_only_timestamps_records_or_claims
         - product_copy_sounds_like_developer_or_agent_language
         - buyer_workflow_requires_founder_explanation
+        - listing_hook_criteria_would_allow_clean_layout_without_real_hook
+        - material_run_cost_produced_same_founder_rejected_outcome
         - delivery_or_listing_assets_still_need_founder_feedback_to_be_buyable
     listing_title_description_and_claim_map_assembly:
       rule: hook_is_visual_shelf_stopping_composition_plus_copy_not_copy_alone
       required_outputs:
         - visual_hook_strategy
+        - per_image_visual_hook_strategy
         - per_image_promise_rtb_alignment
+        - grid_stop_reason_per_image
+        - hook_delta_against_prior
       forbidden_outputs:
         - report_slide_layout_as_thumbnail
         - tiny_product_surface_that_cannot_prove_claim
         - unaligned_feature_list_copy
+        - repeated_clean_template_without_distinct_image_hooks
+        - screenshot_presence_as_the_only_hook
     listing_quality_gate:
       rule: fail_assets_that_would_lose_in_a_real_marketplace_grid
       required_checks:
         - visual_hook_strength
+        - real_hook_quality_gate
+        - grid_stop_reason_per_image
+        - hook_delta_against_prior
         - no_text_overlap_or_clipping
         - product_surface_readable_enough_to_prove_claim
         - each_image_has_one_promise_and_matching_reason_to_believe
+      fail_if:
+        - clean_assets_lack_real_hook
+        - every_image_uses_same_visual_hierarchy_without_distinct_grid_stop_reason

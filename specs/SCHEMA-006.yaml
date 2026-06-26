@@ -104,6 +104,9 @@ SCHEMA-006:
       - category_quality_floor
       - required_product_surfaces
       - working_capacity_requirements
+      - human_scale_capacity_floor
+      - prior_artifact_baseline
+      - material_delta_requirements
       - visual_acceptance_requirements
       - originality_boundary
       - forbidden_architecture
@@ -144,6 +147,9 @@ SCHEMA-006:
       - formula_inventory
       - editable_range_inventory
       - working_capacity_manifest
+      - visible_capacity_manifest
+      - artifact_delta_against_prior
+      - human_scale_capacity_evidence
       - protection_truthfulness
       - period_continuity_manifest
   qa_result:
@@ -166,6 +172,9 @@ SCHEMA-006:
       - formula_truth_table_results
       - boundary_mutation_results
       - working_capacity_results
+      - visible_capacity_results
+      - prior_artifact_delta_results
+      - artifact_delta_gate
       - period_continuity_results
       - protection_truthfulness
       - publish_blockers
@@ -181,6 +190,10 @@ SCHEMA-006:
       - product_logic_review
       - in_product_human_wording_review
       - delivery_copy_human_review
+      - direct_artifact_inspection_evidence
+      - artifact_delta_review
+      - listing_hook_review
+      - cost_outcome_accountability
       - corpus_pattern_results
       - rejection_reasons
       - required_repair_scope
@@ -215,12 +228,15 @@ SCHEMA-006:
     required_top_level_fields:
       - candidate_id
       - listing_hook_ref
+      - founder_acceptance_ref
       - passed_qa_ref
       - source_surface_refs
       - creative_assets
       - creative_claim_map
       - visual_hook_strategy
+      - per_image_visual_hook_strategy
       - per_image_promise_rtb_alignment
+      - hook_delta_against_prior
       - no_fabricated_product_surfaces
       - output_format
       - listing_upload_sequence
@@ -235,7 +251,10 @@ SCHEMA-006:
       - promise_visible_under_2_seconds
       - visual_proof_of_rtb
       - visual_hook_strength
+      - real_hook_quality_gate
+      - grid_stop_reason_per_image
       - per_image_promise_rtb_alignment
+      - hook_delta_against_prior
       - title_keyword_fit
       - competitor_shelf_communication_parity
       - hidden_objection_handling
@@ -282,6 +301,8 @@ SCHEMA-006:
       - formula_truth_table_ref
       - period_continuity_ref
       - protection_truthfulness_ref
+      - artifact_delta_gate
+      - cost_outcome_accountability_ref
       - publish_blockers
       - external_publish_approval
     allowed_publish_statuses:
@@ -294,11 +315,15 @@ SCHEMA-006:
       - artifact_integrity_audit_pass
       - formula_truth_table_pass_or_not_applicable_with_reason
       - working_capacity_pass_or_not_applicable_with_reason
+      - visible_human_scale_capacity_pass
+      - material_artifact_delta_pass
       - period_continuity_pass_or_not_applicable_with_reason
       - protection_truthfulness_pass
       - founder_acceptance_pass
+      - cost_outcome_accountability_pass
       - buyer_experience_pass
       - product_visual_quality_pass
+      - per_image_real_hook_pass
       - listing_quality_gate_pass
       - delivery_package_pass
       - publish_blockers_absent

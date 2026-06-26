@@ -53,3 +53,6 @@ product_generation_budget:
     projected_total_above_budget_blocks_paid_call: true
     quality_critical_stage_must_not_downgrade_automatically: true
     launch_must_not_proceed_when_recorded_generation_cost_exceeds_budget: true
+    paid_rerun_must_stop_if_material_artifact_delta_is_absent: true
+    material_spend_requires_product_or_listing_quality_delta: true
+    same_outcome_after_material_spend_records_failed_iteration: true
