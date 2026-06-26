@@ -1,0 +1,131 @@
+stage_dispatch:
+  purpose: exact_model_selection_per_flow_stage
+  rule: every stage must run in a session pinned to the governed model before stage actions begin
+  source_of_truth:
+    - workflows/FLOW-006.yaml
+    - specs/MODEL-006.yaml
+    - governance/08_product_generation_budget_006.yaml
+  enforcement:
+    exact_model_match_required: true
+    if_model_unavailable: stop_and_escalate
+    if_dispatch_mismatch_detected: mark_run_noncompliant_and_stop_future_stages
+  allowed_runtime_actions:
+    - spawn_child_session_with_model_override
+    - switch_session_model
+    - record_stage_dispatch_log
+    - halt_and_escalate
+    - human_gate
+  stage_model_map:
+    00_candidate_admission:
+      model_policy_ref: MODEL-006.candidate_admission
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+      runtime_resolved_model_id: openai/gpt-5.4-mini
+      dispatch_action: switch_session_model
+    01_public_shelf_read:
+      model_policy_ref: MODEL-006.public_shelf_read_synthesis
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+      runtime_resolved_model_id: openai/gpt-5.4
+      dispatch_action: switch_session_model
+    02_mandatory_competitor_purchase:
+      model_policy_ref: MODEL-006.competitor_selection
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+      runtime_resolved_model_id: openai/gpt-5.4
+      dispatch_action: human_gate
+    03_hidden_buyer_experience_inspection:
+      model_policy_ref: MODEL-006.purchased_competitor_inspection
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+      runtime_resolved_model_id: openai/gpt-5.4
+      dispatch_action: switch_session_model
+    04_alignment_synthesis:
+      model_policy_ref: MODEL-006.alignment_synthesis
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      dispatch_action: switch_session_model
+    05_one_promise_propagation_system_spec:
+      model_policy_ref: MODEL-006.one_promise_propagation_system_spec
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      dispatch_action: switch_session_model
+    06_first_pass_connected_build:
+      model_policy_ref: MODEL-006.first_pass_connected_build
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+      runtime_resolved_model_id: openai/gpt-5.4
+      dispatch_action: switch_session_model
+    07_propagation_buyer_experience_product_visual_qa:
+      model_policy_ref: MODEL-006.qa_execution
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+      runtime_resolved_model_id: openai/gpt-5.4
+      dispatch_action: switch_session_model
+      deterministic_subgates:
+        - artifact_integrity_audit
+        - formula_truth_table_validation
+        - period_continuity_validation
+        - protection_truthfulness_validation
+    08_founder_acceptance_simulation:
+      model_policy_ref: MODEL-006.founder_acceptance_simulation
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      dispatch_action: switch_session_model
+    09_optional_supporting_feature_pass:
+      model_policy_ref: MODEL-006.optional_supporting_feature_pass
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+      runtime_resolved_model_id: openai/gpt-5.4
+      dispatch_action: switch_session_model
+    10_listing_creative_assembly:
+      model_policy_ref: MODEL-006.listing_title_description_and_claim_map_assembly
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+      runtime_resolved_model_id: openai/gpt-5.4
+      dispatch_action: switch_session_model
+    11_listing_quality_gate:
+      model_policy_ref: MODEL-006.listing_quality_gate
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      dispatch_action: switch_session_model
+    12_delivery_launch:
+      model_policy_ref: MODEL-006.delivery_assembly
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+      runtime_resolved_model_id: openai/gpt-5.4-mini
+      dispatch_action: switch_session_model
+    13_monthly_outcomes:
+      model_policy_ref: MODEL-006.post_launch_ledgers_and_rules
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+      runtime_resolved_model_id: openai/gpt-5.4-mini
+      dispatch_action: switch_session_model
+    14_competitor_purchase_accounting:
+      model_policy_ref: MODEL-006.post_launch_ledgers_and_rules
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+      runtime_resolved_model_id: openai/gpt-5.4-mini
+      dispatch_action: switch_session_model
+    15_kill_rules:
+      model_policy_ref: MODEL-006.post_launch_ledgers_and_rules
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+      runtime_resolved_model_id: openai/gpt-5.4-mini
+      dispatch_action: switch_session_model
+    16_resource_allocation_rules:
+      model_policy_ref: MODEL-006.post_launch_ledgers_and_rules
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+      runtime_resolved_model_id: openai/gpt-5.4-mini
+      dispatch_action: switch_session_model
+    17_company_metrics:
+      model_policy_ref: MODEL-006.post_launch_ledgers_and_rules
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+      runtime_resolved_model_id: openai/gpt-5.4-mini
+      dispatch_action: switch_session_model

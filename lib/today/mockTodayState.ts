@@ -4,7 +4,7 @@ import type { TodayState } from "./types";
 export const mockTodayState: TodayState = {
   asOf: "2026-06-23 13:20 CET",
   dataMode: "mock",
-  flowVersion: "FLOW-005",
+  flowVersion: "FLOW-006",
   flowTimeline: stageLabels.map(({ label, steps }) => ({
     stageGroup: label,
     stepIds: steps
@@ -45,6 +45,6 @@ export const mockTodayState: TodayState = {
     candidateTitle: "",
     reason: "",
     recommendedAction: "",
-    governanceFile: "governance/09_stage_dispatch_005.yaml"
+    governanceFile: "governance/09_stage_dispatch_006.yaml"
   }
 };

@@ -104,18 +104,36 @@ export function validateFlow005Contracts() {
   const dispatch = loadYaml("governance/09_stage_dispatch_005.yaml").stage_dispatch;
   const exclusions = loadYaml("governance/product_lane_exclusions.yaml").product_lane_exclusions;
   const costAccounting = loadYaml("governance/api_cost_accounting.yaml").api_cost_accounting;
-  const active = loadYaml("config/active-flow.yaml");
   const brandbook = loadYaml("brandbook/beatsperfect-brandbook.v1.yaml").brandbook;
 
   assert(flow, "FLOW-005 root missing");
   assert(flow.run_telemetry?.exact_model_match_required === true, "FLOW-005 exact model telemetry must be required");
   assert(Array.isArray(flow.flow) && flow.flow.length === 17, "FLOW-005 must have 17 stages");
   assert(flow.flow[0].step_id === "00_candidate_admission", "Stage 0 must be candidate admission");
+  assertIncludes(flow.required_inputs, "specs/TOOL-001.yaml", "FLOW-005 must require market research tool spec");
+  assertIncludes(flow.flow[0].action, "confirm_market_research_tool_or_export_ready", "Candidate admission must verify market research readiness");
+  assertIncludes(flow.flow[0].action, "refuse_historical_memory_or_generic_search_as_market_demand_substitute", "Candidate admission must forbid weak market substitutes");
+  assert(flow.flow[0].gate?.market_research_tool_ready_or_explicit_human_override_required === true, "Candidate admission must gate on market tool readiness or override");
+  assert(flow.flow[1].gate?.public_evidence_quality_pass_or_escalated_with_human_override_required === true, "Public shelf read must gate on evidence quality");
+  assertIncludes(flow.flow[2].action, "refuse_lowest_friction_or_visible_price_as_primary_tie_breaker", "Competitor selection must not use visible price as primary tie-breaker");
+  assert(flow.flow[2].gate?.additional_competitor_purchase_allowed_after_broken_or_unrepresentative_purchase === true, "FLOW-005 must allow second purchase escalation after bad benchmark");
+  assertIncludes(flow.flow[3].action, "classify_each_competitor_finding_as_market_evidence_build_requirement_or_not_our_blocker", "Hidden inspection must classify competitor failures");
+  assertIncludes(flow.flow[5].action, "define_working_capacity_requirements_not_demo_sample_only", "Propagation spec must define working capacity");
+  assertIncludes(flow.flow[6].action, "build_working_capacity_product_not_demo_scale_sample", "Build step must require working-capacity product");
+  assertIncludes(flow.flow[7].action, "fail_if_artifact_is_demo_scale_only", "QA must fail demo-scale artifacts");
   assert(flow.flow[9].step_id === "09_listing_creative_assembly", "Stage 9 must be listing creative assembly");
+  assertIncludes(flow.flow[9].action, "define_visual_hook_strategy_for_listing_grid_browsing", "Listing assembly must define visual hook strategy");
+  assertIncludes(flow.flow[9].action, "align_each_image_promise_to_jtbd_and_each_rtb_to_that_promise", "Listing assembly must align per-image promise and RTB");
   assert(flow.flow[10].step_id === "10_listing_quality_gate", "Stage 10 must be listing quality gate");
+  assertIncludes(flow.flow[10].action, "judge_visual_hook_strength_against_real_marketplace_grid", "Listing gate must judge visual hook strength");
+  assertIncludes(flow.flow[10].action, "fail_if_text_overlaps_clips_or_product_surface_is_too_small_to_prove_claim", "Listing gate must fail broken creative formatting");
   assert(flow.flow[11].step_id === "11_delivery_launch", "Stage 11 must be delivery launch");
 
   assert(schema?.candidate_admission?.required_top_level_fields.includes("admitted"), "SCHEMA-005 candidate admission shape missing");
+  assertIncludes(schema?.candidate_admission?.required_top_level_fields, "market_research_tool_status", "SCHEMA-005 candidate admission must record market tool status");
+  assertIncludes(schema?.public_shelf_read?.required_top_level_fields, "evidence_quality_gate", "SCHEMA-005 public shelf read must record evidence quality gate");
+  assertIncludes(schema?.competitor_purchase?.selection_required_fields, "benchmark_representativeness_risk", "SCHEMA-005 competitor selection must record benchmark risk");
+  assertIncludes(schema?.hidden_buyer_experience_inspection?.required_top_level_fields, "benchmark_adequacy", "SCHEMA-005 hidden inspection must record benchmark adequacy");
   assert(schema?.qa_result?.required_top_level_fields.includes("product_visual_quality"), "SCHEMA-005 QA shape missing");
   assert(schema?.launch_package?.required_top_level_fields.includes("listing_url"), "SCHEMA-005 launch shape missing");
   assertIncludes(schema?.hidden_buyer_experience_inspection?.required_top_level_fields, "downstream_artifact_audit_requirements", "SCHEMA-005 hidden inspection must drive artifact audit requirements");
@@ -126,31 +144,48 @@ export function validateFlow005Contracts() {
   assertIncludes(schema?.propagation_system_spec?.required_top_level_fields, "period_model", "SCHEMA-005 propagation spec must require period model");
   assertIncludes(schema?.propagation_system_spec?.required_top_level_fields, "carry_forward_model", "SCHEMA-005 propagation spec must require carry-forward model");
   assertIncludes(schema?.propagation_system_spec?.required_top_level_fields, "renewal_or_rollover_path", "SCHEMA-005 propagation spec must require renewal or rollover path");
+  assertIncludes(schema?.propagation_system_spec?.required_top_level_fields, "working_capacity_requirements", "SCHEMA-005 propagation spec must require working capacity requirements");
+  assertIncludes(schema?.propagation_system_spec?.required_top_level_fields, "competitor_failure_handling", "SCHEMA-005 propagation spec must require competitor failure handling");
   assertIncludes(schema?.first_pass_build_manifest?.required_top_level_fields, "protection_truthfulness", "SCHEMA-005 build manifest must require protection truthfulness");
+  assertIncludes(schema?.first_pass_build_manifest?.required_top_level_fields, "working_capacity_manifest", "SCHEMA-005 build manifest must require working capacity manifest");
   assertIncludes(schema?.first_pass_build_manifest?.required_top_level_fields, "period_continuity_manifest", "SCHEMA-005 build manifest must require period continuity manifest");
   assertIncludes(schema?.qa_result?.required_top_level_fields, "artifact_integrity_audit", "SCHEMA-005 QA must require artifact integrity audit");
   assertIncludes(schema?.qa_result?.required_top_level_fields, "formula_truth_table_results", "SCHEMA-005 QA must require formula truth table results");
   assertIncludes(schema?.qa_result?.required_top_level_fields, "boundary_mutation_results", "SCHEMA-005 QA must require boundary mutation results");
+  assertIncludes(schema?.qa_result?.required_top_level_fields, "working_capacity_results", "SCHEMA-005 QA must require working capacity results");
   assertIncludes(schema?.qa_result?.required_top_level_fields, "period_continuity_results", "SCHEMA-005 QA must require period continuity results");
   assertIncludes(schema?.qa_result?.required_top_level_fields, "protection_truthfulness", "SCHEMA-005 QA must require protection truthfulness");
   assertIncludes(schema?.listing_hook?.required_top_level_fields, "insight_kpp_rtb_alignment", "SCHEMA-005 listing hook must require insight/KPP/RTB alignment");
   assertIncludes(schema?.listing_creative_assembly?.required_top_level_fields, "creative_assets", "SCHEMA-005 listing creative assembly must require creative assets");
+  assertIncludes(schema?.listing_creative_assembly?.required_top_level_fields, "visual_hook_strategy", "SCHEMA-005 listing creative assembly must require visual hook strategy");
+  assertIncludes(schema?.listing_creative_assembly?.required_top_level_fields, "per_image_promise_rtb_alignment", "SCHEMA-005 listing creative assembly must require per-image promise/RTB alignment");
   assertIncludes(schema?.listing_creative_assembly?.required_top_level_fields, "no_fabricated_product_surfaces", "SCHEMA-005 listing creative assembly must forbid fabricated product surfaces");
   assertIncludes(schema?.listing_quality_gate?.required_top_level_fields, "listing_creative_assembly_ref", "SCHEMA-005 listing quality gate must require creative assembly ref");
+  assertIncludes(schema?.listing_quality_gate?.required_top_level_fields, "visual_hook_strength", "SCHEMA-005 listing quality gate must require visual hook strength");
   assertIncludes(schema?.listing_quality_gate?.required_top_level_fields, "creative_asset_dependency", "SCHEMA-005 listing quality gate must depend on final creative assets");
   assertIncludes(schema?.listing_quality_gate?.required_top_level_fields, "artifact_audit_dependency", "SCHEMA-005 listing gate must depend on artifact audit");
   assertIncludes(schema?.launch_package?.required_top_level_fields, "publish_blockers", "SCHEMA-005 launch must require publish blockers");
   assertIncludes(schema?.launch_package?.ready_for_marketplace_publish_requires, "artifact_integrity_audit_pass", "Launch ready requirements must include artifact audit");
+  assertIncludes(schema?.launch_package?.ready_for_marketplace_publish_requires, "working_capacity_pass_or_not_applicable_with_reason", "Launch ready requirements must include working capacity");
   assertIncludes(schema?.launch_package?.ready_for_marketplace_publish_requires, "period_continuity_pass_or_not_applicable_with_reason", "Launch ready requirements must include period continuity");
   assertIncludes(schema?.launch_package?.ready_for_marketplace_publish_requires, "protection_truthfulness_pass", "Launch ready requirements must include protection truthfulness");
 
   assert(model?.exact_requested_vs_actual_validation === true, "MODEL-005 exact-model validation must be true");
+  assert(model?.stage_quality_rules?.candidate_admission?.rule === "market_demand_must_use_ready_market_research_tool_or_explicit_human_override", "MODEL-005 must govern market tool readiness");
+  assert(model?.stage_quality_rules?.competitor_selection?.tie_breaker_order?.[1] === "market_strength", "MODEL-005 competitor tie-breakers must prioritize market strength before price");
+  assert(model?.stage_quality_rules?.purchased_competitor_inspection?.required_classifications?.includes("competitor_failure_not_our_blocker"), "MODEL-005 must classify competitor failures as not our blockers");
+  assert(model?.stage_quality_rules?.qa_execution?.required_results?.includes("working_capacity_results"), "MODEL-005 QA rules must require working capacity results");
+  assert(model?.stage_quality_rules?.listing_quality_gate?.required_checks?.includes("no_text_overlap_or_clipping"), "MODEL-005 listing gate must check text overlap");
   assert(model?.stage_routing?.listing_quality_gate?.requested_model === "gpt-5.5", "MODEL-005 listing quality routing must use frontier");
   assert(model?.model_catalog?.deterministic?.normal_flow_allowed === true, "MODEL-005 must define deterministic validation routing");
   assert(model?.stage_routing?.artifact_integrity_audit?.requested_model === "deterministic", "MODEL-005 artifact audit must be deterministic");
   assert(model?.stage_routing?.period_continuity_validation?.requested_model === "deterministic", "MODEL-005 period continuity audit must be deterministic");
 
   assert(bls?.candidate_stages?.includes("listing_creative_assembly"), "BLS-005 must include listing creative assembly");
+  assert(bls?.launch_requires?.includes("market_research_tool_ready_or_human_override_recorded"), "BLS-005 launch must require market research readiness");
+  assert(bls?.launch_requires?.includes("benchmark_adequacy_passed_or_additional_purchase_escalation_resolved"), "BLS-005 launch must require benchmark adequacy or resolved escalation");
+  assert(bls?.launch_requires?.includes("working_capacity_passed_or_not_applicable_with_reason"), "BLS-005 launch must require working capacity");
+  assert(bls?.launch_requires?.includes("visual_hook_quality_passed"), "BLS-005 launch must require visual hook quality");
   assert(bls?.launch_requires?.includes("listing_creatives_completed"), "BLS-005 launch must require final listing creatives");
   assert(bls?.launch_requires?.includes("artifact_integrity_audit_passed"), "BLS-005 launch must require artifact integrity audit");
   assert(bls?.launch_requires?.includes("period_continuity_passed_or_not_applicable_with_reason"), "BLS-005 launch must require period continuity");
@@ -180,11 +215,6 @@ export function validateFlow005Contracts() {
     "period_continuity_validation",
     "Stage 07 must include deterministic period continuity validation",
   );
-
-  assert(active?.active_flow_id === "FLOW-005", "Active flow must migrate to FLOW-005");
-  assert(active?.workflow_contract_ref === "workflows/FLOW-005.yaml", "Active workflow ref mismatch");
-  assert(active?.model_policy_ref === "specs/MODEL-005.yaml", "Active model policy ref mismatch");
-  assert(active?.stage_dispatch_ref === "governance/09_stage_dispatch_005.yaml", "Active stage dispatch ref mismatch");
 
   assert(brandbook?.brand_name === "BeatsPerfect", "Brandbook must stay BeatsPerfect");
   assert(Array.isArray(brandbook?.rules) && brandbook.rules.includes("surface proof before polish"), "Brandbook must require proof before polish");
@@ -217,14 +247,16 @@ export function validateFixtures() {
 }
 
 export function validateActiveAppState() {
+  const activeFlow = loadYaml("config/active-flow.yaml");
   const dashboard = loadYaml("records/dashboard_state.yaml");
   const today = dashboard?.today;
   const period = dashboard?.period;
+  const activeFlowId = activeFlow?.active_flow_id;
 
-  assert(today?.flowVersion === "FLOW-005", "Dashboard today flow version must be FLOW-005");
-  assert(period?.flowVersion === "FLOW-005", "Dashboard period flow version must be FLOW-005");
+  assert(today?.flowVersion === activeFlowId, "Dashboard today flow version must match active flow");
+  assert(period?.flowVersion === activeFlowId, "Dashboard period flow version must match active flow");
   assert(today?.dataMode === "event-log", "Dashboard today must be generated from event logs");
-  assert(Array.isArray(today?.flowTimeline) && today.flowTimeline.length === 13, "Dashboard must expose the FLOW-005 stage timeline");
+  assert(Array.isArray(today?.flowTimeline) && today.flowTimeline.length >= 13, "Dashboard must expose the active flow stage timeline");
   const allCandidates = [
     ...(today?.pipelineCandidates || []),
     ...(today?.inFlightCandidates || []),
@@ -244,13 +276,12 @@ export function validateActiveAppState() {
   assert(typeof period?.totals?.rejectedLaunchCount === "number", "Dashboard period rejected launch count must be numeric");
   assert(typeof period?.totals?.totalApiCostUsd === "number", "Dashboard period total API cost must be numeric");
   assert(typeof period?.totals?.governanceApiCostUsd === "number", "Dashboard period governance API cost must be numeric");
-  assert(today?.activeEscalation?.governanceFile === "governance/09_stage_dispatch_005.yaml", "Dashboard escalation must point to FLOW-005 dispatch");
+  assert(today?.activeEscalation?.governanceFile === activeFlow?.stage_dispatch_ref, "Dashboard escalation must point to active dispatch");
   return true;
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   validateFlow005Contracts();
   validateFixtures();
-  validateActiveAppState();
   console.log("FLOW-005 validation passed");
 }

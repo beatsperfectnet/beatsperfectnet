@@ -88,30 +88,29 @@ test("API cost accounting separates product and governance spend", () => {
   const accounting = load("governance/api_cost_accounting.yaml").api_cost_accounting;
   const dashboard = load("records/dashboard_state.yaml");
   assert.equal(accounting.dashboard_policy.competitor_purchase_cost_is_not_api_cost, true);
-  assert.equal(dashboard.today.totals.totalSpendUsd, 36.66);
-  assert.equal(dashboard.today.totals.productApiCostUsd, 22);
-  assert.equal(dashboard.today.totals.governanceApiCostUsd, 14.66);
-  assert.equal(dashboard.today.totals.humanEscalationsTotal, 2);
-  assert.equal(dashboard.today.inFlightCandidates[0].totalUsdSpent, 28);
-  assert.equal(dashboard.period.totals.totalApiCostUsd, 42.66);
-  assert.equal(dashboard.period.totals.productApiCostUsd, 28);
-  assert.equal(dashboard.period.totals.governanceApiCostUsd, 14.66);
+  assert.equal(dashboard.today.totals.totalSpendUsd, 0);
+  assert.equal(dashboard.today.totals.productApiCostUsd, 0);
+  assert.equal(dashboard.today.totals.governanceApiCostUsd, 0);
+  assert.equal(dashboard.today.totals.humanEscalationsTotal, 0);
+  assert.equal(dashboard.period.totals.totalApiCostUsd, 51.66);
+  assert.equal(dashboard.period.totals.productApiCostUsd, 32.5);
+  assert.equal(dashboard.period.totals.governanceApiCostUsd, 19.16);
 });
 
-test("active app state points at FLOW-005", () => {
+test("active app state points at configured flow", () => {
   assert.equal(validateActiveAppState(), true);
 });
 
-test("today snapshot is generated from active FLOW-005 records", () => {
+test("today snapshot is generated from active records", () => {
   const dashboard = load("records/dashboard_state.yaml");
+  const activeFlow = load("config/active-flow.yaml");
   assert.equal(dashboard.today.dataMode, "event-log");
+  assert.equal(dashboard.today.flowVersion, activeFlow.active_flow_id);
   assert.equal(dashboard.today.pipelineCandidates.length, 0);
-  assert.equal(dashboard.today.inFlightCandidates.length, 1);
+  assert.equal(dashboard.today.inFlightCandidates.length, 0);
   assert.equal(dashboard.today.rejectedCandidates.length, 0);
-  assert.equal(dashboard.today.inFlightCandidates[0].candidateId, "C-003-001");
-  assert.equal(dashboard.today.inFlightCandidates[0].candidateTitle, "Budget Planner Studio");
-  assert.equal(dashboard.today.inFlightCandidates[0].currentStepId, "11_delivery_launch");
   assert.equal(dashboard.today.activeEscalation.status, "none");
+  assert.equal(dashboard.today.activeEscalation.governanceFile, activeFlow.stage_dispatch_ref);
 });
 
 test("period snapshot stores the real rejected launch", () => {
@@ -119,15 +118,15 @@ test("period snapshot stores the real rejected launch", () => {
   assert.equal(dashboard.period.rejectedLaunch.reviewId, "LR-C-001-001");
   assert.equal(dashboard.period.totals.rejectedLaunchCount, 1);
   assert.equal(dashboard.period.from, "2026-06-22");
-  assert.equal(dashboard.period.to, "2026-06-24");
-  assert.equal(dashboard.period.buckets.length, 3);
+  assert.equal(dashboard.period.to, "2026-06-26");
+  assert.equal(dashboard.period.buckets.length, 5);
 });
 
-test("runtime launcher resolves FLOW-005 defaults", () => {
+test("runtime launcher derives workflow defaults by flow suffix", () => {
   const launcher = fs.readFileSync(path.join(repoRoot, "runtime/model-stage-launcher.mjs"), "utf8");
-  assert.match(launcher, /FLOW-005/);
-  assert.match(launcher, /workflows\/FLOW-005\.yaml/);
-  assert.match(launcher, /governance\/09_stage_dispatch_005\.yaml/);
+  assert.match(launcher, /const flowSuffix = flowVersion\.split\('-'\)\[1\]/);
+  assert.match(launcher, /const modelPolicyRef = `specs\/MODEL-\$\{flowSuffix\}\.yaml`/);
+  assert.match(launcher, /const generationBudgetRef = `governance\/08_product_generation_budget_\$\{flowSuffix\}\.yaml`/);
 });
 
 test("FLOW-004 frozen evidence checksum matches", () => {

@@ -73,7 +73,7 @@ if (args.update) {
   run("node", ["scripts/update-dashboard-state.mjs"]);
 }
 
-run("npm", ["run", "validate:flow-005"]);
+run("npm", ["run", "validate:flow-006"]);
 
 const staged = gitOutput(["diff", "--cached", "--name-only"]);
 if (staged) {

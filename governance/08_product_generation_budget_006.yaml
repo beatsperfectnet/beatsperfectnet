@@ -1,0 +1,55 @@
+product_generation_budget:
+  budget_id: PGB-006
+  flow_contract_ref: workflows/FLOW-006.yaml
+  generation_budget_usd: 25.00
+  budget_window:
+    start_step_id: 00_candidate_admission
+    end_step_id: 12_delivery_launch
+    excludes_post_launch_monthly_stages: true
+    excludes_competitor_purchase_spend: true
+    includes_attributable_model_api_costs: true
+    includes_paid_tool_usage_when_present: true
+  shared_cost_allocation:
+    rule: total_shared_run_generation_cost_usd_divided_by_number_of_candidates_created_from_that_run
+    allocate_to_each_created_candidate: true
+    do_not_double_count_shared_cost: true
+  cost_buckets:
+    competitor_purchase_cost_usd:
+      separate_from_generation_budget: true
+    generation_api_and_tool_cost_usd:
+      separate_from_competitor_purchase_cost_usd: true
+  phase_budget_plan:
+    discovery_and_purchase:
+      stages:
+        - 00_candidate_admission
+        - 01_public_shelf_read
+        - 02_mandatory_competitor_purchase
+        - 03_hidden_buyer_experience_inspection
+      soft_budget_usd: 5.00
+    alignment_and_spec:
+      stages:
+        - 04_alignment_synthesis
+        - 05_one_promise_propagation_system_spec
+      soft_budget_usd: 5.00
+    build_and_qa:
+      stages:
+        - 06_first_pass_connected_build
+        - 07_propagation_buyer_experience_product_visual_qa
+      soft_budget_usd: 7.00
+    founder_acceptance:
+      stages:
+        - 08_founder_acceptance_simulation
+      soft_budget_usd: 3.00
+    listing_and_launch:
+      stages:
+        - 09_optional_supporting_feature_pass
+        - 10_listing_creative_assembly
+        - 11_listing_quality_gate
+        - 12_delivery_launch
+      soft_budget_usd: 5.00
+  total_hard_budget_usd: 25.00
+  protected_qa_and_fix_reserve_usd: 5.00
+  hard_stop_rules:
+    projected_total_above_budget_blocks_paid_call: true
+    quality_critical_stage_must_not_downgrade_automatically: true
+    launch_must_not_proceed_when_recorded_generation_cost_exceeds_budget: true

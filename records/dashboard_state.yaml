@@ -1,7 +1,7 @@
 today:
-  asOf: 2026-06-25 19:32 GMT+2
+  asOf: 2026-06-26 08:24 GMT+2
   dataMode: event-log
-  flowVersion: FLOW-005
+  flowVersion: FLOW-006
   flowTimeline:
     - stageGroup: admission
       stepIds:
@@ -27,41 +27,44 @@ today:
     - stageGroup: qa
       stepIds:
         - 07_propagation_buyer_experience_product_visual_qa
+    - stageGroup: founder_acceptance
+      stepIds:
+        - 08_founder_acceptance_simulation
     - stageGroup: optional
       stepIds:
-        - 08_optional_supporting_feature_pass
+        - 09_optional_supporting_feature_pass
     - stageGroup: listing
       stepIds:
-        - 09_listing_creative_assembly
+        - 10_listing_creative_assembly
     - stageGroup: gate
       stepIds:
-        - 10_listing_quality_gate
+        - 11_listing_quality_gate
     - stageGroup: launch
       stepIds:
-        - 11_delivery_launch
+        - 12_delivery_launch
     - stageGroup: post_launch
       stepIds:
-        - 12_monthly_outcomes
-        - 13_competitor_purchase_accounting
-        - 14_kill_rules
-        - 15_resource_allocation_rules
-        - 16_company_metrics
+        - 13_monthly_outcomes
+        - 14_competitor_purchase_accounting
+        - 15_kill_rules
+        - 16_resource_allocation_rules
+        - 17_company_metrics
   sourceRefs:
     activeFlow: config/active-flow.yaml
     candidateRecords: records/candidates/*.yaml
     validationRecords: records/validation/*.yaml
   totals:
     pipelineCandidates: 0
-    inFlightCandidates: 1
+    inFlightCandidates: 0
     launchedCandidates: 0
     rejectedCandidates: 0
-    totalSpendUsd: 4.5
+    totalSpendUsd: 0
     productApiCostUsd: 0
-    governanceApiCostUsd: 4.5
+    governanceApiCostUsd: 0
     unallocatedApiCostUsd: 0
     humanEscalationsTotal: 0
     pipelineUsdTotal: 0
-    inFlightUsdTotal: 28
+    inFlightUsdTotal: 0
     launchedUsdTotal: 0
     rejectedUsdTotal: 0
     pipelineTokensTotal: 0
@@ -74,22 +77,7 @@ today:
     refundTokensTotal: 0
     refundCountTotal: 0
   pipelineCandidates: []
-  inFlightCandidates:
-    - candidateId: C-003-001
-      candidateLabel: I-001
-      candidateTitle: Budget Planner Studio
-      outcomeStatus: in_flight
-      currentStepId: 11_delivery_launch
-      currentStageGroup: launch
-      totalTokensUsed: 0
-      totalUsdSpent: 28
-      launchTokens: 0
-      governanceTokens: 0
-      postLaunchSupportTokens: 0
-      refundTokens: 0
-      refundCount: 0
-      budgetHealth: green
-      processHealth: green
+  inFlightCandidates: []
   launchedCandidates: []
   rejectedCandidates: []
   activeEscalation:
@@ -100,12 +88,12 @@ today:
     candidateTitle: ""
     reason: ""
     recommendedAction: ""
-    governanceFile: governance/09_stage_dispatch_005.yaml
+    governanceFile: governance/09_stage_dispatch_006.yaml
 period:
   from: 2026-06-22
-  to: 2026-06-25
+  to: 2026-06-26
   dataMode: event-log
-  flowVersion: FLOW-005
+  flowVersion: FLOW-006
   rejectedLaunch:
     reviewId: LR-C-001-001
     candidateId: C-001-001
@@ -136,8 +124,8 @@ period:
     refundTokensTotal: 0
     refundCountTotal: 0
     usdTotalSpend: 24.96
-    totalApiCostUsd: 47.16
-    productApiCostUsd: 28
+    totalApiCostUsd: 51.66
+    productApiCostUsd: 32.5
     governanceApiCostUsd: 19.16
     unallocatedApiCostUsd: 0
     humanEscalationsTotal: 2
@@ -194,9 +182,24 @@ period:
       rejectedLaunchCount: 0
       avgModelTokensPerLaunch: 0
       avgUsdSpendPerLaunch: 0
-      totalApiCostUsd: 4.5
-      productApiCostUsd: 0
+      totalApiCostUsd: 9
+      productApiCostUsd: 4.5
       governanceApiCostUsd: 4.5
+      unallocatedApiCostUsd: 0
+      humanEscalations: 0
+      launchTokens: 0
+      governanceTokens: 0
+      postLaunchSupportTokens: 0
+      refundTokens: 0
+      refundCount: 0
+    - date: 2026-06-26
+      launchedCount: 0
+      rejectedLaunchCount: 0
+      avgModelTokensPerLaunch: 0
+      avgUsdSpendPerLaunch: 0
+      totalApiCostUsd: 0
+      productApiCostUsd: 0
+      governanceApiCostUsd: 0
       unallocatedApiCostUsd: 0
       humanEscalations: 0
       launchTokens: 0

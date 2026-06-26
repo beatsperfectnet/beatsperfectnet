@@ -381,6 +381,8 @@ function collectGovernanceRefs() {
     'governance/07_capacity_model.yaml',
     'governance/08_product_generation_budget_005.yaml',
     'governance/09_stage_dispatch_005.yaml',
+    'governance/08_product_generation_budget_006.yaml',
+    'governance/09_stage_dispatch_006.yaml',
   ];
 }
 
@@ -391,7 +393,7 @@ function loadContract(repoRoot, relativePath, rootKey) {
 }
 
 function loadModelPolicy(repoRoot) {
-  return loadContract(repoRoot, 'specs/MODEL-005.yaml', 'MODEL-005');
+  return loadContract(repoRoot, 'specs/MODEL-006.yaml', 'MODEL-006');
 }
 
 function loadPricingSnapshot(repoRoot) {
@@ -399,7 +401,7 @@ function loadPricingSnapshot(repoRoot) {
 }
 
 function loadGenerationBudget(repoRoot) {
-  return loadContract(repoRoot, 'governance/08_product_generation_budget_005.yaml', 'product_generation_budget');
+  return loadContract(repoRoot, 'governance/08_product_generation_budget_006.yaml', 'product_generation_budget');
 }
 
 function getStagePolicy(modelPolicy, stage) {
@@ -860,8 +862,8 @@ async function main() {
 
   const repoRoot = args.workspace ? path.resolve(args.workspace) : repoRootFromScript();
   const buildManifestPath = path.resolve(repoRoot, args.buildManifest);
-  const workflowRef = args.workflow || 'workflows/FLOW-005.yaml';
-  const dispatchContractRef = args.dispatchContract || 'governance/09_stage_dispatch_005.yaml';
+  const workflowRef = args.workflow || 'workflows/FLOW-006.yaml';
+  const dispatchContractRef = args.dispatchContract || 'governance/09_stage_dispatch_006.yaml';
   const workflowPath = path.resolve(repoRoot, workflowRef);
   const dispatchContractPath = path.resolve(repoRoot, dispatchContractRef);
   const runLedgerPath = path.resolve(repoRoot, `records/model_runs/${args.runId}.yaml`);
@@ -871,18 +873,21 @@ async function main() {
   const buildManifestDoc = rubyLoadYaml(buildManifestPath);
   const workflowDoc = rubyLoadYaml(workflowPath);
   const dispatchDoc = rubyLoadYaml(dispatchContractPath);
-  const flowVersion = /FLOW-005/.test(workflowRef) ? 'FLOW-005' : 'FLOW-004';
-  const modelPolicyDoc = rubyLoadYaml(path.resolve(repoRoot, flowVersion === 'FLOW-005' ? 'specs/MODEL-005.yaml' : 'specs/MODEL-004.yaml'));
-  const pricingSnapshotDoc = rubyLoadYaml(path.resolve(repoRoot, 'specs/PRICING-004.yaml'));
-  const generationBudgetDoc = rubyLoadYaml(path.resolve(repoRoot, flowVersion === 'FLOW-005' ? 'governance/08_product_generation_budget_005.yaml' : 'governance/08_product_generation_budget_004.yaml'));
   const flowRootKey = Object.keys(workflowDoc).find((key) => /^FLOW-\d+$/.test(key));
   if (!flowRootKey) {
     throw new Error(`No FLOW-### root key found in ${workflowPath}`);
   }
+  const flowVersion = flowRootKey;
+  const flowSuffix = flowVersion.split('-')[1];
+  const modelPolicyRef = `specs/MODEL-${flowSuffix}.yaml`;
+  const generationBudgetRef = `governance/08_product_generation_budget_${flowSuffix}.yaml`;
+  const modelPolicyDoc = rubyLoadYaml(path.resolve(repoRoot, modelPolicyRef));
+  const pricingSnapshotDoc = rubyLoadYaml(path.resolve(repoRoot, 'specs/PRICING-004.yaml'));
+  const generationBudgetDoc = rubyLoadYaml(path.resolve(repoRoot, generationBudgetRef));
   const flow = rootEntry(workflowDoc, flowRootKey, workflowPath);
-  const modelPolicy = rootEntry(modelPolicyDoc, flowVersion === 'FLOW-005' ? 'MODEL-005' : 'MODEL-004', path.resolve(repoRoot, flowVersion === 'FLOW-005' ? 'specs/MODEL-005.yaml' : 'specs/MODEL-004.yaml'));
+  const modelPolicy = rootEntry(modelPolicyDoc, `MODEL-${flowSuffix}`, path.resolve(repoRoot, modelPolicyRef));
   const pricingSnapshot = rootEntry(pricingSnapshotDoc, 'PRICING-004', path.resolve(repoRoot, 'specs/PRICING-004.yaml'));
-  const generationBudget = rootEntry(generationBudgetDoc, 'product_generation_budget', path.resolve(repoRoot, flowVersion === 'FLOW-005' ? 'governance/08_product_generation_budget_005.yaml' : 'governance/08_product_generation_budget_004.yaml'));
+  const generationBudget = rootEntry(generationBudgetDoc, 'product_generation_budget', path.resolve(repoRoot, generationBudgetRef));
   const dispatch = rootEntry(dispatchDoc, 'stage_dispatch', dispatchContractPath);
   const manifest = rootEntry(buildManifestDoc, 'build_manifest', buildManifestPath);
   let candidateState = loadCandidateDomainBrief(

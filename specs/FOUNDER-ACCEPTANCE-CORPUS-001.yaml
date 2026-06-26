@@ -1,0 +1,120 @@
+founder_acceptance_corpus:
+  corpus_id: FOUNDER-ACCEPTANCE-CORPUS-001
+  purpose: reusable_founder_rejection_patterns_for_publish_ready_products_listings_and_delivery
+  reviewer_identity:
+    role: founder_acceptance_simulation
+    stance: adversarial_before_publish
+    pass_standard: product_listing_and_delivery_should_not_need_founder_feedback_to_be_human_ready
+  review_lanes:
+    - lane_id: real_human_use_pressure
+      purpose: prove_the_product_works_beyond_demo_seed_data
+      required_checks:
+        - push_input_rows_beyond_seed_sample
+        - add_realistic_inventory_or_transaction_volume_when_spreadsheet_applicable
+        - verify_formula_ranges_totals_dashboards_charts_and_protection_after_capacity_pressure
+        - fail_if_seed_rows_are_the_only_coherent_workflow
+    - lane_id: product_logic_review
+      purpose: verify_the_artifact_matches_the_buyer_workflow_without_founder_explanation
+      required_checks:
+        - first_tab_and_next_action_are_obvious
+        - inputs_outputs_and_generated_areas_are_visually_distinct
+        - buyer_decision_outputs_answer_the_primary_jtbd
+        - no_hidden_assumptions_only_the_builder_understands
+    - lane_id: in_product_human_wording_review
+      purpose: remove_developer_agent_language_from_buyer_facing_product_text
+      required_checks:
+        - wording_sounds_like_customer_guidance_not_internal_spec
+        - no_agentic_or_developer_terms_in_buyer_copy
+        - no_overexplaining_obvious_ui_or_formula_mechanics
+        - limits_and_warnings_are_plain_but_not_anxious
+    - lane_id: listing_delivery_readiness_review
+      purpose: verify_the_listing_and_delivery_can_sell_and_onboard_without_founder_feedback
+      required_checks:
+        - listing_images_have_visual_hook_not_report_slide_layout
+        - each_image_has_one_buyer_promise_and_matching_reason_to_believe
+        - product_surface_is_large_enough_to_prove_the_claim
+        - delivery_readme_feels_like_customer_handoff_not_internal_documentation
+  rejection_patterns:
+    - pattern_id: demo_scale_rows
+      severity: blocker
+      description: Product only works for small seeded demo rows or fixed sample ranges.
+      reject_when:
+        - formulas_or_totals_do_not_cover_realistic_buyer_capacity
+        - adding_rows_beyond_sample_breaks_outputs_or_requires_structural_edits
+        - QA_only_tests_seed_rows
+      repair_expectation: expand_capacity_ranges_tables_and_tests_to_realistic_buyer_use
+    - pattern_id: formula_logic_not_stress_tested
+      severity: blocker
+      description: Formula or workflow logic passes only superficial happy-path checks.
+      reject_when:
+        - edge_case_inputs_are_not_tested
+        - downstream_dashboards_or_statuses_are_not_verified_after_mutation
+        - unsupported_editor_or_import_behavior_is_claimed_without proof
+      repair_expectation: add_boundary_mutations_truth_tables_and_platform_claim_limits
+    - pattern_id: buyer_workflow_requires_founder_explanation
+      severity: blocker
+      description: A buyer would need the founder to explain where to start or what matters.
+      reject_when:
+        - first_action_is_not_obvious
+        - tab_order_does_not_match_real_workflow
+        - outputs_are_feature_lists_instead_of_decision_surfaces
+      repair_expectation: simplify_onboarding_tab_order_and_decision_outputs
+    - pattern_id: developerish_buyer_copy
+      severity: blocker
+      description: Buyer-facing product text sounds like an agent, developer, or internal QA record.
+      reject_when:
+        - copy_uses_terms_like_artifact_surface_verified_formula_outputs_or_claim_map
+        - instructions_describe_implementation_instead_of_customer_action
+        - disclaimers_feel_machine_written_or_excessive
+      repair_expectation: rewrite_in_plain_customer_language_with_short_action_oriented_guidance
+    - pattern_id: tiny_listing_surface
+      severity: blocker
+      description: Listing image includes a real product screenshot but it is too small to inspect or believe.
+      reject_when:
+        - product_surface_cannot_prove_the_image_claim_at_marketplace_thumbnail_or_gallery_size
+        - screenshot_is_framed_as_decoration_instead_of_evidence
+      repair_expectation: crop_zoom_or_mock_up_the_real_surface_so_the_claim_is_visually_obvious
+    - pattern_id: report_slide_listing_asset
+      severity: blocker
+      description: Listing creative looks like a report slide rather than a marketplace eye-stopper.
+      reject_when:
+        - layout_is_dominated_by_explanatory_text
+        - no_clear_visual_focal_point_exists
+        - composition_would_blend_into_similar_search_results
+      repair_expectation: create_a_grid_browsing_hook_with_stronger_visual_hierarchy_and_real_product_proof
+    - pattern_id: feature_list_instead_of_promise
+      severity: blocker
+      description: Copy lists features instead of a human buyer promise.
+      reject_when:
+        - headline_is_a_scope_list
+        - reason_to_believe_does_not_support_the_specific_image_promise
+        - kpp_is_not_aligned_to_the_primary_jtbd
+      repair_expectation: rewrite_each_claim_as_one_buyer_promise_with_one_matching_product_specific_rtb
+    - pattern_id: competitor_failure_treated_as_blocker
+      severity: blocker
+      description: Purchased competitor breakage blocks or distorts our build instead of becoming evidence.
+      reject_when:
+        - competitor_broken_formula_is_copied_into_our_publish_blockers
+        - broken_competitor_is_treated_as_category_quality_floor_without_broader_evidence
+      repair_expectation: classify_competitor_failure_as_avoidance_requirement_and_escalate_for_more_evidence_if_needed
+    - pattern_id: market_research_tool_missing_but_flow_continued
+      severity: blocker
+      description: Market research was missing or weak, but the flow proceeded as if demand was proven.
+      reject_when:
+        - required_market_tool_or_export_was_unavailable_without_human_override
+        - new_entrant_counts_or_revenue_strength_are_unverifiable
+        - public_shelf_read_has_missing_gallery_or_metrics_without_escalation
+      repair_expectation: stop_for_tool_readiness_human_override_or_additional_market_evidence
+  output_contract:
+    status_values:
+      - pass
+      - fail
+      - pass_with_explicit_human_override
+    required_record_fields:
+      - founder_acceptance_status
+      - adversarial_rejection_attempts
+      - corpus_pattern_results
+      - rejection_reasons
+      - required_repair_scope
+      - rerun_from_step
+      - human_override

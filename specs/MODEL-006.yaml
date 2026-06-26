@@ -1,12 +1,10 @@
-MODEL-005:
-  purpose: governed_model_routing_for_flow_005
+MODEL-006:
+  purpose: governed_model_routing_for_flow_006
   model_catalog:
     mini:
       runtime_model_id: openai/gpt-5.4-mini
       purpose:
         - candidate_admission
-        - public_evidence_extraction
-        - listing_title_description_and_claim_map_assembly
         - delivery_assembly
         - post_launch_ledgers_and_rules
       normal_flow_allowed: true
@@ -19,6 +17,7 @@ MODEL-005:
         - first_pass_connected_build
         - qa_execution
         - optional_supporting_feature_pass
+        - listing_title_description_and_claim_map_assembly
         - listing_repair
       normal_flow_allowed: true
     deterministic:
@@ -35,6 +34,7 @@ MODEL-005:
       purpose:
         - alignment_synthesis
         - one_promise_propagation_system_spec
+        - founder_acceptance_simulation
         - listing_quality_gate
       normal_flow_allowed: true
     human:
@@ -44,9 +44,6 @@ MODEL-005:
       normal_flow_allowed: true
   stage_routing:
     candidate_admission:
-      governed_model_tier: mini
-      requested_model: gpt-5.4-mini
-    public_evidence_extraction:
       governed_model_tier: mini
       requested_model: gpt-5.4-mini
     public_shelf_read_synthesis:
@@ -88,9 +85,12 @@ MODEL-005:
     optional_supporting_feature_pass:
       governed_model_tier: medium
       requested_model: gpt-5.4
+    founder_acceptance_simulation:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
     listing_title_description_and_claim_map_assembly:
-      governed_model_tier: mini
-      requested_model: gpt-5.4-mini
+      governed_model_tier: medium
+      requested_model: gpt-5.4
     listing_visual_composition:
       governed_model_tier: medium
       requested_model: gpt-5.4
@@ -177,6 +177,28 @@ MODEL-005:
       required_results:
         - working_capacity_results
         - row_expansion_or_capacity_boundary_mutations
+    founder_acceptance_simulation:
+      rule: adversarially_simulate_founder_review_and_fail_any_product_that_still_needs_founder_feedback
+      corpus_ref: specs/FOUNDER-ACCEPTANCE-CORPUS-001.yaml
+      required_review_lanes:
+        - real_human_use_pressure
+        - product_logic_review
+        - in_product_human_wording_review
+        - listing_delivery_readiness_review
+      required_outputs:
+        - founder_acceptance_status
+        - adversarial_rejection_attempts
+        - corpus_pattern_results
+        - rejection_reasons
+        - required_repair_scope
+        - rerun_from_step
+        - human_override
+      pass_rule: pass_only_when_no_blocking_rejection_patterns_remain_or_explicit_human_override_is_recorded
+      fail_if:
+        - formulas_or_logic_only_work_for_seed_demo_rows
+        - product_copy_sounds_like_developer_or_agent_language
+        - buyer_workflow_requires_founder_explanation
+        - delivery_or_listing_assets_still_need_founder_feedback_to_be_buyable
     listing_title_description_and_claim_map_assembly:
       rule: hook_is_visual_shelf_stopping_composition_plus_copy_not_copy_alone
       required_outputs:

@@ -1,4 +1,4 @@
-SCHEMA-005:
+SCHEMA-006:
   purpose: exact_required_fields_for_flow_005_artifacts
   candidate_admission:
     required_top_level_fields:
@@ -169,6 +169,34 @@ SCHEMA-005:
       - period_continuity_results
       - protection_truthfulness
       - publish_blockers
+  founder_acceptance_simulation:
+    required_top_level_fields:
+      - candidate_id
+      - artifact_tested
+      - qa_ref
+      - founder_rejection_corpus_ref
+      - founder_acceptance_status
+      - adversarial_rejection_attempts
+      - real_human_use_pressure
+      - product_logic_review
+      - in_product_human_wording_review
+      - delivery_copy_human_review
+      - corpus_pattern_results
+      - rejection_reasons
+      - required_repair_scope
+      - rerun_from_step
+      - human_override
+      - publish_blockers
+    allowed_founder_acceptance_statuses:
+      - pass
+      - fail
+      - pass_with_explicit_human_override
+    human_override_required_fields:
+      - allowed
+      - decision
+      - decision_date
+      - reason
+      - approver
   listing_hook:
     required_top_level_fields:
       - candidate_id
@@ -201,6 +229,7 @@ SCHEMA-005:
   listing_quality_gate:
     required_top_level_fields:
       - listing_creative_assembly_ref
+      - founder_acceptance_ref
       - thumbnail_click_strength
       - first_image_clarity
       - promise_visible_under_2_seconds
@@ -230,6 +259,7 @@ SCHEMA-005:
       - product_artifacts
       - artifact_version
       - delivery_asset
+      - founder_acceptance_ref
       - listing_assets
       - passed_system
       - passed_buyer_experience_checks
@@ -266,6 +296,7 @@ SCHEMA-005:
       - working_capacity_pass_or_not_applicable_with_reason
       - period_continuity_pass_or_not_applicable_with_reason
       - protection_truthfulness_pass
+      - founder_acceptance_pass
       - buyer_experience_pass
       - product_visual_quality_pass
       - listing_quality_gate_pass

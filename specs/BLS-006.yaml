@@ -1,4 +1,4 @@
-BLS-005:
+BLS-006:
   purpose: build_lifecycle_specification
   candidate_stages:
     - candidate_admission
@@ -9,6 +9,7 @@ BLS-005:
     - one_promise_propagation_system_spec
     - first_pass_connected_build
     - propagation_buyer_experience_product_visual_qa
+    - founder_acceptance_simulation
     - optional_supporting_feature_pass
     - listing_creative_assembly
     - listing_quality_gate
@@ -38,6 +39,9 @@ BLS-005:
     - alignment_chain_ref
     - propagation_system_spec_ref
     - qa_result
+    - founder_acceptance_ref
+    - founder_acceptance_status
+    - founder_rejection_patterns
     - listing_hook_ref
     - listing_creative_assembly_ref
     - visual_hook_quality_gate
@@ -64,6 +68,7 @@ BLS-005:
     - period_continuity_passed_or_not_applicable_with_reason
     - protection_truthfulness_passed
     - qa_passed
+    - founder_acceptance_passed_or_explicit_human_override_recorded
     - listing_creatives_completed
     - visual_hook_quality_passed
     - listing_quality_passed

@@ -38,24 +38,28 @@ export const stageLabels: Array<{ label: StageGroup; steps: FlowStepId[] }> = [
     steps: ["07_propagation_buyer_experience_product_visual_qa"]
   },
   {
+    label: "founder_acceptance",
+    steps: ["08_founder_acceptance_simulation"]
+  },
+  {
     label: "optional",
-    steps: ["08_optional_supporting_feature_pass"]
+    steps: ["09_optional_supporting_feature_pass"]
   },
   {
     label: "listing",
-    steps: ["09_listing_creative_assembly"]
+    steps: ["10_listing_creative_assembly"]
   },
   {
     label: "gate",
-    steps: ["10_listing_quality_gate"]
+    steps: ["11_listing_quality_gate"]
   },
   {
     label: "launch",
-    steps: ["11_delivery_launch"]
+    steps: ["12_delivery_launch"]
   },
   {
     label: "post_launch",
-    steps: ["12_monthly_outcomes", "13_competitor_purchase_accounting", "14_kill_rules", "15_resource_allocation_rules", "16_company_metrics"]
+    steps: ["13_monthly_outcomes", "14_competitor_purchase_accounting", "15_kill_rules", "16_resource_allocation_rules", "17_company_metrics"]
   }
 ];
 

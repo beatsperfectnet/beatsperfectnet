@@ -12,6 +12,12 @@ Mandatory competitor purchase reveals hidden buyer experience, actual delivered-
 
 Current bestsellers define the category visual-quality floor.
 
-The purchased competitor inspection defines the actual delivered-product quality reference.
+The purchased competitor shows us what to avoid, but its broken parts do not block our product.
+
+If the competitor is broken, that is useful evidence.
+
+If our product is broken, that is our problem.
+
+Competitor broken alone should not prevent us from shipping.
 
 The BeatsPerfect brandbook defines the final visual identity.

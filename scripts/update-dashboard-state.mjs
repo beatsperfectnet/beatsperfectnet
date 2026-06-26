@@ -16,18 +16,19 @@ const stageTimeline = [
   { stageGroup: "spec", stepIds: ["05_one_promise_propagation_system_spec"] },
   { stageGroup: "build", stepIds: ["06_first_pass_connected_build"] },
   { stageGroup: "qa", stepIds: ["07_propagation_buyer_experience_product_visual_qa"] },
-  { stageGroup: "optional", stepIds: ["08_optional_supporting_feature_pass"] },
-  { stageGroup: "listing", stepIds: ["09_listing_creative_assembly"] },
-  { stageGroup: "gate", stepIds: ["10_listing_quality_gate"] },
-  { stageGroup: "launch", stepIds: ["11_delivery_launch"] },
+  { stageGroup: "founder_acceptance", stepIds: ["08_founder_acceptance_simulation"] },
+  { stageGroup: "optional", stepIds: ["09_optional_supporting_feature_pass"] },
+  { stageGroup: "listing", stepIds: ["10_listing_creative_assembly"] },
+  { stageGroup: "gate", stepIds: ["11_listing_quality_gate"] },
+  { stageGroup: "launch", stepIds: ["12_delivery_launch"] },
   {
     stageGroup: "post_launch",
     stepIds: [
-      "12_monthly_outcomes",
-      "13_competitor_purchase_accounting",
-      "14_kill_rules",
-      "15_resource_allocation_rules",
-      "16_company_metrics",
+      "13_monthly_outcomes",
+      "14_competitor_purchase_accounting",
+      "15_kill_rules",
+      "16_resource_allocation_rules",
+      "17_company_metrics",
     ],
   },
 ];
@@ -86,10 +87,10 @@ function normalizeCurrentStep(candidate) {
 
   const aliases = {
     purchase_approval: "02_mandatory_competitor_purchase",
-    publish_pending: "11_delivery_launch",
-    marketplace_publish: "11_delivery_launch",
-    ready_for_marketplace_publish: "11_delivery_launch",
-    pass_pending_marketplace_publish: "11_delivery_launch",
+    publish_pending: "12_delivery_launch",
+    marketplace_publish: "12_delivery_launch",
+    ready_for_marketplace_publish: "12_delivery_launch",
+    pass_pending_marketplace_publish: "12_delivery_launch",
     published: "12_monthly_outcomes",
   };
   return aliases[raw] ?? null;
@@ -289,11 +290,11 @@ function publicCandidateSnapshot(candidate) {
   };
 }
 
-function activeFlow005Candidates() {
+function activeFlow006Candidates() {
   return readYamlFiles("records/candidates")
     .flatMap((entry) => entry.doc?.candidates || [])
     .filter((candidate) => candidate?.candidate_id)
-    .filter((candidate) => String(candidate.original_flow_contract_ref || "").includes("FLOW-005"))
+    .filter((candidate) => String(candidate.original_flow_contract_ref || "").includes("FLOW-006"))
     .filter((candidate) => !isExcludedFromActiveDashboard(candidate));
 }
 
@@ -369,7 +370,7 @@ function periodState() {
     from: dates[0] || today,
     to: dates[dates.length - 1] || today,
     dataMode: "event-log",
-    flowVersion: "FLOW-005",
+    flowVersion: "FLOW-006",
     ...(rejectedLaunch ? { rejectedLaunch } : {}),
     totals: {
       launchedCount: 0,
@@ -415,7 +416,7 @@ function periodState() {
 }
 
 function buildDashboardState() {
-  const candidates = activeFlow005Candidates().map(publicCandidateSnapshot);
+  const candidates = activeFlow006Candidates().map(publicCandidateSnapshot);
   const byStatus = (status) => candidates.filter((candidate) => candidate.outcomeStatus === status);
   const activeCandidate = byStatus("in_flight")[0] || byStatus("pipeline")[0] || null;
 
@@ -423,7 +424,7 @@ function buildDashboardState() {
     today: {
       asOf: nowBerlin(),
       dataMode: "event-log",
-      flowVersion: "FLOW-005",
+      flowVersion: "FLOW-006",
       flowTimeline: stageTimeline,
       sourceRefs: {
         activeFlow: "config/active-flow.yaml",
@@ -443,8 +444,8 @@ function buildDashboardState() {
             candidateLabel: activeCandidate.candidateLabel,
             candidateTitle: activeCandidate.candidateTitle,
             reason: "Competitor purchase requires human approval before external spend.",
-            recommendedAction: "Approve or reject the purchase before continuing FLOW-005.",
-            governanceFile: "governance/09_stage_dispatch_005.yaml",
+            recommendedAction: "Approve or reject the purchase before continuing FLOW-006.",
+            governanceFile: "governance/09_stage_dispatch_006.yaml",
           }
         : {
             status: "none",
@@ -454,7 +455,7 @@ function buildDashboardState() {
             candidateTitle: "",
             reason: "",
             recommendedAction: "",
-            governanceFile: "governance/09_stage_dispatch_005.yaml",
+            governanceFile: "governance/09_stage_dispatch_006.yaml",
           },
     },
     period: periodState(),

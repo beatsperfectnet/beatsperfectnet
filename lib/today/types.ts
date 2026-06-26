@@ -7,15 +7,16 @@ export type FlowStepId =
   | "05_one_promise_propagation_system_spec"
   | "06_first_pass_connected_build"
   | "07_propagation_buyer_experience_product_visual_qa"
-  | "08_optional_supporting_feature_pass"
-  | "09_listing_creative_assembly"
-  | "10_listing_quality_gate"
-  | "11_delivery_launch"
-  | "12_monthly_outcomes"
-  | "13_competitor_purchase_accounting"
-  | "14_kill_rules"
-  | "15_resource_allocation_rules"
-  | "16_company_metrics";
+  | "08_founder_acceptance_simulation"
+  | "09_optional_supporting_feature_pass"
+  | "10_listing_creative_assembly"
+  | "11_listing_quality_gate"
+  | "12_delivery_launch"
+  | "13_monthly_outcomes"
+  | "14_competitor_purchase_accounting"
+  | "15_kill_rules"
+  | "16_resource_allocation_rules"
+  | "17_company_metrics";
 
 export type StageGroup =
   | "admission"
@@ -26,6 +27,7 @@ export type StageGroup =
   | "spec"
   | "build"
   | "qa"
+  | "founder_acceptance"
   | "optional"
   | "listing"
   | "gate"
@@ -71,7 +73,7 @@ export type TodayCandidateSnapshot = {
 export type TodayState = {
   asOf: string;
   dataMode: "mock" | "event-log";
-  flowVersion: "FLOW-005";
+  flowVersion: "FLOW-005" | "FLOW-006";
   flowTimeline?: Array<{
     stageGroup: StageGroup;
     stepIds: FlowStepId[];

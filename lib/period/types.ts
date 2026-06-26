@@ -20,7 +20,7 @@ export type PeriodState = {
   from: string;
   to: string;
   dataMode: "mock" | "event-log";
-  flowVersion: "FLOW-005";
+  flowVersion: "FLOW-005" | "FLOW-006";
   rejectedLaunch?: {
     reviewId: string;
     candidateId: string;

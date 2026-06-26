@@ -4,7 +4,7 @@ export const mockPeriodState: PeriodState = {
   from: "2026-06-22",
   to: "2026-06-22",
   dataMode: "mock",
-  flowVersion: "FLOW-005",
+  flowVersion: "FLOW-006",
   rejectedLaunch: {
     reviewId: "LR-C-001-001",
     candidateId: "C-001-001",

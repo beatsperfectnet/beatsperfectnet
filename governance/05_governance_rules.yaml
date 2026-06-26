@@ -1,11 +1,11 @@
 governance_rules:
  active_rule_contracts:
-  flow: FLOW-005
+  flow: FLOW-006
   product_analysis: PA-002
-  schema: SCHEMA-005
-  build_lifecycle: BLS-005
-  model_routing: MODEL-005
-  stage_dispatch: governance/09_stage_dispatch_005.yaml
+  schema: SCHEMA-006
+  build_lifecycle: BLS-006
+  model_routing: MODEL-006
+  stage_dispatch: governance/09_stage_dispatch_006.yaml
  superseded_rule_contracts:
   - FLOW-001
   - FLOW-002
@@ -21,6 +21,11 @@ governance_rules:
   - MODEL-002
   - MODEL-003
   - governance/09_stage_dispatch_003.yaml
+  - FLOW-005
+  - SCHEMA-005
+  - BLS-005
+  - MODEL-005
+  - governance/09_stage_dispatch_005.yaml
  human_owned:
   - objective
   - constraints
@@ -30,11 +35,11 @@ governance_rules:
   - resource_allocation
   - capacity_model
   - BM-001
-  - FLOW-005
-  - SCHEMA-005
-  - BLS-005
-  - MODEL-005
-  - governance/09_stage_dispatch_005.yaml
+  - FLOW-006
+  - SCHEMA-006
+  - BLS-006
+  - MODEL-006
+  - governance/09_stage_dispatch_006.yaml
 
  agent_owned:
   - workflow_execution
@@ -49,9 +54,11 @@ governance_rules:
   - marketplace_publish_without_required_human_approval
 
  flow_rules:
-  - FLOW_005_remains_stage_based
+  - FLOW_006_remains_stage_based
+  - FLOW_006_adds_founder_acceptance_simulation_before_listing_work
   - functional_mandates_are_static_flow_metadata
   - models_must_not_assign_their_own_mandates
+  - competitor_broken_parts_are_just_examples_of_what_to_avoid
   - candidate_domain_brief_is_required_before_competitor_selection
   - candidate_domain_brief_default_model_is_medium
   - frontier_domain_brief_review_is_escalation_only

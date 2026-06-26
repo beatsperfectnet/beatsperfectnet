@@ -1,17 +1,18 @@
-FLOW-005:
-  purpose: insight_kpp_rtb_hook_flow_for_verified_product_builds
+FLOW-006:
+  purpose: founder_acceptance_flow_for_publish_ready_human_products_and_listings
   rule: no_creativity_outside_assigned_task
   required_inputs:
     - company.md
     - governance/05_governance_rules.yaml
     - governance/06_resource_allocation.yaml
     - governance/07_capacity_model.yaml
-    - governance/08_product_generation_budget_005.yaml
-    - governance/09_stage_dispatch_005.yaml
-    - specs/SCHEMA-005.yaml
-    - specs/MODEL-005.yaml
-    - specs/BLS-005.yaml
+    - governance/08_product_generation_budget_006.yaml
+    - governance/09_stage_dispatch_006.yaml
+    - specs/SCHEMA-006.yaml
+    - specs/MODEL-006.yaml
+    - specs/BLS-006.yaml
     - specs/TOOL-001.yaml
+    - specs/FOUNDER-ACCEPTANCE-CORPUS-001.yaml
   run_telemetry:
     runtime_launcher_ref: runtime/model-stage-launcher.mjs
     model_usage_ledger_required: true
@@ -37,7 +38,7 @@ FLOW-005:
   flow:
     - step_id: 00_candidate_admission
       agent_tier: mini
-      model_policy_ref: MODEL-005.candidate_admission
+      model_policy_ref: MODEL-006.candidate_admission
       action:
         - confirm_allowed_category
         - confirm_no_prohibited_or_regulated_category
@@ -61,8 +62,8 @@ FLOW-005:
         competitor_purchase_approval_required: true
         api_budget_ceiling_usd: 25
     - step_id: 01_public_shelf_read
-      agent_tier: mini
-      model_policy_ref: MODEL-005.public_evidence_extraction
+      agent_tier: medium
+      model_policy_ref: MODEL-006.public_shelf_read_synthesis
       action:
         - collect_public_listing_evidence
         - collect_titles_thumbnails_images_descriptions_pricing_trust_signals_reviews
@@ -81,7 +82,7 @@ FLOW-005:
         gallery_or_thumbnail_evidence_required_or_escalated: true
     - step_id: 02_mandatory_competitor_purchase
       agent_tier: medium
-      model_policy_ref: MODEL-005.competitor_selection
+      model_policy_ref: MODEL-006.competitor_selection
       action:
         - deterministically_select_one_competitor
         - select_from_evidence_backed_candidate_set_only
@@ -102,7 +103,7 @@ FLOW-005:
       output_file_template: records/competitive_purchase_approval/CPA-XXXX.yaml
     - step_id: 03_hidden_buyer_experience_inspection
       agent_tier: medium
-      model_policy_ref: MODEL-005.purchased_competitor_inspection
+      model_policy_ref: MODEL-006.purchased_competitor_inspection
       action:
         - inspect_purchased_asset_on_disposable_copy
         - record_delivery_path_first_open_normal_use_limits_stress_recovery
@@ -119,7 +120,7 @@ FLOW-005:
       output_file_template: records/purchased_competitor_inspection/PCI-XXXX.yaml
     - step_id: 04_alignment_synthesis
       agent_tier: frontier
-      model_policy_ref: MODEL-005.alignment_synthesis
+      model_policy_ref: MODEL-006.alignment_synthesis
       action:
         - compress_public_and_hidden_evidence_into_one_chain
         - reject_scope_lists_as_kpp
@@ -132,7 +133,7 @@ FLOW-005:
       output_file_template: records/alignment_chain/AC-XXXX.yaml
     - step_id: 05_one_promise_propagation_system_spec
       agent_tier: frontier
-      model_policy_ref: MODEL-005.one_promise_propagation_system_spec
+      model_policy_ref: MODEL-006.one_promise_propagation_system_spec
       action:
         - define_one_system_name
         - define_supported_platform_boundaries
@@ -154,7 +155,7 @@ FLOW-005:
       output_file_template: records/propagation_system_spec/PSS-XXXX.yaml
     - step_id: 06_first_pass_connected_build
       agent_tier: medium
-      model_policy_ref: MODEL-005.first_pass_connected_build
+      model_policy_ref: MODEL-006.first_pass_connected_build
       action:
         - build_minimum_connected_product
         - build_working_capacity_product_not_demo_scale_sample
@@ -169,7 +170,7 @@ FLOW-005:
       output_file_template: builds/<candidate_id>/manifest.yaml
     - step_id: 07_propagation_buyer_experience_product_visual_qa
       agent_tier: medium
-      model_policy_ref: MODEL-005.qa_execution
+      model_policy_ref: MODEL-006.qa_execution
       action:
         - run_deterministic_artifact_integrity_audit
         - run_formula_truth_table_tests
@@ -195,17 +196,42 @@ FLOW-005:
         protection_truthfulness_required: true
         prose_only_qa_forbidden: true
       output_file_template: records/validation/QA-XXXX.yaml
-    - step_id: 08_optional_supporting_feature_pass
+    - step_id: 08_founder_acceptance_simulation
+      agent_tier: frontier
+      model_policy_ref: MODEL-006.founder_acceptance_simulation
+      corpus_ref: specs/FOUNDER-ACCEPTANCE-CORPUS-001.yaml
+      functional_mandate: adversarial_founder_acceptance_reviewer
+      action:
+        - consume_founder_rejection_corpus
+        - simulate_founder_product_inspection_before_publication
+        - pressure_test_real_human_use_beyond_seed_demo_rows
+        - test_formula_logic_workflow_logic_and_buyer_decision_outputs
+        - inspect_in_product_wording_for_human_language_not_developer_or_agent_language
+        - inspect_delivery_copy_for_customer_handoff_clarity
+        - classify_rejection_patterns_by_corpus_id
+        - fail_if_product_requires_founder_feedback_to_be_publishable
+        - define_required_repair_scope_and_rerun_from_step
+        - allow_human_override_only_when_explicitly_recorded
+      gate:
+        founder_acceptance_status_required: pass
+        adversarial_rejection_attempt_required: true
+        corpus_pattern_check_required: true
+        real_human_use_pressure_required: true
+        in_product_copy_human_review_required: true
+        delivery_copy_human_review_required: true
+      output_file_template: records/validation/FA-XXXX.yaml
+    - step_id: 09_optional_supporting_feature_pass
       agent_tier: medium
-      model_policy_ref: MODEL-005.optional_supporting_feature_pass
+      model_policy_ref: MODEL-006.optional_supporting_feature_pass
       action:
         - consider_one_supporting_feature_only_after_qa_pass
       gate:
         optional_feature_attempts_max: 1
-    - step_id: 09_listing_creative_assembly
-      agent_tier: mini
-      model_policy_ref: MODEL-005.listing_title_description_and_claim_map_assembly
+    - step_id: 10_listing_creative_assembly
+      agent_tier: medium
+      model_policy_ref: MODEL-006.listing_title_description_and_claim_map_assembly
       action:
+        - consume_founder_acceptance_ref
         - assemble_listing_from_verified_surfaces
         - define_visual_hook_strategy_for_listing_grid_browsing
         - map_each_claim_to_proof
@@ -217,10 +243,11 @@ FLOW-005:
         - record_source_surface_claim_map_for_each_final_creative
         - forbid_fabricated_product_screens_or_unverified_ui_states
       output_file_template: records/listing_creatives/LC-XXXX.yaml
-    - step_id: 10_listing_quality_gate
+    - step_id: 11_listing_quality_gate
       agent_tier: frontier
-      model_policy_ref: MODEL-005.listing_quality_gate
+      model_policy_ref: MODEL-006.listing_quality_gate
       action:
+        - consume_founder_acceptance_ref
         - judge_shelf_communication_parity
         - judge_visual_hook_strength_against_real_marketplace_grid
         - verify_kpp_is_buyer_decision_promise_not_feature_scope
@@ -232,9 +259,9 @@ FLOW-005:
         - fail_if_visuals_are_mediocre_or_default_looking
         - fail_if_product_surface_fidelity_or_formula_truthfulness_is_unverified
       output_file_template: records/validation/LQ-XXXX.yaml
-    - step_id: 11_delivery_launch
+    - step_id: 12_delivery_launch
       agent_tier: mini
-      model_policy_ref: MODEL-005.delivery_assembly
+      model_policy_ref: MODEL-006.delivery_assembly
       action:
         - assemble_delivery_package
         - prepublish_validate
@@ -250,6 +277,7 @@ FLOW-005:
           - working_capacity_pass_or_not_applicable_with_reason
           - period_continuity_pass_or_not_applicable_with_reason
           - protection_truthfulness_pass
+          - founder_acceptance_pass
           - buyer_experience_pass
           - product_visual_quality_pass
           - listing_quality_gate_pass
@@ -257,28 +285,28 @@ FLOW-005:
           - publish_blockers_absent
         external_publish_requires_human_approval: true
       output_file_template: records/validation/LR-XXXX.yaml
-    - step_id: 12_monthly_outcomes
+    - step_id: 13_monthly_outcomes
       agent_tier: mini
-      model_policy_ref: MODEL-005.post_launch_ledgers_and_rules
+      model_policy_ref: MODEL-006.post_launch_ledgers_and_rules
       action:
         - record_monthly_outcomes
-    - step_id: 13_competitor_purchase_accounting
+    - step_id: 14_competitor_purchase_accounting
       agent_tier: mini
-      model_policy_ref: MODEL-005.post_launch_ledgers_and_rules
+      model_policy_ref: MODEL-006.post_launch_ledgers_and_rules
       action:
         - count_competitor_purchase_cost_once
-    - step_id: 14_kill_rules
+    - step_id: 15_kill_rules
       agent_tier: mini
-      model_policy_ref: MODEL-005.post_launch_ledgers_and_rules
+      model_policy_ref: MODEL-006.post_launch_ledgers_and_rules
       action:
         - apply_kill_rules
-    - step_id: 15_resource_allocation_rules
+    - step_id: 16_resource_allocation_rules
       agent_tier: mini
-      model_policy_ref: MODEL-005.post_launch_ledgers_and_rules
+      model_policy_ref: MODEL-006.post_launch_ledgers_and_rules
       action:
         - apply_resource_allocation_rules
-    - step_id: 16_company_metrics
+    - step_id: 17_company_metrics
       agent_tier: mini
-      model_policy_ref: MODEL-005.post_launch_ledgers_and_rules
+      model_policy_ref: MODEL-006.post_launch_ledgers_and_rules
       action:
         - aggregate_company_metrics
