@@ -66,6 +66,8 @@ stage_dispatch:
       dispatch_action: switch_session_model
       deterministic_subgates:
         - artifact_integrity_audit
+        - buyer_behavior_walkthrough_validation
+        - executable_adversarial_scenario_validation
         - formula_truth_table_validation
         - period_continuity_validation
         - protection_truthfulness_validation
@@ -89,6 +91,12 @@ stage_dispatch:
       dispatch_action: switch_session_model
     11_listing_quality_gate:
       model_policy_ref: MODEL-006.listing_quality_gate
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      dispatch_action: switch_session_model
+    11b_pre_mortem_failure_analysis:
+      model_policy_ref: MODEL-006.pre_mortem_failure_analysis
       governed_model_tier: frontier
       requested_model: gpt-5.5
       runtime_resolved_model_id: openai/gpt-5.5

@@ -11,6 +11,7 @@ founder_acceptance_corpus:
       required_checks:
         - push_input_rows_beyond_seed_sample
         - add_realistic_inventory_or_transaction_volume_when_spreadsheet_applicable
+        - run_the_buyer_behavior_loop_from_visible_instructions_to_next_action
         - verify_formula_ranges_totals_dashboards_charts_and_protection_after_capacity_pressure
         - fail_if_seed_rows_are_the_only_coherent_workflow
         - fail_if_visible_workbook_capacity_matches_or_barely_exceeds_prior_demo_version
@@ -22,6 +23,11 @@ founder_acceptance_corpus:
         - first_tab_and_next_action_are_obvious
         - inputs_outputs_and_generated_areas_are_visually_distinct
         - buyer_decision_outputs_answer_the_primary_jtbd
+        - buyer_decision_outputs_are_machine_checkable_in_the_artifact
+        - buyer_decision_outputs_map_to_understandable_next_actions
+        - adversarial_buyer_scenarios_are_mutated_in_the_artifact_not_only_described_in_records
+        - domain_invariants_are_flagged_or_blocked_before_any_healthy_success_or_no_action_status
+        - required_kpp_outputs_have_artifact_locations_formula_or_logic_sources_and_mutation_evidence
         - no_hidden_assumptions_only_the_builder_understands
         - real_buyer_capacity_is_obvious_without_builder_explanation
     - lane_id: in_product_human_wording_review
@@ -123,6 +129,28 @@ founder_acceptance_corpus:
         - reason_to_believe_does_not_support_the_specific_image_promise
         - kpp_is_not_aligned_to_the_primary_jtbd
       repair_expectation: rewrite_each_claim_as_one_buyer_promise_with_one_matching_product_specific_rtb
+    - pattern_id: jtbd_defined_as_output_not_behavior
+      severity: blocker
+      description: JTBD is defined as a promise, product category, feature scope, or output list instead of a real buyer behavior loop leading to a next action.
+      reject_when:
+        - buyer_trigger_starting_state_behavior_steps_expected_outcome_next_action_or_failure_states_are_missing
+        - required_inputs_do_not_map_to_specific_buyer_behavior_steps
+        - transformations_exist_to_create_impressive_outputs_but_not_to_support_the_buyer_next_action
+        - decision_outputs_do_not_tell_the_buyer_what_to_do_next
+        - domain_invariants_are_missing_or_allow_impossible_unsafe_or_bad_business_states_to_pass_as_healthy_successful_or_no_action
+        - adversarial_buyer_scenarios_are_missing_or_are_not_executed_against_the_artifact
+      repair_expectation: restart_from_alignment_or_propagation_spec_and_define_buyer_behavior_contract_before_build
+    - pattern_id: jtbd_decision_outputs_missing
+      severity: blocker
+      description: The product uses JTBD/KPP/RTB wording but does not produce the machine-checkable buyer decision outputs needed for the primary job.
+      reject_when:
+        - machine_checkable_product_contract_is_missing_before_build
+        - primary_buyer_decision_outputs_are_missing_from_the_artifact
+        - required_decision_outputs_exist_only_in_records_or_listing_copy
+        - kpp_is_satisfied_by_status_labels_dashboard_counts_or_feature_presence_instead_of_the_promised_decision
+        - setup_inputs_do_not_drive_downstream_outputs_or_have_a_declared_default_prefill_role
+        - qa_does_not_mutate_domain_inputs_that_should_change_the_primary_decision_outputs
+      repair_expectation: define_the_primary_buyer_decision_contract_before_build_then rebuild_and_test_artifact_outputs_against_that_contract
     - pattern_id: competitor_failure_treated_as_blocker
       severity: blocker
       description: Purchased competitor breakage blocks or distorts our build instead of becoming evidence.

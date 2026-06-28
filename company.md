@@ -43,10 +43,18 @@ delivery =
 - troubleshooting
 - compatibility help
 
-FLOW-005 keeps the three-part offer structure intact while preserving mandatory competitor inspection and tightening the product chain around insight, promise, proof, and hook.
+FLOW-006 keeps the three-part offer structure intact while preserving mandatory competitor inspection, founder acceptance, a machine-checkable JTBD/KPP/RTB product contract before build, and pre-launch failure analysis before delivery launch.
 Market evidence determines what to offer.
 Domain expertise determines how to implement and test the evidence-backed offer correctly.
 Generation cost is budgeted separately from competitor purchase spend, and canonical model IDs are preferred over legacy aliases.
+
+## Company Memory
+
+Company-level rule changes must preserve their reasons in `docs/COMPANY-MEMORY.md`.
+
+That memory is not a technical changelog. It records why flows, schemas, gates, budgets, validators, and governance rules changed, what failure caused the change, and what future failure the company is trying to prevent.
+
+Material governance or flow changes are incomplete until the company memory is updated.
 
 Good enough means:
 
@@ -56,6 +64,7 @@ Good enough means:
 - addresses major recurring actionable complaints
 - use human-friendly controls when promised, for example visible checkbox controls instead of exposed TRUE/FALSE spreadsheet values
 - keep every listing claim verifiable against the delivered product
+- run an evidence-bound pre-mortem on the complete product/listing/delivery offer before delivery launch
 - stop building once the promise is met and recurring actionable complaints are addressed
 - no critical defects
 - launched within constraints

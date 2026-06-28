@@ -6,6 +6,7 @@ governance_rules:
   build_lifecycle: BLS-006
   model_routing: MODEL-006
   stage_dispatch: governance/09_stage_dispatch_006.yaml
+  company_memory: docs/COMPANY-MEMORY.md
  superseded_rule_contracts:
   - FLOW-001
   - FLOW-002
@@ -21,11 +22,6 @@ governance_rules:
   - MODEL-002
   - MODEL-003
   - governance/09_stage_dispatch_003.yaml
-  - FLOW-005
-  - SCHEMA-005
-  - BLS-005
-  - MODEL-005
-  - governance/09_stage_dispatch_005.yaml
  human_owned:
   - objective
   - constraints
@@ -40,6 +36,7 @@ governance_rules:
   - BLS-006
   - MODEL-006
   - governance/09_stage_dispatch_006.yaml
+  - docs/COMPANY-MEMORY.md
 
  agent_owned:
   - workflow_execution
@@ -84,6 +81,7 @@ governance_rules:
   - launch_requires_generation_budget_pass
   - responses_api_is_preferred_when_supported_safely
   - structured_outputs_must_be_schema_validated_when_supported
+  - material_flow_or_governance_changes_must_update_company_memory_with_reason_failure_learning_and_prevention_target
 
  real_launched_products_require_real_marketplace_listing_url: true
 

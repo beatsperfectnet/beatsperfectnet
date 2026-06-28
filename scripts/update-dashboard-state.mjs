@@ -7,6 +7,17 @@ import YAML from "yaml";
 
 const repoRoot = process.cwd();
 
+const activeContractRefs = [
+  "workflows/FLOW-006.yaml",
+  "specs/SCHEMA-006.yaml",
+  "specs/MODEL-006.yaml",
+  "specs/BLS-006.yaml",
+  "specs/FOUNDER-ACCEPTANCE-CORPUS-001.yaml",
+  "governance/05_governance_rules.yaml",
+  "governance/08_product_generation_budget_006.yaml",
+  "governance/09_stage_dispatch_006.yaml",
+];
+
 const stageTimeline = [
   { stageGroup: "admission", stepIds: ["00_candidate_admission"] },
   { stageGroup: "read", stepIds: ["01_public_shelf_read"] },
@@ -20,6 +31,7 @@ const stageTimeline = [
   { stageGroup: "optional", stepIds: ["09_optional_supporting_feature_pass"] },
   { stageGroup: "listing", stepIds: ["10_listing_creative_assembly"] },
   { stageGroup: "gate", stepIds: ["11_listing_quality_gate"] },
+  { stageGroup: "pre_mortem", stepIds: ["11b_pre_mortem_failure_analysis"] },
   { stageGroup: "launch", stepIds: ["12_delivery_launch"] },
   {
     stageGroup: "post_launch",
@@ -37,6 +49,17 @@ function readYaml(relativePath) {
   const absolutePath = path.join(repoRoot, relativePath);
   if (!fs.existsSync(absolutePath)) return null;
   return YAML.parse(fs.readFileSync(absolutePath, "utf8"));
+}
+
+function fileMtimeMs(relativePath) {
+  if (!relativePath) return 0;
+  const absolutePath = path.join(repoRoot, String(relativePath).split("#")[0]);
+  if (!fs.existsSync(absolutePath)) return 0;
+  return fs.statSync(absolutePath).mtimeMs;
+}
+
+function latestMtimeMs(relativePaths) {
+  return Math.max(0, ...relativePaths.map(fileMtimeMs));
 }
 
 function readYamlFiles(relativeDir) {
@@ -81,12 +104,26 @@ function stageGroupForStep(stepId) {
   return stageTimeline.find((stage) => stage.stepIds.includes(stepId))?.stageGroup ?? null;
 }
 
+function stepForEscalationStage(stageGroup) {
+  const normalized = String(stageGroup || "").trim().toLowerCase();
+  const map = {
+    flow_governance: "04_alignment_synthesis",
+    product_quality: "07_propagation_buyer_experience_product_visual_qa",
+    product_model: "05_one_promise_propagation_system_spec",
+    buyer_safety: "05_one_promise_propagation_system_spec",
+    purchase: "02_mandatory_competitor_purchase",
+    mandatory_competitor_purchase: "02_mandatory_competitor_purchase",
+  };
+  return map[normalized] || null;
+}
+
 function normalizeCurrentStep(candidate) {
   const raw = String(candidate.current_stage || "").trim();
   if (stageTimeline.some((stage) => stage.stepIds.includes(raw))) return raw;
 
   const aliases = {
     purchase_approval: "02_mandatory_competitor_purchase",
+    mandatory_competitor_purchase: "02_mandatory_competitor_purchase",
     publish_pending: "12_delivery_launch",
     marketplace_publish: "12_delivery_launch",
     ready_for_marketplace_publish: "12_delivery_launch",
@@ -112,10 +149,12 @@ function candidateTitle(candidate) {
 }
 
 function candidateTitleById(candidateId) {
-  const candidate = readYamlFiles("records/candidates")
-    .flatMap((entry) => entry.doc?.candidates || [])
-    .find((item) => item?.candidate_id === candidateId);
+  const candidate = allCandidates().find((item) => item?.candidate_id === candidateId);
   return candidate ? candidateTitle(candidate) : candidateId;
+}
+
+function allCandidates() {
+  return readYamlFiles("records/candidates").flatMap((entry) => entry.doc?.candidates || []);
 }
 
 function launchRecord(candidate) {
@@ -159,6 +198,22 @@ function productApiCostForCandidate(candidateId) {
   );
 }
 
+function rejectedProductCandidateIds(candidates = allCandidates()) {
+  const ids = new Set();
+  for (const entry of readYamlFiles("records/validation")) {
+    const review = entry.doc?.launch_review;
+    if (review?.candidate_ref && isRejectedLaunch(review)) {
+      ids.add(review.candidate_ref);
+    }
+  }
+  return ids;
+}
+
+function rejectedProductCostEntries(entries = ledgerEntries(), candidates = allCandidates()) {
+  const rejectedIds = rejectedProductCandidateIds(candidates);
+  return entries.filter((entry) => entry.bucket === "product_generation" && rejectedIds.has(entry.candidate_id));
+}
+
 function todayLedgerEntries() {
   const today = todayBerlinDate();
   return ledgerEntries().filter((entry) => ledgerEntryDate(entry) === today);
@@ -167,6 +222,32 @@ function todayLedgerEntries() {
 function todayHumanEscalations() {
   const today = todayBerlinDate();
   return humanEscalations().filter((entry) => ledgerEntryDate(entry) === today);
+}
+
+function latestHumanEscalationForCandidate(candidate) {
+  const candidateId = candidate?.candidate_id;
+  const entries = todayHumanEscalations().filter((entry) => {
+    const entryCandidate = String(entry.candidate_id || "").trim();
+    return entryCandidate === candidateId || (!entryCandidate && String(entry.stage_group || "") === "flow_governance");
+  });
+  return entries.at(-1) || null;
+}
+
+function latestHumanEscalationForDashboard(candidates) {
+  const candidateIds = new Set(candidates.map((candidate) => candidate.candidate_id));
+  const entries = todayHumanEscalations().filter((entry) => {
+    const entryCandidate = String(entry.candidate_id || "").trim();
+    return !entryCandidate || candidateIds.has(entryCandidate);
+  });
+  return entries.at(-1) || null;
+}
+
+function activeContractChangedAfterCandidateReview(candidate) {
+  const reviewRef = candidate?.launch_review_result;
+  if (!reviewRef) return false;
+  const reviewMtime = fileMtimeMs(reviewRef);
+  if (!reviewMtime) return false;
+  return latestMtimeMs(activeContractRefs) > reviewMtime;
 }
 
 function costBreakdown(entries) {
@@ -197,7 +278,7 @@ function todayLogEntries() {
             ? "governance_cost"
             : "other",
       label: isFlowTransition
-        ? "FLOW-005 to FLOW-006"
+        ? "Archived flow to FLOW-006"
         : bucket === "product_generation"
           ? `${entry.product_name || "Product"} product API`
           : "Governance cost",
@@ -288,13 +369,21 @@ function healthFor(candidate) {
 
 function publicCandidateSnapshot(candidate) {
   const status = outcomeStatus(candidate);
-  const currentStepId = normalizeCurrentStep(candidate);
+  const humanEscalation = latestHumanEscalationForCandidate(candidate);
+  const escalationStepId = stepForEscalationStage(humanEscalation?.stage_group);
+  const contractInvalidatesReview = activeContractChangedAfterCandidateReview(candidate);
+  const currentStepId = contractInvalidatesReview ? "04_alignment_synthesis" : (escalationStepId || normalizeCurrentStep(candidate));
   const currentStageGroup = currentStepId ? stageGroupForStep(currentStepId) : null;
   const launch = launchRecord(candidate);
   const terminalReason = status === "rejected_before_launch"
     ? launch?.decisionSummary || launch?.reason || launch?.result || "Rejected before marketplace launch."
     : undefined;
   const health = healthFor(candidate);
+  const stageReason = humanEscalation?.reason
+    ? String(humanEscalation.reason)
+    : contractInvalidatesReview
+      ? "Active FLOW-006 contract changed after the last launch review; product is not ready for publish and must rerun from synthesis."
+      : undefined;
 
   return {
     candidateId: candidate.candidate_id,
@@ -303,6 +392,7 @@ function publicCandidateSnapshot(candidate) {
     outcomeStatus: status,
     ...(currentStepId ? { currentStepId } : {}),
     ...(currentStageGroup ? { currentStageGroup } : {}),
+    ...(stageReason ? { stageReason } : {}),
     totalTokensUsed: Number(candidate.cumulative_total_tokens || 0),
     totalUsdSpent: productApiCostForCandidate(candidate.candidate_id),
     launchTokens: 0,
@@ -311,7 +401,7 @@ function publicCandidateSnapshot(candidate) {
     refundTokens: 0,
     refundCount: 0,
     budgetHealth: health.budgetHealth,
-    processHealth: health.processHealth,
+    processHealth: contractInvalidatesReview ? "yellow" : health.processHealth,
     ...(terminalReason ? { terminalReason } : {}),
   };
 }
@@ -322,6 +412,62 @@ function activeFlow006Candidates() {
     .filter((candidate) => candidate?.candidate_id)
     .filter((candidate) => String(candidate.original_flow_contract_ref || "").includes("FLOW-006"))
     .filter((candidate) => !isExcludedFromActiveDashboard(candidate));
+}
+
+function activePurchaseEscalation(candidates) {
+  const pendingPurchaseCandidate = candidates.find((candidate) => {
+    const currentStepId = normalizeCurrentStep(candidate);
+    return currentStepId === "02_mandatory_competitor_purchase" && String(candidate.purchase_status || "") !== "complete";
+  });
+  if (!pendingPurchaseCandidate) return null;
+
+  return {
+    status: "pending",
+    scope: "build",
+    candidateId: pendingPurchaseCandidate.candidate_id,
+    candidateLabel: pendingPurchaseCandidate.idea_ref || "",
+    candidateTitle: candidateTitle(pendingPurchaseCandidate),
+    reason: "Competitor purchase requires human approval before external spend.",
+    recommendedAction: "Approve or reject the purchase before continuing FLOW-006.",
+    governanceFile: "governance/09_stage_dispatch_006.yaml",
+  };
+}
+
+function contractChangeEscalation(candidates) {
+  const candidate = candidates.find(activeContractChangedAfterCandidateReview);
+  if (!candidate) return null;
+  return {
+    status: "pending",
+    scope: "build",
+    candidateId: candidate.candidate_id,
+    candidateLabel: candidate.idea_ref || "",
+    candidateTitle: candidateTitle(candidate),
+    reason: "Active FLOW-006 contract changed after this candidate's last launch review.",
+    recommendedAction: "Rerun from 04_alignment_synthesis so the dashboard and artifact state match the live flow.",
+    governanceFile: "governance/09_stage_dispatch_006.yaml",
+  };
+}
+
+function humanEscalationDashboardState(escalation, candidates) {
+  if (!escalation) return null;
+  const candidateId = String(escalation.candidate_id || "").trim();
+  const candidate = candidateId
+    ? candidates.find((item) => item.candidate_id === candidateId)
+    : candidates.find((item) => String(item.original_flow_contract_ref || "").includes("FLOW-006"));
+  const scope = String(escalation.stage_group || "").includes("post_launch") ? "post_launch" : "build";
+  const outcome = String(escalation.outcome || "").trim();
+  return {
+    status: outcome ? "resolved" : "pending",
+    scope,
+    candidateId: candidate?.candidate_id || candidateId,
+    candidateLabel: candidate?.idea_ref || "",
+    candidateTitle: candidate ? candidateTitle(candidate) : candidateId,
+    reason: String(escalation.reason || ""),
+    recommendedAction: outcome
+      ? `Recorded outcome: ${outcome}.`
+      : "Resolve the human-requested product or flow change before continuing.",
+    governanceFile: "governance/09_stage_dispatch_006.yaml",
+  };
 }
 
 function sum(items, getter) {
@@ -382,10 +528,13 @@ function latestRejectedLaunch() {
 function periodState() {
   const rejectedLaunch = latestRejectedLaunch();
   const today = todayBerlinDate();
-  const allCosts = costBreakdown(ledgerEntries());
+  const candidates = allCandidates();
+  const allEntries = ledgerEntries();
+  const allCosts = costBreakdown(allEntries);
+  const rejectedProductApiCostUsd = sumLedger(rejectedProductCostEntries(allEntries, candidates));
   const dates = Array.from(new Set([
     ...(rejectedLaunch?.reviewedAt ? [rejectedLaunch.reviewedAt] : []),
-    ...ledgerEntries().map(ledgerEntryDate).filter(Boolean),
+    ...allEntries.map(ledgerEntryDate).filter(Boolean),
     today,
   ])).sort();
   const rejectedCount = rejectedLaunch ? 1 : 0;
@@ -407,17 +556,19 @@ function periodState() {
       postLaunchSupportTokensTotal: 0,
       refundTokensTotal: 0,
       refundCountTotal: 0,
-      usdTotalSpend: usdSpend,
+      usdTotalSpend: allCosts.totalApiCostUsd,
       totalApiCostUsd: allCosts.totalApiCostUsd,
       productApiCostUsd: allCosts.productApiCostUsd,
       governanceApiCostUsd: allCosts.governanceApiCostUsd,
       unallocatedApiCostUsd: allCosts.unallocatedApiCostUsd,
+      rejectedProductApiCostUsd,
       humanEscalationsTotal: humanEscalations().length,
       avgModelTokensPerLaunch: rejectedCount ? modelTokens : 0,
       avgUsdSpendPerLaunch: rejectedCount ? usdSpend : 0,
     },
     buckets: dates.map((date) => {
-      const dateCosts = costBreakdown(ledgerEntries().filter((entry) => ledgerEntryDate(entry) === date));
+      const dateEntries = allEntries.filter((entry) => ledgerEntryDate(entry) === date);
+      const dateCosts = costBreakdown(dateEntries);
       const dateEscalations = humanEscalations().filter((entry) => ledgerEntryDate(entry) === date).length;
       const rejectedOnDate = rejectedLaunch?.reviewedAt === date;
       return {
@@ -430,6 +581,7 @@ function periodState() {
         productApiCostUsd: dateCosts.productApiCostUsd,
         governanceApiCostUsd: dateCosts.governanceApiCostUsd,
         unallocatedApiCostUsd: dateCosts.unallocatedApiCostUsd,
+        rejectedProductApiCostUsd: sumLedger(rejectedProductCostEntries(dateEntries, candidates)),
         humanEscalations: dateEscalations,
         launchTokens: rejectedOnDate ? 420 : 0,
         governanceTokens: rejectedOnDate ? 140 : 0,
@@ -442,9 +594,22 @@ function periodState() {
 }
 
 function buildDashboardState() {
-  const candidates = activeFlow006Candidates().map(publicCandidateSnapshot);
+  const rawCandidates = activeFlow006Candidates();
+  const candidates = rawCandidates.map(publicCandidateSnapshot);
   const byStatus = (status) => candidates.filter((candidate) => candidate.outcomeStatus === status);
-  const activeCandidate = byStatus("in_flight")[0] || byStatus("pipeline")[0] || null;
+  const contractEscalation = contractChangeEscalation(rawCandidates);
+  const humanEscalation = humanEscalationDashboardState(latestHumanEscalationForDashboard(rawCandidates), rawCandidates);
+  const purchaseEscalation = activePurchaseEscalation(rawCandidates);
+  const activeEscalation = contractEscalation || humanEscalation || purchaseEscalation || {
+    status: "none",
+    scope: "build",
+    candidateId: "",
+    candidateLabel: "",
+    candidateTitle: "",
+    reason: "",
+    recommendedAction: "",
+    governanceFile: "governance/09_stage_dispatch_006.yaml",
+  };
 
   return {
     today: {
@@ -463,27 +628,7 @@ function buildDashboardState() {
       inFlightCandidates: byStatus("in_flight"),
       launchedCandidates: byStatus("launched"),
       rejectedCandidates: byStatus("rejected_before_launch"),
-      activeEscalation: activeCandidate?.currentStepId === "02_mandatory_competitor_purchase"
-        ? {
-            status: "pending",
-            scope: "build",
-            candidateId: activeCandidate.candidateId,
-            candidateLabel: activeCandidate.candidateLabel,
-            candidateTitle: activeCandidate.candidateTitle,
-            reason: "Competitor purchase requires human approval before external spend.",
-            recommendedAction: "Approve or reject the purchase before continuing FLOW-006.",
-            governanceFile: "governance/09_stage_dispatch_006.yaml",
-          }
-        : {
-            status: "none",
-            scope: "build",
-            candidateId: "",
-            candidateLabel: "",
-            candidateTitle: "",
-            reason: "",
-            recommendedAction: "",
-            governanceFile: "governance/09_stage_dispatch_006.yaml",
-          },
+      activeEscalation,
     },
     period: periodState(),
   };

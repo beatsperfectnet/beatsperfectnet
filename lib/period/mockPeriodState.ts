@@ -34,6 +34,7 @@ export const mockPeriodState: PeriodState = {
     productApiCostUsd: 0,
     governanceApiCostUsd: 0,
     unallocatedApiCostUsd: 0,
+    rejectedProductApiCostUsd: 0,
     humanEscalationsTotal: 0,
     avgModelTokensPerLaunch: 31_800,
     avgUsdSpendPerLaunch: 24.96
@@ -49,6 +50,7 @@ export const mockPeriodState: PeriodState = {
       productApiCostUsd: 0,
       governanceApiCostUsd: 0,
       unallocatedApiCostUsd: 0,
+      rejectedProductApiCostUsd: 0,
       humanEscalations: 0,
       launchTokens: 420,
       governanceTokens: 140,

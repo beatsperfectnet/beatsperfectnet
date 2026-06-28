@@ -75,11 +75,6 @@ if (args.update) {
 
 run("npm", ["run", "validate:flow-006"]);
 
-const staged = gitOutput(["diff", "--cached", "--name-only"]);
-if (staged) {
-  throw new Error(`Refusing to publish with pre-existing staged changes:\n${staged}`);
-}
-
 const changedDashboard = spawnSync("git", ["diff", "--quiet", "--", "records/dashboard_state.yaml"]);
 if (changedDashboard.status === 0) {
   process.stdout.write("No dashboard state changes to publish.\n");
@@ -97,5 +92,5 @@ if (args.dryRun) {
 
 run("git", ["add", "records/dashboard_state.yaml"]);
 const commitMessage = args.message || `Update dashboard state ${new Date().toISOString()}`;
-run("git", ["commit", "-m", commitMessage]);
+run("git", ["commit", "--only", "records/dashboard_state.yaml", "-m", commitMessage]);
 run("git", ["push", "origin", "main"]);

@@ -11,6 +11,7 @@ export type FlowStepId =
   | "09_optional_supporting_feature_pass"
   | "10_listing_creative_assembly"
   | "11_listing_quality_gate"
+  | "11b_pre_mortem_failure_analysis"
   | "12_delivery_launch"
   | "13_monthly_outcomes"
   | "14_competitor_purchase_accounting"
@@ -31,6 +32,7 @@ export type StageGroup =
   | "optional"
   | "listing"
   | "gate"
+  | "pre_mortem"
   | "launch"
   | "post_launch";
 
@@ -54,6 +56,7 @@ export type TodayCandidateSnapshot = {
   outcomeStatus: TodayOutcomeStatus;
   currentStepId?: FlowStepId;
   currentStageGroup?: StageGroup;
+  stageReason?: string;
   totalTokensUsed: number;
   totalUsdSpent: number;
   launchTokens: number;
@@ -73,7 +76,7 @@ export type TodayCandidateSnapshot = {
 export type TodayState = {
   asOf: string;
   dataMode: "mock" | "event-log";
-  flowVersion: "FLOW-005" | "FLOW-006";
+  flowVersion: "FLOW-006";
   flowTimeline?: Array<{
     stageGroup: StageGroup;
     stepIds: FlowStepId[];

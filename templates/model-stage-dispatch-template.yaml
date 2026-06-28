@@ -2,7 +2,7 @@ model_stage_dispatch:
   run_id:
   created_at:
   workflow_contract_ref:
-  contract_ref: governance/09_stage_dispatch_005.yaml
+  contract_ref: governance/09_stage_dispatch_006.yaml
   exact_model_match_required: true
   overall_dispatch_match:
   notes:

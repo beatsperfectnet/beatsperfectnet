@@ -10,9 +10,7 @@
     "dashboard:update": "node scripts/update-dashboard-state.mjs",
     "dashboard:publish": "node scripts/publish-dashboard-state.mjs",
     "validate:competitive-purchase": "node scripts/validate-competitive-purchase-approvals.mjs",
-    "validate:flow-005": "node validators/flow-005-validator.mjs",
     "validate:flow-006": "node validators/flow-006-validator.mjs",
-    "test:flow-005": "node --test tests/flow-005.test.mjs",
     "test:flow-006": "node --test tests/flow-006.test.mjs"
   },
   "dependencies": {

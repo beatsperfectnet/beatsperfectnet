@@ -379,8 +379,6 @@ function collectGovernanceRefs() {
     'governance/05_governance_rules.yaml',
     'governance/06_resource_allocation.yaml',
     'governance/07_capacity_model.yaml',
-    'governance/08_product_generation_budget_005.yaml',
-    'governance/09_stage_dispatch_005.yaml',
     'governance/08_product_generation_budget_006.yaml',
     'governance/09_stage_dispatch_006.yaml',
   ];
@@ -464,11 +462,16 @@ function calculateStageCostUsd(pricingSnapshot, runtimeModelId, inputTokens, cac
   return Number((inputCost + cachedInputCost + outputCost).toFixed(6));
 }
 
+function stageNumberFromId(stageId) {
+  const match = String(stageId).match(/^(\d+)/);
+  return match ? Number(match[1]) : NaN;
+}
+
 function stageOutputBudgetLimit(stagePolicy, stageId) {
   if (Number.isFinite(Number(stagePolicy?.default_max_output_tokens))) {
     return Number(stagePolicy.default_max_output_tokens);
   }
-  const stageNumber = Number(String(stageId).split('_')[0]);
+  const stageNumber = stageNumberFromId(stageId);
   if (!Number.isFinite(stageNumber)) return 0;
   if (stageNumber <= 5) return 8000;
   if (stageNumber <= 10) return 16000;
@@ -485,7 +488,7 @@ function stageUsesBudget(stageId) {
 
 function stageBeforeInitialQa(stageId) {
   return String(stageId) !== '20_quality_qa'
-    && Number(String(stageId).split('_')[0]) < 20;
+    && stageNumberFromId(stageId) < 20;
 }
 
 function budgetPreflight({
@@ -1005,7 +1008,7 @@ async function main() {
     const protectedFutureReserveUsd = stageBeforeInitialQa(stage.step_id)
       ? Number(generationBudget.protected_qa_and_fix_reserve_usd || 0)
       : 0;
-    if (!sharedResearchAllocated && Number(String(stage.step_id).split('_')[0]) >= 6) {
+    if (!sharedResearchAllocated && stageNumberFromId(stage.step_id) >= 6) {
       sharedResearchAllocationUsd = Number((sharedResearchActualCostUsd / candidateCount).toFixed(6));
       sharedResearchAllocated = true;
       cumulativeGenerationCostUsd = Number((cumulativeGenerationCostUsd + sharedResearchAllocationUsd).toFixed(6));
@@ -1098,7 +1101,7 @@ async function main() {
       + Number(budgetPreflightResult.estimated_paid_tool_cost_usd || 0)).toFixed(6));
     if (!isHumanGate && !args.dryRun) {
       cumulativeGenerationCostUsd = Number((cumulativeGenerationCostUsd + stageTotalCostUsd).toFixed(6));
-      if (Number(String(stage.step_id).split('_')[0]) <= 5) {
+      if (stageNumberFromId(stage.step_id) <= 5) {
         sharedResearchActualCostUsd = Number((sharedResearchActualCostUsd + stageTotalCostUsd).toFixed(6));
       }
     }

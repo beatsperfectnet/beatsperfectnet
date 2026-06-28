@@ -112,9 +112,7 @@ Run before final handoff:
 
 ```bash
 npm run dashboard:update
-npm run validate:flow-005
 npm run validate:flow-006
-npm run test:flow-005
 npm run test:flow-006
 npm run build
 ```

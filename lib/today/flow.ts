@@ -54,6 +54,10 @@ export const stageLabels: Array<{ label: StageGroup; steps: FlowStepId[] }> = [
     steps: ["11_listing_quality_gate"]
   },
   {
+    label: "pre_mortem",
+    steps: ["11b_pre_mortem_failure_analysis"]
+  },
+  {
     label: "launch",
     steps: ["12_delivery_launch"]
   },

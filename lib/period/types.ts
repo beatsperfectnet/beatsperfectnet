@@ -8,6 +8,7 @@ export type PeriodBucket = {
   productApiCostUsd: number;
   governanceApiCostUsd: number;
   unallocatedApiCostUsd: number;
+  rejectedProductApiCostUsd: number;
   humanEscalations: number;
   launchTokens: number;
   governanceTokens: number;
@@ -20,7 +21,7 @@ export type PeriodState = {
   from: string;
   to: string;
   dataMode: "mock" | "event-log";
-  flowVersion: "FLOW-005" | "FLOW-006";
+  flowVersion: "FLOW-006";
   rejectedLaunch?: {
     reviewId: string;
     candidateId: string;
@@ -46,6 +47,7 @@ export type PeriodState = {
     productApiCostUsd: number;
     governanceApiCostUsd: number;
     unallocatedApiCostUsd: number;
+    rejectedProductApiCostUsd: number;
     humanEscalationsTotal: number;
     avgModelTokensPerLaunch: number;
     avgUsdSpendPerLaunch: number;

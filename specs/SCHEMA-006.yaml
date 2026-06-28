@@ -68,6 +68,7 @@ SCHEMA-006:
       - classified_findings
       - competitor_failure_classification
       - benchmark_adequacy
+      - domain_standard_decision_outputs
       - additional_purchase_escalation
       - rtb_evidence_classification
       - downstream_artifact_audit_requirements
@@ -85,10 +86,21 @@ SCHEMA-006:
       - kpp_quality_check
       - rtb_quality_check
       - evidence_to_claim_map
+      - buyer_behavior_loop
+      - machine_checkable_contract_seed
   propagation_system_spec:
     required_top_level_fields:
       - candidate_id
       - alignment_chain_ref
+      - buyer_behavior_contract
+      - machine_checkable_product_contract
+      - primary_buyer_decision_contract
+      - input_to_decision_map
+      - buyer_behavior_to_input_transformation_output_map
+      - next_action_map
+      - domain_invariants
+      - domain_standard_requirements
+      - forbidden_shallow_substitutes
       - promise_supported
       - system_name
       - system_type
@@ -113,8 +125,13 @@ SCHEMA-006:
       - excluded_scope
       - formula_protection_mode
       - competitor_failure_handling
+      - benchmark_adequacy_resolution
       - artifact_integrity_audit_requirements
       - formula_truth_table_tests
+      - jtbd_truth_table_tests
+      - adversarial_buyer_scenarios
+      - demo_vs_working_capacity_policy
+      - setup_input_propagation_requirements
       - boundary_mutation_tests
       - time_horizon_model
       - period_model
@@ -125,6 +142,8 @@ SCHEMA-006:
     required_top_level_fields:
       - candidate_id
       - propagation_system_spec_ref
+      - buyer_behavior_contract_ref
+      - machine_checkable_product_contract_ref
       - product_artifacts
       - artifact_version
       - implemented_system_name
@@ -134,6 +153,10 @@ SCHEMA-006:
       - canonical_sources_or_structure
       - transformations_or_use_path
       - output_or_completion_surfaces
+      - primary_buyer_decision_outputs
+      - buyer_behavior_to_next_action_manifest
+      - adversarial_scenario_coverage_manifest
+      - jtbd_output_manifest
       - hook_surface
       - visual_reference_contract_applied
       - brandbook_ref
@@ -146,6 +169,7 @@ SCHEMA-006:
       - artifact_integrity_manifest
       - formula_inventory
       - editable_range_inventory
+      - setup_input_usage_manifest
       - working_capacity_manifest
       - visible_capacity_manifest
       - artifact_delta_against_prior
@@ -169,7 +193,14 @@ SCHEMA-006:
       - failure_classification
       - product_repair_count
       - artifact_integrity_audit
+      - buyer_behavior_walkthrough_results
+      - executable_adversarial_scenario_results
       - formula_truth_table_results
+      - jtbd_truth_table_results
+      - primary_buyer_decision_output_results
+      - setup_input_propagation_results
+      - machine_checkable_product_contract_results
+      - buyer_behavior_contract_results
       - boundary_mutation_results
       - working_capacity_results
       - visible_capacity_results
@@ -184,10 +215,16 @@ SCHEMA-006:
       - artifact_tested
       - qa_ref
       - founder_rejection_corpus_ref
+      - buyer_behavior_contract_ref
+      - machine_checkable_product_contract_ref
       - founder_acceptance_status
       - adversarial_rejection_attempts
       - real_human_use_pressure
+      - blind_buyer_behavior_walkthrough
       - product_logic_review
+      - adversarial_buyer_scenario_review
+      - jtbd_decision_output_review
+      - missing_decision_outputs
       - in_product_human_wording_review
       - delivery_copy_human_review
       - direct_artifact_inspection_evidence
@@ -272,18 +309,71 @@ SCHEMA-006:
       - artifact_audit_dependency
       - creative_asset_dependency
       - publish_blockers
+  pre_mortem_failure_analysis:
+    required_top_level_fields:
+      - candidate_id
+      - delivered_product_asset_refs
+      - listing_asset_refs
+      - listing_title
+      - listing_description
+      - delivery_readme_or_onboarding_ref
+      - founder_acceptance_ref
+      - qa_result_ref
+      - public_shelf_evidence_ref
+      - purchased_competitor_inspection_ref
+      - company_memory_ref
+      - assumption
+      - top_3_likely_failure_modes
+      - evidence_by_failure_mode
+      - failure_mode_classification
+      - launch_blockers
+      - watchlist_risks
+      - rerun_from_step_by_blocker
+      - post_launch_signal_by_watchlist
+      - scope_bloat_check
+      - unsupported_feature_ideas_rejected_or_downgraded
+      - one_pass_only
+      - decision
+    allowed_failure_categories:
+      - product
+      - listing
+      - delivery
+      - market_fit
+      - promise
+      - pricing
+      - trust
+    allowed_decisions:
+      - pass
+      - watchlist_only
+      - blocked
+    launch_blocker_requires:
+      - specific_preventable_cause
+      - evidence_ref
+      - earliest_relevant_rerun_step
+    watchlist_requires:
+      - post_launch_signal_to_monitor
+    feature_scope_rule:
+      feature_addition_requires_locked_buyer_behavior_jtbd_or_marketplace_evidence: true
+      unproven_failure_imagination_cannot_create_product_scope: true
   launch_package:
     required_top_level_fields:
       - candidate_id
       - product_artifacts
       - artifact_version
+      - buyer_behavior_contract_ref
+      - product_contract_ref
+      - jtbd_truth_table_ref
+      - primary_buyer_decision_output_ref
       - delivery_asset
       - founder_acceptance_ref
       - listing_assets
+      - listing_quality_gate_ref
+      - pre_mortem_failure_analysis_ref
       - passed_system
       - passed_buyer_experience_checks
       - passed_product_visual_quality
       - passed_listing_gate
+      - passed_pre_mortem_failure_analysis
       - supported_platforms
       - stated_limits
       - unsupported_actions
@@ -298,11 +388,16 @@ SCHEMA-006:
       - launch_date
       - initial_product_version_ref
       - artifact_integrity_audit_ref
+      - buyer_behavior_walkthrough_ref
+      - executable_adversarial_scenario_ref
       - formula_truth_table_ref
+      - machine_checkable_product_contract_ref
       - period_continuity_ref
       - protection_truthfulness_ref
       - artifact_delta_gate
       - cost_outcome_accountability_ref
+      - pre_mortem_launch_blockers
+      - pre_mortem_watchlist_signals
       - publish_blockers
       - external_publish_approval
     allowed_publish_statuses:
@@ -313,7 +408,12 @@ SCHEMA-006:
       - published
     ready_for_marketplace_publish_requires:
       - artifact_integrity_audit_pass
+      - buyer_behavior_contract_pass
+      - buyer_behavior_walkthrough_pass
+      - executable_adversarial_scenarios_pass
       - formula_truth_table_pass_or_not_applicable_with_reason
+      - machine_checkable_product_contract_pass
+      - jtbd_decision_outputs_pass
       - working_capacity_pass_or_not_applicable_with_reason
       - visible_human_scale_capacity_pass
       - material_artifact_delta_pass
@@ -325,5 +425,7 @@ SCHEMA-006:
       - product_visual_quality_pass
       - per_image_real_hook_pass
       - listing_quality_gate_pass
+      - pre_mortem_failure_analysis_complete
+      - pre_mortem_launch_blockers_absent
       - delivery_package_pass
       - publish_blockers_absent

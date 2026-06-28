@@ -13,6 +13,7 @@ FLOW-006:
     - specs/BLS-006.yaml
     - specs/TOOL-001.yaml
     - specs/FOUNDER-ACCEPTANCE-CORPUS-001.yaml
+    - docs/COMPANY-MEMORY.md
   run_telemetry:
     runtime_launcher_ref: runtime/model-stage-launcher.mjs
     model_usage_ledger_required: true
@@ -113,8 +114,9 @@ FLOW-006:
         - note_competitor_broken_parts_as_avoidance_examples_only
         - classify_each_competitor_finding_as_market_evidence_build_requirement_or_not_our_blocker
         - record_benchmark_adequacy_for_downstream_build
-        - escalate_for_additional_purchase_if_purchased_artifact_is_broken_unrepresentative_or_insufficient
+        - require_additional_purchase_or_equivalent_benchmark_evidence_if_purchased_artifact_is_broken_unrepresentative_or_insufficient_for_domain_standards
         - record_formula_protection_recovery_and_breakage_risks_as_testable_requirements
+        - record_domain_standard_decision_outputs_seen_or_missing_in_benchmark
         - record_boundary_rows_ranges_calculation_paths_and_platform_claim_risks_for_spreadsheets
         - record_period_model_horizon_carry_forward_and_handoff_expectations_for_periodic_products
       output_file_template: records/purchased_competitor_inspection/PCI-XXXX.yaml
@@ -126,9 +128,13 @@ FLOW-006:
         - reject_scope_lists_as_kpp
         - reject_marketplace_trust_signals_as_rtb
         - identify_one_primary_buyer_job
+        - define_one_buyer_behavior_loop_with_trigger_starting_state_steps_expected_outcome_next_action_and_failure_states
         - identify_one_kpp_as_buyer_decision_promise
         - identify_one_rtb_system_as_product_specific_proof_mechanism
         - identify_one_hook_hypothesis
+        - derive_machine_checkable_jtbd_kpp_rtb_contract_seed
+        - define_primary_buyer_decision_in_plain_operational_terms
+        - reject_jtbd_definition_that_names_only_product_category_feature_scope_or_output_without_real_buyer_behavior
         - record_excluded_scope
       output_file_template: records/alignment_chain/AC-XXXX.yaml
     - step_id: 05_one_promise_propagation_system_spec
@@ -136,6 +142,14 @@ FLOW-006:
       model_policy_ref: MODEL-006.one_promise_propagation_system_spec
       action:
         - define_one_system_name
+        - consume_alignment_chain_and_benchmark_adequacy
+        - define_buyer_behavior_contract_before_build
+        - define_machine_checkable_product_contract_before_build
+        - map_buyer_behavior_steps_to_required_inputs_transformations_decision_outputs_and_next_actions
+        - define_primary_buyer_decision_outputs_required_by_jtbd_and_kpp
+        - define_required_input_to_decision_output_map
+        - define_domain_invariants_that_must_never_be_presented_as_healthy_or_successful_states
+        - define_domain_standard_requirements_and_forbidden_shallow_substitutes
         - define_supported_platform_boundaries
         - define_support_prevention
         - define_formula_protection_mode_and_recovery
@@ -148,6 +162,10 @@ FLOW-006:
         - define_visual_reference_contract
         - define_artifact_integrity_audit_requirements
         - define_formula_truth_table_and_boundary_mutation_tests
+        - define_jtbd_truth_table_tests_generated_from_primary_buyer_decision
+        - define_adversarial_buyer_scenarios_generated_from_behavior_failures_and_domain_invariants
+        - define_demo_vs_working_capacity_policy_with_few_seed_examples_and_blank_formula_ready_capacity
+        - define_setup_input_propagation_requirements_for_every_buyer_visible_setting
         - define_time_horizon_model_before_build
         - define_period_model_carry_forward_and_handoff_requirements
         - require_rolling_horizon_for_calendar_sensitive_spreadsheets_unless_marketplace_evidence_requires_fixed_year
@@ -155,18 +173,43 @@ FLOW-006:
         - keep_competitor_failure_risks_separate_from_our_artifact_publish_blockers
         - define_publish_blockers_for_missing_or_prose_only_evidence
       output_file_template: records/propagation_system_spec/PSS-XXXX.yaml
+      gate:
+        buyer_behavior_contract_required: true
+        machine_checkable_product_contract_required: true
+        primary_buyer_decision_outputs_required: true
+        adversarial_buyer_scenarios_required: true
+        domain_invariants_required: true
+        jtbd_truth_table_required: true
+        benchmark_adequacy_resolved_before_build_required: true
+        shallow_status_or_feature_substitute_for_kpp_forbidden: true
     - step_id: 06_first_pass_connected_build
       agent_tier: medium
       model_policy_ref: MODEL-006.first_pass_connected_build
       action:
+        - consume_buyer_behavior_contract
+        - consume_machine_checkable_product_contract
         - build_minimum_connected_product
+        - implement_every_required_input_because_a_buyer_behavior_step_requires_it
+        - implement_every_transformation_because_it_converts_buyer_inputs_into_decision_outputs
+        - implement_primary_buyer_decision_outputs_from_contract
+        - implement_next_action_map_so_each_decision_output_tells_the_buyer_what_to_do
+        - implement_required_input_to_decision_output_map
+        - implement_domain_invariant_flags_or_blocks_before_any_healthy_success_status
         - build_working_capacity_product_not_demo_scale_sample
+        - keep_seed_data_to_a_small_demo_set_and_leave_remaining_working_capacity_blank_but_formula_ready
         - build_visible_buyer_usable_rows_tables_and_expansion_path_not_hidden_capacity_only
         - materially_change_any_prior_failed_good_enough_demo_artifact_before_continuing
         - implement_real_hook_surface
         - apply_brandbook_visual_identity
         - keep_editable_generated_and_protected_areas_clear
         - produce_machine_checkable_artifact_manifest
+        - record_machine_checkable_product_contract_ref
+        - record_buyer_behavior_contract_ref
+        - record_primary_buyer_decision_output_manifest
+        - record_buyer_behavior_to_next_action_manifest
+        - record_adversarial_scenario_coverage_manifest
+        - record_jtbd_output_manifest
+        - record_setup_input_usage_manifest
         - record_formula_ranges_editable_ranges_protection_mode_and_platform_claims
         - record_working_capacity_row_limits_and_expansion_behavior
         - record_visible_row_counts_table_capacity_and_prior_artifact_delta
@@ -176,6 +219,9 @@ FLOW-006:
         visible_human_scale_capacity_required: true
         material_delta_against_prior_failed_artifact_required: true
         regenerated_timestamps_do_not_count_as_artifact_delta: true
+        buyer_behavior_contract_consumed_required: true
+        machine_checkable_product_contract_consumed_required: true
+        primary_buyer_decision_outputs_implemented_required: true
       output_file_template: builds/<candidate_id>/manifest.yaml
     - step_id: 07_propagation_buyer_experience_product_visual_qa
       agent_tier: medium
@@ -183,6 +229,14 @@ FLOW-006:
       action:
         - run_deterministic_artifact_integrity_audit
         - run_formula_truth_table_tests
+        - run_jtbd_truth_table_tests_against_primary_buyer_decision_outputs
+        - run_buyer_behavior_walkthrough_tests_against_visible_workbook_instructions
+        - run_executable_adversarial_scenario_mutation_tests_on_temporary_artifact_copy
+        - run_setup_input_propagation_tests_for_every_buyer_visible_setting
+        - fail_if_mutation_tests_only_inspect_formula_references_without_recalculated_before_after_outputs
+        - fail_if_domain_invariant_violation_is_labeled_healthy_successful_or_no_action_without_review
+        - fail_if_kpp_is_satisfied_only_by_feature_list_status_label_or_dashboard_count
+        - fail_if_required_decision_output_is_missing_from_artifact
         - run_boundary_mutation_tests
         - run_working_capacity_and_row_expansion_tests_for_spreadsheets
         - run_visible_capacity_floor_tests_for_core_buyer_tables
@@ -202,6 +256,11 @@ FLOW-006:
       gate:
         artifact_integrity_audit_required: true
         spreadsheet_formula_audit_required_when_applicable: true
+        buyer_behavior_walkthrough_required: true
+        executable_adversarial_scenario_mutations_required: true
+        jtbd_truth_table_required: true
+        primary_buyer_decision_outputs_required: true
+        setup_input_propagation_required: true
         spreadsheet_capacity_audit_required_when_applicable: true
         visible_capacity_floor_required_when_applicable: true
         artifact_delta_against_prior_failed_version_required: true
@@ -218,9 +277,16 @@ FLOW-006:
         - consume_founder_rejection_corpus
         - simulate_founder_product_inspection_before_publication
         - directly_inspect_current_artifact_not_only_records
+        - inspect_machine_checkable_product_contract_and_artifact_evidence
+        - inspect_buyer_behavior_contract_and_next_action_map
         - compare_current_product_to_prior_failed_artifact_for_material_delta
         - pressure_test_real_human_use_beyond_seed_demo_rows
+        - run_blind_buyer_behavior_walkthrough_from_first_open_to_next_action
         - test_formula_logic_workflow_logic_and_buyer_decision_outputs
+        - fail_if_jtbd_is_defined_as_output_or_feature_scope_without_buyer_behavior_loop
+        - fail_if_adversarial_buyer_scenarios_are_missing_or_only_described_without_artifact_mutation_evidence
+        - fail_if_primary_jtbd_decision_outputs_are_missing_or_only_in_prose
+        - fail_if_kpp_is_reduced_to_status_snapshot_feature_list_or_visual_dashboard
         - inspect_in_product_wording_for_human_language_not_developer_or_agent_language
         - inspect_delivery_copy_for_customer_handoff_clarity
         - define_listing_hook_rejection_criteria_before_asset_assembly
@@ -236,6 +302,11 @@ FLOW-006:
         adversarial_rejection_attempt_required: true
         corpus_pattern_check_required: true
         real_human_use_pressure_required: true
+        machine_checkable_product_contract_required: true
+        buyer_behavior_contract_required: true
+        blind_buyer_behavior_walkthrough_required: true
+        adversarial_scenario_evidence_required: true
+        jtbd_decision_output_evidence_required: true
         direct_artifact_inspection_required: true
         material_artifact_delta_required: true
         cost_outcome_accountability_required: true
@@ -286,6 +357,42 @@ FLOW-006:
         - fail_if_visuals_are_mediocre_or_default_looking
         - fail_if_product_surface_fidelity_or_formula_truthfulness_is_unverified
       output_file_template: records/validation/LQ-XXXX.yaml
+    - step_id: 11b_pre_mortem_failure_analysis
+      agent_tier: frontier
+      model_policy_ref: MODEL-006.pre_mortem_failure_analysis
+      functional_mandate: pre_launch_commercial_failure_analysis
+      action:
+        - assume_product_launched_and_failed_with_zero_sales_refunds_or_weak_conversion
+        - inspect_delivered_product_assets
+        - inspect_listing_images_title_and_description
+        - inspect_delivery_readme_and_onboarding
+        - inspect_founder_acceptance_result
+        - inspect_qa_result
+        - inspect_public_shelf_evidence
+        - inspect_purchased_competitor_inspection
+        - inspect_company_memory
+        - identify_top_3_likely_failure_modes_using_only_current_product_listing_delivery_and_market_evidence
+        - record_evidence_for_each_failure_mode
+        - classify_each_failure_mode_as_product_listing_delivery_market_fit_promise_pricing_or_trust
+        - classify_each_failure_mode_as_launch_blocker_or_watchlist
+        - require_specific_preventable_cause_before_launch_blocker
+        - set_rerun_from_earliest_relevant_step_for_each_launch_blocker
+        - set_post_launch_signal_to_monitor_for_each_watchlist_risk
+        - allow_publish_gate_to_continue_when_only_watchlist_risks_remain
+        - run_once_only_before_delivery_launch
+        - forbid_new_product_scope_unless_locked_buyer_behavior_jtbd_or_marketplace_evidence_proves_the_failure
+        - downgrade_unproven_feature_ideas_to_watchlist_or_reject_as_feature_bloat
+      gate:
+        pre_mortem_status_required: pass_or_watchlist_only
+        top_3_failure_modes_required: true
+        evidence_required_for_each_failure_mode: true
+        failure_mode_classification_required: true
+        blocker_requires_specific_preventable_cause: true
+        blocker_requires_rerun_from_step: true
+        watchlist_requires_post_launch_signal: true
+        unsupported_scope_expansion_forbidden: true
+        one_pass_only: true
+      output_file_template: records/validation/PM-XXXX.yaml
     - step_id: 12_delivery_launch
       agent_tier: mini
       model_policy_ref: MODEL-006.delivery_assembly
@@ -301,7 +408,12 @@ FLOW-006:
       gate:
         ready_status_requires:
           - artifact_integrity_audit_pass
+          - buyer_behavior_contract_pass
+          - buyer_behavior_walkthrough_pass
+          - executable_adversarial_scenarios_pass
           - formula_truth_table_pass_or_not_applicable_with_reason
+          - machine_checkable_product_contract_pass
+          - jtbd_decision_outputs_pass
           - working_capacity_pass_or_not_applicable_with_reason
           - visible_human_scale_capacity_pass
           - material_artifact_delta_pass
@@ -313,6 +425,8 @@ FLOW-006:
           - product_visual_quality_pass
           - per_image_real_hook_pass
           - listing_quality_gate_pass
+          - pre_mortem_failure_analysis_complete
+          - pre_mortem_launch_blockers_absent
           - delivery_package_pass
           - publish_blockers_absent
         external_publish_requires_human_approval: true

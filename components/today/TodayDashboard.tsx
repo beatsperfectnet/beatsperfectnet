@@ -57,6 +57,7 @@ function CandidateCard({
         <HealthPill label="budget" value={candidate.budgetHealth} />
         <HealthPill label="process" value={candidate.processHealth} />
       </div>
+      {candidate.stageReason ? <p className="candidateReason">{candidate.stageReason}</p> : null}
       <div className="candidateStats">
         <div>
           <span>tokens</span>

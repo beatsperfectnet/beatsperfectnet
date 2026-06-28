@@ -45,6 +45,7 @@ product_generation_budget:
         - 09_optional_supporting_feature_pass
         - 10_listing_creative_assembly
         - 11_listing_quality_gate
+        - 11b_pre_mortem_failure_analysis
         - 12_delivery_launch
       soft_budget_usd: 5.00
   total_hard_budget_usd: 25.00

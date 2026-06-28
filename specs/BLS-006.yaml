@@ -13,6 +13,7 @@ BLS-006:
     - optional_supporting_feature_pass
     - listing_creative_assembly
     - listing_quality_gate
+    - pre_mortem_failure_analysis
     - delivery_launch
     - monthly_outcomes
     - competitor_purchase_accounting
@@ -37,10 +38,17 @@ BLS-006:
     - benchmark_adequacy
     - additional_purchase_escalation_ref
     - alignment_chain_ref
+    - buyer_behavior_contract_ref
+    - buyer_behavior_contract_status
+    - machine_checkable_product_contract_ref
+    - jtbd_contract_status
+    - primary_buyer_decision_output_status
     - propagation_system_spec_ref
     - prior_artifact_baseline_ref
     - material_artifact_delta_status
     - visible_capacity_gate_status
+    - buyer_behavior_walkthrough_status
+    - adversarial_scenario_status
     - qa_result
     - founder_acceptance_ref
     - founder_acceptance_status
@@ -51,6 +59,10 @@ BLS-006:
     - per_image_real_hook_gate
     - cost_outcome_accountability_status
     - listing_quality_gate_ref
+    - pre_mortem_failure_analysis_ref
+    - pre_mortem_failure_analysis_status
+    - pre_mortem_launch_blockers
+    - pre_mortem_watchlist_signals
     - launch_package_ref
   stage_loop_limits:
     building_medium_qa_loops: 1
@@ -66,9 +78,14 @@ BLS-006:
     - benchmark_adequacy_passed_or_additional_purchase_escalation_resolved
     - alignment_chain_complete
     - propagation_system_spec_complete
+    - buyer_behavior_contract_passed
     - first_pass_connected_build_complete
     - artifact_integrity_audit_passed
+    - buyer_behavior_walkthrough_passed
+    - executable_adversarial_scenarios_passed
     - formula_truth_table_passed_or_not_applicable_with_reason
+    - machine_checkable_product_contract_passed
+    - jtbd_decision_outputs_passed
     - working_capacity_passed_or_not_applicable_with_reason
     - visible_human_scale_capacity_passed
     - material_artifact_delta_passed
@@ -81,5 +98,7 @@ BLS-006:
     - per_image_real_hook_passed
     - cost_outcome_accountability_passed
     - listing_quality_passed
+    - pre_mortem_failure_analysis_completed
+    - pre_mortem_launch_blockers_absent
     - publish_blockers_absent
     - delivery_launch_ready
