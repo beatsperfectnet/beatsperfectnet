@@ -157,6 +157,24 @@ api_cost_ledger:
       source: manual_platform_openai_reading
       confidence: estimated
       notes: Residual reconciliation so the reported Jun 28 dashboard total matches 41.00 USD.
+    - entry_id: API-2026-06-29-C007-flow007-pilot
+      date: 2026-06-29
+      bucket: product_generation
+      candidate_id: C-007-001
+      product_name: Small Seller Reorder Planner
+      amount_usd: 4.75
+      source: model_run_ledger_estimate
+      confidence: estimated_until_platform_dashboard_reconciled
+      notes: FLOW-007 pilot 1 stopped at BENCHMARK_INSUFFICIENT after Stage 1 and Stage 2 gpt-5.5 frontier reviews, a reopened Stage 2 gpt-5.5 review after beauty salon files, and a final Stage 2 gpt-5.5 review after the e-commerce template; no build or artifact generation started.
+    - entry_id: API-2026-06-29-governance-flow007
+      date: 2026-06-29
+      bucket: governance
+      candidate_id:
+      product_name:
+      amount_usd: 27.00
+      source: manual_platform_openai_reading
+      confidence: reported_by_human
+      notes: Today dashboard governance API cost set to 27.00 USD per human report; all other dashboard categories remain generated from current records.
   human_escalations:
     - escalation_id: HE-2026-06-26-FLOW-001
       date: 2026-06-26

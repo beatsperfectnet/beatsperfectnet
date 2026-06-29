@@ -1,5 +1,5 @@
 today:
-  asOf: 2026-06-29 10:38 GMT+2
+  asOf: 2026-06-29 14:22 GMT+2
   dataMode: event-log
   flowVersion: FLOW-007
   flowTimeline:
@@ -39,19 +39,29 @@ today:
     validationRecords: records/validation/*.yaml
     flow007ValidationRecords: records/flow_007_validation/*.yaml
     failureCases: records/failure-cases/*.md
-  todayLog: []
+  todayLog:
+    - id: API-2026-06-29-C007-flow007-pilot
+      kind: product_cost
+      label: Small Seller Reorder Planner product API
+      detail: FLOW-007 pilot 1 stopped at BENCHMARK_INSUFFICIENT after Stage 1 and Stage 2 gpt-5.5 frontier reviews, a reopened Stage 2 gpt-5.5 review after beauty salon files, and a final Stage 2 gpt-5.5 review after the e-commerce template; no build or artifact generation started.
+      amountUsd: 4.75
+    - id: API-2026-06-29-governance-flow007
+      kind: governance_cost
+      label: Governance cost
+      detail: Today dashboard governance API cost set to 27.00 USD per human report; all other dashboard categories remain generated from current records.
+      amountUsd: 27
   totals:
     pipelineCandidates: 0
-    inFlightCandidates: 0
+    inFlightCandidates: 1
     launchedCandidates: 0
     rejectedCandidates: 1
-    totalSpendUsd: 0
-    productApiCostUsd: 0
-    governanceApiCostUsd: 0
+    totalSpendUsd: 31.75
+    productApiCostUsd: 4.75
+    governanceApiCostUsd: 27
     unallocatedApiCostUsd: 0
     humanEscalationsTotal: 0
     pipelineUsdTotal: 0
-    inFlightUsdTotal: 0
+    inFlightUsdTotal: 4.75
     launchedUsdTotal: 0
     rejectedUsdTotal: 41
     pipelineTokensTotal: 0
@@ -64,7 +74,20 @@ today:
     refundTokensTotal: 0
     refundCountTotal: 0
   pipelineCandidates: []
-  inFlightCandidates: []
+  inFlightCandidates:
+    - candidateId: C-007-001
+      candidateLabel: I-001
+      candidateTitle: Small Seller Reorder Planner workbook for small physical-product sellers deciding what to reorder, when to reorder it, and how much to buy before stock runs out.
+      outcomeStatus: in_flight
+      totalTokensUsed: 0
+      totalUsdSpent: 4.75
+      launchTokens: 0
+      governanceTokens: 0
+      postLaunchSupportTokens: 0
+      refundTokens: 0
+      refundCount: 0
+      budgetHealth: green
+      processHealth: green
   launchedCandidates: []
   rejectedCandidates:
     - candidateId: C-004-001
@@ -109,9 +132,9 @@ period:
     launchedCount: 0
     readyForLaunchCount: 1
     rejectedCount: 3
-    totalSpendUsd: 175.23
-    buildSpendUsd: 91.4
-    governanceApiCostUsd: 75.4
+    totalSpendUsd: 206.98
+    buildSpendUsd: 96.15
+    governanceApiCostUsd: 102.4
     otherSpendUsd: 8.43
   buckets:
     - date: 2026-06-22
@@ -174,7 +197,7 @@ period:
       launchedCount: 0
       readyForLaunchCount: 0
       rejectedCount: 1
-      totalSpendUsd: 0
-      buildSpendUsd: 0
-      governanceApiCostUsd: 0
+      totalSpendUsd: 31.75
+      buildSpendUsd: 4.75
+      governanceApiCostUsd: 27
       otherSpendUsd: 0
