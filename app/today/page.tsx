@@ -1,12 +1,5 @@
-import { TodayDashboard } from "@/components/today/TodayDashboard";
-import { loadTodayState } from "@/lib/dashboard/loadDashboardState";
+import { redirect } from "next/navigation";
 
-export default async function TodayPage() {
-  const state = await loadTodayState();
-
-  return (
-    <TodayDashboard
-      state={state}
-    />
-  );
+export default function TodayPage() {
+  redirect("/archive/today");
 }

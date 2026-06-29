@@ -5,7 +5,7 @@ export const mockTodayState: TodayState = {
   asOf: "2026-06-23 13:20 CET",
   dataMode: "mock",
   flowVersion: "FLOW-007",
-  flowTimeline: stageLabels.slice(0, 10).map(({ label, steps }) => ({
+  flowTimeline: stageLabels.slice(0, 13).map(({ label, steps }) => ({
     stageGroup: label,
     stepIds: steps
   })),

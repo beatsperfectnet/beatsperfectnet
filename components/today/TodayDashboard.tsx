@@ -213,15 +213,19 @@ function ListCard({
   );
 }
 
-export function TodayDashboard({ state = mockTodayState }: { state?: TodayState }) {
+export function TodayDashboard({ state = mockTodayState, archived = false }: { state?: TodayState; archived?: boolean }) {
   const [selectedCandidateId, setSelectedCandidateId] = useState(state.activeEscalation.candidateId);
   const supportCandidates = state.launchedCandidates.filter((candidate) => candidate.postLaunchSupportTokens > 0);
   const refundCandidates = state.launchedCandidates.filter((candidate) => candidate.refundCount > 0);
 
   return (
     <Shell
-      title="Today"
-      subtitle="Today is the CET day window. This tab shows spend and cost signals only; outcomes and payback come later."
+      title={archived ? "Today Archive" : "Today"}
+      subtitle={
+        archived
+          ? "Archived daily snapshot view kept for reference while beatsperfect.net is run as a once-per-day history tracker."
+          : "Today is the CET day window. This tab shows spend and cost signals only; outcomes and payback come later."
+      }
       meta={
         <>
           <span className="mono muted">{state.dataMode} snapshot</span>
@@ -229,6 +233,21 @@ export function TodayDashboard({ state = mockTodayState }: { state?: TodayState 
         </>
       }
     >
+      {archived ? (
+        <section className="card panel archiveNotice">
+          <div className="sectionHeader">
+            <div>
+              <p className="eyebrow">Archived view</p>
+              <h2>Not the primary dashboard</h2>
+            </div>
+            <div className="mono muted">{state.asOf}</div>
+          </div>
+          <p className="panelNote">
+            The live event-driven Today surface is paused for now. Period is the primary daily tracker, and this page remains only as a historical snapshot reference.
+          </p>
+        </section>
+      ) : null}
+
       <section className="summaryGrid">
         <MetricCard label="Pipeline candidates" value={state.totals.pipelineCandidates} tone="pipeline" />
         <MetricCard label="In-flight" value={state.totals.inFlightCandidates} tone="warning" />

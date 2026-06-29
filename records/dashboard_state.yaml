@@ -1,38 +1,47 @@
 today:
-  asOf: 2026-06-29 14:22 GMT+2
+  asOf: 2026-06-29 17:29 GMT+2
   dataMode: event-log
   flowVersion: FLOW-007
-  flowTimeline:
+  flowTimeline: &a1
     - stageGroup: market
       stepIds:
         - 00_market_evidence
-    - stageGroup: benchmark
+    - stageGroup: read
       stepIds:
-        - 01_competitor_product_autopsy
+        - 01_public_shelf_read
+    - stageGroup: purchase
+      stepIds:
+        - 02_competitor_selection_purchase_approval
+    - stageGroup: inspect
+      stepIds:
+        - 03_purchased_competitor_inspection
     - stageGroup: architecture
       stepIds:
-        - 02_product_architecture_contract
+        - 04_product_architecture_contract
     - stageGroup: scenarios
       stepIds:
-        - 03_scenario_matrix
+        - 05_scenario_matrix
     - stageGroup: readiness
       stepIds:
-        - 04_build_readiness_review
+        - 06_build_readiness_review
     - stageGroup: build
       stepIds:
-        - 05_product_build
+        - 07_product_build
     - stageGroup: artifact_qa
       stepIds:
-        - 06_real_artifact_inspection
+        - 08_real_artifact_inspection
     - stageGroup: walkthrough
       stepIds:
-        - 07_blind_buyer_walkthrough
+        - 09_blind_buyer_walkthrough
     - stageGroup: listing
       stepIds:
-        - 08_listing_packaging_qa
+        - 10_listing_packaging_qa
+    - stageGroup: pre_mortem
+      stepIds:
+        - 11_pre_mortem_failure_analysis
     - stageGroup: launch
       stepIds:
-        - 09_founder_launch_gate
+        - 12_founder_launch_gate
   sourceRefs:
     activeFlow: config/active-flow.yaml
     candidateRecords: records/candidates/*.yaml
@@ -52,18 +61,18 @@ today:
       amountUsd: 41
   totals:
     pipelineCandidates: 0
-    inFlightCandidates: 1
+    inFlightCandidates: 0
     launchedCandidates: 0
-    rejectedCandidates: 1
+    rejectedCandidates: 0
     totalSpendUsd: 45.75
     productApiCostUsd: 4.75
     governanceApiCostUsd: 41
     unallocatedApiCostUsd: 0
     humanEscalationsTotal: 0
     pipelineUsdTotal: 0
-    inFlightUsdTotal: 4.75
+    inFlightUsdTotal: 0
     launchedUsdTotal: 0
-    rejectedUsdTotal: 41
+    rejectedUsdTotal: 0
     pipelineTokensTotal: 0
     inFlightTokensTotal: 0
     launchedTokensTotal: 0
@@ -74,88 +83,53 @@ today:
     refundTokensTotal: 0
     refundCountTotal: 0
   pipelineCandidates: []
-  inFlightCandidates:
-    - candidateId: C-007-001
-      candidateLabel: I-001
-      candidateTitle: Small Seller Reorder Planner workbook for small physical-product sellers deciding what to reorder, when to reorder it, and how much to buy before stock runs out.
-      outcomeStatus: in_flight
-      totalTokensUsed: 0
-      totalUsdSpent: 4.75
-      launchTokens: 0
-      governanceTokens: 0
-      postLaunchSupportTokens: 0
-      refundTokens: 0
-      refundCount: 0
-      budgetHealth: green
-      processHealth: green
+  inFlightCandidates: []
   launchedCandidates: []
-  rejectedCandidates:
-    - candidateId: C-004-001
-      candidateLabel: I-001
-      candidateTitle: Inventory tracker spreadsheet for small business stock, purchases, sales, and reorder alerts
-      outcomeStatus: rejected_before_launch
-      currentStepId: 04_build_readiness_review
-      currentStageGroup: readiness
-      stageReason: C-004-001 fails FLOW-007 dry validation and must return to Product Architecture Contract instead of artifact rebuild.
-      latestStepChange:
-        changeId: 2026-06-28T14-20-00Z-R-004-011-r2-repair-05-to-12
-        fromStepId: 05_one_promise_propagation_system_spec
-        toStepId: 12_delivery_launch
-        status: completed_local_launch_pending_external_publish_approval
-        triggeredAt: 2026-06-28T14:20:00Z
-        sourceRef: records/flow_step_changes/2026-06-28T14-20-00Z-R-004-011-r2-repair-05-to-12.yaml
-      totalTokensUsed: 0
-      totalUsdSpent: 41
-      launchTokens: 0
-      governanceTokens: 0
-      postLaunchSupportTokens: 0
-      refundTokens: 0
-      refundCount: 0
-      budgetHealth: red
-      processHealth: red
-      terminalReason: C-004-001 fails FLOW-007 dry validation and must return to Product Architecture Contract instead of artifact rebuild.
+  rejectedCandidates: []
   activeEscalation:
-    status: pending
+    status: none
     scope: build
-    candidateId: C-004-001
-    candidateLabel: I-001
-    candidateTitle: Inventory tracker spreadsheet for small business stock, purchases, sales, and reorder alerts
-    reason: Active FLOW-007 contract changed after this candidate's last launch review.
-    recommendedAction: Return to Product Architecture Contract before any build.
+    candidateId: ""
+    candidateLabel: ""
+    candidateTitle: ""
+    reason: ""
+    recommendedAction: ""
     governanceFile: governance/09_stage_dispatch_007.yaml
 period:
+  asOf: 2026-06-29 17:29 GMT+2
   from: 2026-06-22
   to: 2026-06-29
   dataMode: event-log
   flowVersion: FLOW-007
+  flowTimeline: *a1
   totals:
     launchedCount: 0
-    readyForLaunchCount: 1
+    readyForLaunchCount: 0
     rejectedCount: 3
-    totalSpendUsd: 220.98
+    totalSpendUsd: 213.55
     buildSpendUsd: 96.15
     governanceApiCostUsd: 116.4
-    otherSpendUsd: 8.43
+    otherSpendUsd: 1
   buckets:
     - date: 2026-06-22
       launchedCount: 0
       readyForLaunchCount: 0
       rejectedCount: 2
-      totalSpendUsd: 27.37
+      totalSpendUsd: 25.4
       buildSpendUsd: 25.4
       governanceApiCostUsd: 0
-      otherSpendUsd: 1.97
+      otherSpendUsd: 0
     - date: 2026-06-23
       launchedCount: 0
       readyForLaunchCount: 0
       rejectedCount: 0
-      totalSpendUsd: 9.44
+      totalSpendUsd: 6
       buildSpendUsd: 6
       governanceApiCostUsd: 0
-      otherSpendUsd: 3.44
+      otherSpendUsd: 0
     - date: 2026-06-24
       launchedCount: 0
-      readyForLaunchCount: 1
+      readyForLaunchCount: 0
       rejectedCount: 0
       totalSpendUsd: 41.4
       buildSpendUsd: 22
@@ -165,10 +139,10 @@ period:
       launchedCount: 0
       readyForLaunchCount: 0
       rejectedCount: 0
-      totalSpendUsd: 10.72
+      totalSpendUsd: 8.7
       buildSpendUsd: 2
       governanceApiCostUsd: 6.7
-      otherSpendUsd: 2.02
+      otherSpendUsd: 0
     - date: 2026-06-26
       launchedCount: 0
       readyForLaunchCount: 0

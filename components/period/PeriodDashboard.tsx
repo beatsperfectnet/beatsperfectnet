@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { formatStepLabel } from "@/lib/today/flow";
 import { mockPeriodState } from "@/lib/period/mockPeriodState";
 import type { PeriodBucket, PeriodState } from "@/lib/period/types";
 import { Shell } from "@/components/site/Shell";
@@ -87,6 +88,46 @@ function Legend({ items }: { items: Array<{ label: string; className: string }> 
   );
 }
 
+function FlowTimelineCard({ state }: { state: PeriodState }) {
+  const flowTimeline = state.flowTimeline ?? [];
+
+  if (flowTimeline.length === 0) {
+    return null;
+  }
+
+  return (
+    <section className="card panel">
+      <div className="sectionHeader">
+        <div>
+          <p className="eyebrow">{state.flowVersion}</p>
+          <h2>Active flow steps</h2>
+        </div>
+        <div className="mono muted">{flowTimeline.reduce((count, stage) => count + stage.stepIds.length, 0)} steps</div>
+      </div>
+      <p className="panelNote">
+        This is the current contract step map shown alongside the historical charts so the daily tracker still reflects the active operating flow.
+      </p>
+      <div className="flowTimeline">
+        {flowTimeline.map((stage) => (
+          <div className="flowStage" key={`${stage.stageGroup}-${stage.stepIds.join("-")}`}>
+            <div className="flowStageHeader">
+              <div className="flowStageLabel">{stage.stageGroup.replaceAll("_", " ")}</div>
+              <div className="mono muted">{stage.stepIds.length}</div>
+            </div>
+            <div className="flowStepList">
+              {stage.stepIds.map((stepId) => (
+                <span className="flowStep" key={stepId}>
+                  {formatStepLabel(stepId)}
+                </span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export function PeriodDashboard({ state = mockPeriodState }: { state?: PeriodState }) {
   const [from, setFrom] = useState(state.from);
   const [to, setTo] = useState(state.to);
@@ -108,7 +149,7 @@ export function PeriodDashboard({ state = mockPeriodState }: { state?: PeriodSta
   return (
     <Shell
       title="Period"
-      subtitle="Daily spend and product outcomes for the selected period."
+      subtitle="Daily operating history for BeatsPerfect. This is the primary tracker until the product pipeline needs a true live dashboard again."
       meta={
         <>
           <span className="mono muted">{state.dataMode} snapshot</span>
@@ -126,6 +167,10 @@ export function PeriodDashboard({ state = mockPeriodState }: { state?: PeriodSta
             {from} to {to}
           </div>
         </div>
+        <p className="panelNote">
+          Snapshot as of {state.asOf ?? "the current records"}.
+          Netlify is treated as a once-per-day history publish rather than an event-driven live dashboard for now.
+        </p>
         <div className="controlRow">
           <label>
             <span>From</span>
@@ -193,6 +238,8 @@ export function PeriodDashboard({ state = mockPeriodState }: { state?: PeriodSta
           ))}
         </div>
       </section>
+
+      <FlowTimelineCard state={state} />
     </Shell>
   );
 }

@@ -28,8 +28,7 @@ const activeContractRefs = [
   activeFlow.build_lifecycle_ref,
   "governance/05_governance_rules.yaml",
   activeFlowId === "FLOW-007" ? "docs/FLOW-007.md" : null,
-  activeFlowId === "FLOW-006" ? "specs/FOUNDER-ACCEPTANCE-CORPUS-001.yaml" : null,
-  activeFlowId === "FLOW-007" ? "governance/08_product_generation_budget_007.yaml" : "governance/08_product_generation_budget_006.yaml",
+  "governance/08_product_generation_budget_007.yaml",
   activeDispatchRef,
 ].filter(Boolean);
 
@@ -53,15 +52,18 @@ const flow006Timeline = [
 
 const flow007Timeline = [
   { stageGroup: "market", stepIds: ["00_market_evidence"] },
-  { stageGroup: "benchmark", stepIds: ["01_competitor_product_autopsy"] },
-  { stageGroup: "architecture", stepIds: ["02_product_architecture_contract"] },
-  { stageGroup: "scenarios", stepIds: ["03_scenario_matrix"] },
-  { stageGroup: "readiness", stepIds: ["04_build_readiness_review"] },
-  { stageGroup: "build", stepIds: ["05_product_build"] },
-  { stageGroup: "artifact_qa", stepIds: ["06_real_artifact_inspection"] },
-  { stageGroup: "walkthrough", stepIds: ["07_blind_buyer_walkthrough"] },
-  { stageGroup: "listing", stepIds: ["08_listing_packaging_qa"] },
-  { stageGroup: "launch", stepIds: ["09_founder_launch_gate"] },
+  { stageGroup: "read", stepIds: ["01_public_shelf_read"] },
+  { stageGroup: "purchase", stepIds: ["02_competitor_selection_purchase_approval"] },
+  { stageGroup: "inspect", stepIds: ["03_purchased_competitor_inspection"] },
+  { stageGroup: "architecture", stepIds: ["04_product_architecture_contract"] },
+  { stageGroup: "scenarios", stepIds: ["05_scenario_matrix"] },
+  { stageGroup: "readiness", stepIds: ["06_build_readiness_review"] },
+  { stageGroup: "build", stepIds: ["07_product_build"] },
+  { stageGroup: "artifact_qa", stepIds: ["08_real_artifact_inspection"] },
+  { stageGroup: "walkthrough", stepIds: ["09_blind_buyer_walkthrough"] },
+  { stageGroup: "listing", stepIds: ["10_listing_packaging_qa"] },
+  { stageGroup: "pre_mortem", stepIds: ["11_pre_mortem_failure_analysis"] },
+  { stageGroup: "launch", stepIds: ["12_founder_launch_gate"] },
 ];
 
 const stageTimeline = activeFlowId === "FLOW-007" ? flow007Timeline : flow006Timeline;
@@ -139,11 +141,11 @@ function stageGroupForStep(stepId) {
 function stepForEscalationStage(stageGroup) {
   const normalized = String(stageGroup || "").trim().toLowerCase();
   const map = {
-    flow_governance: "04_alignment_synthesis",
+    flow_governance: activeFlowId === "FLOW-007" ? "04_product_architecture_contract" : "04_alignment_synthesis",
     product_quality: "07_propagation_buyer_experience_product_visual_qa",
     product_model: "05_one_promise_propagation_system_spec",
     buyer_safety: "05_one_promise_propagation_system_spec",
-    purchase: "02_mandatory_competitor_purchase",
+    purchase: activeFlowId === "FLOW-007" ? "02_competitor_selection_purchase_approval" : "02_mandatory_competitor_purchase",
     mandatory_competitor_purchase: "02_mandatory_competitor_purchase",
   };
   return map[normalized] || null;
@@ -154,15 +156,15 @@ function normalizeCurrentStep(candidate) {
   if (stageTimeline.some((stage) => stage.stepIds.includes(raw))) return raw;
 
   const aliases = {
-    purchase_approval: "02_mandatory_competitor_purchase",
+    purchase_approval: activeFlowId === "FLOW-007" ? "02_competitor_selection_purchase_approval" : "02_mandatory_competitor_purchase",
     mandatory_competitor_purchase: "02_mandatory_competitor_purchase",
     publish_pending: "12_delivery_launch",
     marketplace_publish: "12_delivery_launch",
     ready_for_marketplace_publish: "12_delivery_launch",
     pass_pending_marketplace_publish: "12_delivery_launch",
     published: "12_monthly_outcomes",
-    FLOW_006_FAILURE_CASE: "04_build_readiness_review",
-    NOT_BUILD_READY: "04_build_readiness_review",
+    FLOW_006_FAILURE_CASE: activeFlowId === "FLOW-007" ? "06_build_readiness_review" : "04_build_readiness_review",
+    NOT_BUILD_READY: activeFlowId === "FLOW-007" ? "06_build_readiness_review" : "04_build_readiness_review",
   };
   return aliases[raw] ?? null;
 }
@@ -211,10 +213,7 @@ function apiCostLedger() {
 }
 
 function activeGenerationBudget() {
-  const budgetRef = activeFlowId === "FLOW-007"
-    ? "governance/08_product_generation_budget_007.yaml"
-    : "governance/08_product_generation_budget_006.yaml";
-  return readYaml(budgetRef)?.product_generation_budget || {};
+  return readYaml("governance/08_product_generation_budget_007.yaml")?.product_generation_budget || {};
 }
 
 function ledgerEntries() {
@@ -500,8 +499,8 @@ function publicCandidateSnapshot(candidate) {
   const contractInvalidatesReview = activeContractChangedAfterCandidateReview(candidate);
   const stepChangeStepId = latestStepChange?.to_step_id || latestStepChange?.from_step_id || null;
   const currentStepId = validation?.build_readiness?.status === "NOT_BUILD_READY"
-    ? "04_build_readiness_review"
-    : stepChangeStepId || (contractInvalidatesReview ? (activeFlowId === "FLOW-007" ? "02_product_architecture_contract" : "04_alignment_synthesis") : (escalationStepId || normalizeCurrentStep(candidate)));
+    ? (activeFlowId === "FLOW-007" ? "06_build_readiness_review" : "04_build_readiness_review")
+    : stepChangeStepId || (contractInvalidatesReview ? (activeFlowId === "FLOW-007" ? "04_product_architecture_contract" : "04_alignment_synthesis") : (escalationStepId || normalizeCurrentStep(candidate)));
   const currentStageGroup = currentStepId ? stageGroupForStep(currentStepId) : null;
   const launch = launchRecord(candidate);
   const terminalReason = status === "rejected_before_launch"
@@ -515,7 +514,9 @@ function publicCandidateSnapshot(candidate) {
     : humanEscalation?.reason
     ? String(humanEscalation.reason)
     : contractInvalidatesReview
-      ? "Active FLOW-006 contract changed after the last launch review; product is not ready for publish and must rerun from synthesis."
+      ? (activeFlowId === "FLOW-007"
+        ? "Active FLOW-007 contract changed after the last review; candidate must return to Product Architecture Contract before any build."
+        : "Active FLOW-006 contract changed after the last launch review; product is not ready for publish and must rerun from synthesis.")
       : undefined;
 
   return {
@@ -774,10 +775,12 @@ function periodState() {
   const totalSpendUsd = Number((allCosts.totalApiCostUsd + totalCompetitorSpend).toFixed(2));
 
   return {
+    asOf: nowBerlin(),
     from: dates[0] || today,
     to: dates[dates.length - 1] || today,
     dataMode: "event-log",
     flowVersion: activeFlowId,
+    flowTimeline: stageTimeline,
     totals: {
       launchedCount: productOutcomes.filter((entry) => entry.status === "launched").length,
       readyForLaunchCount: productOutcomes.filter((entry) => entry.status === "ready").length,

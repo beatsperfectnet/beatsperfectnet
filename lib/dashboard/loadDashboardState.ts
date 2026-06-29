@@ -31,5 +31,12 @@ export async function loadTodayState(): Promise<TodayState> {
 
 export async function loadPeriodState(): Promise<PeriodState> {
   const snapshot = await readSnapshot();
-  return snapshot?.period ?? mockPeriodState;
+  if (snapshot?.period) {
+    return {
+      ...snapshot.period,
+      asOf: snapshot.period.asOf ?? snapshot.today?.asOf,
+      flowTimeline: snapshot.period.flowTimeline ?? snapshot.today?.flowTimeline
+    };
+  }
+  return mockPeriodState;
 }

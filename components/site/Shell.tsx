@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 
 const tabs = [
-  { href: "/today", label: "Today" },
-  { href: "/period", label: "Period" }
+  { href: "/period", label: "Period" },
+  { href: "/archive/today", label: "Archive" }
 ];
 
 export function Shell({
@@ -36,7 +36,7 @@ export function Shell({
           <div className="heroActions">
             <div className="tabbar" role="tablist" aria-label="Dashboard sections">
               {tabs.map((tab) => {
-                const active = pathname === tab.href;
+                const active = pathname === tab.href || pathname.startsWith(`${tab.href}/`);
                 return (
                   <Link
                     key={tab.href}

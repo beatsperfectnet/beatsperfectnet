@@ -684,6 +684,10 @@ input {
   margin-top: 16px;
 }
 
+.archiveNotice {
+  margin-bottom: 16px;
+}
+
 .periodControls label {
   display: grid;
   gap: 8px;

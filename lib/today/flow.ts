@@ -6,40 +6,52 @@ export const stageLabels: Array<{ label: StageGroup; steps: FlowStepId[] }> = [
     steps: ["00_market_evidence"]
   },
   {
-    label: "benchmark",
-    steps: ["01_competitor_product_autopsy"]
+    label: "read",
+    steps: ["01_public_shelf_read"]
+  },
+  {
+    label: "purchase",
+    steps: ["02_competitor_selection_purchase_approval"]
+  },
+  {
+    label: "inspect",
+    steps: ["03_purchased_competitor_inspection"]
   },
   {
     label: "architecture",
-    steps: ["02_product_architecture_contract"]
+    steps: ["04_product_architecture_contract"]
   },
   {
     label: "scenarios",
-    steps: ["03_scenario_matrix"]
+    steps: ["05_scenario_matrix"]
   },
   {
     label: "readiness",
-    steps: ["04_build_readiness_review"]
+    steps: ["06_build_readiness_review"]
   },
   {
     label: "build",
-    steps: ["05_product_build"]
+    steps: ["07_product_build"]
   },
   {
     label: "artifact_qa",
-    steps: ["06_real_artifact_inspection"]
+    steps: ["08_real_artifact_inspection"]
   },
   {
     label: "walkthrough",
-    steps: ["07_blind_buyer_walkthrough"]
+    steps: ["09_blind_buyer_walkthrough"]
   },
   {
     label: "listing",
-    steps: ["08_listing_packaging_qa"]
+    steps: ["10_listing_packaging_qa"]
+  },
+  {
+    label: "pre_mortem",
+    steps: ["11_pre_mortem_failure_analysis"]
   },
   {
     label: "launch",
-    steps: ["09_founder_launch_gate"]
+    steps: ["12_founder_launch_gate"]
   },
   {
     label: "admission",
