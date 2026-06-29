@@ -48,16 +48,16 @@ today:
     - id: API-2026-06-29-governance-flow007
       kind: governance_cost
       label: Governance cost
-      detail: Today dashboard governance API cost set to 27.00 USD per human report; all other dashboard categories remain generated from current records.
-      amountUsd: 27
+      detail: Today dashboard governance API cost set to 41.00 USD per human report; all other dashboard categories remain generated from current records.
+      amountUsd: 41
   totals:
     pipelineCandidates: 0
     inFlightCandidates: 1
     launchedCandidates: 0
     rejectedCandidates: 1
-    totalSpendUsd: 31.75
+    totalSpendUsd: 45.75
     productApiCostUsd: 4.75
-    governanceApiCostUsd: 27
+    governanceApiCostUsd: 41
     unallocatedApiCostUsd: 0
     humanEscalationsTotal: 0
     pipelineUsdTotal: 0
@@ -132,9 +132,9 @@ period:
     launchedCount: 0
     readyForLaunchCount: 1
     rejectedCount: 3
-    totalSpendUsd: 206.98
+    totalSpendUsd: 220.98
     buildSpendUsd: 96.15
-    governanceApiCostUsd: 102.4
+    governanceApiCostUsd: 116.4
     otherSpendUsd: 8.43
   buckets:
     - date: 2026-06-22
@@ -197,7 +197,7 @@ period:
       launchedCount: 0
       readyForLaunchCount: 0
       rejectedCount: 1
-      totalSpendUsd: 31.75
+      totalSpendUsd: 45.75
       buildSpendUsd: 4.75
-      governanceApiCostUsd: 27
+      governanceApiCostUsd: 41
       otherSpendUsd: 0

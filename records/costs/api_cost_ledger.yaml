@@ -171,10 +171,10 @@ api_cost_ledger:
       bucket: governance
       candidate_id:
       product_name:
-      amount_usd: 27.00
+      amount_usd: 41.00
       source: manual_platform_openai_reading
       confidence: reported_by_human
-      notes: Today dashboard governance API cost set to 27.00 USD per human report; all other dashboard categories remain generated from current records.
+      notes: Today dashboard governance API cost set to 41.00 USD per human report; all other dashboard categories remain generated from current records.
   human_escalations:
     - escalation_id: HE-2026-06-26-FLOW-001
       date: 2026-06-26
