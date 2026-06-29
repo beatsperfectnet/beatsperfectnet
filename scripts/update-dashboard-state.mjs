@@ -112,13 +112,32 @@ function nowBerlin() {
   return `${value("year")}-${value("month")}-${value("day")} ${value("hour")}:${value("minute")} ${value("timeZoneName")}`;
 }
 
-function todayBerlinDate() {
+function currentBerlinDate() {
   return new Intl.DateTimeFormat("en-CA", {
     timeZone: "Europe/Berlin",
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
   }).format(new Date());
+}
+
+function ledgerAsOfText() {
+  const asOf = String(apiCostLedger().as_of || "").trim();
+  return asOf || null;
+}
+
+function ledgerAsOfDate() {
+  const asOf = ledgerAsOfText();
+  const match = asOf?.match(/^(\d{4}-\d{2}-\d{2})\b/);
+  return match?.[1] || null;
+}
+
+function operatingBerlinDate() {
+  return ledgerAsOfDate() || currentBerlinDate();
+}
+
+function dashboardAsOf() {
+  return ledgerAsOfText() || nowBerlin();
 }
 
 function stageGroupForStep(stepId) {
@@ -278,9 +297,9 @@ function sumLedger(entries) {
   return Number(entries.reduce((total, entry) => total + Number(entry.amount_usd || 0), 0).toFixed(2));
 }
 
-function productApiCostForCandidate(candidateId) {
+function totalCostForCandidate(candidateId) {
   return sumLedger(
-    ledgerEntries().filter((entry) => entry.bucket === "product_generation" && entry.candidate_id === candidateId),
+    ledgerEntries().filter((entry) => String(entry.candidate_id || "").trim() === candidateId),
   );
 }
 
@@ -301,12 +320,12 @@ function rejectedProductCostEntries(entries = ledgerEntries(), candidates = allC
 }
 
 function todayLedgerEntries() {
-  const today = todayBerlinDate();
+  const today = operatingBerlinDate();
   return ledgerEntries().filter((entry) => ledgerEntryDate(entry) === today);
 }
 
 function todayHumanEscalations() {
-  const today = todayBerlinDate();
+  const today = operatingBerlinDate();
   return humanEscalations().filter((entry) => ledgerEntryDate(entry) === today);
 }
 
@@ -368,7 +387,9 @@ function todayLogEntries() {
         ? "Archived flow to FLOW-006"
         : bucket === "product_generation"
           ? `${entry.product_name || "Product"} product API`
-          : "Governance cost",
+          : bucket === "governance"
+            ? "Governance cost"
+            : "Other cost",
       detail: String(entry.notes || entry.product_name || entry.source || ""),
       amountUsd: Number(amount.toFixed(2)),
     };
@@ -510,7 +531,7 @@ function publicCandidateSnapshot(candidate) {
       },
     } : {}),
     totalTokensUsed: Number(candidate.cumulative_total_tokens || 0),
-    totalUsdSpent: productApiCostForCandidate(candidate.candidate_id),
+    totalUsdSpent: totalCostForCandidate(candidate.candidate_id),
     launchTokens: 0,
     governanceTokens: 0,
     postLaunchSupportTokens: 0,
@@ -670,7 +691,7 @@ function flow007RejectedOutcomes() {
     .filter((validation) => validation?.result?.status === "NOT_BUILD_READY" || validation?.build_readiness?.status === "NOT_BUILD_READY")
     .map((validation) => ({
       candidateId: validation.candidate_id,
-      date: String(validation.validated_at || todayBerlinDate()).slice(0, 10),
+      date: String(validation.validated_at || operatingBerlinDate()).slice(0, 10),
       status: "rejected",
     }));
 }
@@ -681,7 +702,7 @@ function excludedRejectedOutcomes() {
     .flatMap((lane) =>
       (lane.source_candidate_refs || []).map((candidateId) => ({
         candidateId,
-        date: String(lane.source_refs?.[0] || "").includes("LR-C-001-001") ? "2026-06-22" : todayBerlinDate(),
+        date: String(lane.source_refs?.[0] || "").includes("LR-C-001-001") ? "2026-06-22" : operatingBerlinDate(),
         status: "rejected",
       })),
     );
@@ -732,7 +753,7 @@ function currentProductOutcomes() {
 }
 
 function periodState() {
-  const today = todayBerlinDate();
+  const today = operatingBerlinDate();
   const allEntries = ledgerEntries();
   const allCosts = costBreakdown(allEntries);
   const competitorSpend = competitorPurchaseSpendEntries();
@@ -804,7 +825,7 @@ function buildDashboardState() {
 
   return {
     today: {
-      asOf: nowBerlin(),
+      asOf: dashboardAsOf(),
       dataMode: "event-log",
       flowVersion: activeFlowId,
       flowTimeline: stageTimeline,

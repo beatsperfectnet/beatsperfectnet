@@ -4,14 +4,14 @@ api_cost_ledger:
   accounting_ref: governance/api_cost_accounting.yaml
   source_mode: manual_platform_openai_reading
   source_quality: manually_estimated_from_platform_openai_spend_page
-  as_of: 2026-06-28 00:00 Europe/Berlin
+  as_of: 2026-06-28 23:59 Europe/Berlin
   notes:
     - Runtime token-derived cost accounting is incomplete for current Codex/OpenClaw sessions; platform spend is treated as the controlling source for now.
     - Andrey reported total Budget Planner API cost as approximately 28 USD: 6 USD on 2026-06-23 and 22 USD on 2026-06-24.
     - Andrey reported 2026-06-24 total API spend as 36.66 USD, with approximately 22 USD for Budget Planner rebuilds and the remainder under governance.
-    - Current C-004-001 build product API cost is 21.00 USD total: 18.00 USD previous-period product spend and 3.00 USD Today product spend.
-    - Current API costs for Today are 11.00 USD total: 3.00 USD C-004-001 product API and 8.00 USD governance API.
-    - OpenAI dashboard daily API totals are the source of truth for Period totals: 2026-06-22 25.40 USD, 2026-06-23 6.00 USD, 2026-06-24 41.40 USD, 2026-06-25 8.70 USD, 2026-06-26 31.60 USD, 2026-06-27 13.70 USD, and 2026-06-28 11.00 USD as of the current reading.
+    - Current rejected C-004-001 build cost is 41.00 USD total for the reported Jun 28 operating day: 20.00 USD product build, 20.00 USD governance, and 1.00 USD residual reconciliation.
+    - Current API costs for the Jun 28 operating day are 41.00 USD total: 20.00 USD C-004-001 product API, 20.00 USD governance API, and 1.00 USD unallocated reconciliation.
+    - OpenAI dashboard daily API totals are the source of truth for Period totals: 2026-06-22 25.40 USD, 2026-06-23 6.00 USD, 2026-06-24 41.40 USD, 2026-06-25 8.70 USD, 2026-06-26 31.60 USD, 2026-06-27 13.70 USD, and 2026-06-28 41.00 USD as of the current reading.
   entries:
     - entry_id: API-2026-06-22-C001-product
       date: 2026-06-22
@@ -61,12 +61,12 @@ api_cost_ledger:
     - entry_id: API-2026-06-25-C004-product
       date: 2026-06-25
       bucket: product_generation
-      candidate_id: C-004-001
+      candidate_id: C-004-001-R1
       product_name: Inventory Tracker Studio
       amount_usd: 2.00
       source: manual_platform_openai_reading
       confidence: estimated
-      notes: Previous C-004-001 product API cost after reconciling current build total to 21.00 USD.
+      notes: Earlier C-004-001 attempt product API cost before the currently rejected Jun 28 build.
     - entry_id: API-2026-06-25-governance-today
       date: 2026-06-25
       bucket: governance
@@ -79,21 +79,21 @@ api_cost_ledger:
     - entry_id: API-2026-06-26-C004-flow005-product
       date: 2026-06-26
       bucket: product_generation
-      candidate_id: C-004-001
+      candidate_id: C-004-001-R1
       product_name: Inventory Tracker Studio
       amount_usd: 5.00
       source: manual_platform_openai_reading
       confidence: estimated
-      notes: Product API cost for FLOW-005 work before switching to FLOW-006.
+      notes: Earlier C-004-001 attempt product API cost for FLOW-005 work before switching to FLOW-006.
     - entry_id: API-2026-06-26-C004-flow006-product-rerun
       date: 2026-06-26
       bucket: product_generation
-      candidate_id: C-004-001
+      candidate_id: C-004-001-R1
       product_name: Inventory Tracker Studio
       amount_usd: 11.00
       source: manual_platform_openai_reading
       confidence: estimated
-      notes: Additional product API cost for FLOW-006 C-004 run that still produced a good-enough-demo workbook outcome.
+      notes: Earlier C-004-001 attempt product API cost for the FLOW-006 rerun that still produced a good-enough-demo workbook outcome.
     - entry_id: API-2026-06-26-governance-flow006
       date: 2026-06-26
       bucket: governance
@@ -135,19 +135,28 @@ api_cost_ledger:
       bucket: product_generation
       candidate_id: C-004-001
       product_name: Inventory Tracker Studio
-      amount_usd: 3.00
+      amount_usd: 20.00
       source: manual_platform_openai_reading
       confidence: estimated
-      notes: Today product API cost for C-004-001 rerun/pre-launch correction work.
+      notes: Jun 28 product build API cost for the rejected C-004-001 rerun/correction work.
     - entry_id: API-2026-06-28-governance-flow006-dashboard
       date: 2026-06-28
       bucket: governance
-      candidate_id:
-      product_name:
-      amount_usd: 8.00
+      candidate_id: C-004-001
+      product_name: Inventory Tracker Studio
+      amount_usd: 20.00
       source: manual_platform_openai_reading
       confidence: estimated
-      notes: Today governance API cost for FLOW-006/dashboard/pre-mortem and state correction work.
+      notes: Jun 28 governance API cost attributable to the rejected C-004-001 FLOW/dashboard correction work.
+    - entry_id: API-2026-06-28-C004-reconciliation
+      date: 2026-06-28
+      bucket: reconciliation
+      candidate_id: C-004-001
+      product_name: Inventory Tracker Studio
+      amount_usd: 1.00
+      source: manual_platform_openai_reading
+      confidence: estimated
+      notes: Residual reconciliation so the reported Jun 28 dashboard total matches 41.00 USD.
   human_escalations:
     - escalation_id: HE-2026-06-26-FLOW-001
       date: 2026-06-26

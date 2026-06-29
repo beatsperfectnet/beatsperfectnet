@@ -1,5 +1,5 @@
 today:
-  asOf: 2026-06-29 10:05 GMT+2
+  asOf: 2026-06-28 23:59 Europe/Berlin
   dataMode: event-log
   flowVersion: FLOW-007
   flowTimeline:
@@ -39,21 +39,36 @@ today:
     validationRecords: records/validation/*.yaml
     flow007ValidationRecords: records/flow_007_validation/*.yaml
     failureCases: records/failure-cases/*.md
-  todayLog: []
+  todayLog:
+    - id: API-2026-06-28-C004-product
+      kind: product_cost
+      label: Inventory Tracker Studio product API
+      detail: Jun 28 product build API cost for the rejected C-004-001 rerun/correction work.
+      amountUsd: 20
+    - id: API-2026-06-28-governance-flow006-dashboard
+      kind: governance_cost
+      label: Governance cost
+      detail: Jun 28 governance API cost attributable to the rejected C-004-001 FLOW/dashboard correction work.
+      amountUsd: 20
+    - id: API-2026-06-28-C004-reconciliation
+      kind: other
+      label: Other cost
+      detail: Residual reconciliation so the reported Jun 28 dashboard total matches 41.00 USD.
+      amountUsd: 1
   totals:
     pipelineCandidates: 0
     inFlightCandidates: 0
     launchedCandidates: 0
     rejectedCandidates: 1
-    totalSpendUsd: 0
-    productApiCostUsd: 0
-    governanceApiCostUsd: 0
-    unallocatedApiCostUsd: 0
-    humanEscalationsTotal: 0
+    totalSpendUsd: 41
+    productApiCostUsd: 20
+    governanceApiCostUsd: 20
+    unallocatedApiCostUsd: 1
+    humanEscalationsTotal: 1
     pipelineUsdTotal: 0
     inFlightUsdTotal: 0
     launchedUsdTotal: 0
-    rejectedUsdTotal: 21
+    rejectedUsdTotal: 41
     pipelineTokensTotal: 0
     inFlightTokensTotal: 0
     launchedTokensTotal: 0
@@ -82,7 +97,7 @@ today:
         triggeredAt: 2026-06-28T14:20:00Z
         sourceRef: records/flow_step_changes/2026-06-28T14-20-00Z-R-004-011-r2-repair-05-to-12.yaml
       totalTokensUsed: 0
-      totalUsdSpent: 21
+      totalUsdSpent: 41
       launchTokens: 0
       governanceTokens: 0
       postLaunchSupportTokens: 0
@@ -109,10 +124,10 @@ period:
     launchedCount: 0
     readyForLaunchCount: 1
     rejectedCount: 3
-    totalSpendUsd: 145.23
-    buildSpendUsd: 74.4
-    governanceApiCostUsd: 63.4
-    otherSpendUsd: 7.43
+    totalSpendUsd: 175.23
+    buildSpendUsd: 91.4
+    governanceApiCostUsd: 75.4
+    otherSpendUsd: 8.43
   buckets:
     - date: 2026-06-22
       launchedCount: 0
@@ -166,10 +181,10 @@ period:
       launchedCount: 0
       readyForLaunchCount: 0
       rejectedCount: 0
-      totalSpendUsd: 11
-      buildSpendUsd: 3
-      governanceApiCostUsd: 8
-      otherSpendUsd: 0
+      totalSpendUsd: 41
+      buildSpendUsd: 20
+      governanceApiCostUsd: 20
+      otherSpendUsd: 1
     - date: 2026-06-29
       launchedCount: 0
       readyForLaunchCount: 0
