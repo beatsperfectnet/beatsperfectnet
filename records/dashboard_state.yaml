@@ -1,5 +1,5 @@
 today:
-  asOf: 2026-06-29 09:33 GMT+2
+  asOf: 2026-06-29 10:05 GMT+2
   dataMode: event-log
   flowVersion: FLOW-007
   flowTimeline:
@@ -105,170 +105,76 @@ period:
   to: 2026-06-29
   dataMode: event-log
   flowVersion: FLOW-007
-  rejectedLaunch:
-    reviewId: LR-C-001-001
-    candidateId: C-001-001
-    candidateTitle: Meal Planner Studio
-    reviewedAt: 2026-06-22
-    flowContractRef: workflows/FLOW-004.yaml
-    status: revision_requested_after_human_review
-    decisionSummary: Human review rejected the current build before marketplace publishing.
-    blockerSummary: "Human review found the workbook is not publishable as-is: insufficient visible input cells, missing protection, missing per-tab instructions, embedded grocery unit prices, unclear row/column behavior, and non-screenshot listing assets."
-    evidenceRefs:
-      - records/validation/LR-C-001-001.yaml
-      - records/competitive_purchase_approval/CPA-C-001-001.yaml
-      - records/purchased_competitor_inspection/PCI-C-001-001.yaml
-      - records/listing_specs/LS-C-001-001.yaml
-      - records/product_specs/PS-C-001-001.yaml
-      - records/delivery_specs/DS-C-001-001.yaml
-      - records/good_enough_for_humans/GEH-C-001-001.yaml
-      - records/product_surfaces/RPSS-C-001-001.yaml
-      - records/validation/QA-C-001-001.yaml
-      - builds/C-001-001/manifest.yaml
   totals:
     launchedCount: 0
-    rejectedLaunchCount: 1
-    modelTokensTotal: 31800
-    launchTokensTotal: 420
-    governanceTokensTotal: 140
-    postLaunchSupportTokensTotal: 0
-    refundTokensTotal: 0
-    refundCountTotal: 0
-    usdTotalSpend: 137.8
-    totalApiCostUsd: 137.8
-    productApiCostUsd: 74.4
+    readyForLaunchCount: 1
+    rejectedCount: 3
+    totalSpendUsd: 145.23
+    buildSpendUsd: 74.4
     governanceApiCostUsd: 63.4
-    unallocatedApiCostUsd: 0
-    rejectedProductApiCostUsd: 25.4
-    humanEscalationsTotal: 8
-    avgModelTokensPerLaunch: 31800
-    avgUsdSpendPerLaunch: 24.96
+    otherSpendUsd: 7.43
   buckets:
     - date: 2026-06-22
       launchedCount: 0
-      rejectedLaunchCount: 1
-      avgModelTokensPerLaunch: 31800
-      avgUsdSpendPerLaunch: 24.96
-      totalApiCostUsd: 25.4
-      productApiCostUsd: 25.4
+      readyForLaunchCount: 0
+      rejectedCount: 2
+      totalSpendUsd: 27.37
+      buildSpendUsd: 25.4
       governanceApiCostUsd: 0
-      unallocatedApiCostUsd: 0
-      rejectedProductApiCostUsd: 25.4
-      humanEscalations: 0
-      launchTokens: 420
-      governanceTokens: 140
-      postLaunchSupportTokens: 0
-      refundTokens: 0
-      refundCount: 0
+      otherSpendUsd: 1.97
     - date: 2026-06-23
       launchedCount: 0
-      rejectedLaunchCount: 0
-      avgModelTokensPerLaunch: 0
-      avgUsdSpendPerLaunch: 0
-      totalApiCostUsd: 6
-      productApiCostUsd: 6
+      readyForLaunchCount: 0
+      rejectedCount: 0
+      totalSpendUsd: 9.44
+      buildSpendUsd: 6
       governanceApiCostUsd: 0
-      unallocatedApiCostUsd: 0
-      rejectedProductApiCostUsd: 0
-      humanEscalations: 0
-      launchTokens: 0
-      governanceTokens: 0
-      postLaunchSupportTokens: 0
-      refundTokens: 0
-      refundCount: 0
+      otherSpendUsd: 3.44
     - date: 2026-06-24
       launchedCount: 0
-      rejectedLaunchCount: 0
-      avgModelTokensPerLaunch: 0
-      avgUsdSpendPerLaunch: 0
-      totalApiCostUsd: 41.4
-      productApiCostUsd: 22
+      readyForLaunchCount: 1
+      rejectedCount: 0
+      totalSpendUsd: 41.4
+      buildSpendUsd: 22
       governanceApiCostUsd: 19.4
-      unallocatedApiCostUsd: 0
-      rejectedProductApiCostUsd: 0
-      humanEscalations: 2
-      launchTokens: 0
-      governanceTokens: 0
-      postLaunchSupportTokens: 0
-      refundTokens: 0
-      refundCount: 0
+      otherSpendUsd: 0
     - date: 2026-06-25
       launchedCount: 0
-      rejectedLaunchCount: 0
-      avgModelTokensPerLaunch: 0
-      avgUsdSpendPerLaunch: 0
-      totalApiCostUsd: 8.7
-      productApiCostUsd: 2
+      readyForLaunchCount: 0
+      rejectedCount: 0
+      totalSpendUsd: 10.72
+      buildSpendUsd: 2
       governanceApiCostUsd: 6.7
-      unallocatedApiCostUsd: 0
-      rejectedProductApiCostUsd: 0
-      humanEscalations: 0
-      launchTokens: 0
-      governanceTokens: 0
-      postLaunchSupportTokens: 0
-      refundTokens: 0
-      refundCount: 0
+      otherSpendUsd: 2.02
     - date: 2026-06-26
       launchedCount: 0
-      rejectedLaunchCount: 0
-      avgModelTokensPerLaunch: 0
-      avgUsdSpendPerLaunch: 0
-      totalApiCostUsd: 31.6
-      productApiCostUsd: 16
+      readyForLaunchCount: 0
+      rejectedCount: 0
+      totalSpendUsd: 31.6
+      buildSpendUsd: 16
       governanceApiCostUsd: 15.6
-      unallocatedApiCostUsd: 0
-      rejectedProductApiCostUsd: 0
-      humanEscalations: 5
-      launchTokens: 0
-      governanceTokens: 0
-      postLaunchSupportTokens: 0
-      refundTokens: 0
-      refundCount: 0
+      otherSpendUsd: 0
     - date: 2026-06-27
       launchedCount: 0
-      rejectedLaunchCount: 0
-      avgModelTokensPerLaunch: 0
-      avgUsdSpendPerLaunch: 0
-      totalApiCostUsd: 13.7
-      productApiCostUsd: 0
+      readyForLaunchCount: 0
+      rejectedCount: 0
+      totalSpendUsd: 13.7
+      buildSpendUsd: 0
       governanceApiCostUsd: 13.7
-      unallocatedApiCostUsd: 0
-      rejectedProductApiCostUsd: 0
-      humanEscalations: 0
-      launchTokens: 0
-      governanceTokens: 0
-      postLaunchSupportTokens: 0
-      refundTokens: 0
-      refundCount: 0
+      otherSpendUsd: 0
     - date: 2026-06-28
       launchedCount: 0
-      rejectedLaunchCount: 0
-      avgModelTokensPerLaunch: 0
-      avgUsdSpendPerLaunch: 0
-      totalApiCostUsd: 11
-      productApiCostUsd: 3
+      readyForLaunchCount: 0
+      rejectedCount: 0
+      totalSpendUsd: 11
+      buildSpendUsd: 3
       governanceApiCostUsd: 8
-      unallocatedApiCostUsd: 0
-      rejectedProductApiCostUsd: 0
-      humanEscalations: 1
-      launchTokens: 0
-      governanceTokens: 0
-      postLaunchSupportTokens: 0
-      refundTokens: 0
-      refundCount: 0
+      otherSpendUsd: 0
     - date: 2026-06-29
       launchedCount: 0
-      rejectedLaunchCount: 0
-      avgModelTokensPerLaunch: 0
-      avgUsdSpendPerLaunch: 0
-      totalApiCostUsd: 0
-      productApiCostUsd: 0
+      readyForLaunchCount: 0
+      rejectedCount: 1
+      totalSpendUsd: 0
+      buildSpendUsd: 0
       governanceApiCostUsd: 0
-      unallocatedApiCostUsd: 0
-      rejectedProductApiCostUsd: 0
-      humanEscalations: 0
-      launchTokens: 0
-      governanceTokens: 0
-      postLaunchSupportTokens: 0
-      refundTokens: 0
-      refundCount: 0
+      otherSpendUsd: 0

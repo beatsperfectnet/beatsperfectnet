@@ -1,56 +1,27 @@
 export type PeriodBucket = {
   date: string;
   launchedCount: number;
-  rejectedLaunchCount: number;
-  avgModelTokensPerLaunch: number;
-  avgUsdSpendPerLaunch: number;
-  totalApiCostUsd: number;
-  productApiCostUsd: number;
+  readyForLaunchCount: number;
+  rejectedCount: number;
+  totalSpendUsd: number;
+  buildSpendUsd: number;
   governanceApiCostUsd: number;
-  unallocatedApiCostUsd: number;
-  rejectedProductApiCostUsd: number;
-  humanEscalations: number;
-  launchTokens: number;
-  governanceTokens: number;
-  postLaunchSupportTokens: number;
-  refundTokens: number;
-  refundCount: number;
+  otherSpendUsd: number;
 };
 
 export type PeriodState = {
   from: string;
   to: string;
   dataMode: "mock" | "event-log";
-  flowVersion: "FLOW-006";
-  rejectedLaunch?: {
-    reviewId: string;
-    candidateId: string;
-    candidateTitle: string;
-    reviewedAt: string;
-    flowContractRef: string;
-    status: string;
-    decisionSummary: string;
-    blockerSummary: string;
-    evidenceRefs: string[];
-  };
+  flowVersion: "FLOW-006" | "FLOW-007";
   totals: {
     launchedCount: number;
-    rejectedLaunchCount: number;
-    modelTokensTotal: number;
-    launchTokensTotal: number;
-    governanceTokensTotal: number;
-    postLaunchSupportTokensTotal: number;
-    refundTokensTotal: number;
-    refundCountTotal: number;
-    usdTotalSpend: number;
-    totalApiCostUsd: number;
-    productApiCostUsd: number;
+    readyForLaunchCount: number;
+    rejectedCount: number;
+    totalSpendUsd: number;
+    buildSpendUsd: number;
     governanceApiCostUsd: number;
-    unallocatedApiCostUsd: number;
-    rejectedProductApiCostUsd: number;
-    humanEscalationsTotal: number;
-    avgModelTokensPerLaunch: number;
-    avgUsdSpendPerLaunch: number;
+    otherSpendUsd: number;
   };
   buckets: PeriodBucket[];
 };

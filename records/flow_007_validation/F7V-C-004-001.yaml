@@ -3,6 +3,7 @@ flow_007_validation:
   candidate_id: C-004-001
   validation_type: dry_validation_from_flow_006_postmortem
   flow_version: FLOW-007
+  validated_at: 2026-06-29
   input_evidence:
     - records/failure-cases/C-004-001-FLOW-006-postmortem.md
     - records/purchased_competitor_inspection/PCI-C-004-001.yaml

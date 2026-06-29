@@ -647,69 +647,138 @@ function latestRejectedLaunch() {
   return rejected[0] || null;
 }
 
+function competitorPurchaseSpendEntries() {
+  return readYamlFiles("records/competitive_purchase_approval")
+    .map((entry) => {
+      const approval = entry.doc?.competitive_purchase_approval;
+      const acquisition = approval?.acquisition || approval?.purchase_execution || {};
+      const status = String(acquisition.purchase_status || approval?.status || "").toLowerCase();
+      const date = String(acquisition.purchase_date || approval?.human_decision?.decision_date || "").slice(0, 10);
+      const amount = Number(acquisition.actual_price_usd ?? acquisition.actual_price ?? approval?.spend?.approved_amount ?? 0);
+      if (!date || !amount || !(status.includes("complete") || status.includes("completed"))) return null;
+      return {
+        date,
+        amount_usd: amount,
+        candidate_id: approval?.candidate_id || approval?.candidate_ref || "",
+      };
+    })
+    .filter(Boolean);
+}
+
+function flow007RejectedOutcomes() {
+  return Array.from(flow007ValidationByCandidateId().values())
+    .filter((validation) => validation?.result?.status === "NOT_BUILD_READY" || validation?.build_readiness?.status === "NOT_BUILD_READY")
+    .map((validation) => ({
+      candidateId: validation.candidate_id,
+      date: String(validation.validated_at || todayBerlinDate()).slice(0, 10),
+      status: "rejected",
+    }));
+}
+
+function excludedRejectedOutcomes() {
+  return productLaneExclusions()
+    .filter((lane) => lane.status === "excluded_by_human_rejection")
+    .flatMap((lane) =>
+      (lane.source_candidate_refs || []).map((candidateId) => ({
+        candidateId,
+        date: String(lane.source_refs?.[0] || "").includes("LR-C-001-001") ? "2026-06-22" : todayBerlinDate(),
+        status: "rejected",
+      })),
+    );
+}
+
+function launchPackageOutcomes() {
+  const rejectedIds = new Set([
+    ...flow007RejectedOutcomes().map((entry) => entry.candidateId),
+    ...excludedRejectedOutcomes().map((entry) => entry.candidateId),
+  ]);
+
+  return readYamlFiles("records/validation")
+    .map((entry) => {
+      const launch = entry.doc?.launch_package;
+      if (!launch?.candidate_id || rejectedIds.has(launch.candidate_id)) return null;
+      const statusText = String(launch.publish_status || launch.status || launch.result || "").toLowerCase();
+      const date = String(launch.launch_date || "").slice(0, 10);
+      if (!date) return null;
+      const published =
+        statusText === "published" ||
+        statusText.includes("marketplace_publish_complete") ||
+        (launch.listing_url && launch.external_publish_approval?.decision === "approved");
+      const ready =
+        !published &&
+        (statusText.includes("ready_for_marketplace_publish") ||
+          statusText.includes("pass_pending_marketplace_publish")) &&
+        launch.publish_blockers?.status === "pass" &&
+        launch.prepublish_validation?.publish_blockers_absent === true;
+      if (!published && !ready) return null;
+      return {
+        candidateId: launch.candidate_id,
+        date,
+        status: published ? "launched" : "ready",
+      };
+    })
+    .filter(Boolean);
+}
+
+function currentProductOutcomes() {
+  const byCandidate = new Map();
+  for (const outcome of [...launchPackageOutcomes(), ...excludedRejectedOutcomes(), ...flow007RejectedOutcomes()]) {
+    const existing = byCandidate.get(outcome.candidateId);
+    if (!existing || String(outcome.date).localeCompare(String(existing.date)) >= 0) {
+      byCandidate.set(outcome.candidateId, outcome);
+    }
+  }
+  return Array.from(byCandidate.values());
+}
+
 function periodState() {
-  const rejectedLaunch = latestRejectedLaunch();
   const today = todayBerlinDate();
-  const candidates = allCandidates();
   const allEntries = ledgerEntries();
   const allCosts = costBreakdown(allEntries);
-  const rejectedProductApiCostUsd = sumLedger(rejectedProductCostEntries(allEntries, candidates));
+  const competitorSpend = competitorPurchaseSpendEntries();
+  const productOutcomes = currentProductOutcomes();
   const dates = Array.from(new Set([
-    ...(rejectedLaunch?.reviewedAt ? [rejectedLaunch.reviewedAt] : []),
     ...allEntries.map(ledgerEntryDate).filter(Boolean),
+    ...competitorSpend.map((entry) => entry.date).filter(Boolean),
+    ...productOutcomes.map((entry) => entry.date).filter(Boolean),
     today,
   ])).sort();
-  const rejectedCount = rejectedLaunch ? 1 : 0;
-  const modelTokens = rejectedLaunch ? 31800 : 0;
-  const usdSpend = rejectedLaunch ? 24.96 : 0;
+  const totalCompetitorSpend = sumLedger(competitorSpend.map((entry) => ({ amount_usd: entry.amount_usd })));
+  const totalSpendUsd = Number((allCosts.totalApiCostUsd + totalCompetitorSpend).toFixed(2));
 
   return {
     from: dates[0] || today,
     to: dates[dates.length - 1] || today,
     dataMode: "event-log",
     flowVersion: activeFlowId,
-    ...(rejectedLaunch ? { rejectedLaunch } : {}),
     totals: {
-      launchedCount: 0,
-      rejectedLaunchCount: rejectedCount,
-      modelTokensTotal: modelTokens,
-      launchTokensTotal: rejectedLaunch ? 420 : 0,
-      governanceTokensTotal: rejectedLaunch ? 140 : 0,
-      postLaunchSupportTokensTotal: 0,
-      refundTokensTotal: 0,
-      refundCountTotal: 0,
-      usdTotalSpend: allCosts.totalApiCostUsd,
-      totalApiCostUsd: allCosts.totalApiCostUsd,
-      productApiCostUsd: allCosts.productApiCostUsd,
+      launchedCount: productOutcomes.filter((entry) => entry.status === "launched").length,
+      readyForLaunchCount: productOutcomes.filter((entry) => entry.status === "ready").length,
+      rejectedCount: productOutcomes.filter((entry) => entry.status === "rejected").length,
+      totalSpendUsd,
+      buildSpendUsd: allCosts.productApiCostUsd,
       governanceApiCostUsd: allCosts.governanceApiCostUsd,
-      unallocatedApiCostUsd: allCosts.unallocatedApiCostUsd,
-      rejectedProductApiCostUsd,
-      humanEscalationsTotal: humanEscalations().length,
-      avgModelTokensPerLaunch: rejectedCount ? modelTokens : 0,
-      avgUsdSpendPerLaunch: rejectedCount ? usdSpend : 0,
+      otherSpendUsd: Number((allCosts.unallocatedApiCostUsd + totalCompetitorSpend).toFixed(2)),
     },
     buckets: dates.map((date) => {
       const dateEntries = allEntries.filter((entry) => ledgerEntryDate(entry) === date);
       const dateCosts = costBreakdown(dateEntries);
-      const dateEscalations = humanEscalations().filter((entry) => ledgerEntryDate(entry) === date).length;
-      const rejectedOnDate = rejectedLaunch?.reviewedAt === date;
+      const dateCompetitorSpend = sumLedger(
+        competitorSpend
+          .filter((entry) => entry.date === date)
+          .map((entry) => ({ amount_usd: entry.amount_usd })),
+      );
+      const dateOutcomes = productOutcomes.filter((entry) => entry.date === date);
+      const dateTotalSpend = Number((dateCosts.totalApiCostUsd + dateCompetitorSpend).toFixed(2));
       return {
         date,
-        launchedCount: 0,
-        rejectedLaunchCount: rejectedOnDate ? 1 : 0,
-        avgModelTokensPerLaunch: rejectedOnDate ? modelTokens : 0,
-        avgUsdSpendPerLaunch: rejectedOnDate ? usdSpend : 0,
-        totalApiCostUsd: dateCosts.totalApiCostUsd,
-        productApiCostUsd: dateCosts.productApiCostUsd,
+        launchedCount: dateOutcomes.filter((entry) => entry.status === "launched").length,
+        readyForLaunchCount: dateOutcomes.filter((entry) => entry.status === "ready").length,
+        rejectedCount: dateOutcomes.filter((entry) => entry.status === "rejected").length,
+        totalSpendUsd: dateTotalSpend,
+        buildSpendUsd: dateCosts.productApiCostUsd,
         governanceApiCostUsd: dateCosts.governanceApiCostUsd,
-        unallocatedApiCostUsd: dateCosts.unallocatedApiCostUsd,
-        rejectedProductApiCostUsd: sumLedger(rejectedProductCostEntries(dateEntries, candidates)),
-        humanEscalations: dateEscalations,
-        launchTokens: rejectedOnDate ? 420 : 0,
-        governanceTokens: rejectedOnDate ? 140 : 0,
-        postLaunchSupportTokens: 0,
-        refundTokens: 0,
-        refundCount: 0,
+        otherSpendUsd: Number((dateCosts.unallocatedApiCostUsd + dateCompetitorSpend).toFixed(2)),
       };
     }),
   };

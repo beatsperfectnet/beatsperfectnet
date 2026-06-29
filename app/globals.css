@@ -755,6 +755,78 @@ input {
   background: var(--bp-accent);
 }
 
+.periodStackTrack {
+  justify-content: center;
+}
+
+.periodStack {
+  width: 100%;
+  max-width: 58px;
+  min-height: 0;
+  display: flex;
+  flex-direction: column-reverse;
+  overflow: hidden;
+  border-radius: 14px 14px 8px 8px;
+  box-shadow: 0 10px 18px rgba(16, 42, 67, 0.12);
+}
+
+.periodStackPart {
+  width: 100%;
+  min-height: 0;
+}
+
+.periodStackPart.build,
+.legendSwatch.build {
+  background: var(--bp-success);
+}
+
+.periodStackPart.governance,
+.legendSwatch.governance {
+  background: var(--bp-accent);
+}
+
+.periodStackPart.other,
+.legendSwatch.other {
+  background: var(--bp-warning);
+}
+
+.periodStackPart.launched,
+.legendSwatch.launched {
+  background: var(--bp-success);
+}
+
+.periodStackPart.ready,
+.legendSwatch.ready {
+  background: var(--bp-pipeline);
+}
+
+.periodStackPart.rejected,
+.legendSwatch.rejected {
+  background: var(--bp-danger);
+}
+
+.chartLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  margin-top: 12px;
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--bp-muted);
+  font-size: 0.88rem;
+}
+
+.legendSwatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(16, 42, 67, 0.08);
+}
+
 .periodBarLabel {
   color: var(--bp-muted);
   font-size: 0.8rem;
