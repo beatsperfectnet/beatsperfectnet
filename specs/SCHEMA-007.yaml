@@ -1,0 +1,180 @@
+SCHEMA-007:
+  purpose: exact_required_fields_for_flow_007_architecture_first_artifacts
+  allowed_statuses:
+    - IDEA_RECEIVED
+    - MARKET_REJECTED
+    - MARKET_INSUFFICIENT
+    - BENCHMARK_INSUFFICIENT
+    - TARGET_CONTRACT_FAILED
+    - DOMAIN_MODEL_FAILED
+    - DECISION_OUTPUT_FAILED
+    - SCENARIO_MATRIX_FAILED
+    - NOT_BUILD_READY
+    - BUILD_READY
+    - BUILT_QA_FAILED_IMPLEMENTATION
+    - BUILT_QA_FAILED_ARCHITECTURE
+    - LISTING_FAILED
+    - LAUNCH_READY
+    - LAUNCHED
+    - FLOW_006_FAILURE_CASE
+  market_evidence:
+    required_top_level_fields:
+      - candidate_id
+      - product_id
+      - marketplace
+      - evidence_refs
+      - market_signal
+      - market_evidence_quality
+      - category_standard_candidates
+      - status
+    allowed_statuses:
+      - PASS
+      - MARKET_REJECTED
+      - MARKET_INSUFFICIENT
+  competitor_autopsy:
+    template_ref: templates/competitor-autopsy-template.yaml
+    required_top_level_fields:
+      - purchased_competitors
+      - access_status
+      - usable_for_benchmark
+      - sheets_or_pages_included
+      - included_files
+      - hidden_buyer_experience
+      - input_model
+      - output_model
+      - core_buyer_decision
+      - formula_or_logic_model
+      - onboarding_workflow
+      - real_strengths
+      - real_weaknesses
+      - support_traps
+      - category_standard_learned
+      - benchmark_gap_decision
+      - status
+    allowed_statuses:
+      - PASS
+      - BENCHMARK_INSUFFICIENT
+      - FAIL
+  product_architecture_contract:
+    template_ref: templates/product-architecture-contract-template.yaml
+    required_sections:
+      - product_id
+      - candidate_id
+      - flow_version
+      - market_evidence
+      - competitor_autopsy
+      - target_audience_contract
+      - buyer_behavior_contract
+      - domain_model_contract
+      - decision_output_contract
+      - scenario_matrix
+      - support_risk
+      - build_readiness
+    section_required_fields:
+      - status
+      - required_fields
+      - pass_fail_criteria
+      - blockers
+    build_readiness_allowed_statuses:
+      - BUILD_READY
+      - NOT_BUILD_READY
+  scenario_matrix:
+    template_ref: templates/scenario-matrix-template.yaml
+    required_top_level_fields:
+      - candidate_id
+      - product_id
+      - flow_version
+      - status
+      - scenarios
+      - blockers
+    required_fields_per_scenario:
+      - scenario_name
+      - buyer_segment
+      - required_inputs
+      - expected_transformations
+      - expected_outputs
+      - expected_next_action
+      - pass_fail_result
+      - blocker_if_failed
+  build_readiness_review:
+    template_ref: templates/build-readiness-review-template.yaml
+    required_checks:
+      - market_evidence.status = PASS
+      - competitor_autopsy.status = PASS
+      - target_audience_contract.status = PASS
+      - buyer_behavior_contract.status = PASS
+      - domain_model_contract.status = PASS
+      - decision_output_contract.status = PASS
+      - scenario_matrix.status = PASS
+      - support_risk acceptable
+      - build_cost_estimate within limit
+      - category_standard known
+      - visual_format_standard known
+      - listing_hook known
+    output_statuses:
+      - BUILD_READY
+      - NOT_BUILD_READY
+  product_spec:
+    generated_from_required_ref: product_architecture_contract_ref
+    must_reference:
+      - primary_buyer
+      - excluded_buyer
+      - buyer_behavior_loop
+      - domain_model
+      - decision_outputs
+      - scenario_matrix
+      - competitor_category_standard
+      - support_risk_mitigations
+      - capacity_requirements
+      - visual_formatting_standard
+    hard_rule: No product spec can be accepted if it does not cite the Product Architecture Contract.
+  build_manifest:
+    required_locked_inputs:
+      - product_architecture_contract_ref
+      - product_spec_ref
+      - build_readiness_review_ref
+    builder_must_not_change:
+      - primary_buyer
+      - domain_model
+      - decision_outputs
+      - scenario_logic
+      - scope_boundaries
+  qa_result:
+    required_inspectors:
+      - Artifact Structure Inspector
+      - Scenario Execution Inspector
+      - Decision Output Inspector
+      - Competitor/Category Standard Inspector
+      - Support-Risk Inspector
+      - Listing Hook Inspector
+    hard_rule: QA cannot pass if it does not inspect the actual artifact.
+  blind_buyer_walkthrough:
+    template_ref: templates/blind-buyer-walkthrough-template.yaml
+    required_top_level_fields:
+      - buyer_segment
+      - starting_context
+      - tasks_to_complete
+      - artifact_steps_used
+      - expected_result
+      - actual_result
+      - confusion_points
+      - support_risk
+      - pass_fail_result
+  failure_case:
+    required_top_level_fields:
+      - case_id
+      - candidate_id
+      - failed_flow
+      - status
+      - root_cause
+      - lessons
+      - prevention_rule
+  flow_007_validation:
+    required_top_level_fields:
+      - validation_id
+      - candidate_id
+      - validation_type
+      - input_evidence
+      - build_readiness
+      - expected_blockers
+      - result

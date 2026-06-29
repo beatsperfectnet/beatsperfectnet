@@ -1,0 +1,39 @@
+product_generation_budget:
+  budget_id: PGB-007
+  flow_contract_ref: workflows/FLOW-007.yaml
+  generation_budget_usd: 25.00
+  budget_window:
+    start_step_id: 00_market_evidence
+    end_step_id: 09_founder_launch_gate
+    excludes_competitor_purchase_spend: true
+    includes_attributable_model_api_costs: true
+    includes_paid_tool_usage_when_present: true
+  phase_budget_plan:
+    architecture_lock:
+      stages:
+        - 00_market_evidence
+        - 01_competitor_product_autopsy
+        - 02_product_architecture_contract
+        - 03_scenario_matrix
+        - 04_build_readiness_review
+      soft_budget_usd: 8.00
+    build_and_artifact_qa:
+      stages:
+        - 05_product_build
+        - 06_real_artifact_inspection
+        - 07_blind_buyer_walkthrough
+      soft_budget_usd: 10.00
+    listing_packaging_launch_gate:
+      stages:
+        - 08_listing_packaging_qa
+        - 09_founder_launch_gate
+      soft_budget_usd: 7.00
+  total_hard_budget_usd: 25.00
+  hard_stop_rules:
+    projected_total_above_budget_blocks_paid_call: true
+    no_paid_rebuild_unless_product_architecture_contract_changed_materially: true
+    architecture_failure_returns_to_product_architecture_contract_not_artifact_patch: true
+    implementation_repair_loops_after_build_max: 1
+    stop_or_escalate_if_product_fails_after_implementation_repair: true
+    repeated_similar_artifact_regeneration_forbidden: true
+    stronger_model_escalation_should_happen_before_build_readiness_approval: true

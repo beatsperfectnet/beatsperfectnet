@@ -4,6 +4,34 @@ build_manifest:
   process_dir: process
   runtime_launcher_ref:
   flow_contract_ref:
+  product_architecture_contract_ref:
+  product_spec_ref:
+  build_readiness_review_ref:
+  build_readiness_status:
+  hard_rule: Builder must receive a locked Product Architecture Contract and product spec. Build may start only when build_readiness.status is BUILD_READY.
+  locked_architecture_fields_builder_must_not_change:
+    - primary_buyer
+    - domain_model
+    - decision_outputs
+    - scenario_logic
+    - scope_boundaries
+  builder_may_implement:
+    - workbook_files_templates
+    - formulas
+    - dashboards
+    - instructions
+    - listing_assets
+    - packaging
+  spreadsheet_workbook_requirements:
+    - realistic_demo_rows
+    - blank_formula_ready_rows
+    - formulas_extended_beyond_demo_area
+    - clear_input_areas
+    - formula_or_protected_areas_where_possible
+    - warning_error_states
+    - no_demo_only_workbook
+    - no_fake_filled_capacity
+    - no_negative_on_hand_unless_clearly_marked_as_error_or_exception_state
   model_policy_ref:
   pricing_snapshot_ref:
   generation_budget_usd:
@@ -41,6 +69,9 @@ build_manifest:
     - path:
       role:
   ready_for_publish_requires:
+    - build_readiness_status_BUILD_READY
+    - product_architecture_contract_locked
+    - product_spec_generated_from_product_architecture_contract
     - listing_quality_pass
     - product_quality_pass
     - delivery_quality_pass

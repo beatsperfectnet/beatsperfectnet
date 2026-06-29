@@ -1,4 +1,14 @@
 export type FlowStepId =
+  | "00_market_evidence"
+  | "01_competitor_product_autopsy"
+  | "02_product_architecture_contract"
+  | "03_scenario_matrix"
+  | "04_build_readiness_review"
+  | "05_product_build"
+  | "06_real_artifact_inspection"
+  | "07_blind_buyer_walkthrough"
+  | "08_listing_packaging_qa"
+  | "09_founder_launch_gate"
   | "00_candidate_admission"
   | "01_public_shelf_read"
   | "02_mandatory_competitor_purchase"
@@ -20,6 +30,13 @@ export type FlowStepId =
   | "17_company_metrics";
 
 export type StageGroup =
+  | "market"
+  | "benchmark"
+  | "architecture"
+  | "scenarios"
+  | "readiness"
+  | "artifact_qa"
+  | "walkthrough"
   | "admission"
   | "read"
   | "purchase"
@@ -76,7 +93,7 @@ export type TodayCandidateSnapshot = {
 export type TodayState = {
   asOf: string;
   dataMode: "mock" | "event-log";
-  flowVersion: "FLOW-006";
+  flowVersion: "FLOW-006" | "FLOW-007";
   flowTimeline?: Array<{
     stageGroup: StageGroup;
     stepIds: FlowStepId[];

@@ -190,6 +190,37 @@ Evidence:
 - `docs/FLOW-006-C004-RERUN-HANDOFF.md`
 - commits `c230eec Tighten founder acceptance rejection corpus`, `6b5eb5a Harden FLOW-006 artifact outcome gates`
 
+### FLOW-007 - Product Architecture Contract Before Build
+
+Date: 2026-06-29
+
+Reason: C-004-001 showed that FLOW-006 could improve acceptance, QA, artifact inspection, listing gates, cost accountability, and founder rejection while still rebuilding from an under-specified product idea.
+
+Learning:
+
+- Market signal is real evidence but not build permission.
+- Product generation must wait until target audience, buyer behavior, domain model, decision outputs, category standard, and scenario behavior are locked.
+- Inventory replenishment cannot model Opening Stock as a static SKU field when stock changes through dated counts, sales, purchases/receipts, adjustments, and later counts.
+- Architecture failure must return to Product Architecture Contract, not artifact patching.
+
+Changed:
+
+- Created FLOW-007 with Market Evidence -> Competitor Product Autopsy -> Product Architecture Contract -> Scenario Matrix -> Build Readiness Review before product build.
+- Added Product Architecture Contract, Competitor Autopsy, Scenario Matrix, Build Readiness Review, and Blind Buyer Walkthrough templates.
+- Added C-004-001 as a FLOW-006 failure case and dry-validated it as `NOT_BUILD_READY`.
+
+Prevents:
+
+- Repeated rebuilds that harden symptoms while leaving buyer behavior and domain model unlocked.
+- Dashboard or records treating a failed architecture artifact as launch-ready.
+
+Evidence:
+
+- `docs/FLOW-007.md`
+- `workflows/FLOW-007.yaml`
+- `records/failure-cases/C-004-001-FLOW-006-postmortem.md`
+- `records/flow_007_validation/F7V-C-004-001.yaml`
+
 ### FLOW-006 Patch - Machine-Checkable JTBD Decision Contract
 
 Date: 2026-06-27
@@ -258,6 +289,39 @@ Evidence:
 - `specs/BLS-006.yaml`
 - `specs/FOUNDER-ACCEPTANCE-CORPUS-001.yaml`
 - `governance/09_stage_dispatch_006.yaml`
+
+### FLOW-006 Patch - Inventory Replenishment Logic And Helper Scenario
+
+Date: 2026-06-28
+
+Reason: `C-004-001-R2` reached local delivery launch and failed human product inspection with mostly the same core product mistakes: negative on-hand inventory, manual reorder point input beside lead-time/sales inputs, fully populated generated rows, and unclear helper behavior. The pre-mortem did not catch these blockers.
+
+Learning:
+
+- Inventory replenishment products must derive reorder point from demand during lead time plus buffer/safety stock unless explicit category evidence proves a manual override is expected.
+- Negative on-hand is a domain invariant failure; it cannot appear healthy, successful, no-action, or publishable.
+- Buyer capacity should not be filled with fake generated data. Keep only a few seed rows, then leave the rest blank but formula-ready.
+- The helper must be a step-by-step behavior scenario from first open through inputs, transformations, outputs, and next action.
+- Pre-mortem must inspect product logic and onboarding against company memory and founder corpus, not only listing/watchlist risks.
+
+Changed:
+
+- Added explicit FLOW-006 actions, gates, schema fields, model fail rules, BLS tracking, founder corpus patterns, validator assertions, and tests for derived reorder point, negative on-hand handling, blank formula-ready capacity, helper behavior scenario, and product-logic pre-mortem audit.
+- Marked `C-004-001-R2` as `failed_assets_status` and moved the active repair point back to `05_one_promise_propagation_system_spec`.
+
+Prevents:
+
+- Passing an inventory tracker that is a stock-status/demo workbook instead of a replenishment decision tool.
+- Publishing workbooks where records pass while product logic and first-use behavior still fail founder inspection.
+
+Evidence:
+
+- OpenClaw memory `memory/2026-06-28.md`
+- `records/candidates/R-004.yaml`
+- `records/validation/FA-C-004-001-R2.yaml`
+- `records/validation/PM-C-004-001-R2.yaml`
+- `records/validation/LR-C-004-001-R2.yaml`
+- `docs/FLOW-006-C004-RERUN-HANDOFF.md`
 - `validators/flow-006-validator.mjs`
 - `tests/flow-006.test.mjs`
 
@@ -295,6 +359,43 @@ Evidence:
 - `governance/08_product_generation_budget_006.yaml`
 - `governance/09_stage_dispatch_006.yaml`
 - `validators/flow-006-validator.mjs`
+- `tests/flow-006.test.mjs`
+
+### FLOW-006 Patch - Artifact Enforcement For C-004
+
+Date: 2026-06-28
+
+Reason: Analysis of all C-004 records showed the right standard existed in governance and human-review notes, but the workbook generator still shipped the rejected product model. Records could pass by checking formula presence, row counts, and claim maps while the actual artifact still exposed manual reorder point input, allowed negative stock data into normal recommendation flow, filled working capacity with fake rows, and used helper text that did not fully walk the buyer behavior.
+
+Learning:
+
+- Product standards must be executable artifact checks, not only YAML gates.
+- The build script must consume the product contract directly; record wording cannot compensate for a mismatched generator.
+- QA must fail on forbidden artifact states, not just on missing formulas or missing surfaces.
+- Founder/pre-mortem/launch records must not allow contradictory states such as `founder_acceptance_status: fail` with `publish_blockers: pass`.
+
+Changed:
+
+- Repaired the C-004 workbook generator to derive reorder point from velocity, lead time, and safety stock; block negative stock data with `Fix stock data` / `Review stock data`; leave non-seed capacity blank but formula-ready; and rewrite onboarding around the buyer behavior scenario.
+- Added deterministic workbook validation in `validators/c004_artifact_validator.py`.
+- Wired the artifact validator and C-004 record consistency checks into `validate:flow-006`.
+- Updated C-004 R2 records through local launch as `pass_pending_marketplace_publish`; external marketplace publish remains pending human approval and not run.
+
+Prevents:
+
+- Passing a product because records claim compliance while the artifact still violates founder standards.
+- Publishing an inventory tracker that is a populated demo workbook instead of a buyer-usable replenishment planner.
+- Letting post-hoc human rejection coexist with passing publish-blocker fields.
+
+Evidence:
+
+- `validators/c004_artifact_validator.py`
+- `builds/C-004-001/process/build_inventory_tracker.py`
+- `records/validation/QA-C-004-001-R2.yaml`
+- `records/validation/FA-C-004-001-R2.yaml`
+- `records/validation/PM-C-004-001-R2.yaml`
+- `records/validation/LR-C-004-001-R2.yaml`
+- `records/flow_step_changes/2026-06-28T14-20-00Z-R-004-011-r2-repair-05-to-12.yaml`
 - `tests/flow-006.test.mjs`
 
 ## Open Backfill Items

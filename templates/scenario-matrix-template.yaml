@@ -1,0 +1,34 @@
+scenario_matrix:
+  candidate_id:
+  product_id:
+  flow_version: FLOW-007
+  status:
+  allowed_statuses:
+    - PASS
+    - SCENARIO_MATRIX_FAILED
+  hard_rule: Scenario Matrix must pass before build.
+  scenarios:
+    - scenario_name:
+      buyer_segment:
+      required_inputs:
+        - 
+      expected_transformations:
+        - 
+      expected_outputs:
+        - 
+      expected_next_action:
+      pass_fail_result:
+      blocker_if_failed:
+  c004_canonical_scenarios:
+    - no sales history
+    - less than 30 days of sales
+    - 30+ days of sales
+    - supplier change
+    - lead time change
+    - fulfillment mode change
+    - stock count correction
+    - purchase received
+    - SKU out of stock
+    - slow-moving overstocked SKU
+  blockers:
+    - 

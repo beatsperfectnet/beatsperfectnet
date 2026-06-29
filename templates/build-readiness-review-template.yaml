@@ -1,0 +1,28 @@
+build_readiness_review:
+  review_id:
+  candidate_id:
+  product_id:
+  flow_version: FLOW-007
+  product_architecture_contract_ref:
+  scenario_matrix_ref:
+  checks:
+    market_evidence.status = PASS:
+    competitor_autopsy.status = PASS:
+    target_audience_contract.status = PASS:
+    buyer_behavior_contract.status = PASS:
+    domain_model_contract.status = PASS:
+    decision_output_contract.status = PASS:
+    scenario_matrix.status = PASS:
+    support_risk acceptable:
+    build_cost_estimate within limit:
+    category_standard known:
+    visual_format_standard known:
+    listing_hook known:
+  build_readiness:
+    status:
+    allowed_statuses:
+      - BUILD_READY
+      - NOT_BUILD_READY
+    blockers:
+      - 
+  hard_rule: Build starts only if BUILD_READY.

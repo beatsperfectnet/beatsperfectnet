@@ -2,6 +2,46 @@ import type { FlowStepId, StageGroup } from "./types";
 
 export const stageLabels: Array<{ label: StageGroup; steps: FlowStepId[] }> = [
   {
+    label: "market",
+    steps: ["00_market_evidence"]
+  },
+  {
+    label: "benchmark",
+    steps: ["01_competitor_product_autopsy"]
+  },
+  {
+    label: "architecture",
+    steps: ["02_product_architecture_contract"]
+  },
+  {
+    label: "scenarios",
+    steps: ["03_scenario_matrix"]
+  },
+  {
+    label: "readiness",
+    steps: ["04_build_readiness_review"]
+  },
+  {
+    label: "build",
+    steps: ["05_product_build"]
+  },
+  {
+    label: "artifact_qa",
+    steps: ["06_real_artifact_inspection"]
+  },
+  {
+    label: "walkthrough",
+    steps: ["07_blind_buyer_walkthrough"]
+  },
+  {
+    label: "listing",
+    steps: ["08_listing_packaging_qa"]
+  },
+  {
+    label: "launch",
+    steps: ["09_founder_launch_gate"]
+  },
+  {
     label: "admission",
     steps: [
       "00_candidate_admission"

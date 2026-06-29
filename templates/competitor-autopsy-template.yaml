@@ -1,0 +1,38 @@
+competitor_autopsy:
+  candidate_id:
+  product_id:
+  flow_version: FLOW-007
+  status:
+  allowed_statuses:
+    - PASS
+    - BENCHMARK_INSUFFICIENT
+    - FAIL
+  purchased_competitors:
+    - competitor_id:
+      listing_url:
+      seller:
+      purchase_ref:
+      inspected_asset_ref:
+  access_status:
+  usable_for_benchmark:
+  sheets_or_pages_included:
+    - 
+  included_files:
+    - 
+  hidden_buyer_experience:
+  input_model:
+  output_model:
+  core_buyer_decision:
+  formula_or_logic_model:
+  onboarding_workflow:
+  real_strengths:
+    - 
+  real_weaknesses:
+    - 
+  support_traps:
+    - 
+  category_standard_learned:
+  benchmark_gap_decision:
+  hard_rule: A broken, inaccessible, shallow, or unrepresentative competitor can be recorded as evidence but cannot satisfy benchmark autopsy. If benchmark evidence is insufficient, the flow must stop or request approval to inspect another competitor.
+  blockers:
+    - 

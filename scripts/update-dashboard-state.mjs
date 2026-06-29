@@ -7,18 +7,33 @@ import YAML from "yaml";
 
 const repoRoot = process.cwd();
 
-const activeContractRefs = [
-  "workflows/FLOW-006.yaml",
-  "specs/SCHEMA-006.yaml",
-  "specs/MODEL-006.yaml",
-  "specs/BLS-006.yaml",
-  "specs/FOUNDER-ACCEPTANCE-CORPUS-001.yaml",
-  "governance/05_governance_rules.yaml",
-  "governance/08_product_generation_budget_006.yaml",
-  "governance/09_stage_dispatch_006.yaml",
-];
+function activeFlowConfig() {
+  return readYaml("config/active-flow.yaml") || {
+    active_flow_id: "FLOW-007",
+    workflow_contract_ref: "workflows/FLOW-007.yaml",
+    model_policy_ref: "specs/MODEL-007.yaml",
+    stage_dispatch_ref: "governance/09_stage_dispatch_007.yaml",
+    schema_ref: "specs/SCHEMA-007.yaml",
+    build_lifecycle_ref: "specs/BLS-007.yaml",
+  };
+}
 
-const stageTimeline = [
+const activeFlow = activeFlowConfig();
+const activeFlowId = activeFlow.active_flow_id || "FLOW-007";
+const activeDispatchRef = activeFlow.stage_dispatch_ref || "governance/09_stage_dispatch_007.yaml";
+const activeContractRefs = [
+  activeFlow.workflow_contract_ref,
+  activeFlow.schema_ref,
+  activeFlow.model_policy_ref,
+  activeFlow.build_lifecycle_ref,
+  "governance/05_governance_rules.yaml",
+  activeFlowId === "FLOW-007" ? "docs/FLOW-007.md" : null,
+  activeFlowId === "FLOW-006" ? "specs/FOUNDER-ACCEPTANCE-CORPUS-001.yaml" : null,
+  activeFlowId === "FLOW-007" ? "governance/08_product_generation_budget_007.yaml" : "governance/08_product_generation_budget_006.yaml",
+  activeDispatchRef,
+].filter(Boolean);
+
+const flow006Timeline = [
   { stageGroup: "admission", stepIds: ["00_candidate_admission"] },
   { stageGroup: "read", stepIds: ["01_public_shelf_read"] },
   { stageGroup: "purchase", stepIds: ["02_mandatory_competitor_purchase"] },
@@ -33,17 +48,23 @@ const stageTimeline = [
   { stageGroup: "gate", stepIds: ["11_listing_quality_gate"] },
   { stageGroup: "pre_mortem", stepIds: ["11b_pre_mortem_failure_analysis"] },
   { stageGroup: "launch", stepIds: ["12_delivery_launch"] },
-  {
-    stageGroup: "post_launch",
-    stepIds: [
-      "13_monthly_outcomes",
-      "14_competitor_purchase_accounting",
-      "15_kill_rules",
-      "16_resource_allocation_rules",
-      "17_company_metrics",
-    ],
-  },
+  { stageGroup: "post_launch", stepIds: ["13_monthly_outcomes", "14_competitor_purchase_accounting", "15_kill_rules", "16_resource_allocation_rules", "17_company_metrics"] },
 ];
+
+const flow007Timeline = [
+  { stageGroup: "market", stepIds: ["00_market_evidence"] },
+  { stageGroup: "benchmark", stepIds: ["01_competitor_product_autopsy"] },
+  { stageGroup: "architecture", stepIds: ["02_product_architecture_contract"] },
+  { stageGroup: "scenarios", stepIds: ["03_scenario_matrix"] },
+  { stageGroup: "readiness", stepIds: ["04_build_readiness_review"] },
+  { stageGroup: "build", stepIds: ["05_product_build"] },
+  { stageGroup: "artifact_qa", stepIds: ["06_real_artifact_inspection"] },
+  { stageGroup: "walkthrough", stepIds: ["07_blind_buyer_walkthrough"] },
+  { stageGroup: "listing", stepIds: ["08_listing_packaging_qa"] },
+  { stageGroup: "launch", stepIds: ["09_founder_launch_gate"] },
+];
+
+const stageTimeline = activeFlowId === "FLOW-007" ? flow007Timeline : flow006Timeline;
 
 function readYaml(relativePath) {
   const absolutePath = path.join(repoRoot, relativePath);
@@ -129,6 +150,8 @@ function normalizeCurrentStep(candidate) {
     ready_for_marketplace_publish: "12_delivery_launch",
     pass_pending_marketplace_publish: "12_delivery_launch",
     published: "12_monthly_outcomes",
+    FLOW_006_FAILURE_CASE: "04_build_readiness_review",
+    NOT_BUILD_READY: "04_build_readiness_review",
   };
   return aliases[raw] ?? null;
 }
@@ -182,6 +205,69 @@ function ledgerEntries() {
 
 function humanEscalations() {
   return apiCostLedger().human_escalations || [];
+}
+
+function flowStepChanges() {
+  return readYamlFiles("records/flow_step_changes")
+    .map((entry) => ({
+      relativePath: entry.relativePath,
+      ...(entry.doc?.flow_step_change || {}),
+    }))
+    .filter((entry) => entry.change_id);
+}
+
+function flow007ValidationByCandidateId() {
+  const out = new Map();
+  for (const entry of readYamlFiles("records/flow_007_validation")) {
+    const validation = entry.doc?.flow_007_validation;
+    if (validation?.candidate_id) {
+      out.set(validation.candidate_id, { relativePath: entry.relativePath, ...validation });
+    }
+  }
+  return out;
+}
+
+function failureCaseByCandidateId() {
+  const out = new Map();
+  const dir = path.join(repoRoot, "records", "failure-cases");
+  if (!fs.existsSync(dir)) return out;
+  for (const name of fs.readdirSync(dir).filter((entry) => entry.endsWith(".md")).sort()) {
+    const relativePath = path.join("records", "failure-cases", name);
+    const content = fs.readFileSync(path.join(repoRoot, relativePath), "utf8");
+    const candidateMatch = content.match(/^Candidate:\s*(.+)$/m);
+    const statusMatch = content.match(/^Status:\s*(.+)$/m);
+    if (candidateMatch) {
+      out.set(candidateMatch[1].trim(), {
+        relativePath,
+        status: statusMatch?.[1]?.trim() || "FLOW_006_FAILURE_CASE",
+      });
+    }
+  }
+  return out;
+}
+
+function timestampMs(value) {
+  const ms = Date.parse(String(value || ""));
+  return Number.isFinite(ms) ? ms : 0;
+}
+
+function latestFlowStepChangeForCandidate(candidate) {
+  const candidateId = candidate?.candidate_id;
+  if (!candidateId) return null;
+  return flowStepChanges()
+    .filter((entry) => entry.candidate_id === candidateId)
+    .sort((a, b) => {
+      const byTime = timestampMs(a.triggered_at) - timestampMs(b.triggered_at);
+      if (byTime !== 0) return byTime;
+      return String(a.relativePath).localeCompare(String(b.relativePath));
+    })
+    .at(-1) || null;
+}
+
+function latestFlowStepChangeAfterActiveContractChange(candidate) {
+  const latestChange = latestFlowStepChangeForCandidate(candidate);
+  if (!latestChange) return false;
+  return timestampMs(latestChange.triggered_at) > latestMtimeMs(activeContractRefs);
 }
 
 function ledgerEntryDate(entry) {
@@ -245,6 +331,7 @@ function latestHumanEscalationForDashboard(candidates) {
 function activeContractChangedAfterCandidateReview(candidate) {
   const reviewRef = candidate?.launch_review_result;
   if (!reviewRef) return false;
+  if (latestFlowStepChangeAfterActiveContractChange(candidate)) return false;
   const reviewMtime = fileMtimeMs(reviewRef);
   if (!reviewMtime) return false;
   return latestMtimeMs(activeContractRefs) > reviewMtime;
@@ -347,6 +434,15 @@ function readableValue(value) {
 }
 
 function outcomeStatus(candidate) {
+  const validation = flow007ValidationByCandidateId().get(candidate.candidate_id);
+  const failureCase = failureCaseByCandidateId().get(candidate.candidate_id);
+  if (
+    failureCase?.status === "FLOW_006_FAILURE_CASE" ||
+    validation?.build_readiness?.status === "NOT_BUILD_READY" ||
+    validation?.result?.status === "NOT_BUILD_READY"
+  ) {
+    return "rejected_before_launch";
+  }
   const record = launchRecord(candidate);
   const current = String(candidate.current_stage || "").toLowerCase();
   if (isPublished(record) || current === "published") return "launched";
@@ -369,17 +465,27 @@ function healthFor(candidate) {
 
 function publicCandidateSnapshot(candidate) {
   const status = outcomeStatus(candidate);
+  const validation = flow007ValidationByCandidateId().get(candidate.candidate_id);
+  const failureCase = failureCaseByCandidateId().get(candidate.candidate_id);
+  const latestStepChange = latestFlowStepChangeForCandidate(candidate);
   const humanEscalation = latestHumanEscalationForCandidate(candidate);
   const escalationStepId = stepForEscalationStage(humanEscalation?.stage_group);
   const contractInvalidatesReview = activeContractChangedAfterCandidateReview(candidate);
-  const currentStepId = contractInvalidatesReview ? "04_alignment_synthesis" : (escalationStepId || normalizeCurrentStep(candidate));
+  const stepChangeStepId = latestStepChange?.to_step_id || latestStepChange?.from_step_id || null;
+  const currentStepId = validation?.build_readiness?.status === "NOT_BUILD_READY"
+    ? "04_build_readiness_review"
+    : stepChangeStepId || (contractInvalidatesReview ? (activeFlowId === "FLOW-007" ? "02_product_architecture_contract" : "04_alignment_synthesis") : (escalationStepId || normalizeCurrentStep(candidate)));
   const currentStageGroup = currentStepId ? stageGroupForStep(currentStepId) : null;
   const launch = launchRecord(candidate);
   const terminalReason = status === "rejected_before_launch"
-    ? launch?.decisionSummary || launch?.reason || launch?.result || "Rejected before marketplace launch."
+    ? validation?.result?.summary || failureCase?.status || launch?.decisionSummary || launch?.reason || launch?.result || "Rejected before marketplace launch."
     : undefined;
   const health = healthFor(candidate);
-  const stageReason = humanEscalation?.reason
+  const stageReason = validation?.build_readiness?.status === "NOT_BUILD_READY"
+    ? validation.result?.summary || "FLOW-007 dry validation returned NOT_BUILD_READY."
+    : latestStepChange?.reason
+    ? String(latestStepChange.reason)
+    : humanEscalation?.reason
     ? String(humanEscalation.reason)
     : contractInvalidatesReview
       ? "Active FLOW-006 contract changed after the last launch review; product is not ready for publish and must rerun from synthesis."
@@ -393,6 +499,16 @@ function publicCandidateSnapshot(candidate) {
     ...(currentStepId ? { currentStepId } : {}),
     ...(currentStageGroup ? { currentStageGroup } : {}),
     ...(stageReason ? { stageReason } : {}),
+    ...(latestStepChange ? {
+      latestStepChange: {
+        changeId: latestStepChange.change_id,
+        fromStepId: latestStepChange.from_step_id || "",
+        toStepId: latestStepChange.to_step_id || "",
+        status: latestStepChange.status || "",
+        triggeredAt: latestStepChange.triggered_at || "",
+        sourceRef: latestStepChange.relativePath,
+      },
+    } : {}),
     totalTokensUsed: Number(candidate.cumulative_total_tokens || 0),
     totalUsdSpent: productApiCostForCandidate(candidate.candidate_id),
     launchTokens: 0,
@@ -401,16 +517,22 @@ function publicCandidateSnapshot(candidate) {
     refundTokens: 0,
     refundCount: 0,
     budgetHealth: health.budgetHealth,
-    processHealth: contractInvalidatesReview ? "yellow" : health.processHealth,
+    processHealth: status === "rejected_before_launch" ? "red" : contractInvalidatesReview ? "yellow" : health.processHealth,
     ...(terminalReason ? { terminalReason } : {}),
   };
 }
 
-function activeFlow006Candidates() {
+function activeFlowCandidates() {
   return readYamlFiles("records/candidates")
     .flatMap((entry) => entry.doc?.candidates || [])
     .filter((candidate) => candidate?.candidate_id)
-    .filter((candidate) => String(candidate.original_flow_contract_ref || "").includes("FLOW-006"))
+    .filter((candidate) => {
+      const original = String(candidate.original_flow_contract_ref || "");
+      const requalified = candidate.requalified_under || [];
+      const validation = flow007ValidationByCandidateId().has(candidate.candidate_id);
+      if (activeFlowId === "FLOW-007") return validation || original.includes("FLOW-007") || requalified.some((ref) => String(ref).includes("FLOW-007"));
+      return original.includes("FLOW-006");
+    })
     .filter((candidate) => !isExcludedFromActiveDashboard(candidate));
 }
 
@@ -429,7 +551,7 @@ function activePurchaseEscalation(candidates) {
     candidateTitle: candidateTitle(pendingPurchaseCandidate),
     reason: "Competitor purchase requires human approval before external spend.",
     recommendedAction: "Approve or reject the purchase before continuing FLOW-006.",
-    governanceFile: "governance/09_stage_dispatch_006.yaml",
+    governanceFile: activeDispatchRef,
   };
 }
 
@@ -442,9 +564,9 @@ function contractChangeEscalation(candidates) {
     candidateId: candidate.candidate_id,
     candidateLabel: candidate.idea_ref || "",
     candidateTitle: candidateTitle(candidate),
-    reason: "Active FLOW-006 contract changed after this candidate's last launch review.",
-    recommendedAction: "Rerun from 04_alignment_synthesis so the dashboard and artifact state match the live flow.",
-    governanceFile: "governance/09_stage_dispatch_006.yaml",
+    reason: `Active ${activeFlowId} contract changed after this candidate's last launch review.`,
+    recommendedAction: activeFlowId === "FLOW-007" ? "Return to Product Architecture Contract before any build." : "Rerun from 04_alignment_synthesis so the dashboard and artifact state match the live flow.",
+    governanceFile: activeDispatchRef,
   };
 }
 
@@ -466,7 +588,7 @@ function humanEscalationDashboardState(escalation, candidates) {
     recommendedAction: outcome
       ? `Recorded outcome: ${outcome}.`
       : "Resolve the human-requested product or flow change before continuing.",
-    governanceFile: "governance/09_stage_dispatch_006.yaml",
+    governanceFile: activeDispatchRef,
   };
 }
 
@@ -545,7 +667,7 @@ function periodState() {
     from: dates[0] || today,
     to: dates[dates.length - 1] || today,
     dataMode: "event-log",
-    flowVersion: "FLOW-006",
+    flowVersion: activeFlowId,
     ...(rejectedLaunch ? { rejectedLaunch } : {}),
     totals: {
       launchedCount: 0,
@@ -594,7 +716,7 @@ function periodState() {
 }
 
 function buildDashboardState() {
-  const rawCandidates = activeFlow006Candidates();
+  const rawCandidates = activeFlowCandidates();
   const candidates = rawCandidates.map(publicCandidateSnapshot);
   const byStatus = (status) => candidates.filter((candidate) => candidate.outcomeStatus === status);
   const contractEscalation = contractChangeEscalation(rawCandidates);
@@ -608,19 +730,21 @@ function buildDashboardState() {
     candidateTitle: "",
     reason: "",
     recommendedAction: "",
-    governanceFile: "governance/09_stage_dispatch_006.yaml",
+    governanceFile: activeDispatchRef,
   };
 
   return {
     today: {
       asOf: nowBerlin(),
       dataMode: "event-log",
-      flowVersion: "FLOW-006",
+      flowVersion: activeFlowId,
       flowTimeline: stageTimeline,
       sourceRefs: {
         activeFlow: "config/active-flow.yaml",
         candidateRecords: "records/candidates/*.yaml",
         validationRecords: "records/validation/*.yaml",
+        flow007ValidationRecords: "records/flow_007_validation/*.yaml",
+        failureCases: "records/failure-cases/*.md",
       },
       todayLog: todayLogEntries(),
       totals: bucketTotals(candidates),

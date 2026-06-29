@@ -2,6 +2,16 @@ model_run_ledger:
   run_id:
   created_at:
   workflow_contract_ref:
+  product_architecture_contract_ref:
+  build_readiness_review_ref:
+  build_readiness_status:
+  cost_control_rules:
+    no_paid_rebuild_unless_product_architecture_contract_changed_materially: true
+    architecture_failure_returns_to_product_architecture_contract_not_artifact_patch: true
+    implementation_repair_loops_after_build_max: 1
+    stop_or_escalate_if_product_fails_after_implementation_repair: true
+    repeated_similar_artifact_regeneration_forbidden: true
+    stronger_model_escalation_should_happen_before_build_readiness_approval: true
   dispatch_contract_ref:
   dispatch_log_ref:
   session_model_observed:

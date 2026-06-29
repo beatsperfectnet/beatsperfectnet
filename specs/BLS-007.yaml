@@ -1,0 +1,71 @@
+BLS-007:
+  purpose: build_lifecycle_specification_for_flow_007
+  candidate_stages:
+    - market_evidence
+    - competitor_product_autopsy
+    - product_architecture_contract
+    - scenario_matrix
+    - build_readiness_review
+    - product_build
+    - real_artifact_inspection
+    - blind_buyer_walkthrough
+    - listing_packaging_qa
+    - founder_launch_gate
+  statuses:
+    - IDEA_RECEIVED
+    - MARKET_REJECTED
+    - MARKET_INSUFFICIENT
+    - BENCHMARK_INSUFFICIENT
+    - TARGET_CONTRACT_FAILED
+    - DOMAIN_MODEL_FAILED
+    - DECISION_OUTPUT_FAILED
+    - SCENARIO_MATRIX_FAILED
+    - NOT_BUILD_READY
+    - BUILD_READY
+    - BUILT_QA_FAILED_IMPLEMENTATION
+    - BUILT_QA_FAILED_ARCHITECTURE
+    - LISTING_FAILED
+    - LAUNCH_READY
+    - LAUNCHED
+    - FLOW_006_FAILURE_CASE
+  pre_build_tracking:
+    - market_evidence_ref
+    - market_evidence_status
+    - competitor_autopsy_ref
+    - competitor_autopsy_status
+    - product_architecture_contract_ref
+    - target_audience_contract_status
+    - buyer_behavior_contract_status
+    - domain_model_contract_status
+    - decision_output_contract_status
+    - scenario_matrix_ref
+    - scenario_matrix_status
+    - build_readiness_review_ref
+    - build_readiness_status
+  launch_requires:
+    - build_readiness_status_BUILD_READY
+    - product_architecture_contract_cited_by_product_spec
+    - locked_contract_consumed_by_builder
+    - actual_artifact_inspection_passed
+    - scenario_execution_passed_on_actual_artifact
+    - decision_outputs_verified_from_actual_artifact
+    - blind_buyer_walkthrough_passed
+    - listing_packaging_qa_passed
+    - founder_launch_gate_passed
+    - failed_architecture_artifact_absent
+  hard_blocks:
+    failed_architecture_statuses:
+      - MARKET_INSUFFICIENT
+      - BENCHMARK_INSUFFICIENT
+      - TARGET_CONTRACT_FAILED
+      - DOMAIN_MODEL_FAILED
+      - DECISION_OUTPUT_FAILED
+      - SCENARIO_MATRIX_FAILED
+      - NOT_BUILD_READY
+      - FLOW_006_FAILURE_CASE
+    failed_architecture_artifact_cannot_be_launch_ready: true
+    no_product_generation_without_BUILD_READY: true
+  repair_loop_limits:
+    implementation_repairs_after_build_max: 1
+    repeated_similar_artifact_regeneration_forbidden: true
+    architecture_failure_returns_to_contract_not_artifact_patch: true

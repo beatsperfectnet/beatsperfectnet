@@ -1,0 +1,193 @@
+FLOW-007:
+  purpose: product_architecture_contract_flow_for_build_ready_digital_products
+  rule: no_product_generation_before_build_readiness
+  hard_rule: Only candidates with build_readiness.status = BUILD_READY may enter product generation.
+  required_inputs:
+    - company.md
+    - docs/FLOW-007.md
+    - docs/COMPANY-MEMORY.md
+    - governance/05_governance_rules.yaml
+    - governance/06_resource_allocation.yaml
+    - governance/07_capacity_model.yaml
+    - governance/08_product_generation_budget_007.yaml
+    - governance/09_stage_dispatch_007.yaml
+    - specs/SCHEMA-007.yaml
+    - specs/MODEL-007.yaml
+    - specs/BLS-007.yaml
+    - templates/product-architecture-contract-template.yaml
+    - templates/competitor-autopsy-template.yaml
+    - templates/scenario-matrix-template.yaml
+    - templates/build-readiness-review-template.yaml
+    - templates/blind-buyer-walkthrough-template.yaml
+    - brandbook/beatsperfect-brandbook.v1.yaml
+  run_telemetry:
+    runtime_launcher_ref: runtime/model-stage-launcher.mjs
+    model_usage_ledger_required: true
+    stage_dispatch_log_required: true
+    exact_model_match_required: true
+    product_generation_cost_accountability_required: true
+  flow:
+    - step_id: 00_market_evidence
+      agent_tier: mini
+      model_policy_ref: MODEL-007.market_evidence
+      action:
+        - collect_market_research_tool_or_export_evidence
+        - confirm_real_market_signal
+        - record_market_metrics_quality
+        - identify_category_standard_candidates
+        - reject_market_idea_as_build_input_without_architecture_contract
+      output_file_template: records/market_evidence/ME-XXXX.yaml
+      gate:
+        market_evidence_status_required: PASS
+        market_signal_alone_cannot_unlock_build: true
+    - step_id: 01_competitor_product_autopsy
+      agent_tier: mini
+      model_policy_ref: MODEL-007.competitor_product_autopsy
+      action:
+        - inspect_purchased_or_approved_benchmark_product
+        - record_access_status_and_benchmark_usability
+        - inspect_hidden_buyer_experience
+        - inspect_input_output_formula_onboarding_and_support_traps
+        - identify_category_standard_learned
+        - stop_or_request_another_competitor_when_benchmark_insufficient
+      output_file_template: records/competitor_autopsy/CPA-XXXX.yaml
+      template_ref: templates/competitor-autopsy-template.yaml
+      gate:
+        competitor_autopsy_status_required: PASS
+        broken_inaccessible_shallow_or_unrepresentative_competitor_cannot_satisfy_benchmark: true
+    - step_id: 02_product_architecture_contract
+      agent_tier: mini
+      escalation_allowed:
+        - architecture_readiness_review
+      model_policy_ref: MODEL-007.product_architecture_contract
+      action:
+        - define_target_audience_contract
+        - define_buyer_behavior_contract
+        - define_domain_model_contract
+        - define_decision_output_contract
+        - define_support_risk
+        - define_category_and_visual_format_standard
+        - classify_architecture_status_without_building
+      output_file_template: records/product_architecture_contract/PAC-XXXX.yaml
+      template_ref: templates/product-architecture-contract-template.yaml
+      gate:
+        target_audience_contract_status_required: PASS
+        buyer_behavior_contract_status_required: PASS
+        domain_model_contract_status_required: PASS
+        decision_output_contract_status_required: PASS
+        support_risk_acceptable_required: true
+        build_readiness_not_set_here_without_scenario_matrix: true
+    - step_id: 03_scenario_matrix
+      agent_tier: mini
+      model_policy_ref: MODEL-007.scenario_matrix
+      action:
+        - define_real_buyer_scenarios_by_segment
+        - map_required_inputs_transformations_outputs_and_next_actions
+        - include_boundary_and_change_scenarios
+        - fail_if_any_launch_blocking_scenario_fails
+      output_file_template: records/scenario_matrix/SM-XXXX.yaml
+      template_ref: templates/scenario-matrix-template.yaml
+      gate:
+        scenario_matrix_status_required: PASS
+        scenario_matrix_must_pass_before_build: true
+    - step_id: 04_build_readiness_review
+      agent_tier: mini
+      escalation_allowed:
+        - architecture_readiness_review
+      model_policy_ref: MODEL-007.build_readiness_review
+      action:
+        - verify_market_evidence_pass
+        - verify_competitor_autopsy_pass
+        - verify_product_architecture_contract_pass
+        - verify_scenario_matrix_pass
+        - verify_support_risk_cost_category_visual_and_listing_hook
+        - set_build_readiness_status
+      output_file_template: records/build_readiness/BRR-XXXX.yaml
+      template_ref: templates/build-readiness-review-template.yaml
+      gate:
+        build_readiness_status_required: BUILD_READY
+        only_build_ready_candidates_may_enter_product_generation: true
+    - step_id: 05_product_build
+      agent_tier: mini
+      model_policy_ref: MODEL-007.product_build
+      action:
+        - consume_locked_product_architecture_contract
+        - consume_locked_product_spec_generated_from_contract
+        - implement_artifacts_formulas_dashboards_instructions_listing_assets_and_packaging
+        - preserve_primary_buyer_domain_model_decision_outputs_scenario_logic_and_scope_boundaries
+        - record_build_manifest
+      output_file_template: builds/<candidate_id>/manifest.yaml
+      gate:
+        build_readiness_status_must_equal_BUILD_READY: true
+        builder_must_not_change_architecture_contract: true
+        implementation_repair_loops_max: 1
+    - step_id: 06_real_artifact_inspection
+      agent_tier: mini
+      model_policy_ref: MODEL-007.real_artifact_inspection
+      action:
+        - inspect_actual_artifact_not_only_specs
+        - run_artifact_structure_inspector
+        - run_scenario_execution_inspector
+        - run_decision_output_inspector
+        - run_competitor_category_standard_inspector
+        - run_support_risk_inspector
+        - run_listing_hook_inspector
+      output_file_template: records/validation/RAI-XXXX.yaml
+      gate:
+        actual_artifact_inspection_required: true
+        qa_cannot_pass_without_actual_artifact: true
+    - step_id: 07_blind_buyer_walkthrough
+      agent_tier: mini
+      model_policy_ref: MODEL-007.blind_buyer_walkthrough
+      action:
+        - execute_blind_buyer_workflow_from_starting_context
+        - record_artifact_steps_used_confusion_support_risk_and_result
+        - fail_if_buyer_cannot_complete_intended_workflow
+      output_file_template: records/blind_buyer_walkthrough/BBW-XXXX.yaml
+      template_ref: templates/blind-buyer-walkthrough-template.yaml
+      gate:
+        blind_buyer_walkthrough_status_required: PASS
+    - step_id: 08_listing_packaging_qa
+      agent_tier: mini
+      model_policy_ref: MODEL-007.listing_packaging_qa
+      action:
+        - generate_listing_from_buyer_promise_decision_output_contract_category_standard_actual_screenshots_and_brandbook
+        - require_image_role_buyer_hook_specific_product_proof_and_conversion_reason_for_each_image
+        - reject_clean_screenshots_without_buyer_hook
+        - inspect_delivery_packaging_against_artifact_truth
+      output_file_template: records/validation/LPQ-XXXX.yaml
+      gate:
+        listing_images_require_buyer_hook_and_product_proof: true
+        actual_artifact_screenshots_required: true
+    - step_id: 09_founder_launch_gate
+      agent_tier: mini
+      escalation_allowed:
+        - founder_rejection
+      model_policy_ref: MODEL-007.founder_launch_gate
+      action:
+        - reject_if_architecture_contract_or_artifact_evidence_missing
+        - reject_if_failed_architecture_artifact_claims_launch_ready
+        - verify_no_repeated_rebuild_pattern
+        - verify_one_repair_loop_limit
+        - set_launch_status
+      output_file_template: records/validation/FLG-XXXX.yaml
+      gate:
+        founder_launch_gate_required: true
+        failed_architecture_artifact_cannot_be_launch_ready: true
+  statuses:
+    - IDEA_RECEIVED
+    - MARKET_REJECTED
+    - MARKET_INSUFFICIENT
+    - BENCHMARK_INSUFFICIENT
+    - TARGET_CONTRACT_FAILED
+    - DOMAIN_MODEL_FAILED
+    - DECISION_OUTPUT_FAILED
+    - SCENARIO_MATRIX_FAILED
+    - NOT_BUILD_READY
+    - BUILD_READY
+    - BUILT_QA_FAILED_IMPLEMENTATION
+    - BUILT_QA_FAILED_ARCHITECTURE
+    - LISTING_FAILED
+    - LAUNCH_READY
+    - LAUNCHED
+    - FLOW_006_FAILURE_CASE

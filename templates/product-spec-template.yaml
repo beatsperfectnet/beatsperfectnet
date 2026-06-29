@@ -2,11 +2,34 @@ product_spec:
   spec_id:
   candidate_ref:
   idea_ref:
+  flow_version:
+  product_architecture_contract_ref:
+  build_readiness_review_ref:
+  hard_rule: No product spec can be accepted if it does not cite the Product Architecture Contract.
   product_name:
   marketplace:
   listing_spec_ref:
   product_analysis_ref:
   purchased_competitor_inspection_ref:
+  generated_from_product_architecture_contract:
+    primary_buyer:
+    excluded_buyer:
+    buyer_behavior_loop:
+    domain_model:
+    decision_outputs:
+    scenario_matrix_ref:
+    competitor_category_standard:
+    support_risk_mitigations:
+    capacity_requirements:
+    visual_formatting_standard:
+  architecture_lock_traceability:
+    target_audience_contract_ref:
+    buyer_behavior_contract_ref:
+    domain_model_contract_ref:
+    decision_output_contract_ref:
+    scenario_matrix_ref:
+    build_readiness_status:
+    accepted_only_if_build_readiness_status_is_BUILD_READY: true
   domain_brief_application:
     candidate_domain_brief_ref:
     applied_consideration_ids:

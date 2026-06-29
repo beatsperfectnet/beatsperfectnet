@@ -1,0 +1,57 @@
+flow_007_validation:
+  validation_id: F7V-C-004-001
+  candidate_id: C-004-001
+  validation_type: dry_validation_from_flow_006_postmortem
+  flow_version: FLOW-007
+  input_evidence:
+    - records/failure-cases/C-004-001-FLOW-006-postmortem.md
+    - records/purchased_competitor_inspection/PCI-C-004-001.yaml
+    - records/propagation_system_spec/PSS-C-004-001-R2.yaml
+    - records/validation/QA-C-004-001-R2.yaml
+    - records/validation/FA-C-004-001-R2.yaml
+    - records/validation/PM-C-004-001-R2.yaml
+    - records/validation/LR-C-004-001-R2.yaml
+  artifact_rebuild_performed: false
+  build_readiness:
+    status: NOT_BUILD_READY
+    hard_rule_applied: Only candidates with build_readiness.status = BUILD_READY may enter product generation.
+  expected_blockers:
+    - competitor benchmark insufficient or shallow
+    - target audience not locked before build
+    - buyer behavior contract insufficient
+    - domain model failed because Opening Stock was treated as static
+    - decision outputs not fully locked
+    - scenario matrix would fail supplier/lead-time/receipt/stock-count-change cases
+  contract_section_results:
+    market_evidence:
+      status: PASS
+      note: Market signal was real but insufficient for build readiness.
+    competitor_autopsy:
+      status: BENCHMARK_INSUFFICIENT
+      blocker: Competitor/category standard was too shallow to lock architecture.
+    target_audience_contract:
+      status: TARGET_CONTRACT_FAILED
+      blocker: Primary buyer, data maturity segments, and excluded buyers were not locked before build.
+    buyer_behavior_contract:
+      status: NOT_BUILD_READY
+      blocker: Repeated usage loop and decision behavior were under-specified before generation.
+    domain_model_contract:
+      status: DOMAIN_MODEL_FAILED
+      blocker: Opening Stock was treated as a static SKU field instead of dated stock state/events.
+    decision_output_contract:
+      status: DECISION_OUTPUT_FAILED
+      blocker: Reorder timing, quantity, confidence, and next action were not fully locked against the domain model.
+    scenario_matrix:
+      status: SCENARIO_MATRIX_FAILED
+      failed_canonical_scenarios:
+        - supplier change
+        - lead time change
+        - stock count correction
+        - purchase received
+        - no sales history
+        - less than 30 days of sales
+  result:
+    status: NOT_BUILD_READY
+    launch_status_allowed: false
+    product_generation_allowed: false
+    summary: C-004-001 fails FLOW-007 dry validation and must return to Product Architecture Contract instead of artifact rebuild.

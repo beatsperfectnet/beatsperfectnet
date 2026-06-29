@@ -2,11 +2,29 @@ listing_spec:
   spec_id:
   candidate_ref:
   idea_ref:
+  flow_version:
+  product_architecture_contract_ref:
+  decision_output_contract_ref:
+  scenario_matrix_ref:
+  hard_rule: Clean screenshots without a buyer hook do not pass.
   product_name:
   branding_ref:
   marketplace:
   listing_analysis_ref:
   purchased_competitor_inspection_ref:
+  generated_from:
+    buyer_promise:
+    decision_output_contract:
+    competitor_category_standard:
+    actual_artifact_screenshots:
+      - 
+    beatsperfect_brandbook_ref: brandbook/beatsperfect-brandbook.v1.yaml
+  per_listing_image_requirements:
+    - image_role:
+      buyer_hook:
+      specific_product_proof_shown:
+      reason_this_image_helps_conversion:
+  c004_listing_hook_standard: Know what to reorder, when to reorder it, and how much to buy before stock runs out.
   domain_brief_application:
     candidate_domain_brief_ref:
     applied_consideration_ids:

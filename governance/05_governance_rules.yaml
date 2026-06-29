@@ -1,11 +1,11 @@
 governance_rules:
  active_rule_contracts:
-  flow: FLOW-006
+  flow: FLOW-007
   product_analysis: PA-002
-  schema: SCHEMA-006
-  build_lifecycle: BLS-006
-  model_routing: MODEL-006
-  stage_dispatch: governance/09_stage_dispatch_006.yaml
+  schema: SCHEMA-007
+  build_lifecycle: BLS-007
+  model_routing: MODEL-007
+  stage_dispatch: governance/09_stage_dispatch_007.yaml
   company_memory: docs/COMPANY-MEMORY.md
  superseded_rule_contracts:
   - FLOW-001
@@ -22,6 +22,11 @@ governance_rules:
   - MODEL-002
   - MODEL-003
   - governance/09_stage_dispatch_003.yaml
+  - FLOW-006
+  - SCHEMA-006
+  - BLS-006
+  - MODEL-006
+  - governance/09_stage_dispatch_006.yaml
  human_owned:
   - objective
   - constraints
@@ -31,11 +36,11 @@ governance_rules:
   - resource_allocation
   - capacity_model
   - BM-001
-  - FLOW-006
-  - SCHEMA-006
-  - BLS-006
-  - MODEL-006
-  - governance/09_stage_dispatch_006.yaml
+  - FLOW-007
+  - SCHEMA-007
+  - BLS-007
+  - MODEL-007
+  - governance/09_stage_dispatch_007.yaml
   - docs/COMPANY-MEMORY.md
 
  agent_owned:
@@ -51,7 +56,11 @@ governance_rules:
   - marketplace_publish_without_required_human_approval
 
  flow_rules:
-  - FLOW_006_remains_stage_based
+  - FLOW_007_requires_product_architecture_contract_before_build
+  - FLOW_007_build_starts_only_when_build_readiness_status_is_BUILD_READY
+  - FLOW_007_forbids_building_from_market_ideas_or_category_names
+  - FLOW_007_failed_architecture_artifacts_cannot_be_launch_ready
+  - FLOW_006_remains_historical_failure_evidence_for_C_004_001
   - FLOW_006_adds_founder_acceptance_simulation_before_listing_work
   - functional_mandates_are_static_flow_metadata
   - models_must_not_assign_their_own_mandates

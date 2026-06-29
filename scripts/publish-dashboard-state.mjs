@@ -51,6 +51,8 @@ function gitOutput(args) {
   return run("git", args, { capture: true }).trim();
 }
 
+const publishPaths = ["records/dashboard_state.yaml", "records/flow_step_changes"];
+
 function printHelp() {
   process.stdout.write([
     "Usage: node scripts/publish-dashboard-state.mjs [options]",
@@ -73,24 +75,25 @@ if (args.update) {
   run("node", ["scripts/update-dashboard-state.mjs"]);
 }
 
-run("npm", ["run", "validate:flow-006"]);
+run("npm", ["run", "validate:flow-007"]);
 
-const changedDashboard = spawnSync("git", ["diff", "--quiet", "--", "records/dashboard_state.yaml"]);
-if (changedDashboard.status === 0) {
+const changedDashboard = gitOutput(["status", "--short", "--", ...publishPaths]);
+if (!changedDashboard) {
   process.stdout.write("No dashboard state changes to publish.\n");
   process.exit(0);
 }
-if (changedDashboard.status !== 1) {
-  throw new Error("Unable to check dashboard diff.");
-}
 
 if (args.dryRun) {
-  run("git", ["diff", "--", "records/dashboard_state.yaml"]);
+  run("git", ["diff", "--", ...publishPaths]);
+  const status = gitOutput(["status", "--short", "--", ...publishPaths]);
+  if (status) {
+    process.stdout.write(`${status}\n`);
+  }
   process.stdout.write("Dry run: dashboard state validated but not committed or pushed.\n");
   process.exit(0);
 }
 
-run("git", ["add", "records/dashboard_state.yaml"]);
+run("git", ["add", ...publishPaths]);
 const commitMessage = args.message || `Update dashboard state ${new Date().toISOString()}`;
-run("git", ["commit", "--only", "records/dashboard_state.yaml", "-m", commitMessage]);
+run("git", ["commit", "-m", commitMessage, "--", ...publishPaths]);
 run("git", ["push", "origin", "main"]);

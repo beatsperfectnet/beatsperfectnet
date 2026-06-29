@@ -1,86 +1,59 @@
 today:
-  asOf: 2026-06-28 09:01 GMT+2
+  asOf: 2026-06-29 09:33 GMT+2
   dataMode: event-log
-  flowVersion: FLOW-006
+  flowVersion: FLOW-007
   flowTimeline:
-    - stageGroup: admission
+    - stageGroup: market
       stepIds:
-        - 00_candidate_admission
-    - stageGroup: read
+        - 00_market_evidence
+    - stageGroup: benchmark
       stepIds:
-        - 01_public_shelf_read
-    - stageGroup: purchase
+        - 01_competitor_product_autopsy
+    - stageGroup: architecture
       stepIds:
-        - 02_mandatory_competitor_purchase
-    - stageGroup: inspect
+        - 02_product_architecture_contract
+    - stageGroup: scenarios
       stepIds:
-        - 03_hidden_buyer_experience_inspection
-    - stageGroup: synthesis
+        - 03_scenario_matrix
+    - stageGroup: readiness
       stepIds:
-        - 04_alignment_synthesis
-    - stageGroup: spec
-      stepIds:
-        - 05_one_promise_propagation_system_spec
+        - 04_build_readiness_review
     - stageGroup: build
       stepIds:
-        - 06_first_pass_connected_build
-    - stageGroup: qa
+        - 05_product_build
+    - stageGroup: artifact_qa
       stepIds:
-        - 07_propagation_buyer_experience_product_visual_qa
-    - stageGroup: founder_acceptance
+        - 06_real_artifact_inspection
+    - stageGroup: walkthrough
       stepIds:
-        - 08_founder_acceptance_simulation
-    - stageGroup: optional
-      stepIds:
-        - 09_optional_supporting_feature_pass
+        - 07_blind_buyer_walkthrough
     - stageGroup: listing
       stepIds:
-        - 10_listing_creative_assembly
-    - stageGroup: gate
-      stepIds:
-        - 11_listing_quality_gate
-    - stageGroup: pre_mortem
-      stepIds:
-        - 11b_pre_mortem_failure_analysis
+        - 08_listing_packaging_qa
     - stageGroup: launch
       stepIds:
-        - 12_delivery_launch
-    - stageGroup: post_launch
-      stepIds:
-        - 13_monthly_outcomes
-        - 14_competitor_purchase_accounting
-        - 15_kill_rules
-        - 16_resource_allocation_rules
-        - 17_company_metrics
+        - 09_founder_launch_gate
   sourceRefs:
     activeFlow: config/active-flow.yaml
     candidateRecords: records/candidates/*.yaml
     validationRecords: records/validation/*.yaml
-  todayLog:
-    - id: API-2026-06-28-C004-product
-      kind: product_cost
-      label: Inventory Tracker Studio product API
-      detail: Today product API cost for C-004-001 rerun/pre-launch correction work.
-      amountUsd: 3
-    - id: API-2026-06-28-governance-flow006-dashboard
-      kind: governance_cost
-      label: Governance cost
-      detail: Today governance API cost for FLOW-006/dashboard/pre-mortem and state correction work.
-      amountUsd: 8
+    flow007ValidationRecords: records/flow_007_validation/*.yaml
+    failureCases: records/failure-cases/*.md
+  todayLog: []
   totals:
     pipelineCandidates: 0
-    inFlightCandidates: 1
+    inFlightCandidates: 0
     launchedCandidates: 0
-    rejectedCandidates: 0
-    totalSpendUsd: 11
-    productApiCostUsd: 3
-    governanceApiCostUsd: 8
+    rejectedCandidates: 1
+    totalSpendUsd: 0
+    productApiCostUsd: 0
+    governanceApiCostUsd: 0
     unallocatedApiCostUsd: 0
-    humanEscalationsTotal: 1
+    humanEscalationsTotal: 0
     pipelineUsdTotal: 0
-    inFlightUsdTotal: 21
+    inFlightUsdTotal: 0
     launchedUsdTotal: 0
-    rejectedUsdTotal: 0
+    rejectedUsdTotal: 21
     pipelineTokensTotal: 0
     inFlightTokensTotal: 0
     launchedTokensTotal: 0
@@ -91,14 +64,23 @@ today:
     refundTokensTotal: 0
     refundCountTotal: 0
   pipelineCandidates: []
-  inFlightCandidates:
+  inFlightCandidates: []
+  launchedCandidates: []
+  rejectedCandidates:
     - candidateId: C-004-001
       candidateLabel: I-001
       candidateTitle: Inventory tracker spreadsheet for small business stock, purchases, sales, and reorder alerts
-      outcomeStatus: in_flight
-      currentStepId: 04_alignment_synthesis
-      currentStageGroup: synthesis
-      stageReason: Human required the live dashboard and FLOW-006 state to mark C-004-001 not ready for publish and rerun from synthesis after pre-mortem/dashboard corrections.
+      outcomeStatus: rejected_before_launch
+      currentStepId: 04_build_readiness_review
+      currentStageGroup: readiness
+      stageReason: C-004-001 fails FLOW-007 dry validation and must return to Product Architecture Contract instead of artifact rebuild.
+      latestStepChange:
+        changeId: 2026-06-28T14-20-00Z-R-004-011-r2-repair-05-to-12
+        fromStepId: 05_one_promise_propagation_system_spec
+        toStepId: 12_delivery_launch
+        status: completed_local_launch_pending_external_publish_approval
+        triggeredAt: 2026-06-28T14:20:00Z
+        sourceRef: records/flow_step_changes/2026-06-28T14-20-00Z-R-004-011-r2-repair-05-to-12.yaml
       totalTokensUsed: 0
       totalUsdSpent: 21
       launchTokens: 0
@@ -107,23 +89,22 @@ today:
       refundTokens: 0
       refundCount: 0
       budgetHealth: green
-      processHealth: yellow
-  launchedCandidates: []
-  rejectedCandidates: []
+      processHealth: red
+      terminalReason: C-004-001 fails FLOW-007 dry validation and must return to Product Architecture Contract instead of artifact rebuild.
   activeEscalation:
     status: pending
     scope: build
     candidateId: C-004-001
     candidateLabel: I-001
     candidateTitle: Inventory tracker spreadsheet for small business stock, purchases, sales, and reorder alerts
-    reason: Active FLOW-006 contract changed after this candidate's last launch review.
-    recommendedAction: Rerun from 04_alignment_synthesis so the dashboard and artifact state match the live flow.
-    governanceFile: governance/09_stage_dispatch_006.yaml
+    reason: Active FLOW-007 contract changed after this candidate's last launch review.
+    recommendedAction: Return to Product Architecture Contract before any build.
+    governanceFile: governance/09_stage_dispatch_007.yaml
 period:
   from: 2026-06-22
-  to: 2026-06-28
+  to: 2026-06-29
   dataMode: event-log
-  flowVersion: FLOW-006
+  flowVersion: FLOW-007
   rejectedLaunch:
     reviewId: LR-C-001-001
     candidateId: C-001-001
@@ -270,6 +251,22 @@ period:
       unallocatedApiCostUsd: 0
       rejectedProductApiCostUsd: 0
       humanEscalations: 1
+      launchTokens: 0
+      governanceTokens: 0
+      postLaunchSupportTokens: 0
+      refundTokens: 0
+      refundCount: 0
+    - date: 2026-06-29
+      launchedCount: 0
+      rejectedLaunchCount: 0
+      avgModelTokensPerLaunch: 0
+      avgUsdSpendPerLaunch: 0
+      totalApiCostUsd: 0
+      productApiCostUsd: 0
+      governanceApiCostUsd: 0
+      unallocatedApiCostUsd: 0
+      rejectedProductApiCostUsd: 0
+      humanEscalations: 0
       launchTokens: 0
       governanceTokens: 0
       postLaunchSupportTokens: 0

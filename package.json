@@ -10,8 +10,11 @@
     "dashboard:update": "node scripts/update-dashboard-state.mjs",
     "dashboard:publish": "node scripts/publish-dashboard-state.mjs",
     "validate:competitive-purchase": "node scripts/validate-competitive-purchase-approvals.mjs",
+    "validate:c004-artifact": "python3 validators/c004_artifact_validator.py",
     "validate:flow-006": "node validators/flow-006-validator.mjs",
-    "test:flow-006": "node --test tests/flow-006.test.mjs"
+    "validate:flow-007": "node validators/flow-007-validator.mjs",
+    "test:flow-006": "node --test tests/flow-006.test.mjs",
+    "test:flow-007": "node --test tests/flow-007.test.mjs"
   },
   "dependencies": {
     "next": "^15.3.3",

@@ -1,0 +1,162 @@
+MODEL-007:
+  purpose: governed_model_routing_for_flow_007_architecture_first_generation
+  default_model_rule: Use mini by default. Escalate only where repository rules allow or where explicitly needed for architecture-readiness review.
+  model_catalog:
+    mini:
+      runtime_model_id: openai/gpt-5.4-mini
+      purpose:
+        - market_evidence
+        - competitor_product_autopsy
+        - product_architecture_contract
+        - scenario_matrix
+        - build_readiness_review
+        - product_build
+        - real_artifact_inspection
+        - blind_buyer_walkthrough
+        - listing_packaging_qa
+        - founder_launch_gate
+      normal_flow_allowed: true
+    frontier:
+      runtime_model_id: openai/gpt-5.5
+      purpose:
+        - architecture_readiness_review_escalation
+        - founder_rejection_escalation
+      normal_flow_allowed: false
+      escalation_only: true
+    deterministic:
+      runtime_model_id: deterministic
+      purpose:
+        - artifact_inspection
+        - spreadsheet_formula_validation
+        - scenario_execution_validation
+      normal_flow_allowed: true
+    human:
+      runtime_model_id: human
+      purpose:
+        - competitor_purchase_approval
+        - external_publish_approval
+      normal_flow_allowed: true
+  stage_routing:
+    market_evidence:
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+    competitor_product_autopsy:
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+    product_architecture_contract:
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+      escalation_model: gpt-5.5
+      escalation_allowed_for:
+        - architecture_readiness_review
+    scenario_matrix:
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+    build_readiness_review:
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+      escalation_model: gpt-5.5
+      escalation_allowed_for:
+        - architecture_readiness_review
+    product_build:
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+    real_artifact_inspection:
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+      deterministic_subgates:
+        - artifact_structure_inspector
+        - scenario_execution_inspector
+        - decision_output_inspector
+    blind_buyer_walkthrough:
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+    listing_packaging_qa:
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+    founder_launch_gate:
+      governed_model_tier: mini
+      requested_model: gpt-5.4-mini
+      escalation_model: gpt-5.5
+      escalation_allowed_for:
+        - founder_rejection
+  stage_quality_rules:
+    product_architecture_contract:
+      hard_rule: Product architecture must be locked before product spec or build.
+      fail_if:
+        - target_audience_underdefined
+        - buyer_primary_decision_missing
+        - buyer_behavior_loop_missing
+        - domain_model_missing_dated_events_for_time_changing_values
+        - decision_outputs_missing_or_unsupported_by_domain_model
+        - competitor_category_standard_unknown
+    scenario_matrix:
+      hard_rule: Scenario Matrix must pass before build.
+      required_c004_scenarios:
+        - no_sales_history
+        - less_than_30_days_of_sales
+        - 30_plus_days_of_sales
+        - supplier_change
+        - lead_time_change
+        - fulfillment_mode_change
+        - stock_count_correction
+        - purchase_received
+        - sku_out_of_stock
+        - slow_moving_overstocked_sku
+    build_readiness_review:
+      hard_rule: Build starts only if build_readiness.status is BUILD_READY.
+      stronger_model_escalation_rule: Stronger model escalation should happen before build-readiness approval, not after repeated failed rebuilds.
+      fail_if:
+        - any_required_contract_status_not_PASS
+        - support_risk_unacceptable
+        - build_cost_estimate_over_limit
+        - category_standard_unknown
+        - visual_format_standard_unknown
+        - listing_hook_unknown
+    product_build:
+      locked_fields:
+        - primary_buyer
+        - domain_model
+        - decision_outputs
+        - scenario_logic
+        - scope_boundaries
+      spreadsheet_requirements:
+        - realistic_demo_rows
+        - blank_formula_ready_rows
+        - formulas_extended_beyond_demo_area
+        - clear_input_areas
+        - formula_or_protected_areas_where_possible
+        - warning_error_states
+        - no_demo_only_workbook
+        - no_fake_filled_capacity
+        - no_negative_on_hand_unless_clearly_marked_as_error_or_exception_state
+    real_artifact_inspection:
+      required_inspectors:
+        - Artifact Structure Inspector
+        - Scenario Execution Inspector
+        - Decision Output Inspector
+        - Competitor/Category Standard Inspector
+        - Support-Risk Inspector
+        - Listing Hook Inspector
+      spreadsheet_rules:
+        - open_actual_workbook
+        - inspect_actual_sheets
+        - inspect_formulas
+        - inspect_row_capacity
+        - inspect_input_output_separation
+        - test_formulas_beyond_demo_rows
+        - execute_blind_buyer_workflow
+        - verify_required_decision_outputs_from_actual_entered_data
+    listing_packaging_qa:
+      listing_inputs:
+        - buyer_promise
+        - decision_output_contract
+        - competitor_category_standard
+        - actual_artifact_screenshots
+        - BeatsPerfect brandbook
+      per_image_required:
+        - image_role
+        - buyer_hook
+        - specific_product_proof_shown
+        - reason_this_image_helps_conversion
+      hard_rule: Clean screenshots without a buyer hook do not pass.

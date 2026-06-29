@@ -4,17 +4,17 @@ import type { TodayState } from "./types";
 export const mockTodayState: TodayState = {
   asOf: "2026-06-23 13:20 CET",
   dataMode: "mock",
-  flowVersion: "FLOW-006",
-  flowTimeline: stageLabels.map(({ label, steps }) => ({
+  flowVersion: "FLOW-007",
+  flowTimeline: stageLabels.slice(0, 10).map(({ label, steps }) => ({
     stageGroup: label,
     stepIds: steps
   })),
   todayLog: [
     {
-      id: "FLOW-2026-06-26-005-to-006",
+      id: "FLOW-2026-06-29-006-to-007",
       kind: "flow_transition",
-      label: "Archived flow to FLOW-006",
-      detail: "Active flow changed before the next run.",
+      label: "Archived flow to FLOW-007",
+      detail: "Active flow now requires Product Architecture Contract before build.",
       amountUsd: 0
     }
   ],
@@ -54,6 +54,6 @@ export const mockTodayState: TodayState = {
     candidateTitle: "",
     reason: "",
     recommendedAction: "",
-    governanceFile: "governance/09_stage_dispatch_006.yaml"
+    governanceFile: "governance/09_stage_dispatch_007.yaml"
   }
 };

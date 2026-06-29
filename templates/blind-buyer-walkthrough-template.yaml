@@ -1,0 +1,27 @@
+blind_buyer_walkthrough:
+  walkthrough_id:
+  candidate_id:
+  product_id:
+  flow_version: FLOW-007
+  buyer_segment:
+  starting_context:
+  tasks_to_complete:
+    - 
+  artifact_steps_used:
+    - 
+  expected_result:
+  actual_result:
+  confusion_points:
+    - 
+  support_risk:
+  pass_fail_result:
+  hard_rule: If the blind buyer cannot complete the intended workflow, launch fails.
+  c004_canonical_walkthrough:
+    - Add SKU.
+    - Enter stock count with date.
+    - Log sale.
+    - Log purchase/receipt.
+    - Change supplier or lead time.
+    - Read SKU dashboard.
+    - Decide what to reorder, when, and how much.
+    - Understand why the recommendation was made.

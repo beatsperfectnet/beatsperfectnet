@@ -1,6 +1,6 @@
-active_flow_id: FLOW-006
-workflow_contract_ref: workflows/FLOW-006.yaml
-model_policy_ref: specs/MODEL-006.yaml
-stage_dispatch_ref: governance/09_stage_dispatch_006.yaml
-schema_ref: specs/SCHEMA-006.yaml
-build_lifecycle_ref: specs/BLS-006.yaml
+active_flow_id: FLOW-007
+workflow_contract_ref: workflows/FLOW-007.yaml
+model_policy_ref: specs/MODEL-007.yaml
+stage_dispatch_ref: governance/09_stage_dispatch_007.yaml
+schema_ref: specs/SCHEMA-007.yaml
+build_lifecycle_ref: specs/BLS-007.yaml
