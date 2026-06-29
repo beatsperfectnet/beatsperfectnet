@@ -1,5 +1,5 @@
 today:
-  asOf: 2026-06-28 23:59 Europe/Berlin
+  asOf: 2026-06-29 10:32 GMT+2
   dataMode: event-log
   flowVersion: FLOW-007
   flowTimeline:
@@ -39,32 +39,17 @@ today:
     validationRecords: records/validation/*.yaml
     flow007ValidationRecords: records/flow_007_validation/*.yaml
     failureCases: records/failure-cases/*.md
-  todayLog:
-    - id: API-2026-06-28-C004-product
-      kind: product_cost
-      label: Inventory Tracker Studio product API
-      detail: Jun 28 product build API cost for the rejected C-004-001 rerun/correction work.
-      amountUsd: 20
-    - id: API-2026-06-28-governance-flow006-dashboard
-      kind: governance_cost
-      label: Governance cost
-      detail: Jun 28 governance API cost attributable to the rejected C-004-001 FLOW/dashboard correction work.
-      amountUsd: 20
-    - id: API-2026-06-28-C004-reconciliation
-      kind: other
-      label: Other cost
-      detail: Residual reconciliation so the reported Jun 28 dashboard total matches 41.00 USD.
-      amountUsd: 1
+  todayLog: []
   totals:
     pipelineCandidates: 0
     inFlightCandidates: 0
     launchedCandidates: 0
     rejectedCandidates: 1
-    totalSpendUsd: 41
-    productApiCostUsd: 20
-    governanceApiCostUsd: 20
-    unallocatedApiCostUsd: 1
-    humanEscalationsTotal: 1
+    totalSpendUsd: 0
+    productApiCostUsd: 0
+    governanceApiCostUsd: 0
+    unallocatedApiCostUsd: 0
+    humanEscalationsTotal: 0
     pipelineUsdTotal: 0
     inFlightUsdTotal: 0
     launchedUsdTotal: 0

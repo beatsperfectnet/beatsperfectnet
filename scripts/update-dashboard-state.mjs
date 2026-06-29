@@ -132,14 +132,6 @@ function ledgerAsOfDate() {
   return match?.[1] || null;
 }
 
-function operatingBerlinDate() {
-  return ledgerAsOfDate() || currentBerlinDate();
-}
-
-function dashboardAsOf() {
-  return ledgerAsOfText() || nowBerlin();
-}
-
 function stageGroupForStep(stepId) {
   return stageTimeline.find((stage) => stage.stepIds.includes(stepId))?.stageGroup ?? null;
 }
@@ -320,12 +312,12 @@ function rejectedProductCostEntries(entries = ledgerEntries(), candidates = allC
 }
 
 function todayLedgerEntries() {
-  const today = operatingBerlinDate();
+  const today = currentBerlinDate();
   return ledgerEntries().filter((entry) => ledgerEntryDate(entry) === today);
 }
 
 function todayHumanEscalations() {
-  const today = operatingBerlinDate();
+  const today = currentBerlinDate();
   return humanEscalations().filter((entry) => ledgerEntryDate(entry) === today);
 }
 
@@ -691,7 +683,7 @@ function flow007RejectedOutcomes() {
     .filter((validation) => validation?.result?.status === "NOT_BUILD_READY" || validation?.build_readiness?.status === "NOT_BUILD_READY")
     .map((validation) => ({
       candidateId: validation.candidate_id,
-      date: String(validation.validated_at || operatingBerlinDate()).slice(0, 10),
+      date: String(validation.validated_at || currentBerlinDate()).slice(0, 10),
       status: "rejected",
     }));
 }
@@ -702,7 +694,7 @@ function excludedRejectedOutcomes() {
     .flatMap((lane) =>
       (lane.source_candidate_refs || []).map((candidateId) => ({
         candidateId,
-        date: String(lane.source_refs?.[0] || "").includes("LR-C-001-001") ? "2026-06-22" : operatingBerlinDate(),
+        date: String(lane.source_refs?.[0] || "").includes("LR-C-001-001") ? "2026-06-22" : currentBerlinDate(),
         status: "rejected",
       })),
     );
@@ -753,7 +745,7 @@ function currentProductOutcomes() {
 }
 
 function periodState() {
-  const today = operatingBerlinDate();
+  const today = currentBerlinDate();
   const allEntries = ledgerEntries();
   const allCosts = costBreakdown(allEntries);
   const competitorSpend = competitorPurchaseSpendEntries();
@@ -825,7 +817,7 @@ function buildDashboardState() {
 
   return {
     today: {
-      asOf: dashboardAsOf(),
+      asOf: nowBerlin(),
       dataMode: "event-log",
       flowVersion: activeFlowId,
       flowTimeline: stageTimeline,
