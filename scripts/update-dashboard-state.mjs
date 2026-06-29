@@ -210,6 +210,13 @@ function apiCostLedger() {
   };
 }
 
+function activeGenerationBudget() {
+  const budgetRef = activeFlowId === "FLOW-007"
+    ? "governance/08_product_generation_budget_007.yaml"
+    : "governance/08_product_generation_budget_006.yaml";
+  return readYaml(budgetRef)?.product_generation_budget || {};
+}
+
 function ledgerEntries() {
   return apiCostLedger().entries || [];
 }
@@ -465,7 +472,14 @@ function outcomeStatus(candidate) {
 }
 
 function healthFor(candidate) {
-  const budgetPass = candidate.generation_budget_pass !== false;
+  const hardBudgetUsd = Number(
+    candidate.generation_budget_usd ||
+    activeGenerationBudget().generation_budget_usd ||
+    activeGenerationBudget().total_hard_budget_usd ||
+    25,
+  );
+  const totalUsdSpent = totalCostForCandidate(candidate.candidate_id);
+  const budgetPass = candidate.generation_budget_pass !== false && totalUsdSpent <= hardBudgetUsd;
   const qualityPass =
     candidate.listing_quality_pass !== false &&
     candidate.product_quality_pass !== false &&

@@ -1,5 +1,5 @@
 today:
-  asOf: 2026-06-29 10:32 GMT+2
+  asOf: 2026-06-29 10:38 GMT+2
   dataMode: event-log
   flowVersion: FLOW-007
   flowTimeline:
@@ -88,7 +88,7 @@ today:
       postLaunchSupportTokens: 0
       refundTokens: 0
       refundCount: 0
-      budgetHealth: green
+      budgetHealth: red
       processHealth: red
       terminalReason: C-004-001 fails FLOW-007 dry validation and must return to Product Architecture Contract instead of artifact rebuild.
   activeEscalation:
