@@ -1,0 +1,108 @@
+pre_mortem_failure_analysis:
+  review_id:
+  candidate_id:
+  product_id:
+  flow_version: FLOW-007
+  product_architecture_contract_ref:
+  actual_artifact_inspection_ref:
+  blind_buyer_walkthrough_ref:
+  listing_packaging_ref:
+  public_shelf_evidence_ref:
+  purchased_competitor_inspection_ref:
+  market_evidence_ref:
+  target_audience_lock_ref:
+  company_memory_ref: docs/COMPANY-MEMORY.md
+  assumption: Product launched and failed with zero sales, refunds, or weak conversion.
+  attempt_number:
+  prior_attempt_ref:
+  status:
+  allowed_statuses:
+    - pass
+    - watchlist_only
+    - blocked
+    - rebuild_recommended
+  hard_rule: "The pre-mortem must first audit whether the TA, JTBD, and KPP assumptions trace to market evidence, and whether each built feature serves the locked JTBD. Only after this audit should it identify specific preventable offer failures. It must not invent new product scope."
+  decision_rule:
+    attempt_1_with_blockers: rebuild_recommended
+    attempt_2_with_same_or_similar_blockers: blocked
+    attempt_2_with_new_blockers_only: blocked
+    no_blockers: pass or watchlist_only
+  evidence_assumption_audit:
+    ta_jtbd_evidence_check:
+      locked_jtbd:
+      buyer_language_refs_supporting_jtbd:
+        -
+      buyer_language_refs_contradicting_jtbd:
+        -
+      jtbd_grounded_in_evidence:
+    kpp_evidence_check:
+      primary_buyer_promise:
+      evidence_refs_supporting_promise:
+        -
+      promise_escalation_from_evidence:
+      promise_grounded_in_evidence:
+    feature_to_evidence_audit:
+      -
+        feature_or_sheet:
+        evidence_ref:
+        serves_locked_jtbd:
+        verdict:
+    redundant_features:
+      -
+    missing_jtbd_elements:
+      -
+    audit_status:
+  rebuild_feedback:
+    failure_classification:
+    issues:
+      -
+        issue:
+        category:
+        evidence_refs:
+          -
+        rerun_from_step:
+    prior_attempt_issues_resolved:
+      -
+    prior_attempt_issues_persisting:
+      -
+  top_3_likely_failure_modes:
+    - failure_mode:
+      evidence_refs:
+        - 
+      category:
+      launch_blocker_or_watchlist:
+      specific_preventable_cause:
+      earliest_relevant_rerun_step:
+      post_launch_signal:
+  required_checks:
+    - delivered_product_assets
+    - listing_images_title_description
+    - delivery_readme_onboarding
+    - actual_artifact_inspection_result
+    - blind_buyer_walkthrough_result
+    - public_shelf_evidence
+    - purchased_competitor_inspection
+    - company_memory
+    - product_logic_blocker_audit
+    - scope_bloat_check
+    - ta_jtbd_evidence_trace
+    - kpp_evidence_trace
+    - per_feature_evidence_trace
+    - redundant_feature_identification
+    - missing_jtbd_element_identification
+    - attempt_number_tracked
+    - prior_attempt_comparison_when_attempt_2
+  fail_if:
+    - failure_mode_uses_imagined_customer_or_feature_scope_without_current_evidence
+    - blocker_lacks_specific_preventable_cause
+    - blocker_lacks_earliest_relevant_rerun_step
+    - proposed_feature_is_not_proven_by_locked_buyer_behavior_or_marketplace_evidence
+    - top_3_failure_modes_are_generic_or_unsupported_by_product_listing_delivery_or_market_evidence
+    - locked_jtbd_has_no_buyer_language_evidence_trace
+    - primary_buyer_promise_is_an_escalation_of_evidence_without_supporting_refs
+    - built_feature_or_sheet_has_no_evidence_ref_and_is_not_flagged_as_redundant
+    - redundant_features_exist_without_launch_blocker_or_explicit_human_approval
+    - attempt_2_returns_rebuild_recommended_instead_of_blocked
+    - prior_attempt_ref_missing_on_attempt_2
+    - prior_attempt_issues_not_compared_on_attempt_2
+  decision:

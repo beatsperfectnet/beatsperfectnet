@@ -1,0 +1,33 @@
+failed_product_label:
+  label_id:
+  candidate_id:
+  product_lane_id:
+  canonical_status: FAILED_PRODUCT_ASSET
+  product_name:
+  flow_version:
+  failure_class:
+  failure_summary:
+  failed_asset_refs:
+    -
+  supporting_record_refs:
+    -
+  exclusion_ref:
+  future_build_input_policy:
+    may_be_used_as:
+      - failed_baseline
+      - anti_clone_input
+      - exclusion_match_evidence
+      - company_memory_finding_source
+    must_not_be_used_as:
+      - product_blueprint
+      - build_seed
+      - direct_repair_target_without_reopened_architecture
+      - proof_that_the_lane_is_build_ready
+    reopen_requires:
+      - explicit_human_reopen_record
+      - company_memory_preflight_acknowledges_failed_label
+      - material_product_delta_plan
+  status:
+  allowed_statuses:
+    - ACTIVE_FAILED_LABEL
+    - SUPERSEDED_BY_HUMAN_REOPEN

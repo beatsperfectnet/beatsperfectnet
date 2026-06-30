@@ -11,6 +11,8 @@ model_run_ledger:
     implementation_repair_loops_after_build_max: 1
     stop_or_escalate_if_product_fails_after_implementation_repair: true
     repeated_similar_artifact_regeneration_forbidden: true
+    governance_only_delta_cannot_pass_launch: true
+    measured_prior_vs_current_artifact_delta_required_when_applicable: true
     stronger_model_escalation_should_happen_before_build_readiness_approval: true
   dispatch_contract_ref:
   dispatch_log_ref:
@@ -27,9 +29,6 @@ model_run_ledger:
       governed_fallback_model:
       governed_escalation_model:
       functional_mandate:
-      candidate_domain_brief_ref:
-      applied_domain_consideration_ids:
-        - 
       stage_execution_context_hash:
       governed_model_tier:
       requested_model_id:

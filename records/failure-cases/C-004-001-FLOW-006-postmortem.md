@@ -6,7 +6,7 @@ Candidate: C-004-001
 
 Failed flow: FLOW-006
 
-Current artifact: `builds/C-004-001/product/Inventory-Tracker-Studio.xlsx`
+Current artifact: `archive/candidates/C-004-001/C-004-001-FAILED/product/Inventory-Tracker-Studio.xlsx`
 
 ## Root Cause
 

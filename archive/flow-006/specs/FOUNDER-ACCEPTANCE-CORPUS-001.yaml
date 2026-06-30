@@ -1,0 +1,234 @@
+founder_acceptance_corpus:
+  corpus_id: FOUNDER-ACCEPTANCE-CORPUS-001
+  purpose: reusable_founder_rejection_patterns_for_publish_ready_products_listings_and_delivery
+  reviewer_identity:
+    role: founder_acceptance_simulation
+    stance: adversarial_before_publish
+    pass_standard: product_listing_and_delivery_should_not_need_founder_feedback_to_be_human_ready
+  review_lanes:
+    - lane_id: real_human_use_pressure
+      purpose: prove_the_product_works_beyond_demo_seed_data
+      required_checks:
+        - push_input_rows_beyond_seed_sample
+        - add_realistic_inventory_or_transaction_volume_when_spreadsheet_applicable
+        - run_the_buyer_behavior_loop_from_visible_instructions_to_next_action
+        - verify_formula_ranges_totals_dashboards_charts_and_protection_after_capacity_pressure
+        - fail_if_seed_rows_are_the_only_coherent_workflow
+        - fail_if_all_working_capacity_rows_are_prefilled_instead_of_few_seed_examples_plus_blank_formula_ready_rows
+        - fail_if_visible_workbook_capacity_matches_or_barely_exceeds_prior_demo_version
+        - fail_if_realistic_capacity_exists_only_as_hidden_formula_range_not_as_buyer_usable_rows_tables_or_expansion_path
+        - compare_row_counts_visible_tables_and_input_capacity_against_previous_failed_version_before_passing
+    - lane_id: product_logic_review
+      purpose: verify_the_artifact_matches_the_buyer_workflow_without_founder_explanation
+      required_checks:
+        - first_tab_and_next_action_are_obvious
+        - inputs_outputs_and_generated_areas_are_visually_distinct
+        - buyer_decision_outputs_answer_the_primary_jtbd
+        - buyer_decision_outputs_are_machine_checkable_in_the_artifact
+        - buyer_decision_outputs_map_to_understandable_next_actions
+        - adversarial_buyer_scenarios_are_mutated_in_the_artifact_not_only_described_in_records
+        - domain_invariants_are_flagged_or_blocked_before_any_healthy_success_or_no_action_status
+        - negative_on_hand_is_blocked_or_flagged_before_any_healthy_success_no_action_or_publish_state
+        - inventory_replenishment_reorder_point_is_derived_from_lead_time_sales_velocity_and_buffer_not_buyer_entered_when_applicable
+        - required_kpp_outputs_have_artifact_locations_formula_or_logic_sources_and_mutation_evidence
+        - no_hidden_assumptions_only_the_builder_understands
+        - real_buyer_capacity_is_obvious_without_builder_explanation
+    - lane_id: in_product_human_wording_review
+      purpose: remove_developer_agent_language_from_buyer_facing_product_text
+      required_checks:
+        - wording_sounds_like_customer_guidance_not_internal_spec
+        - no_agentic_or_developer_terms_in_buyer_copy
+        - no_overexplaining_obvious_ui_or_formula_mechanics
+        - limits_and_warnings_are_plain_but_not_anxious
+    - lane_id: listing_delivery_readiness_review
+      purpose: verify_the_listing_and_delivery_can_sell_and_onboard_without_founder_feedback
+      required_checks:
+        - listing_images_have_visual_hook_not_report_slide_layout
+        - each_image_has_one_buyer_promise_and_matching_reason_to_believe
+        - each_listing_image_has_a_specific_visual_hook_that_would_stop_grid_browsing
+        - fail_if_the_hook_is_only_clean_layout_generic_headline_or_screenshot_presence
+        - product_surface_is_large_enough_to_prove_the_claim
+        - delivery_readme_feels_like_customer_handoff_not_internal_documentation
+    - lane_id: cost_outcome_accountability_review
+      purpose: reject_runs_that_spend_more_without_materially_improving_the_shipped_product_or_listing
+      required_checks:
+        - compare_current_artifact_to_previous_version_for_material_product_delta
+        - compare_current_listing_assets_to_previous_version_for_hook_delta
+        - record_api_cost_or_estimated_run_cost_for_the_iteration
+        - fail_if_spend_produces_same_demo_scale_product_or_same_hookless_listing_outcome
+  rejection_patterns:
+    - pattern_id: demo_scale_rows
+      severity: blocker
+      description: Product only works for small seeded demo rows or fixed sample ranges.
+      reject_when:
+        - formulas_or_totals_do_not_cover_realistic_buyer_capacity
+        - adding_rows_beyond_sample_breaks_outputs_or_requires_structural_edits
+        - QA_only_tests_seed_rows
+        - visible_buyer_rows_match_the_previous_demo_version
+        - workbook_has_no_clear_real_use_capacity_floor_for_inventory_purchases_sales_and_price_history
+      repair_expectation: expand_capacity_ranges_tables_and_tests_to_realistic_buyer_use
+    - pattern_id: same_demo_workbook_after_rerun
+      severity: blocker
+      description: A rerun claims FLOW progress but ships substantially the same demo-scale workbook as the previously rejected version.
+      reject_when:
+        - visible_inventory_purchase_sales_or_pricing_row_counts_are_unchanged_from_the_prior_failed_artifact
+        - new_records_describe_capacity_but_the_buyer_visible_workbook_does_not_materially_change
+        - regenerated_file_timestamps_are_used_as_evidence_of_improvement_without_artifact_delta
+        - founder_review_would_still_call_it_good_enough_demo_not_a_real_workbook_humans_will_use
+      repair_expectation: rebuild_the_product_from_the_failed_step_with_material_human_scale_capacity_and_record_before_after_delta
+    - pattern_id: formula_logic_not_stress_tested
+      severity: blocker
+      description: Formula or workflow logic passes only superficial happy-path checks.
+      reject_when:
+        - edge_case_inputs_are_not_tested
+        - downstream_dashboards_or_statuses_are_not_verified_after_mutation
+        - unsupported_editor_or_import_behavior_is_claimed_without proof
+      repair_expectation: add_boundary_mutations_truth_tables_and_platform_claim_limits
+    - pattern_id: negative_on_hand_presented_as_healthy
+      severity: blocker
+      description: Inventory logic allows negative on-hand or other impossible stock states to look healthy, successful, no-action, or publishable.
+      reject_when:
+        - negative_on_hand_is_visible_without_a_blocking_error_review_state_or_clear_fix_prompt
+        - negative_stock_can_feed_replenishment_outputs_as_if_it_were_valid_inventory
+        - QA_or_founder_acceptance_passes_without_mutating_on_hand_below_zero_when_inventory_applicable
+      repair_expectation: block_or_flag_negative_inventory_before_any_status_next_action_or_launch_gate_can_pass
+    - pattern_id: reorder_point_input_instead_of_derived
+      severity: blocker
+      description: Replenishment product asks the buyer for reorder point while also asking for the inputs that should derive it.
+      reject_when:
+        - reorder_point_is_a_primary_buyer_input_alongside_lead_time_sales_velocity_or_sales_history
+        - lead_time_sales_velocity_and_buffer_do_not_drive_the_reorder_threshold
+        - artifact_outputs_cannot_show_how_the_reorder_point_was_calculated_from_demand_during_lead_time_plus_buffer
+      repair_expectation: derive_reorder_point_from_lead_time_sales_velocity_and_buffer_or_record_explicit_market_evidence_for_any_exception
+    - pattern_id: fully_prefilled_working_capacity
+      severity: blocker
+      description: Buyer-use rows are filled with generated demo data instead of leaving most capacity blank but formula-ready.
+      reject_when:
+        - all_or_most_core_table_rows_are_populated_with_sample_data
+        - buyer_must_delete_fake_rows_before_using_the_template
+        - records_claim_working_capacity_but_the_visible_capacity_is_not_empty_formula_ready_space_after_a_few_seed_examples
+      repair_expectation: keep_only_a_few_seed_rows_and_leave_remaining_buyer_capacity_blank_formula_ready_with_validation_and_formulas_preserved
+    - pattern_id: unclear_helper_behavior_scenario
+      severity: blocker
+      description: Start Here or helper content fails to walk a buyer through the behavior needed to get correct results.
+      reject_when:
+        - helper_text_lists_features_or_tabs_without_a_concrete_sequence_of_actions
+        - buyer_cannot_follow_inputs_to_transformations_to_outputs_to_next_action_without_builder_explanation
+        - the_behavior_scenario_does_not_match_the_locked_jtbd_and_visible_workbook_flow
+      repair_expectation: rewrite_helper_as_a_short_step_by_step_scenario_from_first_open_through_inputs_results_and_next_action
+    - pattern_id: buyer_workflow_requires_founder_explanation
+      severity: blocker
+      description: A buyer would need the founder to explain where to start or what matters.
+      reject_when:
+        - first_action_is_not_obvious
+        - tab_order_does_not_match_real_workflow
+        - start_here_or_helper_does_not_show_a_step_by_step_path_from_inputs_to_transformations_to_results_to_next_action
+        - outputs_are_feature_lists_instead_of_decision_surfaces
+      repair_expectation: simplify_onboarding_tab_order_and_decision_outputs
+    - pattern_id: developerish_buyer_copy
+      severity: blocker
+      description: Buyer-facing product text sounds like an agent, developer, or internal QA record.
+      reject_when:
+        - copy_uses_terms_like_artifact_surface_verified_formula_outputs_or_claim_map
+        - instructions_describe_implementation_instead_of_customer_action
+        - disclaimers_feel_machine_written_or_excessive
+      repair_expectation: rewrite_in_plain_customer_language_with_short_action_oriented_guidance
+    - pattern_id: tiny_listing_surface
+      severity: blocker
+      description: Listing image includes a real product screenshot but it is too small to inspect or believe.
+      reject_when:
+        - product_surface_cannot_prove_the_image_claim_at_marketplace_thumbnail_or_gallery_size
+        - screenshot_is_framed_as_decoration_instead_of_evidence
+      repair_expectation: crop_zoom_or_mock_up_the_real_surface_so_the_claim_is_visually_obvious
+    - pattern_id: report_slide_listing_asset
+      severity: blocker
+      description: Listing creative looks like a report slide rather than a marketplace eye-stopper.
+      reject_when:
+        - layout_is_dominated_by_explanatory_text
+        - no_clear_visual_focal_point_exists
+        - composition_would_blend_into_similar_search_results
+      repair_expectation: create_a_grid_browsing_hook_with_stronger_visual_hierarchy_and_real_product_proof
+    - pattern_id: clean_listing_without_real_hook
+      severity: blocker
+      description: Listing assets are visually clean and technically correct but do not create a strong reason to stop, click, or remember the product.
+      reject_when:
+        - image_only_states_a_feature_or_surface_without_a_surprising_specific_buyer_outcome
+        - every_image_uses_the_same_template_hierarchy_without_a_distinct_visual_hook
+        - screenshot_presence_is_treated_as_the_hook
+        - image_would_be_acceptable_as_documentation_but_weak_in_an_Etsy_search_grid
+      repair_expectation: give_each_image_a_specific_hook_angle_with_a_visible_before_after_risk_opportunity_or_decision_payoff
+    - pattern_id: feature_list_instead_of_promise
+      severity: blocker
+      description: Copy lists features instead of a human buyer promise.
+      reject_when:
+        - headline_is_a_scope_list
+        - reason_to_believe_does_not_support_the_specific_image_promise
+        - kpp_is_not_aligned_to_the_primary_jtbd
+      repair_expectation: rewrite_each_claim_as_one_buyer_promise_with_one_matching_product_specific_rtb
+    - pattern_id: jtbd_defined_as_output_not_behavior
+      severity: blocker
+      description: JTBD is defined as a promise, product category, feature scope, or output list instead of a real buyer behavior loop leading to a next action.
+      reject_when:
+        - buyer_trigger_starting_state_behavior_steps_expected_outcome_next_action_or_failure_states_are_missing
+        - required_inputs_do_not_map_to_specific_buyer_behavior_steps
+        - transformations_exist_to_create_impressive_outputs_but_not_to_support_the_buyer_next_action
+        - decision_outputs_do_not_tell_the_buyer_what_to_do_next
+        - domain_invariants_are_missing_or_allow_impossible_unsafe_or_bad_business_states_to_pass_as_healthy_successful_or_no_action
+        - adversarial_buyer_scenarios_are_missing_or_are_not_executed_against_the_artifact
+      repair_expectation: restart_from_alignment_or_propagation_spec_and_define_buyer_behavior_contract_before_build
+    - pattern_id: jtbd_decision_outputs_missing
+      severity: blocker
+      description: The product uses JTBD/KPP/RTB wording but does not produce the machine-checkable buyer decision outputs needed for the primary job.
+      reject_when:
+        - machine_checkable_product_contract_is_missing_before_build
+        - primary_buyer_decision_outputs_are_missing_from_the_artifact
+        - required_decision_outputs_exist_only_in_records_or_listing_copy
+        - kpp_is_satisfied_by_status_labels_dashboard_counts_or_feature_presence_instead_of_the_promised_decision
+        - setup_inputs_do_not_drive_downstream_outputs_or_have_a_declared_default_prefill_role
+        - qa_does_not_mutate_domain_inputs_that_should_change_the_primary_decision_outputs
+      repair_expectation: define_the_primary_buyer_decision_contract_before_build_then rebuild_and_test_artifact_outputs_against_that_contract
+    - pattern_id: competitor_failure_treated_as_blocker
+      severity: blocker
+      description: Purchased competitor breakage blocks or distorts our build instead of becoming evidence.
+      reject_when:
+        - competitor_broken_formula_is_copied_into_our_publish_blockers
+        - broken_competitor_is_treated_as_category_quality_floor_without_broader_evidence
+      repair_expectation: classify_competitor_failure_as_avoidance_requirement_and_escalate_for_more_evidence_if_needed
+    - pattern_id: market_research_tool_missing_but_flow_continued
+      severity: blocker
+      description: Market research was missing or weak, but the flow proceeded as if demand was proven.
+      reject_when:
+        - required_market_tool_or_export_was_unavailable_without_human_override
+        - new_entrant_counts_or_revenue_strength_are_unverifiable
+        - public_shelf_read_has_missing_gallery_or_metrics_without_escalation
+      repair_expectation: stop_for_tool_readiness_human_override_or_additional_market_evidence
+    - pattern_id: paid_rerun_same_outcome
+      severity: blocker
+      description: A paid rerun consumes material budget but produces the same founder-rejected outcome.
+      reject_when:
+        - run_cost_is_material_and_the_product_remains_demo_scale
+        - run_cost_is_material_and_listing_assets_remain_hookless_or_only_cosmetically_improved
+        - records_show_passes_but_the_artifact_delta_does_not_support_the_spend
+        - model_upgrade_is_treated_as_quality_improvement_without_stronger_artifact_or_listing_delta
+      repair_expectation: stop_the_flow_mark_the_iteration_failed_record_cost_waste_and_restart_from_the_earliest_artifact_step_that_can_change_the_outcome
+    - pattern_id: record_pass_without_artifact_proof
+      severity: blocker
+      description: YAML records claim gates passed while the actual workbook or listing assets still fail founder inspection.
+      reject_when:
+        - acceptance_record_says_pass_based_on_described_tests_not_direct_artifact_comparison
+        - dashboard_or_schema_validation_passes_are_used_as_publish_readiness_evidence
+        - ignored_local_records_are_updated_more_than_the_shipped_artifact
+      repair_expectation: require_direct_artifact_inspection_before_acceptance_and_make_schema_validation_only_a_structure_check
+  output_contract:
+    status_values:
+      - pass
+      - fail
+      - pass_with_explicit_human_override
+    required_record_fields:
+      - founder_acceptance_status
+      - adversarial_rejection_attempts
+      - corpus_pattern_results
+      - rejection_reasons
+      - required_repair_scope
+      - rerun_from_step
+      - human_override

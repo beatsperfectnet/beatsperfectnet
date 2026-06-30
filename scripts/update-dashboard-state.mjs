@@ -152,6 +152,9 @@ function stepForEscalationStage(stageGroup) {
 }
 
 function normalizeCurrentStep(candidate) {
+  const explicitStep = String(candidate.currentStepId || "").trim();
+  if (stageTimeline.some((stage) => stage.stepIds.includes(explicitStep))) return explicitStep;
+
   const raw = String(candidate.current_stage || "").trim();
   if (stageTimeline.some((stage) => stage.stepIds.includes(raw))) return raw;
 
@@ -567,9 +570,19 @@ function activeFlowCandidates() {
 function activePurchaseEscalation(candidates) {
   const pendingPurchaseCandidate = candidates.find((candidate) => {
     const currentStepId = normalizeCurrentStep(candidate);
-    return currentStepId === "02_mandatory_competitor_purchase" && String(candidate.purchase_status || "") !== "complete";
+    const purchaseStatus = String(candidate.purchase_status || "").toLowerCase();
+    const isPurchaseStep =
+      currentStepId === "02_mandatory_competitor_purchase" ||
+      currentStepId === "02_competitor_selection_purchase_approval";
+    const isComplete =
+      purchaseStatus === "complete" ||
+      purchaseStatus === "completed" ||
+      purchaseStatus === "simulated_complete";
+    return isPurchaseStep && !isComplete;
   });
   if (!pendingPurchaseCandidate) return null;
+
+  const isFlow007 = normalizeCurrentStep(pendingPurchaseCandidate) === "02_competitor_selection_purchase_approval";
 
   return {
     status: "pending",
@@ -578,7 +591,9 @@ function activePurchaseEscalation(candidates) {
     candidateLabel: pendingPurchaseCandidate.idea_ref || "",
     candidateTitle: candidateTitle(pendingPurchaseCandidate),
     reason: "Competitor purchase requires human approval before external spend.",
-    recommendedAction: "Approve or reject the purchase before continuing FLOW-006.",
+    recommendedAction: isFlow007
+      ? "Approve or reject the purchase before continuing FLOW-007."
+      : "Approve or reject the purchase before continuing FLOW-006.",
     governanceFile: activeDispatchRef,
   };
 }

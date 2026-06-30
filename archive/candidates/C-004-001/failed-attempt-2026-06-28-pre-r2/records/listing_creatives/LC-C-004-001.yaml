@@ -1,0 +1,212 @@
+listing_creative_assembly:
+  candidate_id: C-004-001
+  listing_hook_ref: records/listing_hook/LH-C-004-001.yaml
+  passed_qa_ref: records/validation/QA-C-004-001.yaml
+  founder_acceptance_ref: records/validation/FA-C-004-001.yaml
+  source_surface_refs:
+    - builds/C-004-001/listing-assets/real-sheet-previews/02-dashboard.png
+    - builds/C-004-001/listing-assets/real-sheet-previews/04-inventory.png
+    - builds/C-004-001/listing-assets/real-sheet-previews/05-purchases.png
+    - builds/C-004-001/listing-assets/real-sheet-previews/06-sales.png
+    - builds/C-004-001/listing-assets/real-sheet-previews/07-price-calculator.png
+    - builds/C-004-001/listing-assets/real-sheet-previews/08-price-list.png
+    - builds/C-004-001/listing-assets/real-sheet-previews/01-start-here.png
+  creative_assets:
+    - path: builds/C-004-001/listing-assets/final/01-main-promise.png
+      source_svg: builds/C-004-001/process/listing-creatives/svg/01-main-promise.svg
+      role: thumbnail_main_promise
+      source_surface_ref: builds/C-004-001/listing-assets/real-sheet-previews/02-dashboard.png
+      buyer_promise: Know what to reorder, when to reorder it, and how much to buy.
+      grid_stop_reason: The buyer sees a reorder decision, not another stock count.
+      reason_to_believe: Dashboard cards summarize order-now items, suggested order quantity, inventory value, purchase spend, sales revenue, and gross profit.
+      proof_surface: builds/C-004-001/listing-assets/real-sheet-previews/02-dashboard.png
+      stronger_than_prior: true
+      claim: Dashboard cards summarize order-now items, suggested order quantity, inventory value, purchase spend, sales revenue, and gross profit.
+      transformation_allowed: crop_frame_scale_callout_text_only
+      fabricated_product_surface_absent: true
+    - path: builds/C-004-001/listing-assets/final/02-inventory-workflow.png
+      source_svg: builds/C-004-001/process/listing-creatives/svg/02-inventory-workflow.svg
+      role: inventory_surface
+      source_surface_ref: builds/C-004-001/listing-assets/real-sheet-previews/04-inventory.png
+      buyer_promise: Every SKU gets action, reorder-by date, stockout date, and order quantity.
+      grid_stop_reason: A full replenishment table, not a status label.
+      reason_to_believe: Inventory sheet combines purchase roll-up, sales roll-up, days cover, projected stockout, reorder-by date, and suggested order quantity.
+      proof_surface: builds/C-004-001/listing-assets/real-sheet-previews/04-inventory.png
+      stronger_than_prior: true
+      claim: Inventory sheet combines purchase roll-up, sales roll-up, days cover, projected stockout, reorder-by date, and suggested order quantity.
+      transformation_allowed: crop_frame_scale_callout_text_only
+      fabricated_product_surface_absent: true
+    - path: builds/C-004-001/listing-assets/final/03-purchase-log.png
+      source_svg: builds/C-004-001/process/listing-creatives/svg/03-purchase-log.svg
+      role: purchase_log
+      source_surface_ref: builds/C-004-001/listing-assets/real-sheet-previews/05-purchases.png
+      buyer_promise: Turn 300 purchase rows into replenished stock and updated reorder needs.
+      grid_stop_reason: Restocks visibly change the reorder plan.
+      reason_to_believe: Purchase log raises on-hand stock and changes downstream reorder action, days cover, stockout date, and suggested order quantity.
+      proof_surface: builds/C-004-001/listing-assets/real-sheet-previews/05-purchases.png
+      stronger_than_prior: true
+      claim: Purchase log raises on-hand stock and changes downstream reorder action, days cover, stockout date, and suggested order quantity.
+      transformation_allowed: crop_frame_scale_callout_text_only
+      fabricated_product_surface_absent: true
+    - path: builds/C-004-001/listing-assets/final/04-sales-log.png
+      source_svg: builds/C-004-001/process/listing-creatives/svg/04-sales-log.svg
+      role: sales_log
+      source_surface_ref: builds/C-004-001/listing-assets/real-sheet-previews/06-sales.png
+      buyer_promise: Let 500 sales rows calculate velocity and projected stockout dates.
+      grid_stop_reason: Sales volume becomes a stockout warning.
+      reason_to_believe: Sales log drives sales velocity, days cover, projected stockout, revenue, COGS, fees, and gross profit across 500 buyer-usable rows.
+      proof_surface: builds/C-004-001/listing-assets/real-sheet-previews/06-sales.png
+      stronger_than_prior: true
+      claim: Sales log drives sales velocity, days cover, projected stockout, revenue, COGS, fees, and gross profit across 500 buyer-usable rows.
+      transformation_allowed: crop_frame_scale_callout_text_only
+      fabricated_product_surface_absent: true
+    - path: builds/C-004-001/listing-assets/final/05-price-calculator.png
+      source_svg: builds/C-004-001/process/listing-creatives/svg/05-price-calculator.svg
+      role: price_calculator
+      source_surface_ref: builds/C-004-001/listing-assets/real-sheet-previews/07-price-calculator.png
+      buyer_promise: Check margin before you reorder stock you may not profitably sell.
+      grid_stop_reason: Reorder decisions get a margin check.
+      reason_to_believe: Calculator shows suggested price, profit, and margin for 100 buyer-usable test rows tied to inventory unit costs.
+      proof_surface: builds/C-004-001/listing-assets/real-sheet-previews/07-price-calculator.png
+      stronger_than_prior: true
+      claim: Calculator shows suggested price, profit, and margin for 100 buyer-usable test rows tied to inventory unit costs.
+      transformation_allowed: crop_frame_scale_callout_text_only
+      fabricated_product_surface_absent: true
+    - path: builds/C-004-001/listing-assets/final/06-price-list.png
+      source_svg: builds/C-004-001/process/listing-creatives/svg/06-price-list.svg
+      role: price_list
+      source_surface_ref: builds/C-004-001/listing-assets/real-sheet-previews/08-price-list.png
+      buyer_promise: Save approved prices beside the inventory decisions you act on.
+      grid_stop_reason: Approved price snapshots support reorder confidence.
+      reason_to_believe: Price List stores saved product snapshots and status tags across 100 buyer-usable rows after the calculator validates margin.
+      proof_surface: builds/C-004-001/listing-assets/real-sheet-previews/08-price-list.png
+      stronger_than_prior: true
+      claim: Price List stores saved product snapshots and status tags across 100 buyer-usable rows after the calculator validates margin.
+      transformation_allowed: crop_frame_scale_callout_text_only
+      fabricated_product_surface_absent: true
+    - path: builds/C-004-001/listing-assets/final/07-start-here-and-help.png
+      source_svg: builds/C-004-001/process/listing-creatives/svg/07-start-here-and-help.svg
+      role: onboarding_and_limits
+      source_surface_ref: builds/C-004-001/listing-assets/real-sheet-previews/01-start-here.png
+      buyer_promise: Know which inputs drive the reorder math and which formulas to leave alone.
+      grid_stop_reason: Setup inputs are tied to visible reorder outputs.
+      reason_to_believe: Start Here, Setup, and Help explain the inputs that drive replenishment formulas, limits, and seeded capacity.
+      proof_surface: builds/C-004-001/listing-assets/real-sheet-previews/01-start-here.png
+      stronger_than_prior: true
+      claim: Start Here, Setup, and Help explain the inputs that drive replenishment formulas, limits, and seeded capacity.
+      transformation_allowed: crop_frame_scale_callout_text_only
+      fabricated_product_surface_absent: true
+  creative_claim_map:
+    - claim: Dashboard cards summarize order-now items, suggested order quantity, inventory value, purchase spend, sales revenue, and gross profit.
+      creative_path: builds/C-004-001/listing-assets/final/01-main-promise.png
+      proof_ref: records/validation/QA-C-004-001.yaml
+      source_surface_ref: builds/C-004-001/listing-assets/real-sheet-previews/02-dashboard.png
+      grid_stop_reason: The buyer sees a reorder decision, not another stock count.
+    - claim: Inventory sheet combines purchase roll-up, sales roll-up, days cover, projected stockout, reorder-by date, and suggested order quantity.
+      creative_path: builds/C-004-001/listing-assets/final/02-inventory-workflow.png
+      proof_ref: records/validation/QA-C-004-001.yaml
+      source_surface_ref: builds/C-004-001/listing-assets/real-sheet-previews/04-inventory.png
+      grid_stop_reason: A full replenishment table, not a status label.
+    - claim: Purchase log raises on-hand stock and changes downstream reorder action, days cover, stockout date, and suggested order quantity.
+      creative_path: builds/C-004-001/listing-assets/final/03-purchase-log.png
+      proof_ref: records/validation/QA-C-004-001.yaml
+      source_surface_ref: builds/C-004-001/listing-assets/real-sheet-previews/05-purchases.png
+      grid_stop_reason: Restocks visibly change the reorder plan.
+    - claim: Sales log drives sales velocity, days cover, projected stockout, revenue, COGS, fees, and gross profit across 500 buyer-usable rows.
+      creative_path: builds/C-004-001/listing-assets/final/04-sales-log.png
+      proof_ref: records/validation/QA-C-004-001.yaml
+      source_surface_ref: builds/C-004-001/listing-assets/real-sheet-previews/06-sales.png
+      grid_stop_reason: Sales volume becomes a stockout warning.
+    - claim: Calculator shows suggested price, profit, and margin for 100 buyer-usable test rows tied to inventory unit costs.
+      creative_path: builds/C-004-001/listing-assets/final/05-price-calculator.png
+      proof_ref: records/validation/QA-C-004-001.yaml
+      source_surface_ref: builds/C-004-001/listing-assets/real-sheet-previews/07-price-calculator.png
+      grid_stop_reason: Reorder decisions get a margin check.
+    - claim: Price List stores saved product snapshots and status tags across 100 buyer-usable rows after the calculator validates margin.
+      creative_path: builds/C-004-001/listing-assets/final/06-price-list.png
+      proof_ref: records/validation/QA-C-004-001.yaml
+      source_surface_ref: builds/C-004-001/listing-assets/real-sheet-previews/08-price-list.png
+      grid_stop_reason: Approved price snapshots support reorder confidence.
+    - claim: Start Here, Setup, and Help explain the inputs that drive replenishment formulas, limits, and seeded capacity.
+      creative_path: builds/C-004-001/listing-assets/final/07-start-here-and-help.png
+      proof_ref: records/validation/QA-C-004-001.yaml
+      source_surface_ref: builds/C-004-001/listing-assets/real-sheet-previews/01-start-here.png
+      grid_stop_reason: Setup inputs are tied to visible reorder outputs.
+  visual_hook_strategy:
+    primary_grid_hook: "Replenishment decision proof: action, timing, and quantity instead of generic stock tracking."
+    browsing_stop_reason: The first image states the exact buyer decision, and supporting images prove the formulas on real workbook surfaces.
+    prior_hook_delta: Prior assets showed clean stock/pricing surfaces; current assets show reorder action, dates, quantities, velocity, lead time, and buffer proof.
+  per_image_visual_hook_strategy:
+    - creative_path: builds/C-004-001/listing-assets/final/01-main-promise.png
+      grid_stop_reason: The buyer sees a reorder decision, not another stock count.
+      proof_surface: builds/C-004-001/listing-assets/real-sheet-previews/02-dashboard.png
+    - creative_path: builds/C-004-001/listing-assets/final/02-inventory-workflow.png
+      grid_stop_reason: A full replenishment table, not a status label.
+      proof_surface: builds/C-004-001/listing-assets/real-sheet-previews/04-inventory.png
+    - creative_path: builds/C-004-001/listing-assets/final/03-purchase-log.png
+      grid_stop_reason: Restocks visibly change the reorder plan.
+      proof_surface: builds/C-004-001/listing-assets/real-sheet-previews/05-purchases.png
+    - creative_path: builds/C-004-001/listing-assets/final/04-sales-log.png
+      grid_stop_reason: Sales volume becomes a stockout warning.
+      proof_surface: builds/C-004-001/listing-assets/real-sheet-previews/06-sales.png
+    - creative_path: builds/C-004-001/listing-assets/final/05-price-calculator.png
+      grid_stop_reason: Reorder decisions get a margin check.
+      proof_surface: builds/C-004-001/listing-assets/real-sheet-previews/07-price-calculator.png
+    - creative_path: builds/C-004-001/listing-assets/final/06-price-list.png
+      grid_stop_reason: Approved price snapshots support reorder confidence.
+      proof_surface: builds/C-004-001/listing-assets/real-sheet-previews/08-price-list.png
+    - creative_path: builds/C-004-001/listing-assets/final/07-start-here-and-help.png
+      grid_stop_reason: Setup inputs are tied to visible reorder outputs.
+      proof_surface: builds/C-004-001/listing-assets/real-sheet-previews/01-start-here.png
+  per_image_promise_rtb_alignment:
+    - creative_path: builds/C-004-001/listing-assets/final/01-main-promise.png
+      promise: Know what to reorder, when to reorder it, and how much to buy.
+      rtb: Dashboard cards summarize order-now items, suggested order quantity, inventory value, purchase spend, sales revenue, and gross profit.
+      proof_surface: builds/C-004-001/listing-assets/real-sheet-previews/02-dashboard.png
+    - creative_path: builds/C-004-001/listing-assets/final/02-inventory-workflow.png
+      promise: Every SKU gets action, reorder-by date, stockout date, and order quantity.
+      rtb: Inventory sheet combines purchase roll-up, sales roll-up, days cover, projected stockout, reorder-by date, and suggested order quantity.
+      proof_surface: builds/C-004-001/listing-assets/real-sheet-previews/04-inventory.png
+    - creative_path: builds/C-004-001/listing-assets/final/03-purchase-log.png
+      promise: Turn 300 purchase rows into replenished stock and updated reorder needs.
+      rtb: Purchase log raises on-hand stock and changes downstream reorder action, days cover, stockout date, and suggested order quantity.
+      proof_surface: builds/C-004-001/listing-assets/real-sheet-previews/05-purchases.png
+    - creative_path: builds/C-004-001/listing-assets/final/04-sales-log.png
+      promise: Let 500 sales rows calculate velocity and projected stockout dates.
+      rtb: Sales log drives sales velocity, days cover, projected stockout, revenue, COGS, fees, and gross profit across 500 buyer-usable rows.
+      proof_surface: builds/C-004-001/listing-assets/real-sheet-previews/06-sales.png
+    - creative_path: builds/C-004-001/listing-assets/final/05-price-calculator.png
+      promise: Check margin before you reorder stock you may not profitably sell.
+      rtb: Calculator shows suggested price, profit, and margin for 100 buyer-usable test rows tied to inventory unit costs.
+      proof_surface: builds/C-004-001/listing-assets/real-sheet-previews/07-price-calculator.png
+    - creative_path: builds/C-004-001/listing-assets/final/06-price-list.png
+      promise: Save approved prices beside the inventory decisions you act on.
+      rtb: Price List stores saved product snapshots and status tags across 100 buyer-usable rows after the calculator validates margin.
+      proof_surface: builds/C-004-001/listing-assets/real-sheet-previews/08-price-list.png
+    - creative_path: builds/C-004-001/listing-assets/final/07-start-here-and-help.png
+      promise: Know which inputs drive the reorder math and which formulas to leave alone.
+      rtb: Start Here, Setup, and Help explain the inputs that drive replenishment formulas, limits, and seeded capacity.
+      proof_surface: builds/C-004-001/listing-assets/real-sheet-previews/01-start-here.png
+  hook_delta_against_prior:
+    status: pass
+    prior_failure: Clean but hookless workbook screenshots centered on generic stock and pricing visibility.
+    current_delta: Images now lead with replenishment decisions and map each claim to formula-backed workbook outputs.
+  no_fabricated_product_surfaces: true
+  output_format:
+    width_px: 2000
+    height_px: 1600
+    file_type: png
+  listing_upload_sequence:
+    - builds/C-004-001/listing-assets/final/01-main-promise.png
+    - builds/C-004-001/listing-assets/final/02-inventory-workflow.png
+    - builds/C-004-001/listing-assets/final/03-purchase-log.png
+    - builds/C-004-001/listing-assets/final/04-sales-log.png
+    - builds/C-004-001/listing-assets/final/05-price-calculator.png
+    - builds/C-004-001/listing-assets/final/06-price-list.png
+    - builds/C-004-001/listing-assets/final/07-start-here-and-help.png
+  artifact_fidelity_check:
+    status: pass
+    notes: Final creatives use verified workbook preview PNGs as embedded source surfaces; only framing, text, callouts, and scaling were added.
+  publish_blockers:
+    status: pass
+    blockers: []

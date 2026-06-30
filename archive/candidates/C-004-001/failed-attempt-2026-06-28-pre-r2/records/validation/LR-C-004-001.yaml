@@ -1,0 +1,134 @@
+launch_package:
+  candidate_id: C-004-001
+  product_artifacts:
+    - path: builds/C-004-001/product/Inventory-Tracker-Studio.xlsx
+      role: primary_workbook
+    - path: builds/C-004-001/product/Inventory-Tracker-Studio-google-sheets-import.xlsx
+      role: import_copy
+  artifact_version: Inventory-Tracker-Studio.xlsx
+  product_contract_ref: records/propagation_system_spec/PSS-C-004-001.yaml#machine_checkable_product_contract
+  jtbd_truth_table_ref: records/validation/QA-C-004-001.yaml#jtbd_truth_table_results
+  primary_buyer_decision_output_ref: records/validation/QA-C-004-001.yaml#primary_buyer_decision_output_results
+  delivery_asset: builds/C-004-001/delivery-assets/README-FIRST.md
+  founder_acceptance_ref: records/validation/FA-C-004-001.yaml
+  listing_assets:
+    - path: builds/C-004-001/listing-assets/final/01-main-promise.png
+      role: thumbnail_main_promise
+    - path: builds/C-004-001/listing-assets/final/02-inventory-workflow.png
+      role: inventory_replenishment_surface
+    - path: builds/C-004-001/listing-assets/final/03-purchase-log.png
+      role: purchase_log_mutation_surface
+    - path: builds/C-004-001/listing-assets/final/04-sales-log.png
+      role: sales_velocity_surface
+    - path: builds/C-004-001/listing-assets/final/05-price-calculator.png
+      role: margin_check_surface
+    - path: builds/C-004-001/listing-assets/final/06-price-list.png
+      role: saved_price_snapshot_surface
+    - path: builds/C-004-001/listing-assets/final/07-start-here-and-help.png
+      role: onboarding_and_limits
+  passed_system: true
+  passed_buyer_experience_checks:
+    access_path_clear: true
+    first_open_clear: true
+    first_action_clear: true
+    editable_areas_obvious: true
+    reset_or_recovery_available: true
+    unsupported_actions_stated: true
+    replenishment_decision_outputs_visible: true
+  passed_product_visual_quality:
+    brandbook_compliance: true
+    real_surface_screenshot_readiness: true
+    chart_readability: true
+    listing_text_clipping_absent: true
+  passed_listing_gate: true
+  supported_platforms:
+    - Excel-compatible spreadsheet editors
+    - Google Sheets standard-formula import
+  stated_limits:
+    - The workbook does not connect to banks, live inventory services, shipping systems, or marketplaces.
+    - Reorder quantities are planning estimates from buyer-entered stock, purchase, sales, lead time, and buffer data.
+    - Google Sheets import protection behavior can vary by editor or account.
+    - It is a direct-download workbook, not a service.
+    - It is not tax, accounting, or financial advice.
+  unsupported_actions:
+    - live bank sync
+    - live stock sync
+    - live marketplace automation
+    - barcode scanning
+    - tax preparation
+    - custom bookkeeping services
+    - guaranteed imported protection settings in Google Sheets
+  editable_areas:
+    - Setup inputs for review date, sales lookback, fees, target margin, default reorder point, lead time, safety stock, pack size, and support note
+    - Inventory opening stock, reorder point, unit cost, and notes
+    - Purchase log rows
+    - Sales log rows
+    - Price Calculator input rows
+    - Price List snapshot rows
+  protected_or_generated_areas:
+    - Dashboard formulas and charts
+    - Inventory purchase roll-up, sales roll-up, on-hand, inventory value, sales velocity, days cover, projected stockout, lead time, safety stock, order quantity, reorder-by date, action, and status outputs
+    - Purchase totals
+    - Sales revenue, COGS, and gross profit outputs
+    - Price Calculator outputs
+    - Price List snapshot outputs
+  recovery_method:
+    - Duplicate the workbook before heavy edits.
+    - If formulas are damaged, restore from a clean copy.
+  originality_check: pass
+  private_asset_exclusion_check: pass
+  prepublish_validation:
+    status: pass
+    artifact_integrity_audit: pass
+    formula_truth_table: pass
+    machine_checkable_product_contract: pass
+    jtbd_decision_outputs: pass
+    working_capacity: pass
+    visible_human_scale_capacity: pass
+    material_artifact_delta: pass
+    period_continuity: not_applicable
+    protection_truthfulness: pass
+    founder_acceptance: pass
+    cost_outcome_accountability: pass
+    buyer_experience: pass
+    product_visual_quality: pass
+    per_image_real_hook: pass
+    listing_quality_gate: pass
+    delivery_package: pass
+    publish_blockers_absent: true
+  publish_status: pass_pending_marketplace_publish
+  listing_url: null
+  launch_date: 2026-06-27
+  initial_product_version_ref: Inventory-Tracker-Studio.xlsx
+  artifact_integrity_audit_ref: records/validation/QA-C-004-001.yaml#artifact_integrity_audit
+  formula_truth_table_ref: records/validation/QA-C-004-001.yaml#formula_truth_table_results
+  machine_checkable_product_contract_ref: records/propagation_system_spec/PSS-C-004-001.yaml#machine_checkable_product_contract
+  period_continuity_ref: records/validation/QA-C-004-001.yaml#period_continuity_results
+  protection_truthfulness_ref: records/validation/QA-C-004-001.yaml#protection_truthfulness
+  artifact_delta_gate: records/validation/QA-C-004-001.yaml#artifact_delta_gate
+  cost_outcome_accountability_ref: records/validation/FA-C-004-001.yaml#cost_outcome_accountability
+  publish_blockers:
+    status: pass
+    blockers: []
+  external_publish_approval:
+    required: true
+    decision: pending
+    evidence_ref: null
+  ready_for_marketplace_publish_requires:
+    - artifact_integrity_audit_pass
+    - formula_truth_table_pass_or_not_applicable_with_reason
+    - machine_checkable_product_contract_pass
+    - jtbd_decision_outputs_pass
+    - working_capacity_pass_or_not_applicable_with_reason
+    - visible_human_scale_capacity_pass
+    - material_artifact_delta_pass
+    - period_continuity_pass_or_not_applicable_with_reason
+    - protection_truthfulness_pass
+    - founder_acceptance_pass
+    - cost_outcome_accountability_pass
+    - buyer_experience_pass
+    - product_visual_quality_pass
+    - per_image_real_hook_pass
+    - listing_quality_gate_pass
+    - delivery_package_pass
+    - publish_blockers_absent

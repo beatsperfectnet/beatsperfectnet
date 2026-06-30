@@ -1,14 +1,20 @@
 product_lane_exclusions:
-  purpose: prevent rejected or already-launched product lanes from re-entering future idea and candidate runs unless reopened by human approval
+  purpose: prevent rejected, failed-asset, or already-launched product lanes from re-entering future idea, pre-run, and candidate runs unless reopened by human approval
   enforcement:
     applies_to_future_idea_runs: true
+    applies_to_flow_007_pre_run: true
     applies_to_candidate_admission: true
     matching_mode: conservative_keyword_and_explicit_candidate_refs
     reopen_requires_human_approval: true
+    hard_rules:
+      - every_new_flow_007_run_must_check_this_file_before_market_evidence
+      - excluded_failed_product_asset_lanes_cannot_be_rerun_as_new_candidates_without_human_reopen_record
+      - candidate_renaming_or_new_flow_version_does_not_bypass_product_lane_exclusion
   lanes:
     - lane_id: meal_planner_spreadsheet
       status: excluded_by_human_rejection
       excluded_from_future_idea_runs: true
+      excluded_from_flow_007_pre_run: true
       excluded_from_candidate_admission: true
       source_candidate_refs:
         - C-001-001
@@ -27,18 +33,15 @@ product_lane_exclusions:
         - recipe planner
         - food budget
     - lane_id: budget_planner_spreadsheet
-      status: pending_exclusion_after_marketplace_publish
-      excluded_from_future_idea_runs: false
-      excluded_from_candidate_admission: false
+      status: excluded_by_human_rejection
+      excluded_from_future_idea_runs: true
+      excluded_from_flow_007_pre_run: true
+      excluded_from_candidate_admission: true
       source_candidate_refs:
         - C-003-001
       source_refs:
         - records/validation/LR-C-003-001.yaml
-      activation_trigger: marketplace_publish_complete_or_publish_status_published
-      activation_effect:
-        excluded_from_future_idea_runs: true
-        excluded_from_candidate_admission: true
-      reason: Budget Planner Studio may remain active until external marketplace publication; after publish, do not generate duplicate budget-planner variants unless Andrey explicitly reopens the lane.
+      reason: Budget Planner lane is now fully excluded by human decision; do not generate budget-planner variants unless Andrey explicitly reopens the lane.
       keyword_match_terms:
         - budget planner
         - paycheck budget
@@ -47,3 +50,91 @@ product_lane_exclusions:
         - bill calendar
         - savings tracker
         - daily spend tracker
+    - lane_id: inventory_tracker_reorder_workbook
+      status: excluded_by_failed_product_assets
+      excluded_from_future_idea_runs: true
+      excluded_from_flow_007_pre_run: true
+      excluded_from_candidate_admission: true
+      source_candidate_refs:
+        - C-004-001
+        - C-005-001
+      failed_product_label_refs:
+        - records/failed_product_labels/C-004-FAILED.yaml
+        - records/failed_product_labels/C-005-FAILED.yaml
+      source_refs:
+        - records/failed_product_labels/C-004-FAILED.yaml
+        - records/failed_product_labels/C-005-FAILED.yaml
+        - archive/candidates/C-004-001/C-004-001-FAILED/manifest.yaml
+        - archive/candidates/C-004-001/C-004-001-R2-FAILED/manifest.yaml
+        - archive/candidates/C-005-001/C-005-001-FAILED/manifest.yaml
+        - records/validation/FLG-C-005-001.yaml
+        - archive/flow-006/docs/FLOW-006-C004-RERUN-HANDOFF.md
+        - docs/COMPANY-MEMORY.md
+      reason: C-004 and C-005 produced substantially the same Inventory Tracker Studio workbook after repeated FLOW-006/FLOW-007 governance and artifact repairs; do not generate inventory-tracker, stock-status, or reorder-workbook variants unless Andrey explicitly reopens the lane with a new market thesis and a measured material product-delta plan.
+      failed_product_asset_refs:
+        - archive/candidates/C-004-001/C-004-001-FAILED/product/Inventory-Tracker-Studio.xlsx
+        - archive/candidates/C-004-001/C-004-001-FAILED/product/Inventory-Tracker-Studio-google-sheets-import.xlsx
+        - archive/candidates/C-004-001/C-004-001-R2-FAILED/product/Inventory-Tracker-Studio.xlsx
+        - archive/candidates/C-004-001/C-004-001-R2-FAILED/product/Inventory-Tracker-Studio-google-sheets-import.xlsx
+        - archive/candidates/C-005-001/C-005-001-FAILED/product/Inventory-Tracker-Studio.xlsx
+        - archive/candidates/C-005-001/C-005-001-FAILED/product/Inventory-Tracker-Studio-google-sheets-import.xlsx
+      blocked_reentry_modes:
+        - new_candidate_id_for_same_inventory_tracker_product
+        - flow_version_wrapper_without_material_product_delta
+        - renamed_small_seller_reorder_planner_or_stock_tracker
+        - marketplace_category_rerun_using_same_buyer_workbook_shape
+      reopen_requires:
+        - explicit_human_reopen_record
+        - company_memory_preflight_acknowledges_C004_C005_failure
+        - material_product_delta_plan_before_market_evidence_or_build
+      keyword_match_terms:
+        - inventory tracker
+        - inventory spreadsheet
+        - inventory management spreadsheet
+        - stock tracker
+        - stock spreadsheet
+        - reorder tracker
+        - reorder planner
+        - reorder workbook
+        - replenishment planner
+        - small seller reorder planner
+        - small business inventory
+        - sales inventory tracker
+        - purchase log inventory
+    - lane_id: handyman_estimate_quote_workbook
+      status: excluded_by_human_rejection
+      excluded_from_future_idea_runs: true
+      excluded_from_flow_007_pre_run: true
+      excluded_from_candidate_admission: true
+      source_candidate_refs:
+        - C-010-001
+      failed_product_label_refs:
+        - records/failed_product_labels/C-010-FAILED.yaml
+      source_refs:
+        - records/failed_product_labels/C-010-FAILED.yaml
+        - archive/candidates/C-010-001/C-010-001-REJECTED/manifest.yaml
+        - records/validation/FLG-C-010-001.yaml
+        - docs/COMPANY-MEMORY.md
+      reason: C-010 produced a launch-ready Handyman Quote Readiness Planner that passed FLOW-007 QA but was rejected by Andrey before Etsy publish; do not generate handyman estimate, repair quote, or scope-to-estimate workbook variants unless Andrey explicitly reopens the lane.
+      failed_product_asset_refs:
+        - archive/candidates/C-010-001/C-010-001-REJECTED/product/Handyman-Quote-Readiness-Planner.xlsx
+        - archive/candidates/C-010-001/C-010-001-REJECTED/product/Handyman-Quote-Readiness-Planner-google-sheets-import.xlsx
+      reopen_requires:
+        - explicit_human_reopen_record
+        - company_memory_preflight_acknowledges_failed_label
+        - material_product_delta_plan
+      keyword_match_terms:
+        - handyman estimate
+        - handyman quote
+        - handyman invoice
+        - repair quote
+        - repair estimate
+        - scope to estimate
+        - scope-to-quote
+        - contractor estimate
+        - contractor quote
+        - job cost estimate
+        - repair bid
+        - service bid
+        - handyman planner
+        - handyman calculator

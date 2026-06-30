@@ -1,0 +1,58 @@
+run_id: R-004
+source_idea_run: R-004
+queue_ordering: FIFO
+candidates:
+  - candidate_id: C-004-001
+    idea_ref: I-001
+    product_thesis: Inventory tracker spreadsheet for small business stock, purchases, sales, and reorder alerts
+    marketplace: Etsy
+    current_stage: 12_delivery_launch
+    original_flow_contract_ref: workflows/FLOW-006.yaml
+    requalification_required_under: []
+    requalified_under:
+      - workflows/FLOW-006.yaml
+    candidate_admission_ref: records/candidate_admission/CA-C-004-001.yaml
+    flow_006_candidate_admission_status: passed
+    stage_iteration: 1
+    cumulative_prompt_tokens: 0
+    cumulative_completion_tokens: 0
+    cumulative_total_tokens: 0
+    cumulative_api_cost_usd: 0
+    competitive_purchase_approval_ref: records/competitive_purchase_approval/CPA-C-004-001.yaml
+    purchase_status: complete
+    purchased_competitor_inspection_ref: records/purchased_competitor_inspection/PCI-C-004-001.yaml
+    inspection_status: complete
+    external_purchase_cost_usd: 2.02
+    pricing_snapshot_ref: specs/PRICING-004.yaml
+    generation_budget_usd: 25.0
+    shared_research_cost_usd: 0.0
+    generation_api_and_tool_cost_usd: 0.0
+    competitor_purchase_cost_usd: 2.02
+    remaining_generation_budget_usd: 25.0
+    generation_budget_pass: true
+    candidate_domain_brief_ref: null
+    candidate_domain_brief_status: not_started
+    listing_analysis_ref: null
+    product_analysis_ref: records/product_analysis/PA-C-004-001.yaml
+    listing_spec_ref: null
+    product_spec_ref: null
+    delivery_spec_ref: null
+    good_enough_for_humans_spec_ref: null
+    real_product_surface_spec_ref: null
+    qa_result: records/validation/QA-C-004-001.yaml
+    founder_acceptance_ref: records/validation/FA-C-004-001.yaml
+    founder_acceptance_status: pass
+    launch_review_result: records/validation/LR-C-004-001.yaml
+    listing_quality_pass: true
+    product_quality_pass: true
+    delivery_quality_pass: true
+    last_rerun:
+      flow_contract_ref: workflows/FLOW-006.yaml
+      started_from_step: 00_candidate_admission
+      completed_through_step: 12_delivery_launch
+      result: pass_pending_marketplace_publish
+      next_step: external_marketplace_publish_requires_human_approval
+      c005_created: false
+      publish_requires_external_human_approval: true
+      external_publish_status: not_run
+      rerun_date: 2026-06-26

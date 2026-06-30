@@ -1,0 +1,89 @@
+public_shelf_read:
+  candidate_id: C-004-001
+  evidence_refs:
+    - openclaw web_search query "site:etsy.com inventory tracker spreadsheet Etsy listing reorder alerts BOM vendors purchases sales"
+    - openclaw web_search query "site:etsy.com \"inventory tracker spreadsheet\" google sheets excel dashboard vendors purchases sales Etsy"
+    - openclaw web_search query "site:etsy.com \"small business inventory tracker\" spreadsheet Etsy Google Sheets"
+    - openclaw web_search query "site:etsy.com \"apparel inventory tracker\" excel spreadsheet Etsy"
+  evidence_missing:
+    - listing_gallery_thumbnail_screenshots
+  insight_signals:
+    - Buyers respond to a finished workbook with a clear inventory promise, visible setup guidance, and dashboard-style utility proof.
+    - Inventory listings sell best when stock, supplier, purchase, and sales surfaces are visible in the copy.
+  kpp_signals:
+    - Know what is in stock, what is moving, and what needs to be reordered without manual counting.
+  complaint_signals:
+    - Inventory setup is confusing if the workbook is too bare.
+    - Stock math feels fragile if purchase and sales paths are unclear.
+  hook_signals:
+    - Inventory tracker with reorder support and dashboard summaries.
+    - Inventory management workbook with supplier, purchase, and sales visibility.
+  visible_rtb_signals:
+    - Google Sheets and Excel compatibility on premium listings.
+    - Dashboard, BOM, suppliers, purchases, and sales surfaces in stronger benchmark titles.
+    - Quick start guides and tutorial assets in higher-value inventory templates.
+  bestseller_visual_reference:
+    - Dashboard-heavy workbook preview with clear inventory, profit, and stock-status cards plus compatibility cues.
+  competitor_candidates:
+    - Inventory Tracker Spreadsheet Small Business Inventory Template Google Sheets Inventory Tracker Management Inventory Log List Order Tracker
+    - Excel Inventory Tracker Spreadsheet Google Sheets Small Business Materials & Product Log Inventory Management Template Profit Sales Tracker
+    - Inventory Tracker Spreadsheet for Small Business Inventory Template Google Sheets Excel Inventory Management Log Inventory Order Tracker
+    - Google Sheets Inventory Tracker Spreadsheet | Product Management Tool | Inventory Management | Business Spreadsheet | Reseller Template
+  domain_constraints:
+    - one_time_purchase_digital_download
+    - spreadsheet_only_delivery
+    - no_login_or_subscription_claims
+    - no_saas_or_multi_user_claims
+  risk_of_false_scope:
+    - The market evidence supports a workbook product, not a service, app, or subscription.
+  market_research_tool_status:
+    tool: EverBee Product Analytics
+    status: ready_and_used
+    evidence_date: 2026-06-26
+    browser_profile: everbee
+    query: inventory tracker spreadsheet
+    visible_listing_count: 3651
+    notes: EverBee was accessible in Chrome and returned product analytics for the target keyword.
+  market_metrics_summary:
+    demand_status: pass
+    listing_count: 3651
+    sample_products:
+      - seller: PrioriDigitalStudio
+        price_usd: 28.23
+        monthly_sales: 220
+        monthly_revenue_usd: 6416
+        growth_percent: 43
+        total_sales: 6411
+        reviews: 600
+      - seller: JrenDigital
+        price_usd: 21.01
+        monthly_sales: 195
+        monthly_revenue_usd: 4097
+        growth_percent: 125
+        total_sales: 454
+        reviews: 31
+      - seller: MyProductiveLifeCo
+        price_usd: 17.37
+        monthly_sales: 56
+        monthly_revenue_usd: 973
+        growth_percent: 300
+        total_sales: 4352
+        reviews: 393
+    alternatives_considered:
+      - query: small business bookkeeping spreadsheet
+        listing_count: 3294
+        decision: not_selected_broader_market_and_less_direct_inventory_fit
+      - query: reseller spreadsheet inventory
+        listing_count: 777
+        decision: not_selected_narrower_and_lower_revenue_signal
+      - query: pricing calculator spreadsheet handmade
+        listing_count: 361
+        decision: not_selected_supporting_feature_lane
+  gallery_thumbnail_or_listing_image_evidence:
+    status: pass
+    source: public Etsy search results plus EverBee product analytics listing rows
+    observation: Visible benchmark rows showed dashboard-led spreadsheet previews and direct inventory-tracker positioning.
+  evidence_quality_gate:
+    status: pass
+    escalated: false
+    reason: Public Etsy evidence and EverBee market metrics were sufficient to continue without human override.

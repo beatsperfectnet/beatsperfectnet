@@ -4,7 +4,7 @@ capacity_model:
  monthly_api_burn_limit_usd: 500
  generation_budget_usd: 25.00
  pricing_snapshot_ref: specs/PRICING-004.yaml
- generation_budget_contract_ref: governance/08_product_generation_budget_004.yaml
+ generation_budget_contract_ref: governance/08_product_generation_budget_007.yaml
 
  monthly_research_runs:
   target: ">=100"
@@ -18,7 +18,7 @@ capacity_model:
   deterministic_mini_model_compatible
 
  build_policy:
-  max_api_cost_per_launched_product_usd: 25
+  max_api_cost_per_launched_product_usd: 40
   competitor_purchase_cost_excluded_from_generation_budget: true
   generation_api_and_tool_costs_included: true
   shared_cost_allocation_deterministic: true

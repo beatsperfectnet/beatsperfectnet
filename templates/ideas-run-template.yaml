@@ -1,7 +1,13 @@
 idea_run:
  run_id:
  created_at:
+ flow_version: FLOW-007
  exclusion_ref: governance/product_lane_exclusions.yaml
+ admission_rules_ref: governance/03_admission_rules.yaml
+ minimum_distinct_ideas_required: 3
+ direct_carryforward_rejected_without_fresh_idea_generation: true
+ selected_idea_id:
+ market_exhaustion_reason_if_less_than_minimum:
 
 ideas:
  - idea_id:
@@ -10,10 +16,13 @@ ideas:
    category:
    business_model:
    product_lane_id:
+   why_now:
+   why_this_is_distinct:
    exclusion_check:
      status:
-     matched_exclusion_lane:
-     action:
+      matched_exclusion_lane:
+      action:
    tier_1_result:
    tier_2_result:
    observed_new_entrants_above_threshold:
+   candidate_worthy:

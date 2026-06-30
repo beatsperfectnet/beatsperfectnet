@@ -1,0 +1,58 @@
+target_audience_lock:
+  lock_id: null
+  candidate_id: null
+  product_id: null
+  flow_version: FLOW-007
+  target_audience_exploration_ref: null
+  competitor_autopsy_ref: null
+  competitor_usage_pattern_evidence:
+    - null
+  refined_target_audiences:
+    - ta_id: null
+      refinement_notes: null
+      jtbd_refined: null
+      new_evidence_refs: []
+      still_supported: null
+      cross_out_reason: null
+  locked_primary_ta:
+    ta_id: null
+    description: null
+    jtbd_locked: null
+    evidence_chain: []
+    evidence_density: null
+  excluded_tas:
+    - ta_id: null
+      reason: null
+  locked_jtbd_downstream_rule: "All product identity, architecture, features, and build decisions must serve this locked TA and JTBD. Features that do not trace to this buyer's needs require explicit human approval."
+  status: null
+  allowed_statuses:
+    - PASS
+    - TARGET_AUDIENCE_LOCK_FAILED
+  required_fields:
+    - candidate_id
+    - target_audience_exploration_ref
+    - competitor_autopsy_ref
+    - competitor_usage_pattern_evidence
+    - refined_target_audiences
+    - locked_primary_ta
+    - excluded_tas
+    - status
+  pass_fail_criteria:
+    pass:
+      - exactly_one_primary_ta_locked
+      - locked_ta_has_grounded_evidence_from_both_exploration_and_competitor_inspection
+      - locked_jtbd_is_specific_buyer_behavior_not_product_description
+      - excluded_tas_have_explicit_reasons
+    fail:
+      - no_primary_ta_locked
+      - locked_ta_has_no_competitor_inspection_evidence
+      - locked_jtbd_is_a_generic_category_promise
+      - multiple_primary_tas_locked_without_clear_hierarchy
+  hard_rule: "Exactly one primary TA must be locked before product identity reframe. The locked JTBD must trace to specific evidence from both market/shelf evidence and competitor inspection. Product identity reframe and PAC must serve this locked TA."
+  fail_if:
+    - no_primary_ta_locked_before_product_identity_reframe
+    - locked_ta_has_zero_grounded_evidence_refs
+    - locked_jtbd_describes_the_product_not_the_buyer_behavior
+    - competitor_usage_patterns_contradict_locked_ta_without_resolution
+  blockers:
+    - null

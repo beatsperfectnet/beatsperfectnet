@@ -1,0 +1,53 @@
+alignment_chain:
+  chain_id: AC-C-004-001
+  candidate_ref: C-004-001
+  status: complete
+  market_evidence_refs:
+    - records/product_analysis/PA-C-004-001.yaml
+    - records/public_shelf_read/PSR-C-004-001.yaml
+  hidden_product_evidence_ref: records/purchased_competitor_inspection/PCI-C-004-001.yaml
+  primary_buyer_job: Track stock, product cost, and resale price in one workbook without juggling separate inventory and pricing tools.
+  primary_kpp: See what is in stock and what it should sell for while keeping inventory value and price outputs visible.
+  one_rtb_system: The workbook's INVENTORY sheet updates stock status and value, the PRICE CALCULATOR computes product cost and selling price, and the PRICE LIST records the computed snapshot, but the price calculator currently depends on a missing RECIPE sheet and broken workbook names.
+  one_hook_hypothesis: A compact workbook that combines inventory status, pricing math, and a price log will appeal to small sellers who need one spreadsheet instead of separate stock and pricing tools.
+  excluded_scope:
+    - live sales channels
+    - subscription SaaS behavior
+    - bank or payment sync
+    - tax preparation
+    - bookkeeping services
+    - meal planning
+  promise_supported_by_evidence:
+    - Live Etsy listings show inventory trackers with dashboards, suppliers, purchases, sales, and profit framing.
+    - The downloaded workbook delivers an inventory dashboard and a pricing log, but the pricing calculator has a broken internal dependency that must be repaired.
+  alignment_notes:
+    - Keep inventory, pricing, and price-list outputs visible in the product narrative.
+    - Do not promise a complete pricing calculator until the missing RECIPE dependency is repaired.
+    - Use the inventory dashboard as the main proof surface because it is currently the most coherent part of the workbook.
+  kpp_quality_check:
+    is_single_buyer_decision_promise: true
+    is_not_feature_scope_list: true
+    evidence_ref: records/purchased_competitor_inspection/PCI-C-004-001.yaml
+  rtb_quality_check:
+    is_product_specific_proof_mechanism: true
+    excludes_marketplace_trust_signals: true
+    evidence_ref: records/purchased_competitor_inspection/PCI-C-004-001.yaml
+  evidence_to_claim_map:
+    insight_refs:
+      - records/public_shelf_read/PSR-C-004-001.yaml
+      - records/purchased_competitor_inspection/PCI-C-004-001.yaml
+    kpp_refs:
+      - records/product_analysis/PA-C-004-001.yaml
+      - records/purchased_competitor_inspection/PCI-C-004-001.yaml
+    rtb_refs:
+      - records/purchased_competitor_inspection/PCI-C-004-001.yaml
+      - records/validation/QA-C-004-001.yaml
+  candidate_id: C-004-001
+  evidence_refs:
+    - records/product_analysis/PA-C-004-001.yaml
+    - records/public_shelf_read/PSR-C-004-001.yaml
+    - records/purchased_competitor_inspection/PCI-C-004-001.yaml
+  insight: Small sellers want one workbook that makes stock risk, purchase activity, sales movement, and pricing decisions visible without a separate inventory app.
+  kpp: See stock risk, inventory value, and sales momentum at a glance.
+  rtb: The shipped workbook connects Setup, Inventory, Purchases, Sales, Price Calculator, Price List, Dashboard, Start Here, and Help with audited formulas, unlocked input ranges, and verified listing surfaces.
+  hook_hypothesis: A dashboard-first inventory workbook can win the grid when it shows reorder risk and business value before explaining features.

@@ -17,13 +17,20 @@ flow_007_validation:
     status: NOT_BUILD_READY
     hard_rule_applied: Only candidates with build_readiness.status = BUILD_READY may enter product generation.
   expected_blockers:
+    - product identity reframe would fail because the candidate stays in the inventory tracker class
     - competitor benchmark insufficient or shallow
     - target audience not locked before build
     - buyer behavior contract insufficient
     - domain model failed because Opening Stock was treated as static
     - decision outputs not fully locked
     - scenario matrix would fail supplier/lead-time/receipt/stock-count-change cases
+    - workbook blueprint would require invention of sheet structure and columns
+    - builder input completeness would fail because the builder would have to invent core inputs
+    - pre-build architecture premortem would identify the same failed product path
   contract_section_results:
+    product_identity_reframe:
+      status: PRODUCT_IDENTITY_FAILED
+      blocker: Candidate remains the generic inventory tracker class instead of a distinct buyer-decision product.
     market_evidence:
       status: PASS
       note: Market signal was real but insufficient for build readiness.
@@ -51,8 +58,23 @@ flow_007_validation:
         - purchase received
         - no sales history
         - less than 30 days of sales
+    workbook_or_product_blueprint:
+      status: PRODUCT_BLUEPRINT_FAILED
+      blocker: The builder would have to invent workbook structure, required sheets, required columns, and demo fixtures.
+    builder_input_completeness:
+      status: BUILDER_INPUT_INCOMPLETE
+      blocker: Builder inputs are incomplete because the product identity and workbook blueprint are not locked.
+    pre_build_architecture_premortem:
+      status: PRE_BUILD_ARCHITECTURE_PREMORTEM_FAILED
+      blocker: The same failed inventory snapshot path remains available without a stronger blueprint or fixture lock.
   result:
     status: NOT_BUILD_READY
     launch_status_allowed: false
     product_generation_allowed: false
-    summary: C-004-001 fails FLOW-007 dry validation and must return to Product Architecture Contract instead of artifact rebuild.
+    blocked_by:
+      - PRODUCT_IDENTITY_FAILED
+      - PRODUCT_BLUEPRINT_FAILED
+      - BUILDER_INPUT_INCOMPLETE
+      - PRE_BUILD_ARCHITECTURE_PREMORTEM_FAILED
+      - SAME_FAILED_PRODUCT_CLASS_BLOCKED
+    summary: C-004-001 fails FLOW-007 dry validation and is blocked before build; it must return to Product Identity Reframe and Product Architecture Contract instead of artifact rebuild.

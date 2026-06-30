@@ -1,0 +1,318 @@
+propagation_system_spec:
+  candidate_id: C-004-001
+  alignment_chain_ref: records/alignment_chain/AC-C-004-001.yaml
+  machine_checkable_product_contract:
+    contract_id: JTBD-KPP-RTB-C-004-001-FLOW-006
+    contract_type: jtbd_kpp_rtb_product_contract
+    primary_buyer_decision: Know what to reorder, when to reorder, and how much to order.
+    jtbd: Decide replenishment actions from current stock, purchases, sales velocity, lead time, and buffer settings.
+    kpp: The workbook turns stock and sales logs into SKU-level replenishment decisions with dates and quantities.
+    rtb: Spreadsheet formulas calculate reorder action, reorder-by date, projected stockout date, days of cover, suggested order quantity, sales velocity, lead time used, and safety stock for every inventory row.
+    required_inputs:
+      - input_id: setup_review_date
+        surface: Setup!B5
+        drives: sales lookback window, projected stockout date, and reorder-by date
+      - input_id: setup_sales_lookback_days
+        surface: Setup!B6
+        drives: sales velocity per day
+      - input_id: setup_lead_time_days
+        surface: Setup!B11
+        drives: lead time used, reorder-by date, and suggested order quantity
+      - input_id: setup_safety_stock_days
+        surface: Setup!B12
+        drives: safety stock and suggested order quantity
+      - input_id: setup_default_pack_size
+        surface: Setup!B13
+        drives: suggested order quantity rounding
+      - input_id: inventory_opening_stock
+        surface: Inventory!E5:E104
+        drives: on hand, days cover, projected stockout date, reorder action, and suggested order quantity
+      - input_id: inventory_reorder_point
+        surface: Inventory!I5:I104
+        drives: status and plan-reorder fallback
+      - input_id: inventory_unit_cost
+        surface: Inventory!J5:J104
+        drives: inventory value, sales COGS, price calculator cost, and price-list snapshots
+      - input_id: purchase_log_quantity
+        surface: Purchases!D5:D304
+        drives: Inventory purchase roll-up and on-hand quantity
+      - input_id: sales_log_date_sku_quantity
+        surface: Sales!A5:D504
+        drives: sales roll-up, sales velocity, days cover, projected stockout, reorder-by date, and order quantity
+    required_outputs:
+      - output_id: reorder_action
+        surface: Inventory!S5:S104
+        minimum_quality: One of Order now, Order this week, Plan reorder, or No action for every SKU.
+      - output_id: reorder_by_date
+        surface: Inventory!R5:R104
+        minimum_quality: Date equals projected stockout date minus lead time when velocity exists; otherwise declares No sales signal.
+      - output_id: projected_stockout_date
+        surface: Inventory!N5:N104
+        minimum_quality: Date derived from review date plus days of cover when velocity exists; otherwise declares No recent sales.
+      - output_id: days_of_cover
+        surface: Inventory!M5:M104
+        minimum_quality: On-hand quantity divided by sales velocity; 999 used only when velocity is zero.
+      - output_id: suggested_order_quantity
+        surface: Inventory!Q5:Q104
+        minimum_quality: Nonnegative order quantity rounded to the setup pack size and based on lead time plus safety stock.
+      - output_id: sales_velocity
+        surface: Inventory!L5:L104
+        minimum_quality: Recent sales quantity over setup lookback days.
+      - output_id: lead_time_used
+        surface: Inventory!O5:O104
+        minimum_quality: Mirrors Setup lead time days for every SKU.
+      - output_id: safety_stock_buffer
+        surface: Inventory!P5:P104
+        minimum_quality: Sales velocity multiplied by setup safety stock days and rounded up.
+    minimum_viable_output_quality:
+      - Every required output is visible in the delivered workbook, not only in records or listing copy.
+      - Reorder date and order quantity formulas must cover all 100 SKU rows.
+      - Setup inputs must either drive downstream formulas or be removed.
+      - KPP cannot be satisfied by feature presence, dashboard counts, status labels, or prose.
+      - Purchased competitor breakage is translated into audit requirements and does not block our artifact when our formulas pass.
+    domain_failure_modes:
+      - reorder_action_only_status_label_without_date_or_quantity
+      - suggested_quantity_not_driven_by_velocity_lead_time_and_buffer
+      - setup_input_present_but_not_connected_to_formulas
+      - sales_velocity_ignores_date_window
+      - purchase_or_sales_logs_do_not_change_inventory_outputs
+      - benchmark_formula_breakage_copied_into_shipped_artifact
+      - demo_scale_rows_only
+    acceptance_scenarios:
+      - scenario_id: seeded_replenishment_decision
+        expected: Dashboard shows 100 inventory rows, 6 Order now SKUs, and 96 total suggested units.
+      - scenario_id: sku_001_out_of_stock
+        expected: SKU-001 calculates Order now, reorder by 2026-01-15, projected stockout 2026-01-29, and suggested order quantity 18.
+      - scenario_id: sku_007_near_term_reorder
+        expected: SKU-007 calculates Order this week, reorder by 2026-03-21, projected stockout 2026-04-04, and suggested order quantity 6.
+      - scenario_id: sku_100_no_action
+        expected: SKU-100 calculates No action with positive days of cover and suggested order quantity 0.
+    jtbd_truth_table_tests:
+      - test_id: reorder_now_when_stockout_or_reorder_by_past
+        inputs: on_hand <= 0 or reorder_by_date <= review_date
+        expected_output: reorder_action = Order now
+      - test_id: reorder_this_week_when_reorder_by_within_seven_days
+        inputs: review_date < reorder_by_date <= review_date + 7
+        expected_output: reorder_action = Order this week
+      - test_id: plan_reorder_when_under_point_without_immediate_date_pressure
+        inputs: on_hand <= reorder_point and reorder_by_date > review_date + 7
+        expected_output: reorder_action = Plan reorder
+      - test_id: no_action_when_cover_exceeds_lead_and_buffer
+        inputs: on_hand > velocity * (lead_time_days + safety_stock_days)
+        expected_output: reorder_action = No action and suggested_order_quantity = 0
+  primary_buyer_decision_contract:
+    decision: Know what to reorder, when to reorder, and how much to order.
+    buyer_decision_outputs:
+      - reorder_action
+      - reorder_by_date
+      - projected_stockout_date
+      - days_of_cover
+      - suggested_order_quantity
+      - sales_velocity
+      - lead_time_used
+      - safety_stock_buffer
+    forbidden_kpp_substitutes:
+      - feature checklist
+      - dashboard count only
+      - status label without date and quantity
+      - prose promise without formulas
+  input_to_decision_map:
+    Setup!B5 review date: Inventory!N, Inventory!R, Dashboard reorder timing
+    Setup!B6 sales lookback days: Inventory!L sales velocity
+    Setup!B11 lead time days: Inventory!O lead time used, Inventory!R reorder-by date, Inventory!Q suggested order quantity
+    Setup!B12 safety stock days: Inventory!P safety stock, Inventory!Q suggested order quantity
+    Setup!B13 default pack size: Inventory!Q suggested order quantity rounding
+    Inventory!E opening stock: Inventory!H on hand, Inventory!M days cover, Inventory!S action
+    Purchases!D quantity: Inventory!F purchase roll-up, Inventory!H on hand, Inventory!Q suggested quantity
+    Sales!A:D date/sku/quantity: Inventory!G sales roll-up, Inventory!L velocity, Inventory!N/R/S/Q replenishment outputs
+  domain_standard_requirements:
+    - Replenishment tracker must answer action, timing, and quantity, not merely stock status.
+    - Lead time and safety stock must be visible or traceable for the reorder recommendation.
+    - Purchase and sales logs must mutate downstream inventory outputs.
+    - Benchmark adequacy is resolved by converting broken competitor formulas into formula-integrity and mutation-test requirements before build.
+  forbidden_shallow_substitutes:
+    - Treating a low-stock badge as the KPP.
+    - Counting dashboard cards as proof of replenishment logic.
+    - Listing feature scope as proof of buyer decision value.
+    - Writing reorder advice in prose without formulas.
+  promise_supported: Know what to reorder, when to reorder, and how much to order in one inventory workbook.
+  system_name: Inventory Tracker Studio
+  system_type: inventory replenishment and pricing workbook
+  primary_platform: Google Sheets and Excel with standard formulas
+  supported_domain_boundaries:
+    - inventory replenishment planning
+    - stock tracking
+    - purchase logging
+    - sales logging
+    - product pricing
+    - saved price snapshots
+  supported_platform_boundaries:
+    - Google Sheets standard-formula import
+    - Excel-compatible spreadsheet editors
+  first_success_scenario: Open Setup, confirm review date, sales lookback, lead time, safety stock, and pack size, then use Inventory to identify each SKU's reorder action, reorder-by date, projected stockout date, days of cover, and suggested order quantity.
+  support_prevention:
+    - Keep Setup first and explain which defaults drive reorder formulas.
+    - Use yellow input cells for buyer edits and blue generated cells for formula outputs.
+    - Keep required replenishment outputs visible on Inventory, not hidden on helper sheets.
+    - Explain recovery by duplicating a clean copy.
+  protection_and_recovery:
+    - Passworded sheet protection with unlocked buyer input ranges.
+    - Buyer-facing copy says protection behavior can vary after Google Sheets import.
+    - Recovery path is restoring from a clean duplicate.
+  stated_limits:
+    - The workbook does not connect to live inventory services, banks, shipping systems, or marketplaces.
+    - Reorder quantities are planning estimates from buyer-entered data.
+    - The workbook is not tax, accounting, or legal advice.
+  hook_surface:
+    - Dashboard
+    - Inventory
+    - Purchases
+    - Sales
+  visual_reference_contract:
+    - Use calm BeatsPerfect styling with readable decision tables.
+    - Show the replenishment outputs in real workbook surfaces.
+    - Avoid fake screens, fake formulas, and competitor-derived visuals.
+  category_quality_floor:
+    - First-open clarity
+    - Human-scale inventory capacity
+    - Visible replenishment outputs
+    - No broken formula dependencies
+    - Clear editable versus generated areas
+  required_product_surfaces:
+    - Start Here
+    - Dashboard
+    - Setup
+    - Inventory
+    - Purchases
+    - Sales
+    - Price Calculator
+    - Price List
+    - Help
+  working_capacity_requirements:
+    status: required
+    spreadsheet_requirements:
+      - Inventory formulas must cover 100 buyer-usable SKU rows.
+      - Purchases formulas and SKU validation must cover 300 buyer-usable purchase rows.
+      - Sales formulas and SKU validation must cover 500 buyer-usable sales rows.
+      - Pricing and price-list formulas must cover 100 buyer-usable rows each.
+      - Replenishment formulas must cover the full Inventory range, not only seeded examples.
+  human_scale_capacity_floor:
+    inventory_rows: 100
+    purchases_rows: 300
+    sales_rows: 500
+    price_calculator_rows: 100
+    price_list_rows: 100
+  prior_artifact_baseline:
+    inventory_rows: 12
+    purchases_rows: 12
+    sales_rows: 12
+    price_calculator_rows: 6
+    price_list_rows: 6
+    buyer_decision_failure: Prior artifact showed stock/pricing visibility but did not answer reorder date and order quantity as the primary buyer decision.
+  material_delta_requirements:
+    - Add SKU-level reorder action, reorder-by date, projected stockout date, days cover, suggested order quantity, sales velocity, lead time used, and safety stock.
+    - Expand buyer-visible tables to human-scale capacity.
+    - Regenerate listing creatives around replenishment-specific proof, not generic table screenshots.
+  visual_acceptance_requirements:
+    - Dashboard cards must not clip values or labels.
+    - Inventory preview must show the replenishment output columns.
+    - Listing proof claims must wrap within their containers.
+  originality_boundary:
+    - No competitor workbook assets, screenshots, formulas copied by structure, or branding.
+  forbidden_architecture:
+    - SaaS inventory service
+    - live stock sync
+    - live price feed
+    - browser-only workflow
+    - subscription gating
+  excluded_scope:
+    - bookkeeping services
+    - tax preparation
+    - live marketplace automation
+    - barcode scanning
+  formula_protection_mode:
+    mode: passworded_sheet_protection_with_unlocked_input_ranges
+    protected_ranges_or_reason_not_protected:
+      - Generated/formula cells are locked in the shipped workbook.
+      - Setup, Inventory input columns, Purchases, Sales, Price Calculator, and Price List input ranges are unlocked.
+    recovery_only_labeling_required: true
+    buyer_claim_language_allowed: Protected workbook structure with editable input ranges, with Google Sheets import caveat.
+  competitor_failure_handling:
+    status: benchmark_adequacy_resolved_before_build
+    rule: Broken competitor formulas were treated as domain failure modes and converted into artifact-integrity, formula, and mutation-test requirements.
+    downstream_resolution: Current build must prove replenishment formulas through LibreOffice recalculation and workbook inspection.
+  benchmark_adequacy_resolution:
+    status: resolved
+    decision: Purchased competitor benchmark was adequate for domain standards after separating broken implementation details from required decision outputs.
+    build_implication: Build must ship formula-backed action, date, quantity, velocity, lead time, and buffer outputs.
+  artifact_integrity_audit_requirements:
+    artifact_open_check: required
+    required_surfaces_check: required
+    formula_inventory_check: required
+    editable_range_check: required
+    protection_truthfulness_check: required
+    listing_surface_fidelity_check: required
+  formula_truth_table_tests:
+    applicable: true
+    test_cases:
+      - Dashboard B5/D5/F5 must calculate 100 inventory rows, 6 Order now SKUs, and 96 suggested order units in the seeded workbook.
+      - SKU-001 must calculate Order now, reorder-by 2026-01-15, projected stockout 2026-01-29, and suggested order quantity 18.
+      - SKU-007 must calculate Order this week, reorder-by 2026-03-21, projected stockout 2026-04-04, and suggested order quantity 6.
+      - SKU-100 must calculate No action and suggested order quantity 0.
+  jtbd_truth_table_tests:
+    applicable: true
+    generated_from_primary_buyer_decision: true
+    test_cases:
+      - action_date_quantity_present_for_every_sku
+      - sales_velocity_mutation_changes_stockout_date_and_reorder_by_date
+      - lead_time_mutation_changes_reorder_by_date
+      - safety_stock_mutation_changes_suggested_order_quantity
+      - purchase_mutation_reduces_suggested_order_quantity
+  setup_input_propagation_requirements:
+    every_buyer_visible_setting_must_drive_downstream_formula_or_be_declared_default: true
+    propagated_inputs:
+      - Setup!B5 review date
+      - Setup!B6 sales lookback days
+      - Setup!B7 sales tax
+      - Setup!B8 marketplace fee
+      - Setup!B9 target margin
+      - Setup!B10 default reorder point
+      - Setup!B11 lead time days
+      - Setup!B12 safety stock days
+      - Setup!B13 default pack size
+    declared_default_only_inputs:
+      - Setup!B4 currency symbol
+      - Setup!B14 support note
+  boundary_mutation_tests:
+    applicable: true
+    test_cases:
+      - Increase Setup lead time days and verify reorder-by date shifts earlier.
+      - Increase safety stock days and verify suggested order quantity rises or stays bounded at pack-size rounding.
+      - Add purchase quantity for SKU-001 and verify on hand rises and suggested order quantity falls.
+      - Reduce recent sales for SKU-007 and verify velocity, stockout date, and action change.
+      - Raise target margin and verify price calculator suggested price changes.
+  time_horizon_model:
+    horizon_type: ad_hoc_inventory_review
+    start_period_user_configurable: false
+    fixed_calendar_year_allowed: false
+    review_date_user_configurable: true
+    stale_fixed_year_listing_copy_forbidden: true
+  period_model:
+    applicable: false
+    period_type: not_applicable
+    reason_if_not_applicable: Inventory replenishment review is date-sensitive but not a rolling monthly workbook.
+  carry_forward_model:
+    applicable: false
+    reason_if_not_applicable: Replenishment state is recomputed from stock, purchases, and sales logs, not month-end carry-forward.
+  renewal_or_rollover_path:
+    applicable: false
+    no_macro_or_external_import_required: true
+    reason_if_not_applicable: Buyer continues using the same logs until capacity is reached or copies the workbook.
+  publish_blockers:
+    missing_audit_evidence: false
+    failed_formula_or_mutation_test: false
+    unverified_platform_claim: false
+    protection_claim_without_protection: false
+    missing_period_continuity_when_applicable: false
+    stale_fixed_year_structure_without_marketplace_evidence: false
+    prose_only_qa: false

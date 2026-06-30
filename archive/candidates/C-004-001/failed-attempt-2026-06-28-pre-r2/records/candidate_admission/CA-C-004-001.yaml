@@ -1,0 +1,38 @@
+candidate_admission:
+  candidate_id: C-004-001
+  market_evidence_ref: records/product_analysis/PA-C-004-001.yaml
+  marketplace: Etsy
+  product_type: inventory tracker spreadsheet
+  primary_platform_candidate: Google Sheets and modern Excel
+  admitted: true
+  reason: FLOW-006 candidate admission passed. EverBee Product Analytics returned strong current demand for inventory tracker spreadsheet with 3,651 analyzed listings and visible top-result sales/revenue metrics; nearby alternatives did not clearly dominate the existing Inventory lane.
+  market_research_tool_status:
+    status: ready_and_used
+    tool: EverBee Product Analytics
+    browser_profile: everbee
+    cdp_url: http://127.0.0.1:9222
+    captured_at: 2026-06-26T11:21:18Z
+    account_plan_observed: Growth plan
+  market_demand_evidence_quality: pass
+  missing_market_inputs: []
+  alternatives_considered:
+    - product_type: small business bookkeeping spreadsheet
+      everbee_listings_analyzed: 3294
+      decision: not_selected
+      reason: Strong but broader and not clearly better than the existing Inventory lane; overlaps heavily with bundles that already include inventory.
+    - product_type: reseller spreadsheet inventory
+      everbee_listings_analyzed: 777
+      decision: not_selected
+      reason: More niche and lower visible top-result revenue than broad inventory tracker spreadsheet.
+    - product_type: pricing calculator spreadsheet handmade
+      everbee_listings_analyzed: 361
+      decision: not_selected
+      reason: Narrower support feature rather than stronger candidate lane.
+  flow_006_decision:
+    result: update_existing_candidate
+    updated_candidate_id: C-004-001
+    new_candidate_created: false
+    rejected_new_candidate_id: C-005-001
+  competitor_purchase_required: true
+  competitor_purchase_approval_required: true
+  api_budget_ceiling_usd: 25

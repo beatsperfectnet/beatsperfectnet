@@ -1,0 +1,164 @@
+product_analysis:
+  analysis_id: PA-C-004-001
+  candidate_ref: C-004-001
+  idea_ref: I-001
+  marketplace: Etsy
+  search_queries_used:
+    - inventory tracker spreadsheet
+    - inventory management spreadsheet small business
+    - inventory tracker spreadsheet suppliers purchases sales
+    - apparel inventory tracker excel spreadsheet
+    - EverBee Product Analytics: inventory tracker spreadsheet
+    - EverBee Product Analytics: small business bookkeeping spreadsheet
+    - EverBee Product Analytics: reseller spreadsheet inventory
+    - EverBee Product Analytics: pricing calculator spreadsheet handmade
+  evidence_sources:
+    - source_type: marketplace_listing
+      source_ref: Inventory Tracker Spreadsheet Small Business Inventory Template Google Sheets Inventory Tracker Management Inventory Log List Order Tracker
+      evidence_summary: Live Etsy listing shows a small-business inventory tracker with order tracking and Google Sheets framing.
+    - source_type: marketplace_listing
+      source_ref: Excel Inventory Tracker Spreadsheet Google Sheets Small Business Materials & Product Log Inventory Management Template Profit Sales Tracker
+      evidence_summary: Live Etsy listing shows a more complete inventory dashboard with materials, product log, profit, and sales framing.
+    - source_type: marketplace_listing
+      source_ref: Inventory Tracker Spreadsheet for Small Business Inventory Template Google Sheets Excel Inventory Management Log Inventory Order Tracker
+      evidence_summary: Live Etsy listing shows inventory management plus order tracking with cross-platform compatibility.
+    - source_type: marketplace_listing
+      source_ref: Google Sheets Inventory Tracker Spreadsheet | Product Management Tool | Inventory Management | Business Spreadsheet | Reseller Template
+      evidence_summary: Live Etsy listing shows product management and reseller framing in the same workbook category.
+    - source_type: market_research_tool
+      source_ref: EverBee Product Analytics query "inventory tracker spreadsheet"
+      evidence_summary: Returned 3,651 analyzed listings. Visible top results included PrioriDigitalStudio at $28.23 with 220 last-month sales and $6,416 revenue, JrenDigital at $21.01 with 195 sales and $4,097 revenue, and multiple inventory/spreadsheet bundles with strong total sales and reviews.
+    - source_type: market_research_tool
+      source_ref: EverBee Product Analytics alternative comparison
+      evidence_summary: Small business bookkeeping spreadsheet returned 3,294 listings and strong demand, reseller spreadsheet inventory returned 777 listings, and pricing calculator spreadsheet handmade returned 361 listings. None clearly displaced the existing inventory tracker candidate.
+  observed_product_type:
+    - value: inventory tracker spreadsheet
+      evidence_summary: Successful listings sell a finished inventory-management workbook rather than a blank log.
+  observed_tabs_components:
+    - value: inventory dashboard
+      evidence_summary: Core proof surface in the stronger listings.
+    - value: products
+      evidence_summary: Product-level tracking is visible in the category.
+    - value: materials or BOM
+      evidence_summary: Premium listings add materials and bill-of-materials support.
+    - value: suppliers
+      evidence_summary: Supplier tracking appears in the richer multi-tab inventory systems.
+    - value: purchases
+      evidence_summary: Purchase tracking helps buyers keep stock updated.
+    - value: sales
+      evidence_summary: Sales tracking connects stock to demand.
+    - value: setup or read me
+      evidence_summary: Setup and first-use guidance are common buyer trust surfaces.
+  observed_workflows:
+    - value: track stock on hand and reorder before items run out
+      evidence_summary: This is the primary buyer job surfaced by the listings.
+    - value: connect purchases and sales to inventory counts
+      evidence_summary: The strongest listings make inventory update paths explicit.
+    - value: manage suppliers and compare product costs
+      evidence_summary: Supplier and price tracking reduce manual work for small businesses and resellers.
+    - value: understand product profit and profit margin
+      evidence_summary: Several listings frame inventory as a business decision tool, not only a count sheet.
+  observed_formulas_features:
+    - value: on-hand quantity updates
+      evidence_summary: Inventory math updates stock automatically in the stronger listings.
+    - value: reorder thresholds
+      evidence_summary: Low-stock behavior is a visible category utility.
+    - value: profit and margin calculations
+      evidence_summary: Profit math is explicitly called out in the premium benchmarks.
+    - value: supplier and purchase rollups
+      evidence_summary: Richer listings connect purchases and suppliers to stock status.
+  observed_dashboards:
+    - value: dashboard with stock summaries, sales, and profit cards
+      evidence_summary: Dashboard-style presentation is common in the better inventory listings.
+  observed_visual_surface_patterns:
+    - value: dashboard-first spreadsheet preview, strong compatibility cues, and explicit inventory management framing
+      evidence_summary: The market prefers immediate utility proof over decorative visuals.
+  observed_buyer_decision_bearing_charts:
+    - value: inventory cost versus inventory value
+      evidence_summary: Helps buyers judge whether the stock picture makes sense.
+    - value: sales versus available stock
+      evidence_summary: Helps buyers see whether stock is being consumed or replenished.
+    - value: profit versus margin
+      evidence_summary: Helps buyers understand whether inventory activity is actually healthy.
+  observed_chart_unit_and_threshold_semantics:
+    - value: inventory charts must label counts, costs, and profit clearly
+      evidence_summary: Charts only help if the unit and meaning are obvious.
+  observed_sample_data_examples:
+    - value: starter products, materials, suppliers, and orders
+      evidence_summary: Sample data makes the workbook understandable before editing.
+  recurring_actionable_complaints:
+    - complaint: setup can be confusing if the inventory workbook is too bare
+      complaint_frequency: recurring in spreadsheet-template category
+      evidence: Clear onboarding and setup surfaces reduce first-open uncertainty.
+    - complaint: stock math feels fragile when the update path is unclear
+      complaint_frequency: recurring in inventory category
+      evidence: Buyers need obvious purchase, sales, and manufacturing updates.
+    - complaint: buyers want a business view, not only a product count table
+      complaint_frequency: recurring
+      evidence: The strongest listings add dashboard, profit, and supplier views.
+  complaint_frequency: setup_confusion_and_weak_inventory_update_paths_are_recurring_category_risks
+  complaint_evidence:
+    - Benchmark listings visibly show dashboards, setup guidance, and category-specific inventory surfaces to pre-answer objections.
+  scope_gap_summary: The gap is not more features; it is a finished inventory-management workbook with screenshot-worthy internal surfaces that make stock, purchases, sales, suppliers, and profit visible.
+  product_scope_recommendations:
+    - value: Build an inventory dashboard, products table, materials or BOM surface, suppliers sheet, purchases sheet, sales sheet, and setup guidance.
+      evidence_summary: These surfaces are repeatedly visible in market examples and support the listing promise.
+  forbidden_feature_inference:
+    - value: SaaS automation, login requirements, subscription billing, multi-user permissions
+      evidence_summary: Not required by the observed spreadsheet promise and would create unsupported claims.
+  evidence_missing:
+    - listing_gallery_thumbnail_screenshots
+  market_research_tool_status:
+    status: ready_and_used
+    tool: EverBee Product Analytics
+    browser_profile: everbee
+    captured_at: 2026-06-26T11:21:18Z
+    account_plan_observed: Growth plan
+  market_metrics_summary:
+    evidence_quality_gate: pass
+    selected_lane:
+      query: inventory tracker spreadsheet
+      everbee_listings_analyzed: 3651
+      visible_top_result_examples:
+        - title: Small Business Bundle Bookkeeping Inventory Tracker Order Tracker Product Handmade Pricing Calculator Smart Bill Calendar Google Sheet Excel
+          shop: PrioriDigitalStudio
+          price_usd: 28.23
+          last_month_sales: 220
+          last_month_revenue_usd: 6416
+          growth_rate: 43%
+          total_sales: 6411
+          total_reviews: 600
+        - title: Small Business Bookkeeping Spreadsheet Template Profit Loss Easy Accounting Template Sales Tax Inventory Income Tracker Excel Google Sheets
+          shop: JrenDigital
+          price_usd: 21.01
+          last_month_sales: 195
+          last_month_revenue_usd: 4097
+          growth_rate: 125%
+          total_sales: 454
+          total_reviews: 31
+        - title: Inventory Tracker Spreadsheet for Small Business Inventory Template Google Sheets Excel Product Material Inventory Management Order Tracking
+          shop: MyProductiveLifeCo
+          price_usd: 17.37
+          last_month_sales: 56
+          last_month_revenue_usd: 973
+          growth_rate: 300%
+          total_sales: 4352
+          total_reviews: 393
+    alternatives:
+      - query: small business bookkeeping spreadsheet
+        everbee_listings_analyzed: 3294
+        top_visible_revenue_usd: 6416
+        decision: strong_but_not_clearly_better
+      - query: reseller spreadsheet inventory
+        everbee_listings_analyzed: 777
+        top_visible_revenue_usd: 1014
+        decision: narrower_than_inventory
+      - query: pricing calculator spreadsheet handmade
+        everbee_listings_analyzed: 361
+        top_visible_revenue_usd: 642
+        decision: support_feature_not_primary_lane
+  flow_006_candidate_admission_decision:
+    candidate_id: C-004-001
+    admitted: true
+    create_c005: false
+    reason: Inventory remains a strong enough and better-scoped candidate; alternatives are either broader without clear advantage or narrower than the existing workbook lane.

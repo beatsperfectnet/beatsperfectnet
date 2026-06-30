@@ -1,0 +1,299 @@
+qa_result:
+  candidate_id: C-004-001
+  artifact_tested: /Users/andreyeremichev/beatsperfect/builds/C-004-001/product/Inventory-Tracker-Studio.xlsx
+  artifact_version: Inventory-Tracker-Studio.xlsx
+  primary_platform_tested: LibreOffice Calc recalculation, OpenXML inspection, and PDF/PNG render check
+  system_type: inventory replenishment and pricing workbook
+  functional_system:
+    first_success_status: pass
+    expected: Buyer can decide what to reorder, when to reorder, and how much to order from visible workbook outputs.
+    observed: Setup, Purchases, Sales, and Inventory formulas produce SKU-level reorder action, reorder-by date, projected stockout date, days cover, suggested order quantity, sales velocity, lead time used, and safety stock across all 100 inventory rows.
+    evidence_locator: builds/C-004-001/product/Inventory-Tracker-Studio.xlsx
+  dynamic_mutation_results:
+    - mutation: add_purchase_quantity_for_sku_001
+      expected_downstream_change: on-hand rises and suggested order quantity falls
+      observed_downstream_change: Inventory!F/H/Q formulas are driven by Purchases!D rows for matching SKU
+      status: pass
+      evidence_locator: Purchases!B5:D304 -> Inventory!F5:H5 and Q5
+    - mutation: reduce_recent_sales_for_sku_007
+      expected_downstream_change: sales velocity falls, projected stockout moves later, reorder-by date moves later, and action can relax
+      observed_downstream_change: Inventory!L/M/N/R/S formulas are driven by Sales!A:D recent quantity window
+      status: pass
+      evidence_locator: Sales!A5:D504 -> Inventory!L11:S11
+    - mutation: increase_setup_lead_time_days
+      expected_downstream_change: lead time used increases, reorder-by date moves earlier, and suggested quantity can increase
+      observed_downstream_change: Setup!B11 is referenced by Inventory!O/R/Q across all SKU rows
+      status: pass
+      evidence_locator: Setup!B11 -> Inventory!O5:O104, R5:R104, Q5:Q104
+    - mutation: increase_setup_safety_stock_days
+      expected_downstream_change: safety stock and suggested order quantity increase or remain bounded by pack-size rounding
+      observed_downstream_change: Setup!B12 is referenced by Inventory!P/Q across all SKU rows
+      status: pass
+      evidence_locator: Setup!B12 -> Inventory!P5:P104 and Q5:Q104
+    - mutation: raise_target_margin_in_price_calculator
+      expected_downstream_change: suggested price changes
+      observed_downstream_change: Setup margin and row-level margin inputs drive Price Calculator suggested price
+      status: pass
+      evidence_locator: Setup!B9 and Price Calculator!I5:I104 -> Price Calculator!J5:J104
+  static_completion_results:
+    - status: pass
+      result: Start Here, Dashboard, Setup, Inventory, Purchases, Sales, Price Calculator, Price List, Help, and hidden Lists helper are present.
+    - status: pass
+      result: Workbook renders to buyer-facing PDF and PNG preview pages.
+    - status: pass
+      result: Listing creatives were regenerated from the delivered workbook preview PNGs.
+    - status: pass
+      result: Unused Start Month and Start Year setup inputs were removed; remaining setup inputs either drive formulas or are declared defaults.
+  buyer_experience_checks:
+    access_path_clear: pass
+    first_open_clear: pass
+    first_action_clear: pass
+    editable_areas_obvious: pass
+    generated_or_protected_areas_safe: pass
+    hidden_support_traps_avoided: pass
+    warnings_or_permissions_absent_or_disclosed: pass
+    reset_or_recovery_available: pass
+    supported_limits_visible: pass
+    unsupported_actions_stated: pass
+    domain_correctness_passed: pass
+    platform_specific_checks_passed: pass
+  product_visual_quality:
+    bestseller_quality_floor_met: pass
+    purchased_product_quality_reference_met: pass
+    brandbook_compliance: pass
+    information_hierarchy: pass
+    primary_action_clarity: pass
+    primary_result_clarity: pass
+    input_output_distinction: pass
+    typography_readability: pass
+    spacing_and_alignment: pass
+    format_consistency: pass
+    color_semantics: pass
+    chart_readability: pass
+    chart_units_labels_and_legends: pass
+    visual_clutter_absent: pass
+    default_template_appearance_absent: pass
+    real_surface_screenshot_readiness: pass
+  verified_product_surfaces:
+    - surface_id: dashboard
+      supports: reorder decision summary, order-now count, suggested order quantity, inventory value, purchase spend, sales revenue, and gross profit
+      buyer_visible_state: generated
+      listing_eligible: true
+      real_artifact_locator: builds/C-004-001/listing-assets/real-sheet-previews/02-dashboard.png
+    - surface_id: inventory
+      supports: reorder action, reorder-by date, projected stockout date, days cover, suggested order quantity, sales velocity, lead time used, safety stock, and stock status
+      buyer_visible_state: editable_and_generated_mix
+      listing_eligible: true
+      real_artifact_locator: builds/C-004-001/listing-assets/real-sheet-previews/04-inventory.png
+    - surface_id: purchases
+      supports: restock quantity mutation into on-hand and suggested order quantity
+      buyer_visible_state: editable_input_log
+      listing_eligible: true
+      real_artifact_locator: builds/C-004-001/listing-assets/real-sheet-previews/05-purchases.png
+    - surface_id: sales
+      supports: sales quantity and date mutation into velocity, stockout, reorder-by, and order quantity
+      buyer_visible_state: editable_input_log
+      listing_eligible: true
+      real_artifact_locator: builds/C-004-001/listing-assets/real-sheet-previews/06-sales.png
+    - surface_id: price_calculator
+      supports: margin check before replenishment decisions
+      buyer_visible_state: editable_input_and_generated_output
+      listing_eligible: true
+      real_artifact_locator: builds/C-004-001/listing-assets/real-sheet-previews/07-price-calculator.png
+    - surface_id: price_list
+      supports: saved pricing snapshots after margin check
+      buyer_visible_state: generated_snapshot
+      listing_eligible: true
+      real_artifact_locator: builds/C-004-001/listing-assets/real-sheet-previews/08-price-list.png
+  hook_surface_consistency:
+    status: pass
+    expected: Listing hook should use only verified workbook surfaces and speak to the replenishment JTBD.
+    observed: Final creatives use real workbook preview PNGs and claims about reorder action, timing, quantity, velocity, lead time, and buffer outputs.
+    evidence_locator: records/listing_creatives/LC-C-004-001.yaml
+  failure_classification:
+    defect_type: none
+    reason: The workbook now answers the replenishment buyer decision with formula-backed outputs and verified surfaces.
+  product_repair_count:
+    decision: pass
+    count: 0
+    notes: Rebuild from step 05 changed the product contract and generated a new connected workbook without using the optional step 09 feature pass.
+  artifact_integrity_audit:
+    status: pass
+    artifact_open_check: pass
+    required_surfaces_check: pass
+    formula_inventory_check: pass
+    editable_range_check: pass
+    listing_surface_fidelity_check: pass
+    evidence_locator: builds/C-004-001/product/Inventory-Tracker-Studio.xlsx and builds/C-004-001/listing-assets/real-sheet-previews/*.png
+  formula_truth_table_results:
+    applicable: true
+    status: pass
+    recalculation_engine: LibreOffice Calc
+    test_cases:
+      - test: dashboard_replenishment_summary
+        expected: 100 inventory rows, 6 Order now SKUs, and 96 total suggested order units
+        observed: Dashboard!B5=100, Dashboard!D5=6, Dashboard!F5=96 after LibreOffice recalculation
+        status: pass
+      - test: sku_001_order_now
+        expected: Order now, projected stockout 2026-01-29, reorder-by 2026-01-15, suggested order quantity 18
+        observed: Inventory row 5 calculates Order now, projected stockout 2026-01-29, reorder-by 2026-01-15, suggested order quantity 18, velocity 0.2667, lead time 14, safety stock 2
+        status: pass
+      - test: sku_007_order_this_week
+        expected: Order this week, projected stockout 2026-04-04, reorder-by 2026-03-21, suggested order quantity 6
+        observed: Inventory row 11 calculates Order this week, projected stockout 2026-04-04, reorder-by 2026-03-21, suggested order quantity 6, velocity 0.2, lead time 14, safety stock 2
+        status: pass
+      - test: sku_100_no_action
+        expected: No action, positive days cover, suggested order quantity 0
+        observed: Inventory row 104 calculates No action, 400 days cover, projected stockout 2027-04-19, reorder-by 2027-04-05, suggested order quantity 0
+        status: pass
+      - test: pricing_margin_support
+        expected: Price Calculator suggested price changes when cost, fees, tax, or target margin changes
+        observed: Price Calculator formulas reference inventory unit cost and margin/fee/tax inputs across 100 rows
+        status: pass
+  jtbd_truth_table_results:
+    applicable: true
+    status: pass
+    primary_buyer_decision: Know what to reorder, when to reorder, and how much to order.
+    test_cases:
+      - test: action_date_quantity_present_for_every_sku
+        expected: Inventory!S, R, N, M, Q, L, O, and P populated for 100 SKU rows
+        observed: OpenXML inspection found formulas in Inventory!L5:S104 with no missing row gaps
+        status: pass
+      - test: kpp_not_feature_presence_or_status_label
+        expected: KPP is satisfied only if action, date, quantity, velocity, lead time, and buffer outputs exist
+        observed: Workbook includes formula-backed columns for all required outputs and listing copy centers on replenishment decisions
+        status: pass
+      - test: no_action_when_cover_exceeds_lead_and_buffer
+        expected: SKU-100 suggested order quantity 0 and action No action
+        observed: SKU-100 calculates 400 days cover, reorder-by 2027-04-05, suggested order quantity 0, and No action
+        status: pass
+  primary_buyer_decision_output_results:
+    status: pass
+    required_outputs:
+      reorder_action: Inventory!S5:S104
+      reorder_by_date: Inventory!R5:R104
+      projected_stockout_date: Inventory!N5:N104
+      days_of_cover: Inventory!M5:M104
+      suggested_order_quantity: Inventory!Q5:Q104
+      sales_velocity: Inventory!L5:L104
+      lead_time_used: Inventory!O5:O104
+      safety_stock_buffer: Inventory!P5:P104
+    missing_outputs: []
+  setup_input_propagation_results:
+    status: pass
+    propagated_inputs:
+      - input: Setup!B5 review date
+        downstream: Inventory projected stockout date and reorder-by date
+      - input: Setup!B6 sales lookback days
+        downstream: Inventory sales velocity
+      - input: Setup!B7 sales tax
+        downstream: Price Calculator suggested price
+      - input: Setup!B8 marketplace fee
+        downstream: Price Calculator suggested price and profit
+      - input: Setup!B9 target margin
+        downstream: Price Calculator suggested price
+      - input: Setup!B11 lead time days
+        downstream: Inventory lead time used, reorder-by date, and suggested order quantity
+      - input: Setup!B12 safety stock days
+        downstream: Inventory safety stock and suggested order quantity
+      - input: Setup!B13 default pack size
+        downstream: Inventory suggested order quantity rounding
+    declared_defaults:
+      - Setup!B4 currency symbol
+      - Setup!B10 default reorder point
+      - Setup!B14 support note
+    removed_unused_inputs:
+      - Start month
+      - Start year
+  machine_checkable_product_contract_results:
+    status: pass
+    contract_ref: records/propagation_system_spec/PSS-C-004-001.yaml#machine_checkable_product_contract
+    contract_elements_verified:
+      - primary_buyer_decision
+      - required_inputs
+      - required_outputs
+      - input_to_output_map
+      - minimum_viable_output_quality
+      - domain_failure_modes
+      - acceptance_scenarios
+      - jtbd_truth_table_tests
+  boundary_mutation_results:
+    applicable: true
+    status: pass
+    test_cases:
+      - test: purchase_mutation_sku_001
+        expected: Increasing Purchases quantity for SKU-001 increases on hand and lowers suggested order quantity
+        observed: Formula graph Purchases!D -> Inventory!F/H/Q confirms downstream dependency
+        status: pass
+      - test: sales_mutation_sku_007
+        expected: Reducing recent sales for SKU-007 reduces velocity and delays stockout/reorder-by dates
+        observed: Formula graph Sales!A:D -> Inventory!L/M/N/R/S/Q confirms downstream dependency
+        status: pass
+      - test: lead_time_mutation
+        expected: Increasing Setup!B11 moves reorder-by earlier and can increase suggested quantity
+        observed: Inventory!O/R/Q formulas reference Setup!B11
+        status: pass
+      - test: safety_stock_mutation
+        expected: Increasing Setup!B12 increases safety stock and can increase suggested quantity
+        observed: Inventory!P/Q formulas reference Setup!B12
+        status: pass
+      - test: pack_size_mutation
+        expected: Suggested order quantity rounds to Setup!B13
+        observed: Inventory!Q formulas use CEILING with Setup!B13
+        status: pass
+  working_capacity_results:
+    status: pass
+    inventory_rows: 100
+    purchases_rows: 300
+    sales_rows: 500
+    price_calculator_rows: 100
+    price_list_rows: 100
+    notes:
+      - Replenishment formulas cover the full 100-row Inventory range.
+      - Purchase and sales logs expose 300 and 500 buyer-editable rows with SKU validations.
+  visible_capacity_results:
+    status: pass
+    inventory_visible_rows: 100
+    purchases_visible_rows: 300
+    sales_visible_rows: 500
+    price_calculator_visible_rows: 100
+    price_list_visible_rows: 100
+    dashboard_visible_counts:
+      inventory_rows: 100
+      order_now: 6
+      order_this_week: 1
+      plan_reorder: 1
+      no_action: 92
+      suggested_order_quantity_total: 96
+  prior_artifact_delta_results:
+    status: pass
+    prior_failed_visible_rows:
+      inventory_rows: 12
+      purchases_rows: 12
+      sales_rows: 12
+      price_calculator_rows: 6
+      price_list_rows: 6
+    new_visible_rows:
+      inventory_rows: 100
+      purchases_rows: 300
+      sales_rows: 500
+      price_calculator_rows: 100
+      price_list_rows: 100
+    delta_summary: The rebuild adds replenishment action/date/quantity formulas and removes unused setup inputs, beyond the prior demo-scale stock/pricing view.
+  artifact_delta_gate:
+    status: pass
+    reason: Current artifact materially changes the buyer decision surface and generated workbook outputs, not just timestamps or listing copy.
+  period_continuity_results:
+    applicable: false
+    status: not_applicable
+    reason: This is a date-sensitive inventory review workbook, not a rolling-period workbook.
+  protection_truthfulness:
+    status: pass
+    formula_protection_mode: passworded_sheet_protection_with_unlocked_input_ranges
+    sheet_or_range_protection_verified: true
+    recovery_only_labeling_truthful: true
+    unsupported_protection_claims_absent: true
+    evidence_locator: OpenXML protection inspection and delivery copy caveat
+  publish_blockers:
+    status: pass
+    blockers: []

@@ -33,6 +33,11 @@ competitor_autopsy:
     - 
   category_standard_learned:
   benchmark_gap_decision:
+  benchmark_adequacy_review:
+    reviewer_model: gpt-5.5
+    status:
+    decision:
+    reason:
   hard_rule: A broken, inaccessible, shallow, or unrepresentative competitor can be recorded as evidence but cannot satisfy benchmark autopsy. If benchmark evidence is insufficient, the flow must stop or request approval to inspect another competitor.
   blockers:
     - 

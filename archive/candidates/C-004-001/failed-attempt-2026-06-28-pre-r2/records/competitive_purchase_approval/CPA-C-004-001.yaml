@@ -1,0 +1,123 @@
+competitive_purchase_approval:
+  approval_id: CPA-C-004-001
+  flow_contract_ref: workflows/FLOW-006.yaml
+  candidate_ref: C-004-001
+  candidate_domain_brief_ref: null
+  applied_domain_consideration_ids: []
+  status: complete
+
+  selected_competitor:
+    title: "Inventory Tracker Spreadsheet Small Business Inventory Template Google Sheets Inventory Tracker Management Inventory Log List Order Tracker"
+    marketplace: Etsy
+    seller_name_if_visible: unknown
+    product_url: https://www.etsy.com/listing/1757356616/inventory-tracker-spreadsheet-small
+    current_price: 2.02
+    original_price_if_visible: 5.04
+    currency: USD
+    discount_summary_if_visible: 60% off
+    live_purchase_verification:
+      verification_status: verified_live
+      product_url: https://www.etsy.com/listing/1757356616/inventory-tracker-spreadsheet-small
+      title: "Inventory Tracker Spreadsheet Small Business Inventory Template Google Sheets Inventory Tracker Management Inventory Log List Order Tracker"
+      seller_name_if_visible: unknown
+      current_price: 2.02
+      original_price_if_visible: 5.04
+      currency: USD
+      discount_summary_if_visible: 60% off
+      evidence_ref: openclaw web_search 2026-06-25 query "site:etsy.com \"small business inventory tracker\" spreadsheet Etsy Google Sheets"
+      verification_method: live_marketplace_search_result
+    observed_monthly_revenue: unknown
+    revenue_evidence_date: 2026-06-25
+    revenue_evidence_ref: records/product_analysis/PA-C-004-001.yaml
+    observable_listing_age_or_launch_date: unknown
+    match_tier: tier_1_same_jtbd_same_product_type_same_platform_comparable_scope
+    primary_jtbd_match: true
+    product_type_match: true
+    platform_match: true
+    scope_match: true
+    selection_reason: Selected as the lowest-friction live Etsy benchmark with direct inventory-management framing and a visible price point.
+
+  alternatives_considered:
+    - product_url: https://www.etsy.com/listing/1790374485/excel-inventory-tracker-spreadsheet
+      match_tier: tier_1_same_jtbd_same_product_type_same_platform_comparable_scope
+      observed_monthly_revenue: unknown
+      current_price: unknown
+      reason_not_selected: Stronger feature surface, but the selected listing has a clearer live price signal.
+    - product_url: https://www.etsy.com/listing/4350883270/inventory-tracker-spreadsheet-for-small
+      match_tier: tier_1_same_jtbd_same_product_type_same_platform_comparable_scope
+      observed_monthly_revenue: unknown
+      current_price: unknown
+      reason_not_selected: Inventory management is strong, but the selected listing is a simpler benchmark for initial purchase approval.
+    - product_url: https://www.etsy.com/ca/listing/1546247998/google-sheets-inventory-tracker
+      match_tier: tier_2_same_jtbd_same_product_type_comparable_scope
+      observed_monthly_revenue: unknown
+      current_price: unknown
+      reason_not_selected: Adjacent reseller template, but the selected listing is a more direct stock-management comparison.
+
+  selection_rule_applied:
+    rule_id: highest_available_match_tier_then_deterministic_tie_breakers
+    tie_break_result: Selected the live-verified Etsy small-business inventory tracker as the closest purchasable benchmark.
+    expected_inspection_scope:
+      - delivered_assets
+      - first_use_experience
+      - spreadsheet_architecture
+      - formula_and_automation_behavior
+      - listing_promise_delivery_truthfulness
+      - recurring_complaint_mapping
+      - spreadsheet_stress_behavior
+      - resilience_risks
+      - support_risks
+
+  spend:
+    approval_required: true
+    requested_amount: 2.02
+    approved_amount: 2.02
+    existing_budget_rule_ref: governance/08_product_generation_budget_005.yaml
+
+  human_decision:
+    decision: approved
+    decision_date: 2026-06-25
+    notes: User purchased the selected Etsy benchmark and downloaded the original files.
+
+  purchase_execution:
+    execution_mode: human_purchased_downloaded
+    purchase_status: complete
+    purchase_date: 2026-06-25
+    actual_price: 2.02
+    receipt_private_ref: null
+    purchased_asset_private_refs:
+      - /Users/andreyeremichev/Downloads/README-TemplateAccess.pdf
+      - /Users/andreyeremichev/Downloads/README-Instructions.pdf
+      - /Users/andreyeremichev/Downloads/Copy of Pricing Calculator & Inventory Tracker.xlsx
+    acquisition_notes: User purchased the Etsy benchmark and downloaded the two original PDF files plus the workbook export.
+
+  candidate_id: C-004-001
+  selection:
+    selected_competitor_ref: competitive_purchase_approval.selected_competitor
+    selection_reason: Selected as a same-platform, same-JTBD Etsy inventory workbook benchmark with live listing verification and completed acquisition.
+    match_tier: tier_1_same_jtbd_same_product_type_same_platform_comparable_scope
+    alternatives_considered: competitive_purchase_approval.alternatives_considered
+    tie_break_result: Selected the live-verified Etsy small-business inventory tracker as the closest purchased benchmark.
+    live_verification: competitive_purchase_approval.selected_competitor.live_purchase_verification
+    evidence_completeness: pass_existing_purchase_complete
+    market_strength_signals:
+      - EverBee confirmed demand for "inventory tracker spreadsheet" with 3651 visible listings and strong revenue samples.
+      - Public Etsy evidence showed multiple comparable inventory spreadsheet listings.
+      - The selected listing matched inventory tracker, spreadsheet delivery, Etsy marketplace, and comparable scope.
+    benchmark_representativeness_risk: low_after_everbee_market_confirmation
+    purchase_escalation_policy: additional_purchase_allowed_only_if_purchased_artifact_is_broken_unrepresentative_or_insufficient
+  approval:
+    approval_required: true
+    decision: approved
+    decision_date: 2026-06-25
+    approved_amount_usd: 2.02
+    approver: human
+  acquisition:
+    purchase_status: complete
+    purchase_date: 2026-06-25
+    actual_price_usd: 2.02
+    purchased_asset_private_refs:
+      - /Users/andreyeremichev/Downloads/README-TemplateAccess.pdf
+      - /Users/andreyeremichev/Downloads/README-Instructions.pdf
+      - /Users/andreyeremichev/Downloads/Copy of Pricing Calculator & Inventory Tracker.xlsx
+  originality_boundary_required: true

@@ -1,0 +1,58 @@
+actual_artifact_inspection:
+  inspection_id:
+  candidate_id:
+  product_id:
+  flow_version: FLOW-007
+  product_architecture_contract_ref:
+  company_memory_preflight_ref:
+  findings_ledger_ref:
+  build_manifest_ref:
+  artifact_tested:
+  artifact_version:
+  status:
+  allowed_statuses:
+    - PASS
+    - BUILT_QA_FAILED_IMPLEMENTATION
+    - BUILT_QA_FAILED_ARCHITECTURE
+  hard_rule: QA cannot pass if it does not inspect the actual artifact and execute buyer behavior, decision outputs, and adversarial mutations.
+  required_results:
+    - artifact_structure_results
+    - scenario_execution_results
+    - decision_output_results
+    - formula_truth_table_results
+    - jtbd_truth_table_results
+    - buyer_behavior_walkthrough_results
+    - executable_adversarial_scenario_results
+    - setup_input_propagation_results
+    - working_capacity_results
+    - visible_capacity_results
+    - blank_formula_ready_capacity_results
+    - material_product_delta_results
+    - seed_data_behavior_demo_results
+    - build_findings_closure_results
+    - helper_behavior_walkthrough_results
+    - competitor_category_standard_results
+    - support_risk_results
+    - architecture_vs_implementation_classification_results
+  fail_if:
+    - actual_artifact_not_opened_or_inspected
+    - qa_only_inspects_records_or_formula_presence
+    - mutation_tests_lack_recalculated_before_after_outputs
+    - required_decision_output_missing_from_artifact
+    - domain_invariant_violation_labeled_healthy_successful_or_no_action
+    - all_working_capacity_rows_are_prefilled_demo_data
+    - buyer_visible_capacity_exists_only_in_hidden_formula_ranges
+    - helper_or_start_here_does_not_walk_inputs_to_results_to_next_action
+    - setup_input_does_not_change_downstream_output_or_have_declared_default_role
+    - clean_listing_hook_claim_has_no_actual_artifact_surface
+    - artifact_is_structural_or_behavior_clone_of_failed_baseline_without_material_buyer_value_delta
+    - seed_data_does_not_demonstrate_primary_decision_under_declared_review_or_demo_context
+    - applicable_build_finding_is_closed_without_measured_artifact_or_behavior_evidence
+    - product_name_or_primary_promise_matches_forbidden_old_product_identity
+    - required_blueprint_sheet_missing
+    - required_blueprint_column_missing
+    - required_scenario_fixture_not_present_or_not_testable
+    - seed_data_is_not_the_locked_fixture_data
+    - formula_outputs_do_not_match_expected_fixture_outputs
+    - static_opening_stock_or_current_stock_pattern_reappears_for_reorder_planner
+  repair_classification_required: true

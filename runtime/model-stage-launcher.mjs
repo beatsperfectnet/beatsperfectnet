@@ -50,7 +50,7 @@ function parseArgs(argv) {
   const out = {
     dryRun: false,
     includePublish: false,
-    publishDashboardState: false,
+    publishDashboardState: true,
     stopAt: null,
   };
 
@@ -68,8 +68,16 @@ function parseArgs(argv) {
       out.publishDashboardState = true;
       continue;
     }
+    if (arg === '--no-publish-dashboard-state') {
+      out.publishDashboardState = false;
+      continue;
+    }
     if (arg === '--run-id') {
       out.runId = argv[++i];
+      continue;
+    }
+    if (arg === '--candidate-ref') {
+      out.candidateRef = argv[++i];
       continue;
     }
     if (arg === '--build-manifest') {
@@ -111,14 +119,16 @@ function printHelp() {
     'Usage: node runtime/model-stage-launcher.mjs --run-id R-004 [options]',
     '',
     'Options:',
-    '  --build-manifest <path>  Build manifest to launch from (required)',
+    '  --candidate-ref <id>     Candidate id to bootstrap when no build manifest exists yet',
+    '  --build-manifest <path>  Build manifest to launch from (required after product build; optional for pre-build FLOW-007 bootstrap)',
     '  --workflow <path>        Workflow contract to use',
     '  --dispatch-contract <path> Stage dispatch contract to use',
     '  --workspace <path>       Workspace directory for OpenClaw sessions',
     '  --session-root <path>     Root directory for session binding files',
   '  --stop-at <step_id>      Stop after the named step',
   '  --include-publish        Include the human publish gate stage',
-  '  --publish-dashboard-state Regenerate, commit, and push records/dashboard_state.yaml after the run',
+  '  --publish-dashboard-state Regenerate, commit, and push dashboard state after each step change (default)',
+  '  --no-publish-dashboard-state Do not publish dashboard state after step changes',
   '  --dry-run                Read and plan only, do not start sessions',
   ].join('\n'));
   process.stdout.write('\n');
@@ -167,6 +177,70 @@ function repoRootFromScript() {
 
 function ensureDir(dirPath) {
   mkdirSync(dirPath, { recursive: true });
+}
+
+function safeFilePart(value) {
+  return String(value || 'none').replace(/[^a-zA-Z0-9._-]+/g, '-');
+}
+
+function writeFlowStepChange({
+  repoRoot,
+  runId,
+  candidateId,
+  fromStepId,
+  toStepId,
+  status,
+  reason,
+  sequence,
+}) {
+  const triggeredAt = new Date().toISOString();
+  const record = {
+    flow_step_change: {
+      change_id: `FSC-${safeFilePart(runId)}-${String(sequence).padStart(3, '0')}`,
+      run_id: runId,
+      candidate_id: candidateId || null,
+      from_step_id: fromStepId || null,
+      to_step_id: toStepId || null,
+      status,
+      reason,
+      triggered_at: triggeredAt,
+      source: 'runtime/model-stage-launcher.mjs',
+    },
+  };
+  const fileName = [
+    triggeredAt.replace(/[:.]/g, '-'),
+    safeFilePart(runId),
+    String(sequence).padStart(3, '0'),
+    safeFilePart(fromStepId),
+    'to',
+    safeFilePart(toStepId || status),
+  ].join('-') + '.yaml';
+  const relativePath = path.join('records', 'flow_step_changes', fileName);
+  const absolutePath = path.join(repoRoot, relativePath);
+  ensureDir(path.dirname(absolutePath));
+  writeFileSync(absolutePath, rubyDumpYaml(record), 'utf8');
+  return { relativePath, record: record.flow_step_change };
+}
+
+function publishDashboardState(repoRoot, message) {
+  const result = spawnSync('node', [
+    'scripts/publish-dashboard-state.mjs',
+    '--message',
+    message,
+  ], {
+    cwd: repoRoot,
+    encoding: 'utf8',
+    maxBuffer: 1024 * 1024 * 10,
+  });
+  const publish = {
+    status: result.status === 0 ? 'ok' : 'failed',
+    stdout: result.stdout,
+    stderr: result.stderr,
+  };
+  if (result.status !== 0) {
+    throw new Error(`Dashboard publish failed: ${result.stderr || result.stdout || 'unknown error'}`);
+  }
+  return publish;
 }
 
 function resolveExistingAssetPath(assetPath, buildRoot, repoRoot) {
@@ -228,6 +302,12 @@ function buildAssetReport({ manifest, buildRoot, repoRoot, dryRun }) {
   return report;
 }
 
+function readActiveFlowConfig(repoRoot) {
+  const activeFlowPath = path.join(repoRoot, 'config', 'active-flow.yaml');
+  if (!existsSync(activeFlowPath)) return null;
+  return rubyLoadYaml(activeFlowPath);
+}
+
 function effectiveSocketPathForCodexHome(codexHome) {
   return path.join(codexHome, 'app-server-control', 'app-server-control.sock');
 }
@@ -276,6 +356,13 @@ function rootEntry(doc, expectedKey, filePath) {
     throw new Error(`Expected ${filePath} to have top-level key ${expectedKey}`);
   }
   return doc[expectedKey];
+}
+
+function candidateRunEntry(doc, filePath) {
+  if (!doc || typeof doc !== 'object' || Array.isArray(doc)) {
+    throw new Error(`Expected ${filePath} to contain a candidate run YAML mapping`);
+  }
+  return 'candidate_run' in doc ? doc.candidate_run : doc;
 }
 
 function stableStringify(value) {
@@ -379,8 +466,8 @@ function collectGovernanceRefs() {
     'governance/05_governance_rules.yaml',
     'governance/06_resource_allocation.yaml',
     'governance/07_capacity_model.yaml',
-    'governance/08_product_generation_budget_006.yaml',
-    'governance/09_stage_dispatch_006.yaml',
+    'governance/08_product_generation_budget_007.yaml',
+    'governance/09_stage_dispatch_007.yaml',
   ];
 }
 
@@ -391,7 +478,7 @@ function loadContract(repoRoot, relativePath, rootKey) {
 }
 
 function loadModelPolicy(repoRoot) {
-  return loadContract(repoRoot, 'specs/MODEL-006.yaml', 'MODEL-006');
+  return loadContract(repoRoot, 'specs/MODEL-007.yaml', 'MODEL-007');
 }
 
 function loadPricingSnapshot(repoRoot) {
@@ -399,7 +486,7 @@ function loadPricingSnapshot(repoRoot) {
 }
 
 function loadGenerationBudget(repoRoot) {
-  return loadContract(repoRoot, 'governance/08_product_generation_budget_006.yaml', 'product_generation_budget');
+  return loadContract(repoRoot, 'governance/08_product_generation_budget_007.yaml', 'product_generation_budget');
 }
 
 function getStagePolicy(modelPolicy, stage) {
@@ -567,7 +654,7 @@ function budgetPreflight({
 function updateCandidateLedger(candidateQueueRecord, updates) {
   if (!candidateQueueRecord?.filePath) return null;
   const doc = rubyLoadYaml(candidateQueueRecord.filePath);
-  const root = rootEntry(doc, 'candidate_run', candidateQueueRecord.filePath);
+  const root = candidateRunEntry(doc, candidateQueueRecord.filePath);
   const candidate = root.candidates?.find((entry) => entry?.candidate_id === candidateQueueRecord.candidate?.candidate_id);
   if (!candidate) return null;
   Object.assign(candidate, updates);
@@ -585,7 +672,7 @@ function findCandidateQueueRecord(repoRoot, candidateRef) {
     if (!entry.endsWith('.yaml')) continue;
     const filePath = path.join(candidatesDir, entry);
     const doc = rubyLoadYaml(filePath);
-    const root = rootEntry(doc, 'candidate_run', filePath);
+    const root = candidateRunEntry(doc, filePath);
     for (const candidate of Array.isArray(root.candidates) ? root.candidates : []) {
       if (candidate?.candidate_id === candidateRef || candidate?.candidate_ref === candidateRef) {
         return {
@@ -598,6 +685,68 @@ function findCandidateQueueRecord(repoRoot, candidateRef) {
   }
 
   return null;
+}
+
+function findCandidateQueueRecordByRunId(repoRoot, runId, candidateRef) {
+  const filePath = path.join(repoRoot, 'records', 'candidates', `${runId}.yaml`);
+  if (!existsSync(filePath)) {
+    if (!candidateRef) return null;
+    return findCandidateQueueRecord(repoRoot, candidateRef);
+  }
+
+  const doc = rubyLoadYaml(filePath);
+  const root = candidateRunEntry(doc, filePath);
+  const candidates = Array.isArray(root.candidates) ? root.candidates : [];
+  if (candidateRef) {
+    const candidate = candidates.find((entry) => entry?.candidate_id === candidateRef || entry?.candidate_ref === candidateRef);
+    if (!candidate) {
+      throw new Error(`Candidate ${candidateRef} was not found in ${path.relative(repoRoot, filePath)}`);
+    }
+    return { filePath, candidate, run: root };
+  }
+  if (candidates.length === 1) {
+    return { filePath, candidate: candidates[0], run: root };
+  }
+  if (candidates.length === 0) {
+    throw new Error(`No candidates found in ${path.relative(repoRoot, filePath)}`);
+  }
+  throw new Error(`Multiple candidates found in ${path.relative(repoRoot, filePath)}; rerun with --candidate-ref`);
+}
+
+function resolveLaunchManifestContext({ repoRoot, args, activeFlowConfig }) {
+  if (args.buildManifest) {
+    const buildManifestPath = path.resolve(repoRoot, args.buildManifest);
+    const buildManifestDoc = rubyLoadYaml(buildManifestPath);
+    const manifest = rootEntry(buildManifestDoc, 'build_manifest', buildManifestPath);
+    return {
+      buildManifestPath,
+      manifest,
+      manifestSource: `build manifest ${path.relative(repoRoot, buildManifestPath)}`,
+      buildRoot: path.dirname(buildManifestPath),
+    };
+  }
+
+  const candidateQueueRecord = findCandidateQueueRecordByRunId(repoRoot, args.runId, args.candidateRef);
+  if (!candidateQueueRecord?.candidate) {
+    throw new Error('Missing required argument: --build-manifest (or provide a bootstrap candidate via records/candidates/<run-id>.yaml or --candidate-ref)');
+  }
+
+  const candidate = candidateQueueRecord.candidate;
+  const manifest = {
+    candidate_ref: candidate.candidate_id || candidate.candidate_ref || args.candidateRef || null,
+    status: 'bootstrap_pending_build_manifest',
+  };
+
+  if (!manifest.candidate_ref) {
+    throw new Error(`Unable to determine candidate_ref while bootstrapping ${path.relative(repoRoot, candidateQueueRecord.filePath)}`);
+  }
+
+  return {
+    buildManifestPath: null,
+    manifest,
+    manifestSource: `bootstrap from ${path.relative(repoRoot, candidateQueueRecord.filePath)}`,
+    buildRoot: repoRoot,
+  };
 }
 
 function loadCandidateDomainBrief(repoRoot, candidateRef, buildManifestCandidateBriefRef) {
@@ -849,6 +998,11 @@ function stagePlan(flowStages, dispatchStageMap, stopAt, includePublish) {
   return planned;
 }
 
+function dispatchActionIncludesHumanGate(dispatchAction) {
+  const normalized = String(dispatchAction || '').trim();
+  return normalized === 'human_gate' || normalized.endsWith('_human_gate');
+}
+
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   if (args.help) {
@@ -858,24 +1012,30 @@ async function main() {
   if (!args.runId) {
     throw new Error('Missing required argument: --run-id');
   }
-  if (!args.buildManifest) {
-    throw new Error('Missing required argument: --build-manifest');
-  }
   const codexHomeRuntime = ensureShortCodexHome();
 
   const repoRoot = args.workspace ? path.resolve(args.workspace) : repoRootFromScript();
-  const buildManifestPath = path.resolve(repoRoot, args.buildManifest);
-  const workflowRef = args.workflow || 'workflows/FLOW-006.yaml';
-  const dispatchContractRef = args.dispatchContract || 'governance/09_stage_dispatch_006.yaml';
+  const activeFlowConfig = readActiveFlowConfig(repoRoot);
+  const workflowRef = args.workflow || activeFlowConfig?.workflow_contract_ref || 'workflows/FLOW-007.yaml';
+  const dispatchContractRef = args.dispatchContract || activeFlowConfig?.stage_dispatch_ref || 'governance/09_stage_dispatch_007.yaml';
   const workflowPath = path.resolve(repoRoot, workflowRef);
   const dispatchContractPath = path.resolve(repoRoot, dispatchContractRef);
   const runLedgerPath = path.resolve(repoRoot, `records/model_runs/${args.runId}.yaml`);
   const dispatchLogPath = path.resolve(repoRoot, `records/model_dispatches/${args.runId}.yaml`);
   const sessionRoot = path.resolve(repoRoot, args.sessionRoot || 'records/model_sessions');
 
-  const buildManifestDoc = rubyLoadYaml(buildManifestPath);
   const workflowDoc = rubyLoadYaml(workflowPath);
   const dispatchDoc = rubyLoadYaml(dispatchContractPath);
+  const {
+    buildManifestPath,
+    manifest,
+    manifestSource,
+    buildRoot,
+  } = resolveLaunchManifestContext({
+    repoRoot,
+    args,
+    activeFlowConfig,
+  });
   const flowRootKey = Object.keys(workflowDoc).find((key) => /^FLOW-\d+$/.test(key));
   if (!flowRootKey) {
     throw new Error(`No FLOW-### root key found in ${workflowPath}`);
@@ -892,7 +1052,6 @@ async function main() {
   const pricingSnapshot = rootEntry(pricingSnapshotDoc, 'PRICING-004', path.resolve(repoRoot, 'specs/PRICING-004.yaml'));
   const generationBudget = rootEntry(generationBudgetDoc, 'product_generation_budget', path.resolve(repoRoot, generationBudgetRef));
   const dispatch = rootEntry(dispatchDoc, 'stage_dispatch', dispatchContractPath);
-  const manifest = rootEntry(buildManifestDoc, 'build_manifest', buildManifestPath);
   let candidateState = loadCandidateDomainBrief(
     repoRoot,
     manifest.candidate_ref,
@@ -905,7 +1064,7 @@ async function main() {
   let sharedResearchAllocated = false;
   const assetReport = buildAssetReport({
     manifest,
-    buildRoot: path.dirname(buildManifestPath),
+    buildRoot,
     repoRoot,
     dryRun: args.dryRun,
   });
@@ -931,7 +1090,7 @@ async function main() {
       overall_exact_match: true,
       notes: [
         `Launcher: runtime/model-stage-launcher.mjs`,
-        `Build manifest: ${path.relative(repoRoot, buildManifestPath)}`,
+        `Bootstrap source: ${manifestSource}`,
         ...(assetReport.missing.length
           ? [`Missing manifest assets: ${assetReport.missing.map((item) => `${item.group}:${item.path || '<missing path>'}`).join(', ')}`]
           : []),
@@ -953,7 +1112,7 @@ async function main() {
       overall_dispatch_match: true,
       notes: [
         `Launcher: runtime/model-stage-launcher.mjs`,
-        `Build manifest: ${path.relative(repoRoot, buildManifestPath)}`,
+        `Bootstrap source: ${manifestSource}`,
         ...(assetReport.missing.length
           ? [`Missing manifest assets: ${assetReport.missing.map((item) => `${item.group}:${item.path || '<missing path>'}`).join(', ')}`]
           : []),
@@ -968,8 +1127,12 @@ async function main() {
   const mainSessionFile = sessionFileFor(sessionRoot, args.runId, 'main', false);
   let stageSessionFile = mainSessionFile;
   let stageResults = [];
+  let dashboardPublish = null;
+  let flowStepChangeSequence = 0;
 
-  for (const stage of plannedStages) {
+  for (let stageIndex = 0; stageIndex < plannedStages.length; stageIndex += 1) {
+    const stage = plannedStages[stageIndex];
+    const nextStage = plannedStages[stageIndex + 1] || null;
     candidateState = loadCandidateDomainBrief(
       repoRoot,
       manifest.candidate_ref,
@@ -982,14 +1145,12 @@ async function main() {
     const requestedModel = canonicalRequestedModelId(stage, stagePolicy);
     const requestedModelResolved = resolveRuntimeModelId(pricingSnapshot, requestedModel);
     const isChildSession = stage.dispatch.dispatch_action === 'spawn_child_session_with_model_override';
-    const isHumanGate = String(stage.dispatch.dispatch_action || '').trim() === 'human_gate'
+    const isHumanGate = dispatchActionIncludesHumanGate(stage.dispatch.dispatch_action)
       || requestedModelResolved === 'human';
     stageSessionFile = isHumanGate ? null : sessionFileFor(sessionRoot, args.runId, stage.step_id, isChildSession);
     const stageUsesContextBlock = stageUsesExecutionContext(stage.step_id);
     const stageNeedsCandidateBrief = stageRequiresCandidateBrief(stage.step_id);
-    const marketplaceAdapterRef = candidateDomainBrief?.marketplace_adapter_ref
-      || candidateRecord?.marketplace
-      || null;
+    const marketplaceAdapterRef = candidateRecord?.marketplace || null;
     const applicableDomainConsiderationIds = stageUsesContextBlock
       ? getApplicableDomainConsiderationIds(candidateDomainBrief, stage.step_id)
       : [];
@@ -1119,8 +1280,6 @@ async function main() {
       governed_escalation_model: stage.dispatch.escalation_model || null,
       governed_model_tier: stage.dispatch.governed_model_tier || stagePolicy.governed_model_tier || null,
       functional_mandate: stage.functional_mandate || null,
-      candidate_domain_brief_ref: candidateDomainBriefRef || null,
-      applied_domain_consideration_ids: applicableDomainConsiderationIds,
       stage_execution_context_hash: stageExecutionContextHash,
       requested_model_id: requestedModel || null,
       requested_model: requestedModel,
@@ -1175,8 +1334,6 @@ async function main() {
       requested_model_resolved: requestedModelResolved,
       requested_model_id: requestedModel || null,
       functional_mandate: stage.functional_mandate || null,
-      candidate_domain_brief_ref: candidateDomainBriefRef || null,
-      applied_domain_consideration_ids: applicableDomainConsiderationIds,
       stage_execution_context_hash: stageExecutionContextHash,
       governed_model_tier: stage.dispatch.governed_model_tier || stagePolicy.governed_model_tier || null,
       runtime_resolved_model_id: requestedModelResolved || null,
@@ -1238,6 +1395,56 @@ async function main() {
     runLedger.model_run_ledger.stages.push(stageRecord);
     dispatchLog.model_stage_dispatch.stages.push(dispatchRecord);
 
+    if (!args.dryRun) {
+      let stepChange = null;
+      if (isHumanGate) {
+        flowStepChangeSequence += 1;
+        stepChange = writeFlowStepChange({
+          repoRoot,
+          runId: args.runId,
+          candidateId: candidateRecord?.candidate_id || manifest.candidate_ref,
+          fromStepId: stage.step_id,
+          toStepId: stage.step_id,
+          status: 'waiting_on_human',
+          reason: `Entered ${stage.step_id} and paused for human approval.`,
+          sequence: flowStepChangeSequence,
+        });
+      } else if (!exactMatch) {
+        flowStepChangeSequence += 1;
+        stepChange = writeFlowStepChange({
+          repoRoot,
+          runId: args.runId,
+          candidateId: candidateRecord?.candidate_id || manifest.candidate_ref,
+          fromStepId: stage.step_id,
+          toStepId: stage.step_id,
+          status: 'blocked',
+          reason: `Stopped at ${stage.step_id} because requested ${requestedModel} did not match observed ${observedModel}.`,
+          sequence: flowStepChangeSequence,
+        });
+      } else {
+        flowStepChangeSequence += 1;
+        stepChange = writeFlowStepChange({
+          repoRoot,
+          runId: args.runId,
+          candidateId: candidateRecord?.candidate_id || manifest.candidate_ref,
+          fromStepId: stage.step_id,
+          toStepId: nextStage?.step_id || null,
+          status: nextStage ? 'active' : 'complete',
+          reason: nextStage
+            ? `Completed ${stage.step_id}; ${nextStage.step_id} is now active.`
+            : `Completed ${stage.step_id}; no further planned step is active.`,
+          sequence: flowStepChangeSequence,
+        });
+      }
+
+      if (args.publishDashboardState && stepChange) {
+        dashboardPublish = publishDashboardState(
+          repoRoot,
+          `Update dashboard after ${args.runId} ${stepChange.record.from_step_id} to ${stepChange.record.to_step_id || stepChange.record.status}`,
+        );
+      }
+    }
+
     if (isHumanGate) {
       runLedger.model_run_ledger.notes.push(`Paused at ${stage.step_id} for human purchase approval before any external spend.`);
       dispatchLog.model_stage_dispatch.notes.push(`Paused at ${stage.step_id} for human purchase approval before any external spend.`);
@@ -1286,8 +1493,6 @@ async function main() {
       governed_escalation_model: dispatchStage.escalation_model || null,
       governed_model_tier: dispatchStage.governed_model_tier || null,
       functional_mandate: stage.functional_mandate || null,
-      candidate_domain_brief_ref: candidateDomainBriefRef || null,
-      applied_domain_consideration_ids: [],
       stage_execution_context_hash: null,
       requested_model: dispatchStage.requested_model || null,
       requested_model_id: dispatchStage.requested_model_id || dispatchStage.requested_model || null,
@@ -1334,8 +1539,6 @@ async function main() {
       requested_model: dispatchStage.requested_model || null,
       requested_model_id: dispatchStage.requested_model_id || dispatchStage.requested_model || null,
       functional_mandate: stage.functional_mandate || null,
-      candidate_domain_brief_ref: candidateDomainBriefRef || null,
-      applied_domain_consideration_ids: [],
       stage_execution_context_hash: null,
       governed_model_tier: dispatchStage.governed_model_tier || null,
       runtime_resolved_model_id: dispatchStage.runtime_resolved_model_id || null,
@@ -1372,31 +1575,10 @@ async function main() {
     writeFileSync(dispatchLogPath, rubyDumpYaml(dispatchLog), 'utf8');
   }
 
-  let dashboardPublish = null;
-  if (args.publishDashboardState && !args.dryRun) {
-    const lastCompletedStage = stageResults[stageResults.length - 1]?.stepId || lastPlannedStageId || 'unknown_stage';
-    const result = spawnSync('node', [
-      'scripts/publish-dashboard-state.mjs',
-      '--message',
-      `Update dashboard after ${args.runId} ${lastCompletedStage}`,
-    ], {
-      cwd: repoRoot,
-      encoding: 'utf8',
-      maxBuffer: 1024 * 1024 * 10,
-    });
-    dashboardPublish = {
-      status: result.status === 0 ? 'ok' : 'failed',
-      stdout: result.stdout,
-      stderr: result.stderr,
-    };
-    if (result.status !== 0) {
-      throw new Error(`Dashboard publish failed after ${lastCompletedStage}: ${result.stderr || result.stdout || 'unknown error'}`);
-    }
-  }
-
   const summary = {
     runId: args.runId,
-    buildManifest: path.relative(repoRoot, buildManifestPath),
+    buildManifest: buildManifestPath ? path.relative(repoRoot, buildManifestPath) : null,
+    manifestSource,
     launcher: 'runtime/model-stage-launcher.mjs',
     dryRun: args.dryRun,
     overallExactMatch: runLedger.model_run_ledger.overall_exact_match,

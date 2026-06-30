@@ -1,0 +1,139 @@
+flow_007_pilot_policy:
+  policy_id: FLOW-007-PILOT-AGGRESSIVE-FRONTIER-001
+  applies_to:
+    flow_version: FLOW-007
+    pilot_numbers: [1, 2, 3]
+  objective: Stabilize FLOW-007 quality before optimizing API model cost.
+  model_policy: aggressive_frontier_pilot
+  frontier_model: gpt-5.5
+  prohibited_models:
+    - gpt-5.5-pro
+    - gpt-5.4-pro
+    - any pro model
+  priority_processing_allowed: false
+  model_unavailable_rule:
+    if_gpt_5_5_unavailable: stop_and_report
+    report_fields:
+      - attempted_stage
+      - reason_gpt_5_5_was_required
+      - fallback_options
+      - estimated_quality_risk
+      - estimated_cost_impact
+    frontier_required_gates_must_not_continue_with_mini_or_medium: true
+  cost_control:
+    api_cost_target_usd:
+      min: 25
+      max: 40
+    excludes:
+      - competitor_purchase
+      - EverBee_subscription
+      - marketplace_fees
+      - external_tools
+      - human_time
+    prebuild_pause_if_projected_api_cost_exceeds_usd: 35
+    hard_stop_api_cost_usd: 40
+    hard_stop_requires_explicit_approval_to_continue: true
+    implementation_repair_loops_after_build_max: 1
+    repeated_similar_artifact_regeneration_forbidden: true
+    no_paid_rebuild_unless_product_architecture_contract_changed_materially: true
+    architecture_failure_returns_to_product_architecture_contract_not_artifact_patch: true
+    stronger_reasoning_before_build_not_after_failed_rebuilds: true
+  pre_architecture_market_sequence:
+    hard_rule: Market evidence chooses the product opportunity before architecture; a post-mortem hypothesis may guide research but must not lock product_direction before evidence.
+    required_order:
+      - market_evidence_candidate_admission
+      - public_shelf_read
+      - deterministic_competitor_selection_purchase_approval
+      - purchased_competitor_inspection
+      - product_architecture_contract
+    competitor_purchase_rule:
+      exactly_one_competitor_by_default: true
+      selected_from_evidence_backed_market_set_only: true
+      ranking_order:
+        - match_tier
+        - market_strength
+        - product_surface_completeness
+        - gallery_visual_evidence
+        - price_and_purchase_friction
+      additional_purchase_allowed_only_if:
+        - purchased_artifact_formula_broken
+        - purchased_artifact_inaccessible
+        - purchased_artifact_unrepresentative
+        - purchased_artifact_lacks_core_benchmark_surfaces
+      additional_purchase_limit: 1
+    architecture_input_rule: Target audience, use cases, domain model, decision outputs, and scenario logic must be derived from market evidence plus purchased competitor inspection, not from the initial hypothesis alone.
+  mini_allowed_tasks:
+    - extract_Etsy_or_EverBee_listing_data_into_structured_notes
+    - extract_titles_and_seller_promises
+    - extract_review_complaints
+    - cluster_buyer_language
+    - format_YAML_drafts
+    - simple_completeness_checks
+    - first_pass_listing_copy_variants
+    - non_final_mechanical_QA
+  mini_forbidden_final_approvals:
+    - final_market_continuation_decision
+    - final_competitor_benchmark_adequacy_decision
+    - final_product_identity_reframe
+    - final_target_audience_contract
+    - final_buyer_behavior_contract
+    - final_domain_model_contract
+    - final_decision_output_contract
+    - final_scenario_matrix_pass_fail
+    - final_workbook_or_product_blueprint
+    - final_build_readiness_decision
+    - final_launch_decision
+    - architecture_vs_implementation_failure_classification
+  medium_allowed_tasks:
+    - competitor_autopsy_draft
+    - product_architecture_contract_draft
+    - product_spec_draft
+    - workbook_architecture_draft
+    - formula_implementation
+    - spreadsheet_workbook_generation
+    - listing_asset_draft
+    - delivery_readme_draft
+    - first_pass_artifact_inspection
+    - repair_implementation
+  medium_forbidden_final_approvals:
+    - domain_model
+    - decision_outputs
+    - scenario_matrix
+    - build_readiness
+    - blind_buyer_walkthrough
+    - launch_gate
+  mandatory_frontier_stages:
+    - stage_id: 01_market_evidence_adequacy_final_review
+      requested_model: gpt-5.5
+    - stage_id: 02_competitor_product_autopsy_final_review
+      requested_model: gpt-5.5
+    - stage_id: 03_product_identity_reframe_final_approval
+      requested_model: gpt-5.5
+    - stage_id: 04_target_audience_contract_final_approval
+      requested_model: gpt-5.5
+    - stage_id: 05_buyer_behavior_contract_final_approval
+      requested_model: gpt-5.5
+    - stage_id: 06_domain_model_contract_final_approval
+      requested_model: gpt-5.5
+    - stage_id: 07_decision_output_contract_final_approval
+      requested_model: gpt-5.5
+    - stage_id: 08_scenario_matrix_adversarial_review
+      requested_model: gpt-5.5
+    - stage_id: 09_workbook_or_product_blueprint_final_approval
+      requested_model: gpt-5.5
+    - stage_id: 10_build_readiness_review
+      requested_model: gpt-5.5
+    - stage_id: 11_pre_build_architecture_premortem
+      requested_model: gpt-5.5
+    - stage_id: 12_actual_artifact_inspection_final_review
+      requested_model: gpt-5.5
+    - stage_id: 13_blind_buyer_walkthrough
+      requested_model: gpt-5.5
+    - stage_id: 14_architecture_vs_implementation_failure_classification
+      requested_model: gpt-5.5
+    - stage_id: 15_listing_hook_and_packaging_final_review
+      requested_model: gpt-5.5
+    - stage_id: 16_pre_mortem_failure_analysis
+      requested_model: gpt-5.5
+    - stage_id: 17_launch_gate
+      requested_model: gpt-5.5

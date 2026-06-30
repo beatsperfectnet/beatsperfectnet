@@ -1,0 +1,98 @@
+company_memory_preflight:
+  preflight_id:
+  candidate_id:
+  flow_version: FLOW-007
+  run_started_at:
+  idea_run_ref:
+  candidate_run_ref:
+  product_lane_exclusion_ref: governance/product_lane_exclusions.yaml
+  canonical_failure_modes_catalog_ref: workflows/FLOW-007.yaml#canonical_failure_modes
+  product_lane_exclusion_check:
+    status:
+    matched_lane_id:
+    failed_product_label_refs:
+      -
+    matched_terms:
+      -
+    human_reopen_record_ref:
+    decision:
+  company_memory_ref: docs/COMPANY-MEMORY.md
+  company_memory_digest:
+    source_ref: docs/COMPANY-MEMORY.md
+    reviewed_at:
+    reviewed_by:
+    digest:
+  applicable_memory_entries:
+    - memory_entry:
+      applicability_reason:
+      evidence_ref:
+      applies_to:
+        - build
+        - governance
+      required_run_effect:
+  canonical_failure_modes_assessment:
+    - failure_mode_id:
+      finding_class:
+      summary:
+      source_refs:
+        -
+      applies_to_run:
+      required_owner_gate:
+      due_by_gate:
+      closure_requirement:
+      status:
+  build_findings:
+    - finding_id:
+      failure_mode_id:
+      source_memory_entry:
+      finding:
+      affected_gates:
+        - product_architecture_contract
+        - build_readiness_review
+        - product_build
+        - real_artifact_inspection
+        - listing_packaging_qa
+        - pre_mortem_failure_analysis
+        - founder_launch_gate
+      closure_requirement:
+      status:
+  governance_findings:
+    - finding_id:
+      failure_mode_id:
+      source_memory_entry:
+      finding:
+      affected_controls:
+        - workflow
+        - schema
+        - model_policy
+        - budget
+        - dispatch
+        - dashboard
+        - validator
+        - tests
+        - company_memory
+      closure_requirement:
+      status:
+  open_findings_carried_forward:
+    - finding_id:
+      failure_mode_id:
+      required_ref_in_later_record:
+      must_block_if_missing_at_gate:
+  pre_run_status:
+  allowed_statuses:
+    - PASS
+    - BLOCKED
+  hard_rule: No FLOW-007 run may start market evidence, purchase approval, model execution, or artifact generation without a current company-memory preflight and findings ledger.
+  fail_if:
+    - product_lane_exclusion_file_not_checked
+    - matched_failed_product_asset_lane_without_failed_product_label_records
+    - candidate_matches_excluded_product_lane_without_human_reopen_record
+    - fresh_idea_generation_missing
+    - fewer_than_required_distinct_ideas_without_market_exhaustion_reason
+    - candidate_selected_without_why_this_not_that_rationale
+    - company_memory_not_read
+    - applicable_prior_failure_lesson_not_classified
+    - canonical_failure_mode_not_assessed
+    - open_run_blocker_missing_owner_gate_or_due_gate
+    - build_finding_closed_by_governance_wording_only
+    - governance_finding_closed_by_artifact_generation_only

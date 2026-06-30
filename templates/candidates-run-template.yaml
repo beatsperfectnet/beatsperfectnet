@@ -1,13 +1,20 @@
 candidate_run:
   run_id:
+  flow_version: FLOW-007
   source_idea_run:
   queue_ordering: FIFO
+  selected_candidate_id:
+  compared_idea_ids:
+    -
+  selection_rationale:
+  reject_if_candidate_is_direct_carryforward_without_fresh_idea_set: true
 
   candidates:
     - candidate_id:
       idea_ref:
       product_thesis:
       marketplace:
+      why_selected_over_other_ideas:
       current_stage: queued
       exclusion_check:
         status:
@@ -32,9 +39,6 @@ candidate_run:
       applied_inspection_requirement_ids:
         - 
       external_purchase_cost_usd:
-      candidate_domain_brief_ref:
-      candidate_domain_brief_status:
-      candidate_domain_brief_locked_at:
       listing_analysis_ref:
       listing_spec_ref:
       product_analysis_ref:

@@ -1,0 +1,78 @@
+findings_ledger:
+  findings_id:
+  candidate_id:
+  flow_version: FLOW-007
+  company_memory_preflight_ref:
+  canonical_failure_modes_catalog_ref: workflows/FLOW-007.yaml#canonical_failure_modes
+  build_findings:
+    - finding_id:
+      failure_mode_id:
+      source_ref:
+      category:
+      finding:
+      required_product_or_artifact_effect:
+      affected_records:
+        - product_architecture_contract
+        - build_readiness_review
+        - build_manifest
+        - actual_artifact_inspection
+        - listing_packaging_qa
+        - pre_mortem_failure_analysis
+        - launch_gate
+      close_only_with:
+        - measured_artifact_evidence
+        - scenario_or_mutation_result
+        - buyer_behavior_walkthrough_result
+        - listing_or_delivery_evidence
+      status:
+  governance_findings:
+    - finding_id:
+      failure_mode_id:
+      source_ref:
+      category:
+      finding:
+      required_flow_or_control_effect:
+      affected_controls:
+        - workflow
+        - schema
+        - model_policy
+        - budget
+        - dispatch
+        - dashboard
+        - validator
+        - tests
+        - company_memory
+      close_only_with:
+        - rule_contract_change
+        - validator_or_test_assertion
+        - dashboard_or_runtime_control_change
+        - company_memory_update
+      status:
+  run_blockers:
+    - failure_mode_id:
+      title:
+      finding_class:
+      source_finding_ids:
+        -
+      owner_gate:
+      due_by_gate:
+      blocker_status:
+      close_only_with:
+        -
+  closure_rules:
+    build_findings_cannot_be_closed_by_governance_wording_only: true
+    governance_findings_cannot_be_closed_by_artifact_generation_only: true
+    closed_findings_require_evidence_ref: true
+    open_applicable_findings_must_be_carried_to_launch_gate: true
+    required_pre_build_run_blockers_must_be_resolved_before_BUILD_READY: true
+    no_open_run_blocker_due_by_gate_can_be_ignored: true
+  open_findings:
+    - finding_id:
+      failure_mode_id:
+      blocker_or_watchlist:
+      next_required_gate:
+  status:
+  allowed_statuses:
+    - OPEN
+    - CLOSED
+    - BLOCKED

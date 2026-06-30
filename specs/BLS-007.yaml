@@ -2,14 +2,20 @@ BLS-007:
   purpose: build_lifecycle_specification_for_flow_007
   candidate_stages:
     - market_evidence
-    - competitor_product_autopsy
+    - public_shelf_read
+    - competitor_selection_purchase_approval
+    - purchased_competitor_inspection
+    - product_identity_reframe
     - product_architecture_contract
     - scenario_matrix
     - build_readiness_review
+    - workbook_or_product_blueprint
+    - pre_build_architecture_premortem
     - product_build
     - real_artifact_inspection
     - blind_buyer_walkthrough
     - listing_packaging_qa
+    - pre_mortem_failure_analysis
     - founder_launch_gate
   statuses:
     - IDEA_RECEIVED
@@ -20,19 +26,38 @@ BLS-007:
     - DOMAIN_MODEL_FAILED
     - DECISION_OUTPUT_FAILED
     - SCENARIO_MATRIX_FAILED
+    - PRODUCT_IDENTITY_FAILED
+    - PRODUCT_BLUEPRINT_FAILED
+    - BUILDER_INPUT_INCOMPLETE
+    - PRE_BUILD_ARCHITECTURE_PREMORTEM_FAILED
+    - SAME_FAILED_PRODUCT_CLASS_BLOCKED
     - NOT_BUILD_READY
     - BUILD_READY
     - BUILT_QA_FAILED_IMPLEMENTATION
     - BUILT_QA_FAILED_ARCHITECTURE
     - LISTING_FAILED
     - LAUNCH_READY
+    - REBUILD_REQUIRED
+    - REJECTED_ESCALATE
     - LAUNCHED
     - FLOW_006_FAILURE_CASE
   pre_build_tracking:
+    - idea_run_ref
+    - candidate_run_ref
+    - company_memory_preflight_ref
+    - findings_ledger_ref
+    - canonical_failure_modes_catalog_ref
+    - canonical_failure_modes_assessed
+    - open_run_blocker_ids
+    - run_blocker_owner_gates
+    - open_build_findings
+    - open_governance_findings
     - market_evidence_ref
     - market_evidence_status
     - competitor_autopsy_ref
     - competitor_autopsy_status
+    - product_identity_reframe_ref
+    - product_identity_status
     - product_architecture_contract_ref
     - target_audience_contract_status
     - buyer_behavior_contract_status
@@ -40,17 +65,38 @@ BLS-007:
     - decision_output_contract_status
     - scenario_matrix_ref
     - scenario_matrix_status
+    - workbook_or_product_blueprint_ref
+    - product_blueprint_status
     - build_readiness_review_ref
     - build_readiness_status
+    - pre_build_architecture_premortem_ref
+    - pre_build_architecture_premortem_status
+    - prior_failed_baseline_refs
+    - material_product_delta_status
   launch_requires:
+    - company_memory_preflight_passed
+    - applicable_build_findings_closed_or_carried_to_launch_gate
+    - applicable_governance_findings_closed_or_carried_to_launch_gate
+    - no_open_run_blockers_due_by_launch
+    - product_identity_reframe_passed
     - build_readiness_status_BUILD_READY
     - product_architecture_contract_cited_by_product_spec
     - locked_contract_consumed_by_builder
+    - workbook_or_product_blueprint_passed
     - actual_artifact_inspection_passed
     - scenario_execution_passed_on_actual_artifact
     - decision_outputs_verified_from_actual_artifact
+    - pre_build_architecture_premortem_passed
+    - executable_adversarial_scenario_mutations_passed
+    - setup_input_propagation_passed
+    - blank_formula_ready_capacity_passed
+    - helper_behavior_walkthrough_passed
     - blind_buyer_walkthrough_passed
     - listing_packaging_qa_passed
+    - pre_mortem_launch_blockers_absent
+    - cost_outcome_accountability_passed
+    - measured_material_product_delta_passed_when_applicable
+    - seed_data_behavior_demo_passed_when_applicable
     - founder_launch_gate_passed
     - failed_architecture_artifact_absent
   hard_blocks:
@@ -65,7 +111,18 @@ BLS-007:
       - FLOW_006_FAILURE_CASE
     failed_architecture_artifact_cannot_be_launch_ready: true
     no_product_generation_without_BUILD_READY: true
+    no_run_start_without_company_memory_preflight: true
+    no_run_start_without_fresh_idea_generation_and_candidate_admission: true
+    required_pre_build_run_blockers_resolved_before_BUILD_READY: true
+    build_findings_cannot_be_closed_by_governance_wording_only: true
+    governance_findings_cannot_be_closed_by_artifact_generation_only: true
   repair_loop_limits:
+    launch_gate_max_attempts: 2
+    attempt_1_failure_status: REBUILD_REQUIRED
+    attempt_2_failure_status: REJECTED_ESCALATE
+    rebuild_preserves_prior_attempt_records: true
     implementation_repairs_after_build_max: 1
     repeated_similar_artifact_regeneration_forbidden: true
+    governance_only_delta_cannot_pass_launch: true
+    measured_prior_vs_current_artifact_delta_required_when_applicable: true
     architecture_failure_returns_to_contract_not_artifact_patch: true

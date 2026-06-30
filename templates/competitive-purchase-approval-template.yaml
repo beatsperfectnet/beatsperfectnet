@@ -2,9 +2,6 @@ competitive_purchase_approval:
   approval_id:
   flow_contract_ref:
   candidate_ref:
-  candidate_domain_brief_ref:
-  applied_domain_consideration_ids:
-    - 
   status:
 
   selected_competitor:

@@ -1,0 +1,54 @@
+target_audience_exploration:
+  exploration_id: null
+  candidate_id: null
+  product_id: null
+  flow_version: FLOW-007
+  market_evidence_ref: null
+  public_shelf_read_ref: null
+  candidate_target_audiences:
+    - ta_id: null
+      description: null
+      jtbd_statement: null
+      evidence_refs: []
+      evidence_status: null
+      price_point_feasibility: null
+      crossed_out: false
+      cross_out_reason: null
+  surviving_target_audiences: []
+  preliminary_primary_ta: null
+  preliminary_primary_jtbd: null
+  selection_rationale: null
+  status: null
+  allowed_statuses:
+    - PASS
+    - TARGET_AUDIENCE_EXPLORATION_FAILED
+  required_fields:
+    - candidate_id
+    - market_evidence_ref
+    - public_shelf_read_ref
+    - candidate_target_audiences
+    - surviving_target_audiences
+    - preliminary_primary_ta
+    - preliminary_primary_jtbd
+    - selection_rationale
+    - status
+  pass_fail_criteria:
+    pass:
+      - at_least_two_candidate_target_audiences_explored
+      - each_surviving_ta_has_at_least_one_grounded_evidence_ref
+      - preliminary_primary_ta_is_selected_from_surviving_set
+      - jtbd_statements_trace_to_specific_evidence_not_generic_category
+    fail:
+      - fewer_than_two_candidate_target_audiences
+      - all_candidate_tas_are_hypotheses_with_no_grounded_evidence
+      - preliminary_ta_selected_from_crossed_out_set
+      - jtbd_statements_are_generic_category_descriptions_not_specific_buyer_behavior
+  hard_rule: "Target audiences must be derived from market evidence and public shelf read, not from a pre-locked product concept. Each JTBD must cite specific evidence. Hypotheses are allowed but must be labeled."
+  fail_if:
+    - fewer_than_two_candidate_target_audiences_explored
+    - no_evidence_refs_for_any_surviving_ta
+    - preliminary_ta_is_crossed_out
+    - jtbd_is_a_product_description_not_a_buyer_behavior
+    - all_tas_are_hypotheses_without_grounded_evidence
+  blockers:
+    - null

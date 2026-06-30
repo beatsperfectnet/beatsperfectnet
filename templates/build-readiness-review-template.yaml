@@ -5,19 +5,54 @@ build_readiness_review:
   flow_version: FLOW-007
   product_architecture_contract_ref:
   scenario_matrix_ref:
+  product_identity_reframe_ref:
+  workbook_or_product_blueprint_ref:
+  company_memory_preflight_ref:
+  findings_ledger_ref:
+  canonical_failure_modes_catalog_ref: workflows/FLOW-007.yaml#canonical_failure_modes
+  builder_input_completeness:
+    status:
+    status_required: PASS
+    fail_if_builder_must_invent:
+      - product_identity
+      - sheet_structure
+      - core_tables
+      - required_columns
+      - formulas
+      - scenario_outputs
+      - demo_fixture
+      - warning_states
+      - dashboard_outputs
+      - protected_input_areas
   checks:
+    company_memory_preflight.status = PASS:
+    applicable_canonical_failure_modes_assessed:
+    applicable_build_findings_closed_or_mapped_forward:
+    applicable_governance_findings_closed_or_mapped_forward:
+    no_open_run_blockers_due_by_build_readiness:
     market_evidence.status = PASS:
     competitor_autopsy.status = PASS:
+    product_identity_reframe.status = PASS:
     target_audience_contract.status = PASS:
     buyer_behavior_contract.status = PASS:
     domain_model_contract.status = PASS:
     decision_output_contract.status = PASS:
+    failure_baseline_material_delta.status = PASS or NOT_APPLICABLE:
+    contract_not_restatement_of_failed_artifact:
     scenario_matrix.status = PASS:
+    workbook_or_product_blueprint.status = PASS:
+    builder_input_completeness.status = PASS:
     support_risk acceptable:
     build_cost_estimate within limit:
     category_standard known:
     visual_format_standard known:
     listing_hook known:
+  run_blocker_resolution:
+    - failure_mode_id:
+      owner_gate:
+      due_by_gate:
+      status:
+      evidence_ref:
   build_readiness:
     status:
     allowed_statuses:
@@ -26,3 +61,14 @@ build_readiness_review:
     blockers:
       - 
   hard_rule: Build starts only if BUILD_READY.
+  fail_if:
+    - product_identity_reframe_missing_or_failed
+    - workbook_or_product_blueprint_missing_or_failed
+    - builder_input_completeness_missing_or_failed
+    - material_delta_missing_for_same_domain_repair_paid_rerun_or_postmortem_seeded_candidate
+    - claimed_delta_is_governance_only
+    - failed_artifact_used_as_implicit_product_blueprint
+    - company_memory_preflight_missing_or_stale
+    - applicable_canonical_failure_mode_not_assessed
+    - open_run_blocker_due_by_build_readiness_still_open
+    - applicable_finding_has_no_owner_gate_before_build

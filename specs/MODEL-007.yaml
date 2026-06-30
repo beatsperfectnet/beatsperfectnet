@@ -1,28 +1,56 @@
 MODEL-007:
   purpose: governed_model_routing_for_flow_007_architecture_first_generation
-  default_model_rule: Use mini by default. Escalate only where repository rules allow or where explicitly needed for architecture-readiness review.
+  default_model_rule: Use the lowest-cost non-pro model by default. Escalate only where repository rules allow or where explicitly needed for architecture-readiness review.
+  first_three_pilots_override:
+    policy_ref: governance/10_flow_007_pilot_policy.yaml
+    model_policy: aggressive_frontier_pilot
+    frontier_model: gpt-5.5
+    prohibited_models:
+      - gpt-5.5-pro
+      - gpt-5.4-pro
+      - any pro model
+    priority_processing_allowed: false
+    hard_rule: Every frontier-required final gate for pilot numbers 1 through 3 must call gpt-5.5 exactly and must not silently substitute any Pro or medium model.
   model_catalog:
-    mini:
-      runtime_model_id: openai/gpt-5.4-mini
+    baseline:
+      runtime_model_id: openai/gpt-5.4
       purpose:
         - market_evidence
-        - competitor_product_autopsy
+        - public_shelf_read
+        - competitor_selection
+        - purchased_competitor_inspection
+        - product_identity_reframe_draft
         - product_architecture_contract
         - scenario_matrix
+        - workbook_or_product_blueprint_draft
         - build_readiness_review
+        - pre_build_architecture_premortem_draft
         - product_build
         - real_artifact_inspection
         - blind_buyer_walkthrough
         - listing_packaging_qa
+        - pre_mortem_failure_analysis
         - founder_launch_gate
       normal_flow_allowed: true
     frontier:
       runtime_model_id: openai/gpt-5.5
       purpose:
+        - benchmark_adequacy_final_review
+        - product_identity_reframe
+        - product_architecture_contract_final_approval
+        - scenario_matrix_final_approval
+        - workbook_or_product_blueprint_final_approval
         - architecture_readiness_review_escalation
+        - build_readiness_review_final_approval
+        - pre_build_architecture_premortem
         - founder_rejection_escalation
+        - architecture_vs_implementation_classification
+        - blind_buyer_walkthrough_final_approval
+        - launch_readiness_final_approval
       normal_flow_allowed: false
       escalation_only: true
+      pilot_required_for_first_three_pilots: true
+      pro_variant_allowed: false
     deterministic:
       runtime_model_id: deterministic
       purpose:
@@ -36,62 +64,294 @@ MODEL-007:
         - competitor_purchase_approval
         - external_publish_approval
       normal_flow_allowed: true
+  frontier_required:
+    competitor_benchmark_adequacy_review:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    product_identity_reframe:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    target_audience_contract:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    buyer_behavior_contract:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    domain_model_contract:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    decision_output_contract:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    scenario_matrix:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    workbook_or_product_blueprint:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    build_readiness_review:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    pre_build_architecture_premortem:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    architecture_vs_implementation_classification:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    blind_buyer_walkthrough:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    launch_readiness:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
   stage_routing:
     market_evidence:
-      governed_model_tier: mini
-      requested_model: gpt-5.4-mini
-    competitor_product_autopsy:
-      governed_model_tier: mini
-      requested_model: gpt-5.4-mini
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+    public_shelf_read:
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+    competitor_selection:
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+      human_gate_required: competitor_purchase_approval
+    purchased_competitor_inspection:
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+      frontier_review_ref: MODEL-007.frontier_required.competitor_benchmark_adequacy_review
     product_architecture_contract:
-      governed_model_tier: mini
-      requested_model: gpt-5.4-mini
-      escalation_model: gpt-5.5
-      escalation_allowed_for:
-        - architecture_readiness_review
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
     scenario_matrix:
-      governed_model_tier: mini
-      requested_model: gpt-5.4-mini
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    workbook_or_product_blueprint:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
     build_readiness_review:
-      governed_model_tier: mini
-      requested_model: gpt-5.4-mini
-      escalation_model: gpt-5.5
-      escalation_allowed_for:
-        - architecture_readiness_review
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    pre_build_architecture_premortem:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
     product_build:
-      governed_model_tier: mini
-      requested_model: gpt-5.4-mini
+      governed_model_tier: medium
+      requested_model: gpt-5.4
     real_artifact_inspection:
-      governed_model_tier: mini
-      requested_model: gpt-5.4-mini
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
       deterministic_subgates:
         - artifact_structure_inspector
         - scenario_execution_inspector
         - decision_output_inspector
     blind_buyer_walkthrough:
-      governed_model_tier: mini
-      requested_model: gpt-5.4-mini
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
     listing_packaging_qa:
-      governed_model_tier: mini
-      requested_model: gpt-5.4-mini
+      governed_model_tier: medium
+      requested_model: gpt-5.4
     founder_launch_gate:
-      governed_model_tier: mini
-      requested_model: gpt-5.4-mini
-      escalation_model: gpt-5.5
-      escalation_allowed_for:
-        - founder_rejection
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    pre_mortem_failure_analysis:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+  pilot_mandatory_frontier_stage_routing:
+    market_evidence_adequacy_final_review:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      prohibited_fallback_tiers: [baseline, medium, pro]
+    competitor_product_autopsy_final_review:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      prohibited_fallback_tiers: [baseline, medium, pro]
+    product_identity_reframe_final_approval:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    target_audience_contract_final_approval:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    buyer_behavior_contract_final_approval:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    domain_model_contract_final_approval:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    decision_output_contract_final_approval:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    scenario_matrix_adversarial_review:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    workbook_or_product_blueprint_final_approval:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    build_readiness_review:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    pre_build_architecture_premortem:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    actual_artifact_inspection_final_review:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    blind_buyer_walkthrough:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    architecture_vs_implementation_failure_classification:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    listing_hook_and_packaging_final_review:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    launch_gate:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
   stage_quality_rules:
+    market_evidence:
+      hard_rule: Product direction must be derived from market evidence before architecture, and the candidate entering market evidence must come from a fresh idea-generation pass rather than direct carryforward from a prior failed lane.
+      required_outputs:
+        - category_demand
+        - price_range
+        - top_products
+        - buyer_language
+        - promise_taxonomy
+        - review_pain_points
+        - visible_feature_standards
+        - category_sophistication_level
+        - weak_spots_opportunity
+        - market_derived_product_opportunity
+      fail_if:
+        - fresh_idea_generation_or_candidate_selection_record_missing
+        - product_direction_prelocked_before_market_evidence
+        - candidate_was_carried_forward_without_fresh_idea_set
+        - historical_memory_only
+        - generic_web_search_without_required_market_metrics
+        - invented_new_entrant_counts
+    public_shelf_read:
+      hard_rule: Public shelf evidence must establish what products buyers are already comparing before any competitor purchase.
+      required_outputs:
+        - listing_titles
+        - thumbnails_or_gallery_evidence
+        - pricing
+        - seller_or_market_strength_signals
+        - visible_product_surfaces
+        - promise_and_hook_language
+        - scope_distortion_risks
+      escalate_if:
+        - listing_gallery_or_thumbnail_evidence_missing
+        - revenue_reviews_age_or_seller_signals_unknown_for_key_candidates
+        - evidence_sources_do_not_support_product_opportunity
+    competitor_selection:
+      hard_rule: Select exactly one competitor from the evidence-backed market set before purchase approval.
+      tie_breaker_order:
+        - match_tier
+        - market_strength
+        - product_surface_completeness
+        - gallery_visual_evidence
+        - price_and_purchase_friction
+      forbidden_primary_tie_breakers:
+        - lowest_price_only
+        - visible_price_only
+        - easiest_live_search_result
+        - fit_to_prelocked_postmortem_hypothesis
+      escalate_if:
+        - seller_revenue_reviews_age_or_visual_evidence_unknown_for_selected_competitor
+        - stronger_feature_surface_alternative_is_rejected_only_for_price_visibility
+        - selected_product_could_distort_candidate_scope
+    purchased_competitor_inspection:
+      hard_rule: Broken competitor parts are evidence and build requirements, not automatic proof that the market-derived opportunity is invalid.
+      required_classifications:
+        - market_evidence
+        - build_requirement
+        - competitor_failure_not_our_blocker
+        - benchmark_insufficient
+      additional_purchase_rule: Exactly one additional purchase or equivalent benchmark evidence may be requested only when the purchased artifact is broken, inaccessible, unrepresentative, or lacks core benchmark surfaces.
+      hard_block_if:
+        - benchmark_adequacy_is_not_pass_and_additional_purchase_or_equivalent_benchmark_evidence_is_unresolved
+      required_final_review:
+        - benchmark_adequacy_review
+        - gpt_5_5_final_review
+      fail_if:
+        - medium_draft_is_treated_as_final_adequacy_approval
+    product_identity_reframe:
+      hard_rule: The product identity must distinguish the actual buyer-decision product from the market category label and the failed baseline class.
+      required_outputs:
+        - product_identity
+        - forbidden_old_product_identity
+        - primary_buyer_decision
+        - primary_buyer_promise
+        - prohibited_generic_promises
+        - required_product_class_delta
+      fail_if:
+        - product_identity_matches_market_category_label
+        - product_identity_is_generic_category_label
+        - same_failed_product_class_is_reused
     product_architecture_contract:
       hard_rule: Product architecture must be locked before product spec or build.
+      required_outputs:
+        - canonical_failure_mode_resolution
+        - buyer_behavior_contract
+        - buyer_behavior_to_input_transformation_output_map
+        - input_to_decision_map
+        - next_action_map
+        - domain_invariants
+        - setup_input_propagation_requirements
+        - machine_checkable_decision_output_locations
+        - formula_or_logic_sources
+        - truth_table_tests
+        - adversarial_buyer_scenarios
+        - working_capacity_requirements
+        - visible_human_scale_capacity_floor
+        - demo_vs_working_capacity_policy
+        - failure_baseline_and_material_delta
+        - seed_data_behavior_demo_requirements
+        - helper_behavior_scenario
       fail_if:
         - target_audience_underdefined
+        - target_audience_trigger_moment_or_current_workaround_missing
+        - target_audience_capability_band_missing
+        - audience_collapses_novice_and_expert_without_distinct_behavior_or_explicit_exclusion
+        - product_value_after_assumed_prior_knowledge_is_weak_or_unstated
+        - product_requires_buyer_to_already_do_the_full_judgment_without_meaningful_decision_help
         - buyer_primary_decision_missing
         - buyer_behavior_loop_missing
+        - buyer_behavior_does_not_improve_on_the_current_workaround
         - domain_model_missing_dated_events_for_time_changing_values
         - decision_outputs_missing_or_unsupported_by_domain_model
         - competitor_category_standard_unknown
+        - product_direction_was_not_derived_from_market_evidence_and_purchased_benchmark
+        - jtbd_is_defined_as_output_feature_scope_product_category_or_status_without_buyer_behavior_loop
+        - decision_outputs_do_not_map_to_understandable_next_actions
+        - product_is_only_a_faster_calculator_or_data_entry_shell_for_the_declared_buyer
+        - domain_invariant_violation_can_be_labeled_healthy_successful_or_no_action_without_review
+        - helper_behavior_scenario_does_not_show_inputs_transformations_decision_outputs_and_next_action_step_by_step
+        - setup_inputs_do_not_have_declared_downstream_use_or_declared_default_role
+        - same_domain_repair_or_paid_rerun_lacks_material_delta_against_failed_baseline
+        - failed_artifact_is_used_as_implicit_product_blueprint
+        - applicable_canonical_failure_mode_unmapped_to_contract_or_later_gate
+        - claimed_delta_is_only_governance_records_model_routing_or_cleaner_writing
+        - seed_data_would_not_demonstrate_the_primary_decision_in_the_declared_demo_context
     scenario_matrix:
       hard_rule: Scenario Matrix must pass before build.
+      required_outputs:
+        - scenario_id
+        - buyer_segment
+        - starting_context
+        - input_tables
+        - expected_outputs
+        - expected_next_action
+        - expected_warning_or_confidence_state
+        - formula_sources_required
+        - pass_fail_rule
+      fail_if:
+        - any_scenario_lacks_expected_outputs
+        - any_spreadsheet_or_calculator_scenario_is_not_deterministic
+        - builder_would_need_to_invent_seed_data
+      fixture_rules:
+        numeric_truth_table_required_when_product_is_spreadsheet_or_calculator: true
+        scenario_without_expected_outputs_blocks_build: true
+        scenario_fixtures_required_before_build: true
       required_c004_scenarios:
         - no_sales_history
         - less_than_30_days_of_sales
@@ -103,23 +363,89 @@ MODEL-007:
         - purchase_received
         - sku_out_of_stock
         - slow_moving_overstocked_sku
+    workbook_or_product_blueprint:
+      hard_rule: Builder must not invent workbook structure, columns, dashboards, or demo fixtures.
+      required_outputs:
+        - product_name
+        - forbidden_old_product_names
+        - required_sheets
+        - sheet_purpose
+        - buyer_editable_areas
+        - protected_formula_areas
+        - core_tables
+        - required_columns
+        - formula_columns
+        - validation_rules
+        - required_dashboards
+        - required_decision_outputs
+        - required_warning_states
+        - required_demo_fixtures
+        - required_blank_capacity
+        - forbidden_fields
+        - forbidden_architecture_patterns
+        - scenario_tests_using_each_sheet
+      fail_if:
+        - builder_must_invent_sheet_structure
+        - builder_must_invent_required_columns
+        - builder_must_invent_demo_fixture
+        - forbidden_architecture_patterns_missing
     build_readiness_review:
       hard_rule: Build starts only if build_readiness.status is BUILD_READY.
       stronger_model_escalation_rule: Stronger model escalation should happen before build-readiness approval, not after repeated failed rebuilds.
       fail_if:
+        - product_identity_reframe_missing_or_failed
         - any_required_contract_status_not_PASS
         - support_risk_unacceptable
         - build_cost_estimate_over_limit
         - category_standard_unknown
         - visual_format_standard_unknown
         - listing_hook_unknown
+        - workbook_or_product_blueprint_missing_or_failed
+        - builder_input_completeness_missing_or_failed
+        - applicable_canonical_failure_mode_not_assessed
+        - open_run_blocker_due_by_build_readiness_still_open
+        - material_product_delta_missing_when_applicable
+        - contract_is_a_restatement_of_failed_artifact_with_new_governance
+        - material_delta_is_governance_only
+    pre_build_architecture_premortem:
+      hard_rule: Assume the built product is rejected by Andrey and identify whether the same failed artifact path still survives.
+      required_outputs:
+        - same_failed_product_path_remaining
+        - category_label_regression_path
+        - unenforced_fixture_test_gap
+        - prose_only_domain_fields
+        - generic_product_identity_risk
+        - blueprint_invention_risk
+        - run_blocker_closure_check
+      fail_if:
+        - same_failed_product_path_is_not_identified
+        - premortem_repeat_path_failure_mode_still_open_at_build
+        - no_generic_category_regression_path
+        - blueprint_is_sufficient_without_invention_review
     product_build:
+      hard_rule: Builder must implement the locked buyer behavior and machine-checkable decision contract, not reinterpret product scope.
       locked_fields:
         - primary_buyer
         - domain_model
         - decision_outputs
         - scenario_logic
         - scope_boundaries
+      required_manifests:
+        - product_identity_reframe_manifest
+        - buyer_behavior_contract_ref
+        - primary_buyer_decision_output_manifest
+        - buyer_behavior_to_next_action_manifest
+        - adversarial_scenario_coverage_manifest
+        - scenario_fixture_manifest
+        - workbook_product_blueprint_manifest
+        - builder_input_completeness_manifest
+        - setup_input_usage_manifest
+        - working_capacity_manifest
+        - visible_capacity_manifest
+        - pre_build_architecture_premortem_manifest
+        - prior_failed_artifact_delta_manifest
+        - seed_data_behavior_demo_manifest
+        - helper_behavior_scenario_manifest
       spreadsheet_requirements:
         - realistic_demo_rows
         - blank_formula_ready_rows
@@ -130,14 +456,47 @@ MODEL-007:
         - no_demo_only_workbook
         - no_fake_filled_capacity
         - no_negative_on_hand_unless_clearly_marked_as_error_or_exception_state
+      fail_if:
+        - artifact_does_not_implement_the_required_buyer_behavior_loop
+        - inputs_exist_without_a_buyer_behavior_reason
+        - outputs_do_not_tell_the_buyer_what_next_action_to_take
+        - all_working_capacity_rows_are_prepopulated_as_demo_data_without_blank_formula_ready_capacity
+        - capacity_exists_only_in_hidden_formula_ranges
+        - helper_or_start_here_is_vague_and_does_not_walk_buyer_from_inputs_to_results_to_next_action
+        - buyer_visible_setup_input_has_no_downstream_formula_or_declared_prefill_role
+        - measured_prior_failed_artifact_delta_manifest_missing_when_applicable
+        - build_recreates_failed_artifact_shape_behavior_or_buyer_outcome_without_material_delta
+        - seed_data_behavior_demo_manifest_missing_or_contradicts_primary_decision
+        - product_identity_reframe_manifest_missing
+        - scenario_fixture_manifest_missing
+        - workbook_product_blueprint_manifest_missing
+        - builder_input_completeness_manifest_missing
+        - pre_build_architecture_premortem_manifest_missing
     real_artifact_inspection:
+      hard_rule: QA must execute buyer behavior and adversarial mutations on the actual artifact, not only inspect formula presence or records.
       required_inspectors:
         - Artifact Structure Inspector
         - Scenario Execution Inspector
         - Decision Output Inspector
+        - Prior Failed Baseline Delta Inspector
+        - Seed Data Behavior Demo Inspector
         - Competitor/Category Standard Inspector
         - Support-Risk Inspector
         - Listing Hook Inspector
+      required_results:
+        - buyer_behavior_walkthrough_results
+        - executable_adversarial_scenario_results
+        - formula_truth_table_results
+        - jtbd_truth_table_results
+        - primary_buyer_decision_output_results
+        - setup_input_propagation_results
+        - blank_formula_ready_capacity_results
+        - material_product_delta_results
+        - seed_data_behavior_demo_results
+        - helper_behavior_walkthrough_results
+        - working_capacity_results
+        - visible_capacity_results
+        - architecture_vs_implementation_classification_results
       spreadsheet_rules:
         - open_actual_workbook
         - inspect_actual_sheets
@@ -147,7 +506,26 @@ MODEL-007:
         - test_formulas_beyond_demo_rows
         - execute_blind_buyer_workflow
         - verify_required_decision_outputs_from_actual_entered_data
+      fail_if:
+        - qa_does_not_start_from_visible_buyer_instructions_and_complete_the_behavior_loop_to_next_action
+        - mutation_tests_only_inspect_formula_references_without_recalculated_before_after_outputs
+        - impossible_or_unsafe_domain_states_are_presented_as_healthy_successful_or_no_action_without_review
+        - required_decision_output_is_missing_from_artifact
+        - kpp_passes_only_because_a_feature_status_label_or_dashboard_count_exists
+        - all_working_capacity_rows_are_populated_instead_of_few_seed_examples_plus_blank_formula_ready_rows
+        - helper_behavior_walkthrough_is_unclear_or_not_step_by_step
+        - setup_input_does_not_change_downstream_output_or_have_declared_default_role
+        - artifact_is_structural_or_behavior_clone_of_failed_baseline_without_material_buyer_value_delta
+        - seed_data_does_not_demonstrate_primary_decision_under_declared_review_or_demo_context
+        - product_name_or_primary_promise_matches_forbidden_old_product_identity
+        - required_blueprint_sheet_missing
+        - required_blueprint_column_missing
+        - required_scenario_fixture_not_present_or_not_testable
+        - seed_data_is_not_the_locked_fixture_data
+        - formula_outputs_do_not_match_expected_fixture_outputs
+        - static_opening_stock_or_current_stock_pattern_reappears_for_reorder_planner
     listing_packaging_qa:
+      hard_rule: Clean screenshots without a buyer hook do not pass; listing assets must be buyer-hooked proof from actual product surfaces, not clean documentation screenshots.
       listing_inputs:
         - buyer_promise
         - decision_output_contract
@@ -159,4 +537,83 @@ MODEL-007:
         - buyer_hook
         - specific_product_proof_shown
         - reason_this_image_helps_conversion
-      hard_rule: Clean screenshots without a buyer hook do not pass.
+        - grid_stop_reason
+        - product_surface_large_enough_to_prove_claim
+      fail_if:
+        - clean_assets_lack_real_hook
+        - report_slide_layout_as_thumbnail
+        - screenshot_presence_as_the_only_hook
+        - tiny_product_surface_that_cannot_prove_claim
+        - unverified_compatibility_or_protection_claim
+    pre_mortem_failure_analysis:
+      hard_rule: "First audit whether TA, JTBD, and KPP assumptions trace to market evidence and whether each built feature serves the locked JTBD. Then identify specific preventable offer failures. On attempt 1, blockers produce rebuild_recommended; on attempt 2, any blocker produces blocked."
+      required_inputs:
+        - delivered_product_assets
+        - listing_images_title_description
+        - delivery_readme_onboarding
+        - actual_artifact_inspection_result
+        - blind_buyer_walkthrough_result
+        - public_shelf_evidence
+        - purchased_competitor_inspection
+        - company_memory
+        - failed_baseline_material_delta_evidence
+        - market_evidence_ref
+        - target_audience_lock_ref
+      required_outputs:
+        - evidence_assumption_audit
+        - redundant_features
+        - missing_jtbd_elements
+        - top_3_likely_failure_modes
+        - evidence_for_each_failure_mode
+        - failure_mode_category
+        - launch_blocker_or_watchlist
+        - rerun_from_step_for_each_blocker
+        - post_launch_signal_for_each_watchlist
+        - scope_bloat_check
+        - product_logic_blocker_audit
+        - rebuild_feedback
+        - attempt_number
+      pass_rule: pass_when_no_specific_preventable_launch_blockers_remain_or_only_watchlist_risks_remain
+      fail_if:
+        - failure_mode_uses_imagined_customer_or_feature_scope_without_current_evidence
+        - blocker_lacks_specific_preventable_cause
+        - blocker_lacks_earliest_relevant_rerun_step
+        - proposed_feature_is_not_proven_by_locked_buyer_behavior_or_marketplace_evidence
+        - top_3_failure_modes_are_generic_or_unsupported_by_product_listing_delivery_or_market_evidence
+        - material_delta_review_is_missing_for_same_domain_repair_paid_rerun_or_postmortem_seeded_candidate
+        - pre_mortem_ignores_same_failed_artifact_outcome_risk
+        - locked_jtbd_has_no_buyer_language_evidence_trace
+        - built_feature_has_no_evidence_ref_and_is_not_flagged
+        - redundant_features_pass_without_blocker_or_human_approval
+        - attempt_2_returns_rebuild_recommended_instead_of_blocked
+    founder_launch_gate:
+      hard_rule: "Launch gate runs in two attempts max. Phase 1 red-teams TA/JTBD/KPP assumptions against evidence. Phase 2 verifies build chain. Phase 3 decides: attempt 1 failure returns REBUILD_REQUIRED; attempt 2 failure returns REJECTED_ESCALATE. LAUNCH_READY requires all phases to pass."
+      fail_if:
+        # Phase 1 red-team failures
+        - ta_shaped_by_product_concept_not_by_evidence
+        - jtbd_invented_by_contracts_without_buyer_language
+        - kpp_escalation_beyond_evidence
+        - built_features_not_serving_locked_jtbd
+        - scope_disproportionate_to_price_and_buyer
+        - phase_1_red_team_blockers_present
+        # Phase 2 build verification failures
+        - architecture_contract_or_artifact_evidence_missing
+        - failed_architecture_artifact_claims_launch_ready
+        - pre_mortem_has_launch_blockers_on_attempt_2
+        - cost_outcome_accountability_failed
+        - clean_listing_assets_lack_real_hook
+        - artifact_is_demo_scale_or_same_failed_outcome_after_paid_rerun
+        - launch_ready_claim_depends_on_governance_records_without_material_product_delta
+        - prior_failed_baseline_delta_was_not_measured_on_actual_artifact
+        - seed_data_undercuts_primary_buyer_decision_demo
+        - product_identity_matches_forbidden_old_product_identity
+        - required_blueprint_sheet_missing
+        - required_blueprint_column_missing
+        - required_scenario_fixture_not_present_or_not_testable
+        - builder_input_completeness_missing_or_failed
+        - open_run_blocker_due_by_launch_still_open
+        # Phase 3 loop control failures
+        - attempt_2_rebuild_instruction_issued_instead_of_reject
+        - prior_attempt_not_compared_on_attempt_2
+        - rebuild_instruction_missing_rerun_from_step
+        - escalation_detail_missing_on_rejected_escalate

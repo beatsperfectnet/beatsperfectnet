@@ -1,0 +1,29 @@
+escalations:
+  - escalation_id: ESC-C-004-001
+    created_at: 2026-06-25
+    candidate_ref: C-004-001
+    product_ref: null
+    reason: FLOW-005 reached step 02 mandatory_competitor_purchase, which requires human approval before the competitor can be acquired.
+    current_stage: mandatory_competitor_purchase
+    cumulative_prompt_tokens: 0
+    cumulative_completion_tokens: 0
+    cumulative_total_tokens: 0
+    cumulative_api_cost_usd: 0.0
+    generation_budget_usd: 25.0
+    generation_budget_pass: true
+    budget_exception_requested: false
+    budget_exception_reason: null
+    approval_artifact: records/competitive_purchase_approval/CPA-C-004-001.yaml
+    approval_scope: approve_competitor_purchase
+    required_human_decision:
+      - approve_purchase
+      - request_revision
+    human_decision: pending
+    status: pending
+    purchase_gate:
+      status: blocked_pending_human_external_purchase_action
+      reason: FLOW-005 step 02 requires human authorization plus external acquisition of the benchmark listing.
+      required_before_continuing:
+        - Etsy account/session and target listing
+        - Human authorization for purchase
+        - Final price confirmation

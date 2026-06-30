@@ -5,12 +5,20 @@ build_manifest:
   runtime_launcher_ref:
   flow_contract_ref:
   product_architecture_contract_ref:
+  product_identity_reframe_ref:
   product_spec_ref:
+  workbook_or_product_blueprint_ref:
   build_readiness_review_ref:
+  pre_build_architecture_premortem_ref:
+  company_memory_preflight_ref:
+  findings_ledger_ref:
+  prior_failed_baseline_refs:
+    -
   build_readiness_status:
   hard_rule: Builder must receive a locked Product Architecture Contract and product spec. Build may start only when build_readiness.status is BUILD_READY.
   locked_architecture_fields_builder_must_not_change:
     - primary_buyer
+    - buyer_behavior_loop
     - domain_model
     - decision_outputs
     - scenario_logic
@@ -32,6 +40,27 @@ build_manifest:
     - no_demo_only_workbook
     - no_fake_filled_capacity
     - no_negative_on_hand_unless_clearly_marked_as_error_or_exception_state
+    - visible_human_scale_capacity_floor
+    - non_seed_capacity_blank_formula_ready
+    - helper_behavior_scenario_implemented
+    - setup_input_propagation_manifest
+    - primary_buyer_decision_outputs_implemented
+  required_behavior_manifests:
+    - product_identity_reframe_manifest
+    - buyer_behavior_contract_ref
+    - primary_buyer_decision_output_manifest
+    - buyer_behavior_to_next_action_manifest
+    - adversarial_scenario_coverage_manifest
+    - scenario_fixture_manifest
+    - workbook_product_blueprint_manifest
+    - builder_input_completeness_manifest
+    - setup_input_usage_manifest
+    - working_capacity_manifest
+    - visible_capacity_manifest
+    - pre_build_architecture_premortem_manifest
+    - prior_failed_artifact_delta_manifest
+    - seed_data_behavior_demo_manifest
+    - helper_behavior_scenario_manifest
   model_policy_ref:
   pricing_snapshot_ref:
   generation_budget_usd:
@@ -41,9 +70,6 @@ build_manifest:
   competitor_purchase_excluded_from_generation_budget: true
   remaining_generation_budget_usd:
   generation_budget_pass:
-  candidate_domain_brief_ref:
-  applied_domain_consideration_ids:
-    - 
   good_enough_for_humans_spec_ref:
   real_product_surface_spec_ref:
   competitive_purchase_approval_ref:
@@ -76,8 +102,6 @@ build_manifest:
     - product_quality_pass
     - delivery_quality_pass
     - good_enough_pass
-    - candidate_domain_brief_complete
-    - domain_considerations_applied
     - domain_correctness_qa_pass
     - prohibited_domain_scope_absent
     - professional_boundary_claims_pass
@@ -92,3 +116,19 @@ build_manifest:
     - private_competitor_assets_excluded
     - qa_result_pass
     - launch_review_result_pass
+    - buyer_behavior_contract_consumed
+    - primary_buyer_decision_outputs_implemented
+    - product_identity_reframe_consumed
+    - workbook_or_product_blueprint_consumed
+    - scenario_fixtures_consumed
+    - executable_adversarial_scenarios_pass
+    - setup_input_propagation_pass
+    - blank_formula_ready_capacity_pass
+    - visible_human_scale_capacity_pass
+    - helper_behavior_scenario_pass
+    - measured_material_product_delta_pass
+    - seed_data_behavior_demo_pass
+    - pre_build_architecture_premortem_pass
+    - builder_input_completeness_pass
+    - pre_mortem_launch_blockers_absent
+    - cost_outcome_accountability_pass

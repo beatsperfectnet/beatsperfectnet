@@ -30,13 +30,6 @@ product_spec:
     scenario_matrix_ref:
     build_readiness_status:
     accepted_only_if_build_readiness_status_is_BUILD_READY: true
-  domain_brief_application:
-    candidate_domain_brief_ref:
-    applied_consideration_ids:
-      - 
-    excluded_considerations:
-      - consideration_id:
-        reason:
   applied_inspection_requirement_ids:
     - 
   spreadsheet_resilience_standard_ref:

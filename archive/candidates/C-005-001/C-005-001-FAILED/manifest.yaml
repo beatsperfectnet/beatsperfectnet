@@ -1,0 +1,143 @@
+build_manifest:
+  build_id: B-C-005-001-FLOW-007-INVENTORY
+  candidate_ref: C-005-001
+  process_dir: process
+  runtime_launcher_ref: runtime/model-stage-launcher.mjs
+  flow_contract_ref: workflows/FLOW-007.yaml
+  product_architecture_contract_ref: records/product_architecture_contract/PAC-C-005-001.yaml
+  product_spec_ref: records/product_specs/PS-C-005-001.yaml
+  build_readiness_review_ref: records/build_readiness/BRR-C-005-001.yaml
+  build_readiness_status: BUILD_READY
+  hard_rule: Builder must receive a locked Product Architecture Contract and product spec. Build may start only when build_readiness.status is BUILD_READY.
+  locked_architecture_fields_builder_must_not_change:
+    - primary_buyer
+    - buyer_behavior_loop
+    - domain_model
+    - decision_outputs
+    - scenario_logic
+    - scope_boundaries
+  builder_may_implement:
+    - workbook_files_templates
+    - formulas
+    - dashboards
+    - instructions
+    - listing_assets
+    - packaging
+  spreadsheet_workbook_requirements:
+    - realistic_demo_rows
+    - blank_formula_ready_rows
+    - formulas_extended_beyond_demo_area
+    - clear_input_areas
+    - formula_or_protected_areas_where_possible
+    - warning_error_states
+    - no_demo_only_workbook
+    - no_fake_filled_capacity
+    - no_negative_on_hand_unless_clearly_marked_as_error_or_exception_state
+    - visible_human_scale_capacity_floor
+    - non_seed_capacity_blank_formula_ready
+    - helper_behavior_scenario_implemented
+    - setup_input_propagation_manifest
+    - primary_buyer_decision_outputs_implemented
+  required_behavior_manifests:
+    - buyer_behavior_contract_ref
+    - primary_buyer_decision_output_manifest
+    - buyer_behavior_to_next_action_manifest
+    - adversarial_scenario_coverage_manifest
+    - setup_input_usage_manifest
+    - working_capacity_manifest
+    - visible_capacity_manifest
+    - helper_behavior_scenario_manifest
+  model_policy_ref: MODEL-007.product_build
+  pricing_snapshot_ref: specs/PRICING-004.yaml
+  generation_budget_usd: 40
+  shared_research_cost_usd: 0
+  generation_api_and_tool_cost_usd: 0
+  competitor_purchase_cost_usd: 2.02
+  competitor_purchase_excluded_from_generation_budget: true
+  remaining_generation_budget_usd: 40
+  generation_budget_pass: true
+  candidate_domain_brief_ref: null
+  applied_domain_consideration_ids: []
+  good_enough_for_humans_spec_ref: null
+  real_product_surface_spec_ref: null
+  competitive_purchase_approval_ref: records/competitive_purchase_approval/CPA-C-005-001.yaml
+  purchased_competitor_inspection_ref: records/purchased_competitor_inspection/PCI-C-004-001.yaml
+  applied_inspection_requirement_ids:
+    - CC-001
+    - CC-002
+    - CC-003
+  branding_ref: brandbook/beatsperfect-brandbook.v1.yaml
+  delivery_method: digital_download
+  competitive_standard: small-business inventory workbook with clear setup, transaction logs, status outputs, and honest spreadsheet delivery
+  benchmark_sources:
+    - records/competitive_purchase_approval/CPA-C-005-001.yaml
+    - records/competitor_autopsy/AUT-C-005-001.yaml
+    - records/public_shelf_read/PSR-C-005-001.yaml
+  status: validated_launch_ready
+  listing_assets:
+    - path: builds/C-005-001/listing-assets/final/01-main-promise.png
+      role: thumbnail_main_promise
+    - path: builds/C-005-001/listing-assets/final/02-inventory-workflow.png
+      role: inventory_replenishment_surface
+    - path: builds/C-005-001/listing-assets/final/03-purchase-log.png
+      role: purchase_log_mutation_surface
+    - path: builds/C-005-001/listing-assets/final/04-sales-log.png
+      role: sales_velocity_surface
+    - path: builds/C-005-001/listing-assets/final/05-price-calculator.png
+      role: margin_check_surface
+    - path: builds/C-005-001/listing-assets/final/06-price-list.png
+      role: saved_price_snapshot_surface
+    - path: builds/C-005-001/listing-assets/final/07-start-here-and-help.png
+      role: onboarding_and_limits
+  product_assets:
+    - path: builds/C-005-001/product/Inventory-Tracker-Studio.xlsx
+      role: primary_workbook
+    - path: builds/C-005-001/product/Inventory-Tracker-Studio-google-sheets-import.xlsx
+      role: import_copy
+  delivery_assets:
+    - path: builds/C-005-001/delivery-assets/README-FIRST.md
+      role: first_open_readme
+    - path: builds/C-005-001/delivery-assets/Quick-Start-and-FAQ.md
+      role: quick_start_faq
+  internal_process_artifacts:
+    - path: builds/C-005-001/process/build_inventory_tracker.py
+      role: workbook_generator
+    - path: builds/C-005-001/process/build_listing_creatives.py
+      role: listing_generator
+    - path: builds/C-005-001/process/pdf/Inventory-Tracker-Studio.pdf
+      role: render_check_pdf
+    - path: validators/c005_artifact_validator.py
+      role: artifact_validator
+  ready_for_publish_requires:
+    - build_readiness_status_BUILD_READY
+    - product_architecture_contract_locked
+    - product_spec_generated_from_product_architecture_contract
+    - listing_quality_pass
+    - product_quality_pass
+    - delivery_quality_pass
+    - good_enough_pass
+    - candidate_domain_brief_complete
+    - domain_considerations_applied
+    - domain_correctness_qa_pass
+    - prohibited_domain_scope_absent
+    - professional_boundary_claims_pass
+    - generation_budget_pass
+    - competitor_purchase_completed
+    - purchased_competitor_inspection_complete
+    - inspection_requirements_applied
+    - promise_delivery_truthfulness_pass
+    - spreadsheet_resilience_qa_pass
+    - support_by_design_qa_pass
+    - reference_based_originality_pass
+    - private_competitor_assets_excluded
+    - qa_result_pass
+    - launch_review_result_pass
+    - buyer_behavior_contract_consumed
+    - primary_buyer_decision_outputs_implemented
+    - executable_adversarial_scenarios_pass
+    - setup_input_propagation_pass
+    - blank_formula_ready_capacity_pass
+    - visible_human_scale_capacity_pass
+    - helper_behavior_scenario_pass
+    - pre_mortem_launch_blockers_absent
+    - cost_outcome_accountability_pass

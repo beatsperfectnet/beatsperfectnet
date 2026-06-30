@@ -1,0 +1,27 @@
+run_id: R-004
+created_at: 2026-06-25
+ideas:
+  - idea_id: I-001
+    product_thesis: Inventory tracker spreadsheet for small business stock, purchases, sales, and reorder alerts
+    marketplace: Etsy
+    category: digital_product
+    business_model: one_time_purchase_digital_download
+    tier_1_result: passed
+    tier_2_result: passed
+    observed_new_entrants_above_threshold: 6
+  - idea_id: I-002
+    product_thesis: Inventory management spreadsheet for resellers with suppliers, materials, and profit tracking
+    marketplace: Etsy
+    category: digital_product
+    business_model: one_time_purchase_digital_download
+    tier_1_result: passed
+    tier_2_result: passed
+    observed_new_entrants_above_threshold: 6
+  - idea_id: I-003
+    product_thesis: Apparel and accessories inventory tracker spreadsheet for variant-heavy sellers
+    marketplace: Etsy
+    category: digital_product
+    business_model: one_time_purchase_digital_download
+    tier_1_result: passed
+    tier_2_result: passed
+    observed_new_entrants_above_threshold: 6

@@ -2,6 +2,10 @@ product_architecture_contract:
   product_id:
   candidate_id:
   flow_version: FLOW-007
+  company_memory_preflight_ref:
+  findings_ledger_ref:
+  target_audience_lock_ref:
+  canonical_failure_modes_catalog_ref: workflows/FLOW-007.yaml#canonical_failure_modes
   market_evidence:
     status:
     required_fields:
@@ -37,12 +41,43 @@ product_architecture_contract:
         - benchmark_is_broken_inaccessible_shallow_or_unrepresentative
     blockers:
       - 
+  product_identity_reframe:
+    status:
+    required_fields:
+      - market_category_label
+      - product_identity
+      - forbidden_old_product_identity
+      - primary_buyer_decision
+      - primary_buyer_promise
+      - prohibited_generic_promises
+      - required_product_class_delta
+      - rejection_rules
+    hard_rule: If the candidate still fits the failed product class or uses a generic category label as the identity, it is not architecture-approved.
+    pass_fail_criteria:
+      pass:
+        - product_identity_matches_actual_buyer_decision_product
+        - product_identity_is_not_the_market_category_label
+        - forbidden_old_product_identity_terms_are_explicit
+        - required_product_class_delta_is_explicit
+      fail:
+        - product_identity_remains_the_failed_product_class
+        - product_identity_is_a_generic_category_label
+    blockers:
+      - 
   target_audience_contract:
     status:
     required_fields:
       - primary_buyer
       - secondary_buyer
       - excluded_buyers
+      - exact_trigger_moment
+      - current_workaround
+      - expertise_floor
+      - expertise_ceiling
+      - assumed_prior_knowledge
+      - buyer_judgment_still_required
+      - product_value_after_prior_knowledge
+      - not_valuable_for
       - data_maturity_segments
       - real_use_cases_by_segment
       - product_behavior_by_segment
@@ -57,10 +92,18 @@ product_architecture_contract:
     pass_fail_criteria:
       pass:
         - primary_buyer_is_specific_enough_to_drive_product_behavior
+        - target_audience_has_specific_trigger_moment_and_capability_band
+        - current_workaround_and_value_delta_are_explicit
+        - product_value_remains_material_after_assumed_prior_knowledge
+        - product_does_not_require_the_buyer_to_already_do_the_full_job_mentally
         - excluded_buyers_and_non_scope_are_explicit
         - product_behavior_changes_by_data_maturity_when_relevant
       fail:
         - target_audience_is_a_category_name_or_generic_small_business
+        - audience_collapses_novice_and_expert_without_distinct_product_behavior_or_explicit_exclusion
+        - assumed_prior_knowledge_or_capability_band_is_missing
+        - product_is_only_a_faster_calculator_or_data_entry_shell_for_declared_buyer
+        - exact_trigger_moment_or_current_workaround_is_missing
         - launch_blocking_mismatch_scenarios_are_missing
     blockers:
       - 
@@ -73,15 +116,22 @@ product_architecture_contract:
       - decision_output
       - next_action
       - repeated_usage_loop
+      - before_product_decision_workaround
+      - after_product_decision_delta
+      - buyer_behavior_to_input_transformation_output_map
+      - input_to_decision_map
+      - failure_states
     hard_rule: If the product cannot name the buyer's primary decision or outcome, it is NOT_BUILD_READY.
     pass_fail_criteria:
       pass:
         - buyer_primary_decision_is_named
         - inputs_transform_into_decision_outputs
         - decision_outputs_create_understandable_next_action
+        - product_changes_the_decision_quality_speed_or_consistency_vs_the_current_workaround
         - repeated_usage_loop_is_realistic
       fail:
         - behavior_is_feature_presence_or_dashboard_viewing_only
+        - product_only_reformats_inputs_the_buyer_already_knows_how_to_resolve_without_meaningful_decision_help
         - primary_decision_or_outcome_is_missing
     blockers:
       - 
@@ -96,6 +146,8 @@ product_architecture_contract:
       - dashboards_or_views
       - invalid_static_assumptions
       - data_integrity_rules
+      - domain_invariants
+      - setup_input_propagation_requirements
     hard_rule: If a real-world value changes over time and affects future decisions, the product must not model it only as an overwritten static field. It must be represented as a dated event or dated settings change where appropriate.
     c004_canonical_example: Opening Stock must not be treated as a static SKU field for a replenishment decision workbook. Stock is a dated physical state changed by sales, purchases/receipts, adjustments, and later counts.
     pass_fail_criteria:
@@ -117,6 +169,9 @@ product_architecture_contract:
       - explanation_required
       - unsupported_outputs
       - failure_if_missing
+      - machine_checkable_output_locations
+      - formula_or_logic_sources
+      - truth_table_tests
     hard_rule: If promised decision outputs are missing or unsupported by the domain model, status is NOT_BUILD_READY.
     c004_required_buyer_decision: When should I reorder each SKU, and how much should I buy?
     c004_required_outputs:
@@ -139,13 +194,63 @@ product_architecture_contract:
         - outputs_are_unsupported_by_inputs_or_domain_model
     blockers:
       - 
+  canonical_failure_mode_resolution:
+    status:
+    required_fields:
+      - failure_mode_id
+      - resolution_strategy
+      - owner_stage
+      - closure_evidence_required
+      - status
+    pass_fail_criteria:
+      pass:
+        - every_applicable_failure_mode_is_closed_here_or_mapped_to_a_later_gate
+        - no_failure_mode_lacks_an_owner_before_build
+      fail:
+        - applicable_failure_mode_is_omitted
+        - applicable_failure_mode_is_left_open_without_owner_gate
+    blockers:
+      -
+  failure_baseline_and_material_delta:
+    status:
+    required_fields:
+      - applicability
+      - prior_failed_baseline_refs
+      - prior_failed_artifact_fingerprints_required
+      - claimed_material_deltas
+      - buyer_behavior_delta
+      - domain_model_delta
+      - decision_output_delta
+      - scenario_delta
+      - working_capacity_delta
+      - onboarding_delta
+      - listing_promise_delta
+      - seed_data_behavior_demo_delta
+      - governance_only_delta
+    hard_rule: A prior failed artifact can provide blockers and test cases, but cannot become the product blueprint. Same-domain repairs, paid reruns, and post-mortem-seeded candidates must define a material buyer-facing product delta before BUILD_READY.
+    pass_fail_criteria:
+      pass:
+        - failed_baseline_is_measured_or_declared_not_applicable
+        - material_delta_changes_buyer_value_not_only_governance_records
+        - seed_data_demo_supports_the_primary_decision_when_seed_data_is_used
+      fail:
+        - contract_restates_failed_artifact_with_cleaner_governance
+        - delta_is_only_record_chain_model_routing_or_listing_wording
+        - prior_failed_artifact_is_used_as_implicit_product_blueprint
+    blockers:
+      -
   scenario_matrix:
     status:
     required_fields:
-      - scenario_matrix_ref
-      - launch_blocking_scenarios
-      - passed_scenarios
-      - failed_scenarios
+      - scenario_id
+      - buyer_segment
+      - starting_context
+      - input_tables
+      - expected_outputs
+      - expected_next_action
+      - expected_warning_or_confidence_state
+      - formula_sources_required
+      - pass_fail_rule
     pass_fail_criteria:
       pass:
         - all_launch_blocking_scenarios_pass
@@ -161,6 +266,7 @@ product_architecture_contract:
       - platform_risks
       - mitigation_in_product
       - mitigation_in_delivery
+      - helper_behavior_scenario
       - acceptable
     pass_fail_criteria:
       pass:
@@ -169,6 +275,29 @@ product_architecture_contract:
         - buyer_needs_founder_or_support_explanation_to_complete_workflow
     blockers:
       - 
+  feature_evidence_traceability:
+    status:
+    required_fields:
+      - feature_evidence_map
+      - builder_inventions
+      - human_approved_inventions
+    feature_evidence_map:
+      -
+    builder_inventions:
+      -
+    human_approved_inventions:
+      -
+    hard_rule: "Every non-trivial feature, sheet, or output locked in the PAC must cite a specific evidence ref from market evidence, buyer language, competitor weakness, or validated TA/JTBD. Features without evidence trace are flagged as builder inventions and require explicit human approval."
+    pass_fail_criteria:
+      pass:
+        - every_non_trivial_feature_has_evidence_ref
+        - builder_inventions_are_explicitly_labeled
+        - builder_inventions_have_human_approval_or_are_removed
+      fail:
+        - features_lack_evidence_refs_without_being_flagged
+        - builder_inventions_pass_without_human_approval
+    blockers:
+      -
   build_readiness:
     status:
     allowed_statuses:
@@ -187,14 +316,45 @@ product_architecture_contract:
       - category_standard
       - visual_format_standard
       - listing_hook
+      - working_capacity_requirements
+      - visible_human_scale_capacity_floor
+      - demo_vs_working_capacity_policy
+      - helper_behavior_scenario
+      - setup_input_propagation_requirements
+      - artifact_acceptance_tests
+      - builder_input_completeness
+      - applicable_company_memory_findings_consumed
+      - run_blocker_resolution
+      - feature_evidence_traceability
+      - target_audience_exploration_status
+      - target_audience_lock_status
+      - scope_proportionality_check
     hard_rule: No build may start unless status is BUILD_READY.
     pass_fail_criteria:
       BUILD_READY:
         - all_required_contract_sections_pass
         - scenario_matrix_passes
         - support_risk_acceptable
+        - builder_input_completeness_passes
       NOT_BUILD_READY:
         - any_required_contract_section_fails_or_is_unknown
         - scenario_matrix_fails_or_is_missing
+    scope_proportionality_check:
+      required_inputs:
+        - price_point
+        - buyer_sophistication_level
+        - category_standard
+        - total_sheets_or_components
+        - total_required_features
+        - total_decision_outputs
+        - total_warning_states
+      hard_rule: "Total locked scope must be proportional to the price point, buyer sophistication, and category standard. A 5-sheet decision-state-machine product in a $2.99 solo-handyman estimate lane should fail."
+      pass_fail_criteria:
+        pass:
+          - scope_is_proportional_to_price_and_buyer
+          - no_feature_exceeds_category_sophistication_without_evidence
+        fail:
+          - scope_exceeds_what_the_price_point_and_buyer_sophistication_justify
+          - features_exceed_category_standard_without_evidence_support
     blockers:
       - 

@@ -3,9 +3,6 @@ purchased_competitor_inspection:
   flow_contract_ref:
   candidate_ref:
   competitive_purchase_approval_ref:
-  candidate_domain_brief_ref:
-  applied_domain_consideration_ids:
-    - 
   status:
 
   competitor_product:

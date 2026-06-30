@@ -1,0 +1,81 @@
+listing_quality_gate:
+  candidate_id: C-004-001
+  final_artifact_version: Inventory-Tracker-Studio.xlsx
+  passed_qa_ref: records/validation/QA-C-004-001.yaml
+  listing_creative_assembly_ref: records/listing_creatives/LC-C-004-001.yaml
+  founder_acceptance_ref: records/validation/FA-C-004-001.yaml
+  final_kpp: Know what to reorder, when to reorder it, and how much to buy from formula-backed workbook outputs.
+  final_hook: Inventory Tracker Studio turns stock, purchases, sales velocity, lead time, and safety stock into SKU-level replenishment actions.
+  title: Inventory Reorder Tracker Spreadsheet | Stockout Dates, Order Qty, Sales Velocity | Excel & Google Sheets
+  thumbnail: builds/C-004-001/listing-assets/final/01-main-promise.png
+  image_sequence:
+    - builds/C-004-001/listing-assets/final/01-main-promise.png
+    - builds/C-004-001/listing-assets/final/02-inventory-workflow.png
+    - builds/C-004-001/listing-assets/final/03-purchase-log.png
+    - builds/C-004-001/listing-assets/final/04-sales-log.png
+    - builds/C-004-001/listing-assets/final/05-price-calculator.png
+    - builds/C-004-001/listing-assets/final/06-price-list.png
+    - builds/C-004-001/listing-assets/final/07-start-here-and-help.png
+  thumbnail_click_strength: pass
+  first_image_clarity: pass
+  promise_visible_under_2_seconds: pass
+  visual_proof_of_rtb: pass
+  visual_hook_strength: pass
+  real_hook_quality_gate:
+    status: pass
+    reason: Each image has a distinct replenishment or supporting decision hook tied to a verified workbook surface.
+  grid_stop_reason_per_image:
+    - image: 01-main-promise.png
+      reason: The buyer sees a reorder decision, not another stock count.
+    - image: 02-inventory-workflow.png
+      reason: A full replenishment table, not a status label.
+    - image: 03-purchase-log.png
+      reason: Restocks visibly change the reorder plan.
+    - image: 04-sales-log.png
+      reason: Sales volume becomes a stockout warning.
+    - image: 05-price-calculator.png
+      reason: Reorder decisions get a margin check.
+    - image: 06-price-list.png
+      reason: Approved price snapshots support reorder confidence.
+    - image: 07-start-here-and-help.png
+      reason: Setup inputs are tied to visible reorder outputs.
+  per_image_promise_rtb_alignment:
+    status: pass
+    ref: records/listing_creatives/LC-C-004-001.yaml#per_image_promise_rtb_alignment
+  hook_delta_against_prior:
+    status: pass
+    prior_failure: Prior assets were clean but hookless and centered on stock/pricing visibility.
+    current_delta: Current assets lead with action/date/quantity replenishment proof and wrap proof claims without clipping.
+  title_keyword_fit: pass
+  competitor_shelf_communication_parity: pass
+  hidden_objection_handling: pass
+  trust_signal_strength: pass
+  value_stack_clarity: pass
+  real_product_surface_quality: pass
+  product_surface_fidelity: pass
+  claim_truthfulness: pass
+  failure_source: none
+  product_repair_count: 0
+  listing_repair_count: 1
+  decision: pass
+  kpp_quality:
+    status: pass
+    reason: The KPP is a buyer decision promise, not feature scope or a dashboard count.
+  rtb_quality:
+    status: pass
+    reason: RTB is product-specific formula evidence from Inventory, Dashboard, Purchases, Sales, Setup, and pricing surfaces.
+  artifact_audit_dependency:
+    qa_ref: records/validation/QA-C-004-001.yaml
+    artifact_integrity_audit_status: pass
+    formula_truth_table_status: pass
+    jtbd_truth_table_status: pass
+    protection_truthfulness_status: pass
+  creative_asset_dependency:
+    listing_creative_assembly_ref: records/listing_creatives/LC-C-004-001.yaml
+    final_creatives_status: pass
+    no_fabricated_product_surfaces: true
+    source_surface_fidelity_status: pass
+  publish_blockers:
+    status: pass
+    blockers: []
+  verdict: pass

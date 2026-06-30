@@ -9,12 +9,19 @@ SCHEMA-007:
     - DOMAIN_MODEL_FAILED
     - DECISION_OUTPUT_FAILED
     - SCENARIO_MATRIX_FAILED
+    - PRODUCT_IDENTITY_FAILED
+    - PRODUCT_BLUEPRINT_FAILED
+    - BUILDER_INPUT_INCOMPLETE
+    - PRE_BUILD_ARCHITECTURE_PREMORTEM_FAILED
+    - SAME_FAILED_PRODUCT_CLASS_BLOCKED
     - NOT_BUILD_READY
     - BUILD_READY
     - BUILT_QA_FAILED_IMPLEMENTATION
     - BUILT_QA_FAILED_ARCHITECTURE
     - LISTING_FAILED
     - LAUNCH_READY
+    - REBUILD_REQUIRED
+    - REJECTED_ESCALATE
     - LAUNCHED
     - FLOW_006_FAILURE_CASE
   market_evidence:
@@ -31,6 +38,87 @@ SCHEMA-007:
       - PASS
       - MARKET_REJECTED
       - MARKET_INSUFFICIENT
+  company_memory_preflight:
+    template_ref: templates/company-memory-preflight-template.yaml
+    required_top_level_fields:
+      - preflight_id
+      - candidate_id
+      - flow_version
+      - idea_run_ref
+      - candidate_run_ref
+      - product_lane_exclusion_ref
+      - canonical_failure_modes_catalog_ref
+      - product_lane_exclusion_check
+      - company_memory_ref
+      - company_memory_digest
+      - applicable_memory_entries
+      - canonical_failure_modes_assessment
+      - build_findings
+      - governance_findings
+      - open_findings_carried_forward
+      - pre_run_status
+    allowed_statuses:
+      - PASS
+      - BLOCKED
+  findings_ledger:
+    template_ref: templates/findings-ledger-template.yaml
+    required_top_level_fields:
+      - findings_id
+      - candidate_id
+      - flow_version
+      - company_memory_preflight_ref
+      - canonical_failure_modes_catalog_ref
+      - build_findings
+      - governance_findings
+      - run_blockers
+      - closure_rules
+      - open_findings
+      - status
+    allowed_statuses:
+      - OPEN
+      - CLOSED
+      - BLOCKED
+  failed_product_label:
+    template_ref: templates/failed-product-label-template.yaml
+    required_top_level_fields:
+      - label_id
+      - candidate_id
+      - product_lane_id
+      - canonical_status
+      - product_name
+      - flow_version
+      - failure_class
+      - failure_summary
+      - failed_asset_refs
+      - supporting_record_refs
+      - exclusion_ref
+      - future_build_input_policy
+      - status
+    allowed_statuses:
+      - ACTIVE_FAILED_LABEL
+      - SUPERSEDED_BY_HUMAN_REOPEN
+  idea_run:
+    template_ref: templates/ideas-run-template.yaml
+    required_top_level_fields:
+      - run_id
+      - created_at
+      - flow_version
+      - exclusion_ref
+      - admission_rules_ref
+      - minimum_distinct_ideas_required
+      - direct_carryforward_rejected_without_fresh_idea_generation
+      - selected_idea_id
+      - ideas
+  candidate_run:
+    template_ref: templates/candidates-run-template.yaml
+    required_top_level_fields:
+      - run_id
+      - flow_version
+      - source_idea_run
+      - queue_ordering
+      - selected_candidate_id
+      - compared_idea_ids
+      - selection_rationale
   competitor_autopsy:
     template_ref: templates/competitor-autopsy-template.yaml
     required_top_level_fields:
@@ -50,23 +138,45 @@ SCHEMA-007:
       - support_traps
       - category_standard_learned
       - benchmark_gap_decision
+      - benchmark_adequacy_review
       - status
     allowed_statuses:
       - PASS
       - BENCHMARK_INSUFFICIENT
       - FAIL
+  product_identity_reframe:
+    template_ref: templates/product-identity-reframe-template.yaml
+    required_top_level_fields:
+      - product_id
+      - candidate_id
+      - flow_version
+      - market_category_label
+      - product_identity
+      - forbidden_old_product_identity
+      - primary_buyer_decision
+      - primary_buyer_promise
+      - prohibited_generic_promises
+      - required_product_class_delta
+      - rejection_rules
+      - status
+    allowed_statuses:
+      - PASS
+      - PRODUCT_IDENTITY_FAILED
   product_architecture_contract:
     template_ref: templates/product-architecture-contract-template.yaml
     required_sections:
       - product_id
       - candidate_id
       - flow_version
+      - product_identity_reframe
       - market_evidence
       - competitor_autopsy
       - target_audience_contract
       - buyer_behavior_contract
       - domain_model_contract
       - decision_output_contract
+      - canonical_failure_mode_resolution
+      - failure_baseline_and_material_delta
       - scenario_matrix
       - support_risk
       - build_readiness
@@ -85,27 +195,66 @@ SCHEMA-007:
       - product_id
       - flow_version
       - status
-      - scenarios
+      - scenario_fixtures
+      - numeric_truth_table_required_when_product_is_spreadsheet_or_calculator
       - blockers
     required_fields_per_scenario:
-      - scenario_name
+      - scenario_id
       - buyer_segment
-      - required_inputs
-      - expected_transformations
+      - starting_context
+      - input_tables
       - expected_outputs
       - expected_next_action
+      - expected_warning_or_confidence_state
+      - formula_sources_required
+      - pass_fail_rule
       - pass_fail_result
       - blocker_if_failed
+  workbook_or_product_blueprint:
+    template_ref: templates/workbook-product-blueprint-template.yaml
+    required_top_level_fields:
+      - blueprint_id
+      - candidate_id
+      - product_id
+      - flow_version
+      - product_name
+      - forbidden_old_product_names
+      - required_sheets
+      - sheet_purpose
+      - buyer_editable_areas
+      - protected_formula_areas
+      - core_tables
+      - required_columns
+      - formula_columns
+      - validation_rules
+      - required_dashboards
+      - required_decision_outputs
+      - required_warning_states
+      - required_demo_fixtures
+      - required_blank_capacity
+      - forbidden_fields
+      - forbidden_architecture_patterns
+      - scenario_tests_using_each_sheet
+      - status
+    allowed_statuses:
+      - PASS
+      - PRODUCT_BLUEPRINT_FAILED
   build_readiness_review:
     template_ref: templates/build-readiness-review-template.yaml
     required_checks:
       - market_evidence.status = PASS
       - competitor_autopsy.status = PASS
+      - product_identity_reframe.status = PASS
       - target_audience_contract.status = PASS
       - buyer_behavior_contract.status = PASS
       - domain_model_contract.status = PASS
       - decision_output_contract.status = PASS
+      - failure_baseline_material_delta.status = PASS or NOT_APPLICABLE
       - scenario_matrix.status = PASS
+      - workbook_or_product_blueprint.status = PASS
+      - builder_input_completeness.status = PASS
+      - applicable_canonical_failure_modes_assessed
+      - no_open_run_blockers_due_by_build_readiness
       - support_risk acceptable
       - build_cost_estimate within limit
       - category_standard known
@@ -114,6 +263,20 @@ SCHEMA-007:
     output_statuses:
       - BUILD_READY
       - NOT_BUILD_READY
+    required_top_level_fields:
+      - review_id
+      - candidate_id
+      - product_id
+      - flow_version
+      - product_architecture_contract_ref
+      - scenario_matrix_ref
+      - product_identity_reframe_ref
+      - workbook_or_product_blueprint_ref
+      - company_memory_preflight_ref
+      - findings_ledger_ref
+      - canonical_failure_modes_catalog_ref
+      - builder_input_completeness
+      - run_blocker_resolution
   product_spec:
     generated_from_required_ref: product_architecture_contract_ref
     must_reference:
@@ -130,16 +293,37 @@ SCHEMA-007:
     hard_rule: No product spec can be accepted if it does not cite the Product Architecture Contract.
   build_manifest:
     required_locked_inputs:
+      - product_identity_reframe_ref
       - product_architecture_contract_ref
       - product_spec_ref
+      - workbook_or_product_blueprint_ref
       - build_readiness_review_ref
+      - pre_build_architecture_premortem_ref
     builder_must_not_change:
       - primary_buyer
+      - buyer_behavior_loop
       - domain_model
       - decision_outputs
       - scenario_logic
       - scope_boundaries
+    required_behavior_manifests:
+      - product_identity_reframe_manifest
+      - buyer_behavior_contract_ref
+      - primary_buyer_decision_output_manifest
+      - buyer_behavior_to_next_action_manifest
+      - adversarial_scenario_coverage_manifest
+      - scenario_fixture_manifest
+      - workbook_product_blueprint_manifest
+      - builder_input_completeness_manifest
+      - setup_input_usage_manifest
+      - working_capacity_manifest
+      - visible_capacity_manifest
+      - pre_build_architecture_premortem_manifest
+      - prior_failed_artifact_delta_manifest
+      - seed_data_behavior_demo_manifest
+      - helper_behavior_scenario_manifest
   qa_result:
+    template_ref: templates/actual-artifact-inspection-template.yaml
     required_inspectors:
       - Artifact Structure Inspector
       - Scenario Execution Inspector
@@ -148,6 +332,19 @@ SCHEMA-007:
       - Support-Risk Inspector
       - Listing Hook Inspector
     hard_rule: QA cannot pass if it does not inspect the actual artifact.
+    required_results:
+      - buyer_behavior_walkthrough_results
+      - executable_adversarial_scenario_results
+      - formula_truth_table_results
+      - jtbd_truth_table_results
+      - primary_buyer_decision_output_results
+      - setup_input_propagation_results
+      - blank_formula_ready_capacity_results
+      - material_product_delta_results
+      - seed_data_behavior_demo_results
+      - helper_behavior_walkthrough_results
+      - working_capacity_results
+      - visible_capacity_results
   blind_buyer_walkthrough:
     template_ref: templates/blind-buyer-walkthrough-template.yaml
     required_top_level_fields:
@@ -160,6 +357,121 @@ SCHEMA-007:
       - confusion_points
       - support_risk
       - pass_fail_result
+  pre_build_architecture_premortem:
+    template_ref: templates/pre-mortem-failure-analysis-template.yaml
+    required_top_level_fields:
+      - review_id
+      - candidate_id
+      - product_id
+      - flow_version
+      - product_architecture_contract_ref
+      - actual_artifact_inspection_ref
+      - blind_buyer_walkthrough_ref
+      - listing_packaging_ref
+      - public_shelf_evidence_ref
+      - purchased_competitor_inspection_ref
+      - company_memory_ref
+      - assumption
+      - status
+      - top_3_likely_failure_modes
+      - required_checks
+      - fail_if
+      - decision
+    allowed_statuses:
+      - pass
+      - watchlist_only
+      - blocked
+  pre_mortem_failure_analysis:
+    template_ref: templates/pre-mortem-failure-analysis-template.yaml
+    required_top_level_fields:
+      - product_architecture_contract_ref
+      - actual_artifact_inspection_ref
+      - blind_buyer_walkthrough_ref
+      - listing_packaging_ref
+      - public_shelf_evidence_ref
+      - purchased_competitor_inspection_ref
+      - market_evidence_ref
+      - target_audience_lock_ref
+      - company_memory_ref
+      - assumption
+      - attempt_number
+      - evidence_assumption_audit
+      - rebuild_feedback
+      - top_3_likely_failure_modes
+      - required_checks
+      - fail_if
+      - decision
+    allowed_statuses:
+      - pass
+      - watchlist_only
+      - blocked
+      - rebuild_recommended
+  launch_gate:
+    template_ref: templates/launch-gate-template.yaml
+    required_top_level_fields:
+      - product_identity_reframe_ref
+      - product_architecture_contract_ref
+      - workbook_or_product_blueprint_ref
+      - build_readiness_review_ref
+      - actual_artifact_inspection_ref
+      - blind_buyer_walkthrough_ref
+      - listing_packaging_ref
+      - pre_build_architecture_premortem_ref
+      - pre_mortem_failure_analysis_ref
+      - model_run_ledger_ref
+      - market_evidence_ref
+      - target_audience_lock_ref
+      - attempt_number
+      - max_attempts
+      - status
+      - assumption_red_team
+      - rebuild_loop
+      - required_checks_phase_1_red_team
+      - required_checks_phase_2_build_verification
+      - required_checks_phase_3_loop_decision
+      - fail_if
+      - material_product_delta_review
+    allowed_statuses:
+      - LAUNCH_READY
+      - REBUILD_REQUIRED
+      - REJECTED_ESCALATE
+      - LISTING_FAILED
+      - BUILT_QA_FAILED_IMPLEMENTATION
+      - BUILT_QA_FAILED_ARCHITECTURE
+      - NOT_BUILD_READY
+  material_product_delta:
+    template_ref: templates/material-product-delta-template.yaml
+    required_top_level_fields:
+      - candidate_id
+      - flow_version
+      - applicability
+      - prior_failed_baselines
+      - old_product_class
+      - new_product_class
+      - forbidden_reused_architecture
+      - required_removed_patterns
+      - required_added_patterns
+      - required_added_tables
+      - required_added_decision_outputs
+      - required_added_scenarios
+      - required_user_workflow_difference
+      - pass_fail_evidence
+      - claimed_material_deltas
+      - measured_artifact_fingerprints
+      - buyer_behavior_delta
+      - domain_model_delta
+      - decision_output_delta
+      - scenario_delta
+      - working_capacity_delta
+      - onboarding_delta
+      - listing_promise_delta
+      - seed_data_behavior_demo_delta
+      - governance_only_delta
+      - status
+    allowed_statuses:
+      - PASS
+      - FAIL
+      - NOT_APPLICABLE
   failure_case:
     required_top_level_fields:
       - case_id

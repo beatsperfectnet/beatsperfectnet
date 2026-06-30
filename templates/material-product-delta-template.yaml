@@ -1,0 +1,106 @@
+material_product_delta:
+  delta_id:
+  candidate_id:
+  flow_version: FLOW-007
+  applicability:
+    applies:
+    reason:
+    same_domain_repair_or_paid_rerun:
+    postmortem_seeded_candidate:
+  prior_failed_baselines:
+    - baseline_ref:
+      artifact_ref:
+      failure_summary:
+      measured_fingerprint_required: true
+  old_product_class:
+  new_product_class:
+  forbidden_reused_architecture:
+    - 
+  required_removed_patterns:
+    - 
+  required_added_patterns:
+    - 
+  required_added_tables:
+    - 
+  required_added_decision_outputs:
+    - 
+  required_added_scenarios:
+    - 
+  required_user_workflow_difference:
+    - 
+  pass_fail_evidence:
+    - 
+  claimed_material_deltas:
+    - delta_id:
+      buyer_value_change:
+      evidence_ref:
+      status:
+  measured_artifact_fingerprints:
+    prior:
+      sheets:
+      dimensions:
+      formula_count:
+      formula_ranges:
+      editable_ranges:
+      seed_data_dates:
+      decision_output_locations:
+      listing_hook_pattern:
+    current:
+      sheets:
+      dimensions:
+      formula_count:
+      formula_ranges:
+      editable_ranges:
+      seed_data_dates:
+      decision_output_locations:
+      listing_hook_pattern:
+  buyer_behavior_delta:
+    status:
+    evidence:
+  domain_model_delta:
+    status:
+    evidence:
+  decision_output_delta:
+    status:
+    evidence:
+  scenario_delta:
+    status:
+    evidence:
+  working_capacity_delta:
+    status:
+    evidence:
+  onboarding_delta:
+    status:
+    evidence:
+  listing_promise_delta:
+    status:
+    evidence:
+  seed_data_behavior_demo_delta:
+    status:
+    evidence:
+  governance_only_delta:
+    is_governance_only:
+    governance_changes:
+    buyer_facing_changes:
+  hard_rule: PASS is forbidden when the only material changes are workflow version, record chain, model routing, launch-gate wording, or cleaner claims around the same buyer-facing artifact.
+  fail_if:
+    - old_product_class_missing
+    - new_product_class_missing
+    - forbidden_reused_architecture_missing
+    - required_removed_patterns_missing
+    - required_added_patterns_missing
+    - required_added_tables_missing
+    - required_added_decision_outputs_missing
+    - required_added_scenarios_missing
+    - required_user_workflow_difference_missing
+    - pass_fail_evidence_missing
+    - prior_failed_baseline_missing_when_applicable
+    - measured_artifact_fingerprint_missing
+    - same_workbook_shape_same_formulas_same_outputs_without_buyer_value_delta
+    - seed_data_weakens_the_declared_behavior_demo
+    - governance_only_delta
+  status:
+  allowed_statuses:
+    - PASS
+    - FAIL
+    - NOT_APPLICABLE

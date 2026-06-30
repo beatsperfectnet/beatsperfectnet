@@ -1,0 +1,51 @@
+workbook_product_blueprint:
+  blueprint_id:
+  candidate_id:
+  product_id:
+  flow_version: FLOW-007
+  product_name:
+  forbidden_old_product_names:
+    - 
+  required_sheets:
+    - 
+  sheet_purpose:
+    - sheet_name:
+      purpose:
+  buyer_editable_areas:
+    - 
+  protected_formula_areas:
+    - 
+  core_tables:
+    - 
+  required_columns:
+    - 
+  formula_columns:
+    - 
+  validation_rules:
+    - 
+  required_dashboards:
+    - 
+  required_decision_outputs:
+    - 
+  required_warning_states:
+    - 
+  required_demo_fixtures:
+    - 
+  required_blank_capacity:
+    - 
+  forbidden_fields:
+    - 
+  forbidden_architecture_patterns:
+    - 
+  scenario_tests_using_each_sheet:
+    - 
+  status:
+  allowed_statuses:
+    - PASS
+    - PRODUCT_BLUEPRINT_FAILED
+  hard_rule: The builder must receive a precise workbook or product blueprint and must not infer missing structure from the failed baseline.
+  fail_if:
+    - builder_must_invent_sheet_structure
+    - builder_must_invent_required_columns
+    - builder_must_invent_demo_fixture
+    - forbidden_architecture_patterns_are_missing

@@ -1,0 +1,194 @@
+launch_gate:
+  review_id:
+  candidate_id:
+  product_id:
+  flow_version: FLOW-007
+  product_architecture_contract_ref:
+  product_identity_reframe_ref:
+  build_readiness_review_ref:
+  workbook_or_product_blueprint_ref:
+  actual_artifact_inspection_ref:
+  blind_buyer_walkthrough_ref:
+  listing_packaging_ref:
+  pre_mortem_failure_analysis_ref:
+  pre_build_architecture_premortem_ref:
+  model_run_ledger_ref:
+  company_memory_preflight_ref:
+  findings_ledger_ref:
+  market_evidence_ref:
+  target_audience_lock_ref:
+  attempt_number:
+  prior_attempt_ref:
+  max_attempts: 2
+  status:
+  allowed_statuses:
+    - LAUNCH_READY
+    - REBUILD_REQUIRED
+    - REJECTED_ESCALATE
+    - LISTING_FAILED
+    - BUILT_QA_FAILED_IMPLEMENTATION
+    - BUILT_QA_FAILED_ARCHITECTURE
+    - NOT_BUILD_READY
+  hard_rule: "Launch gate runs in two attempts maximum. Attempt 1: red-team assumptions, verify build, and if any failure is found, return REBUILD_REQUIRED with specific rerun-from step and actionable instructions. Attempt 2: compare against prior attempt, verify fixes landed, and if failures persist or new failures appear, return REJECTED_ESCALATE with classification and recommended human action. LAUNCH_READY requires both phases to pass."
+  assumption_red_team:
+    ta_red_team:
+      locked_ta_description:
+      locked_jtbd:
+      market_evidence_supporting_this_buyer:
+        -
+      market_evidence_contradicting_this_buyer:
+        -
+      ta_shaped_by_evidence_or_by_product_concept:
+      verdict:
+    jtbd_red_team:
+      locked_jtbd:
+      buyer_language_that_matches_jtbd:
+        -
+      buyer_language_that_contradicts_jtbd:
+        -
+      jtbd_invented_by_contracts_or_grounded_in_evidence:
+      verdict:
+    kpp_red_team:
+      primary_buyer_promise:
+      competitor_weakness_or_buyer_language_supporting_promise:
+        -
+      promise_is_escalation_beyond_evidence:
+      verdict:
+    build_vs_jtbd_alignment:
+      features_serving_locked_jtbd:
+        -
+      features_not_serving_locked_jtbd:
+        -
+      jtbd_elements_missing_from_build:
+        -
+      redundant_feature_count:
+      missing_element_count:
+      verdict:
+    scope_proportionality:
+      price_point_usd:
+      buyer_sophistication:
+      category_standard_complexity:
+      built_product_complexity:
+        sheet_count:
+        feature_count:
+        decision_output_count:
+        warning_state_count:
+      proportional:
+      verdict:
+    red_team_status:
+    red_team_blockers:
+      -
+  rebuild_loop:
+    rule: "First failure triggers REBUILD_REQUIRED with specific instructions. Second failure triggers REJECTED_ESCALATE. No third attempt without explicit human reopen."
+    attempt_1_failure_status: REBUILD_REQUIRED
+    attempt_2_failure_status: REJECTED_ESCALATE
+    rebuild_instruction:
+      failure_classification:
+      rerun_from_step:
+      specific_issues:
+        -
+          issue:
+          category:
+          what_to_fix:
+          evidence_refs:
+            -
+      rebuild_scope:
+    escalation_detail:
+      reason:
+      issues_persisting_after_rebuild:
+        -
+      architecture_vs_implementation:
+      recommended_human_action:
+    prior_attempt_comparison:
+      prior_issues:
+        -
+      issues_resolved:
+        -
+      issues_persisting:
+        -
+      new_issues:
+        -
+  failure_rerun_mapping:
+    assumption_failure:
+      ta_wrong: 02_target_audience_exploration
+      jtbd_wrong: 05_target_audience_lock
+      kpp_wrong: 06_product_identity_reframe
+    implementation_failure:
+      build_quality: 12_product_build
+      listing_quality: 15_listing_packaging_qa
+    scope_failure:
+      redundant_features: 07_product_architecture_contract
+      missing_features: 07_product_architecture_contract
+      disproportionate_scope: 07_product_architecture_contract
+  material_product_delta_review:
+    applicability:
+    material_product_delta_ref:
+    measured_on_actual_artifact:
+    governance_only_delta:
+    pass_fail_result:
+  required_checks_phase_1_red_team:
+    - ta_is_grounded_in_market_evidence_not_shaped_by_product_concept
+    - jtbd_traces_to_buyer_language_not_contract_invention
+    - kpp_traces_to_competitor_weakness_or_buyer_language
+    - every_built_feature_serves_the_locked_jtbd
+    - no_redundant_features_without_human_approval
+    - no_missing_jtbd_elements_without_explicit_exclusion
+    - scope_is_proportional_to_price_point_and_buyer_sophistication
+  required_checks_phase_2_build_verification:
+    - product_identity_reframe_passed
+    - product_architecture_contract_passed
+    - workbook_or_product_blueprint_passed
+    - build_readiness_passed
+    - actual_artifact_inspection_passed
+    - executable_adversarial_scenario_mutations_passed
+    - decision_outputs_verified_from_actual_artifact
+    - pre_build_architecture_premortem_passed
+    - blind_buyer_walkthrough_passed
+    - listing_images_have_buyer_hook_and_product_proof
+    - pre_mortem_launch_blockers_absent_or_rebuild_recommended
+    - delivery_package_clear
+    - support_risk_acceptable
+    - cost_outcome_accountability_passed
+    - no_c004_style_failure_pattern_remains
+    - measured_material_product_delta_passed_when_applicable
+    - seed_data_behavior_demo_passed_when_applicable
+    - applicable_findings_closed_or_classified_as_launch_blockers
+  required_checks_phase_3_loop_decision:
+    - attempt_number_tracked
+    - prior_attempt_compared_when_attempt_2
+    - rebuild_instruction_complete_when_rebuild_required
+    - escalation_detail_complete_when_rejected_escalate
+  execution_order: phase_1_then_phase_2_then_phase_3
+  fail_if:
+    # Phase 1 red-team failures
+    - ta_was_shaped_by_product_concept_not_by_evidence
+    - jtbd_was_invented_by_contracts_without_buyer_language_trace
+    - kpp_is_an_escalation_beyond_evidence_without_supporting_refs
+    - built_features_do_not_serve_locked_jtbd
+    - redundant_features_exist_without_human_approval
+    - scope_is_disproportionate_to_price_point_and_buyer_sophistication
+    # Phase 2 build verification failures
+    - architecture_contract_or_artifact_evidence_missing
+    - failed_architecture_artifact_claims_launch_ready
+    - pre_mortem_has_launch_blockers_on_attempt_2
+    - cost_outcome_accountability_failed
+    - clean_listing_assets_lack_real_hook
+    - artifact_is_demo_scale_or_same_failed_outcome_after_paid_rerun
+    - actual_buyer_workflow_requires_founder_explanation
+    - launch_ready_claim_depends_on_governance_records_without_material_product_delta
+    - prior_failed_baseline_delta_was_not_measured_on_actual_artifact
+    - seed_data_undercuts_primary_buyer_decision_demo
+    - company_memory_preflight_or_findings_ledger_missing
+    - open_applicable_finding_lacks_closure_or_launch_blocker_classification
+    - product_identity_matches_forbidden_old_product_identity
+    - required_blueprint_sheet_missing
+    - required_blueprint_column_missing
+    - required_scenario_fixture_not_present_or_not_testable
+    - builder_input_completeness_missing_or_failed
+    - open_run_blocker_due_by_launch_still_open
+    # Phase 3 loop control failures
+    - attempt_2_rebuild_instruction_issued_instead_of_reject
+    - prior_attempt_not_compared_on_attempt_2
+    - rebuild_instruction_missing_rerun_from_step
+    - rebuild_instruction_missing_specific_issues
+    - escalation_detail_missing_on_rejected_escalate

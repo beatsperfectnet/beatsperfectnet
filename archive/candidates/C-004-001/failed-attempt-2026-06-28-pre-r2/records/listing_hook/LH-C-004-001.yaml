@@ -1,0 +1,71 @@
+listing_hook:
+  candidate_id: C-004-001
+  final_artifact_version: Inventory-Tracker-Studio.xlsx
+  passed_qa_ref: records/validation/QA-C-004-001.yaml
+  final_kpp: Know what to reorder, when to reorder it, and how much to buy.
+  final_hook: Inventory Tracker Studio turns stock, purchases, sales velocity, lead time, and safety stock into SKU-level reorder actions, dates, and quantities.
+  title: Inventory Reorder Tracker Spreadsheet | Stockout Dates, Order Qty, Sales Velocity | Excel & Google Sheets
+  thumbnail: builds/C-004-001/listing-assets/final/01-main-promise.png
+  image_sequence:
+    - path: builds/C-004-001/listing-assets/final/01-main-promise.png
+      role: dashboard_replenishment_summary
+      caption: Dashboard summarizes order-now SKUs, suggested order quantity, stock value, purchases, sales, and profit.
+    - path: builds/C-004-001/listing-assets/final/02-inventory-workflow.png
+      role: inventory_replenishment_surface
+      caption: Inventory shows action, reorder-by date, projected stockout date, days cover, order quantity, velocity, lead time, and safety stock.
+    - path: builds/C-004-001/listing-assets/final/03-purchase-log.png
+      role: purchase_log
+      caption: Purchase rows replenish stock and change downstream reorder needs.
+    - path: builds/C-004-001/listing-assets/final/04-sales-log.png
+      role: sales_log
+      caption: Sales rows drive velocity, days cover, projected stockout, and reorder timing.
+    - path: builds/C-004-001/listing-assets/final/05-price-calculator.png
+      role: price_calculator
+      caption: Price Calculator checks margin before the buyer orders more stock.
+    - path: builds/C-004-001/listing-assets/final/06-price-list.png
+      role: price_list
+      caption: Price List stores approved price snapshots for reorder confidence.
+    - path: builds/C-004-001/listing-assets/final/07-start-here-and-help.png
+      role: onboarding
+      caption: Start Here and Help explain editable cells, setup defaults, limits, and recovery.
+  description: |
+    Inventory Tracker Studio is a direct-download spreadsheet workbook for small businesses, makers, and resellers who need a practical replenishment decision surface.
+
+    The workbook answers what to reorder, when to reorder it, and how much to buy. It uses Setup defaults, Inventory stock, purchase rows, and sales rows to calculate reorder action, reorder-by date, projected stockout date, days of cover, suggested order quantity, sales velocity, lead time used, and safety stock for every SKU.
+
+    It ships with Start Here, Dashboard, Setup, Inventory, Purchases, Sales, Price Calculator, Price List, and Help. Yellow cells are for buyer input. Formula cells and decision outputs update automatically. Capacity is 100 inventory rows, 300 purchase rows, 500 sales rows, 100 calculator rows, and 100 price-list rows.
+
+    It is a spreadsheet workbook, not a subscription app, not a live inventory service, not bank-connected, and not bookkeeping or tax advice.
+  claim_map:
+    - claim: dashboard replenishment summary
+      proof_ref: builds/C-004-001/listing-assets/real-sheet-previews/02-dashboard.png
+    - claim: formula-backed reorder action, reorder-by date, stockout date, days cover, order quantity, velocity, lead time, and safety stock
+      proof_ref: builds/C-004-001/listing-assets/real-sheet-previews/04-inventory.png
+    - claim: purchase logging changes stock and order quantity
+      proof_ref: builds/C-004-001/listing-assets/real-sheet-previews/05-purchases.png
+    - claim: sales logging changes velocity, stockout date, and reorder timing
+      proof_ref: builds/C-004-001/listing-assets/real-sheet-previews/06-sales.png
+    - claim: margin check before ordering more stock
+      proof_ref: builds/C-004-001/listing-assets/real-sheet-previews/07-price-calculator.png
+    - claim: saved price snapshots support reorder confidence
+      proof_ref: builds/C-004-001/listing-assets/real-sheet-previews/08-price-list.png
+    - claim: first-open guidance, setup propagation, limits, and recovery
+      proof_ref: builds/C-004-001/listing-assets/real-sheet-previews/01-start-here.png
+  insight_kpp_rtb_alignment:
+    insight: Small-business sellers need a workbook that turns stock and sales activity into replenishment decisions without manual counting or live service setup.
+    kpp: Know what to reorder, when to reorder it, and how much to buy.
+    rtb: The delivered workbook calculates action, reorder-by date, stockout date, days cover, suggested quantity, velocity, lead time, and safety stock from Setup, Purchases, Sales, and Inventory formulas.
+    evidence_refs:
+      - records/propagation_system_spec/PSS-C-004-001.yaml
+      - records/validation/QA-C-004-001.yaml
+      - records/validation/FA-C-004-001.yaml
+  unverified_claim_exclusions:
+    compatibility_claims_removed:
+      - live bank sync
+      - live inventory sync
+      - guaranteed Google Sheets protection preservation
+    protection_claims_removed:
+      - unbreakable formulas
+    automation_claims_removed:
+      - tax filing
+      - live marketplace automation

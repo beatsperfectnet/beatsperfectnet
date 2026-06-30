@@ -1,0 +1,278 @@
+purchased_competitor_inspection:
+  inspection_id: PCI-C-004-001
+  flow_contract_ref: workflows/FLOW-006.yaml
+  candidate_ref: C-004-001
+  competitive_purchase_approval_ref: records/competitive_purchase_approval/CPA-C-004-001.yaml
+  candidate_domain_brief_ref: null
+  applied_domain_consideration_ids: []
+  status: complete
+
+  competitor_product:
+    title: Inventory Tracker Spreadsheet Small Business Inventory Template Google Sheets Inventory Tracker Management Inventory Log List Order Tracker
+    marketplace: Etsy
+    seller_name_if_visible: unknown
+    product_url: https://www.etsy.com/listing/1757356616/inventory-tracker-spreadsheet-small
+    purchase_date: 2026-06-25
+    purchase_price: 2.02
+    selection_match_tier: tier_1_same_jtbd_same_product_type_same_platform_comparable_scope
+
+  inspection_environment:
+    private_asset_refs:
+      - /Users/andreyeremichev/Downloads/README-TemplateAccess.pdf
+      - /Users/andreyeremichev/Downloads/README-Instructions.pdf
+      - /Users/andreyeremichev/Downloads/Copy of Pricing Calculator & Inventory Tracker.xlsx
+    disposable_working_copy_used: true
+    file_or_platform_type: XLSX workbook export plus PDF buyer instructions
+    application_used: openpyxl workbook inspection and ZIP/XML inspection
+    application_version_if_known: not_applicable
+    inspection_date: 2026-06-25
+    limitations:
+      - The live Google Sheet was open in Chrome, but no browser-control session was exposed in this turn, so the inspection used the downloaded XLSX export instead.
+      - The PDF readme files were present in Downloads, but text extraction tools were not available in the environment.
+
+  delivered_assets:
+    - asset_id: DA-001
+      filename_or_label: Copy of Pricing Calculator & Inventory Tracker.xlsx
+      asset_type: spreadsheet_workbook
+      file_format: XLSX
+      observable_purpose: Main editable workbook export.
+      buyer_action_required: Open in spreadsheet software and edit setup, inventory, calculator, and price list surfaces.
+      evidence_locator: /Users/andreyeremichev/Downloads/Copy of Pricing Calculator & Inventory Tracker.xlsx
+    - asset_id: DA-002
+      filename_or_label: README-TemplateAccess.pdf
+      asset_type: access_and_usage_pdf
+      file_format: PDF
+      observable_purpose: Template access instructions.
+      buyer_action_required: Read before editing the workbook.
+      evidence_locator: /Users/andreyeremichev/Downloads/README-TemplateAccess.pdf
+    - asset_id: DA-003
+      filename_or_label: README-Instructions.pdf
+      asset_type: access_and_usage_pdf
+      file_format: PDF
+      observable_purpose: Buyer instructions and workbook usage guidance.
+      buyer_action_required: Read before editing the workbook.
+      evidence_locator: /Users/andreyeremichev/Downloads/README-Instructions.pdf
+
+  first_use_observations:
+    first_open_asset: Workbook opens on SETUP, not on a dedicated Start Here sheet.
+    start_point_clear: mostly_true
+    setup_steps_observed:
+      - Choose currency in SETUP.
+      - Set sales tax percentage in SETUP.
+      - Use INVENTORY to manage materials, stock, status, and value.
+      - Use PRICE CALCULATOR to derive selling price and real profit.
+      - Use PRICE LIST to log priced products.
+    sample_or_demo_state_present: true
+    buyer_inputs_required_before_value:
+      - Currency choice.
+      - Sales tax percentage.
+      - Product names, SKUs, stock counts, unit prices, and batch inputs.
+    observed_friction:
+      - observation: The workbook has no dedicated instruction-first landing tab, so buyers need to infer the flow from sheet labels.
+        evidence_locator: workbook sheet order and top-row labels.
+      - observation: The pricing calculator references a missing RECIPE sheet and the workbook-defined INCOME/EXPENSE names resolve to #REF!, which is a structural blocker.
+        evidence_locator: PRICE CALCULATOR formulas and workbook defined names.
+
+  spreadsheet_architecture:
+    tab_count: 4
+    tabs:
+      - tab_id: sheet1
+        visible_name: SETUP
+        generic_function: currency, sales tax, and unit setup
+        role: onboarding
+      - tab_id: sheet2
+        visible_name: INVENTORY
+        generic_function: materials list, stock status, and inventory value dashboard
+        role: primary_inventory_surface
+      - tab_id: sheet3
+        visible_name: PRICE CALCULATOR
+        generic_function: product price, cost, profit, and batch calculator
+        role: pricing_surface
+      - tab_id: sheet4
+        visible_name: PRICE LIST
+        generic_function: product price log and saved calculation record
+        role: pricing_history_surface
+    primary_user_flow: Set currency and tax, track materials and stock on INVENTORY, calculate pricing and profit on PRICE CALCULATOR, then save priced outputs to PRICE LIST.
+    data_entry_strategy: Setup cells and inventory rows are the buyer edit areas; calculator rows accept product and cost inputs.
+    output_or_dashboard_strategy: Inventory status counts and dashboard charts summarize stock; price calculator and price list surface selling price, profit, discount, and tax outputs.
+    setup_strategy: Use SETUP first, then INVENTORY, then PRICE CALCULATOR, then PRICE LIST.
+    category_strategy: Combine inventory management with product pricing and sales logging for small-business or reseller workflows.
+    formula_dependency_observations: PRICE CALCULATOR depends on a RECIPE sheet that is not present in the downloaded workbook and on workbook defined names that resolve to #REF!.
+    evidence_missing: []
+
+  formula_and_automation_observations:
+    formulas_present: true
+    formula_visibility: exported_formula_xml_visible
+    editable_areas_marked: partially
+    formula_protection_observed: no worksheet protection enabled in the downloaded workbook
+    listing_automation_claims:
+      - claim_summary: stock status and inventory value update from the materials table
+      - claim_summary: pricing calculator derives product cost, profit, discount, and final price
+      - claim_summary: price list stores the calculated product snapshot
+    delivery_status: delivered_with_formula_dependency_gaps
+    manual_work_observed: Buyers still need to supply inventory rows, product rows, and setup values.
+    likely_breakage_risks:
+      - Missing RECIPE sheet breaks batch/material lookup formulas in PRICE CALCULATOR.
+      - Defined names INCOME and EXPENSE resolve to #REF!, which is a structural integrity issue.
+      - The workbook lacks a first-use instruction tab, so users may edit the wrong sheet first.
+
+  listing_promise_delivery_checks:
+    - check_id: LPC-001
+      listing_claim_summary: inventory tracker spreadsheet
+      delivery_status: delivered
+      observed_result: INVENTORY tab contains stock, status, and inventory-value formulas.
+      evidence_locator: workbook export
+    - check_id: LPC-002
+      listing_claim_summary: pricing calculator
+      delivery_status: partially_delivered
+      observed_result: PRICE CALCULATOR has cost, profit, and final-price formulas but some references are broken.
+      evidence_locator: PRICE CALCULATOR formulas and workbook defined names
+    - check_id: LPC-003
+      listing_claim_summary: price list
+      delivery_status: delivered
+      observed_result: PRICE LIST stores calculation snapshots.
+      evidence_locator: PRICE LIST tab
+    - check_id: LPC-004
+      listing_claim_summary: setup instructions
+      delivery_status: partially_delivered
+      observed_result: SETUP is present, but a dedicated instruction path is not obvious.
+      evidence_locator: SETUP tab
+
+  complaint_checks:
+    - complaint_id: CC-001
+      complaint_summary: Setup can be confusing when the workbook has no Start Here tab.
+      inspection_status: observed
+      observed_cause: Users must infer the flow from sheet names alone.
+      evidence_locator: workbook tab order
+      downstream_action_required: Add explicit first-use guidance in our product.
+    - complaint_id: CC-002
+      complaint_summary: Pricing workflows should not depend on missing sheets.
+      inspection_status: observed
+      observed_cause: PRICE CALCULATOR references a RECIPE sheet that is absent in the download.
+      evidence_locator: PRICE CALCULATOR formulas
+      downstream_action_required: Avoid hidden sheet dependencies unless they are shipped.
+    - complaint_id: CC-003
+      complaint_summary: Workbook integrity matters when named ranges resolve to errors.
+      inspection_status: observed
+      observed_cause: INCOME and EXPENSE defined names resolve to #REF!.
+      evidence_locator: workbook defined names
+      downstream_action_required: Validate all workbook names before publishing.
+
+  stress_tests:
+    - test_id: ST-001
+      applicability: applicable
+      reason_if_not_applicable_or_not_testable: null
+      test_action: Open the workbook and inspect the setup path.
+      observed_result: The workbook starts on SETUP, but the buyer is not explicitly guided.
+      result: pass_partial
+      failure_mode: Buyers may not know which sheet is intended first.
+      evidence_locator: workbook tab order
+      downstream_requirement: Add a start-here path in our build.
+    - test_id: ST-002
+      applicability: applicable
+      reason_if_not_applicable_or_not_testable: null
+      test_action: Inspect price calculator lookup dependencies.
+      observed_result: PRICE CALCULATOR references a missing RECIPE sheet and broken workbook names.
+      result: fail
+      failure_mode: Pricing calculations cannot be trusted as shipped.
+      evidence_locator: PRICE CALCULATOR formulas and workbook defined names
+      downstream_requirement: Remove or repair missing dependencies before publish.
+    - test_id: ST-003
+      applicability: applicable
+      reason_if_not_applicable_or_not_testable: null
+      test_action: Inspect inventory formulas and chart surfaces.
+      observed_result: INVENTORY includes dashboard charts and inventory value/status formulas.
+      result: pass
+      failure_mode: Inventory visuals are too sparse or unclear.
+      evidence_locator: INVENTORY tab
+      downstream_requirement: Preserve clear stock and status visuals.
+
+  support_risks:
+    - risk_id: SR-001
+      observed_risk: Hidden formula dependencies can break the product when a sheet is missing.
+      likely_support_trigger: Buyers notice errors on the calculator sheet.
+      prevention_requirement: Ship all referenced sheets and validate internal links.
+    - risk_id: SR-002
+      observed_risk: No obvious instruction-first tab can increase first-open confusion.
+      likely_support_trigger: Buyers edit the wrong area or miss the intended workflow.
+      prevention_requirement: Add explicit start instructions.
+    - risk_id: SR-003
+      observed_risk: Unclear named ranges make workbook integrity harder to trust.
+      likely_support_trigger: Buyers encounter #REF! in workbook definitions or formulas.
+      prevention_requirement: Audit workbook names and formulas before publish.
+  rtb_evidence_classification:
+    product_specific_rtb_signals:
+      - Inventory status counts and value formulas are present on INVENTORY.
+      - PRICE LIST records cost, profit, discount, and tax outputs from the calculator.
+      - The workbook shows a complete inventory-management and pricing workflow in one file.
+    marketplace_trust_signals_not_rtb:
+      - Etsy purchase and digital download framing.
+      - External seller and rating signals.
+    unsupported_or_unverified_signals:
+      - Any claim that the pricing calculator is complete despite the missing RECIPE dependency.
+      - Any claim that the workbook is fully coherent without repairing the workbook names.
+  formula_protection_and_recovery_risks:
+    formulas_present: true
+    protection_observed: no worksheet protection enabled in the downloaded workbook.
+    recovery_observed: no explicit recovery or reset tab was found.
+  purchase_ref: records/competitive_purchase_approval/CPA-C-004-001.yaml
+  inspected_asset_private_ref: /Users/andreyeremichev/Downloads/Copy of Pricing Calculator & Inventory Tracker.xlsx
+  inspected_on_disposable_copy: true
+  delivery_path:
+    status: inspected
+    assets: delivered_assets
+    first_open: SETUP sheet in downloaded XLSX export
+  actual_product_depth:
+    status: adequate_with_competitor_breakage_classified_as_avoidance_evidence
+    surfaces:
+      - SETUP
+      - INVENTORY
+      - PRICE CALCULATOR
+      - PRICE LIST
+  limits_and_stress:
+    status: inspected
+    stress_tests: stress_tests
+    key_risk: Missing RECIPE sheet and broken defined names in the benchmark are build-avoidance requirements, not blockers for our artifact.
+  purchased_product_visual_reference:
+    status: inspected
+    useful_patterns:
+      - Inventory status and value dashboard.
+      - Setup-first workbook path.
+      - Price calculator and price list adjacency.
+  rtb_risks:
+    - Do not claim pricing calculator completeness without formula audit evidence.
+    - Do not claim protected structure unless shipped protection is verified.
+    - Do not rely on marketplace trust signals as product proof.
+  hidden_hook_or_value_stack:
+    - Inventory status plus value dashboard.
+    - Pricing calculator plus saved price list.
+    - Setup defaults for currency and tax.
+  originality_boundary:
+    status: pass
+    rules:
+      - Use competitor findings as requirements and avoidance examples only.
+      - Do not copy competitor workbook assets, screenshots, branding, or file structure.
+  classified_findings:
+    market_evidence:
+      - Inventory dashboard and pricing adjacency are useful buyer value signals.
+    build_requirements:
+      - Add explicit Start Here guidance.
+      - Validate all formulas and workbook names.
+      - Ship all referenced sheets and truthful protection claims.
+    not_our_blockers:
+      - Benchmark missing RECIPE dependency.
+      - Benchmark broken INCOME and EXPENSE defined names.
+      - Benchmark missing dedicated recovery tab.
+  competitor_failure_classification: competitor_failure_not_our_blocker
+  benchmark_adequacy: adequate_after_classifying_broken_price_calculator_as_avoidance_requirement
+  additional_purchase_escalation:
+    required: false
+    reason: EverBee and public evidence confirmed the category; the broken benchmark still supplied enough build requirements and avoidance patterns.
+  downstream_artifact_audit_requirements:
+    - Verify formula references and workbook names.
+    - Verify buyer-editable ranges and generated ranges.
+    - Verify protection truthfulness.
+    - Verify listing surfaces come from delivered artifacts.
+  period_continuity_observations:
+    applicable: false
+    reason: Inventory and pricing workbook is not a rolling-period workbook.

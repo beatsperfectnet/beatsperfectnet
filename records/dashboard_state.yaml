@@ -1,11 +1,8 @@
 today:
-  asOf: 2026-06-30 06:50 GMT+2
+  asOf: 2026-06-30 11:59 GMT+2
   dataMode: event-log
   flowVersion: FLOW-007
   flowTimeline: &a1
-    - stageGroup: ideas
-      stepIds:
-        - idea_generation
     - stageGroup: market
       stepIds:
         - 00_market_evidence
@@ -51,36 +48,21 @@ today:
     validationRecords: records/validation/*.yaml
     flow007ValidationRecords: records/flow_007_validation/*.yaml
     failureCases: records/failure-cases/*.md
-  todayLog:
-    - id: API-2026-06-29-product
-      kind: product_cost
-      label: Product API cost
-      detail: June 29 product API spend updated from the latest manual report.
-      amountUsd: 10
-    - id: API-2026-06-29-governance-flow007
-      kind: governance_cost
-      label: Governance cost
-      detail: June 29 governance API spend updated from the latest manual report.
-      amountUsd: 51
-    - id: API-2026-06-29-other
-      kind: other
-      label: Other spend
-      detail: June 29 additional non-product/non-governance spend.
-      amountUsd: 6
+  todayLog: []
   totals:
     pipelineCandidates: 0
-    inFlightCandidates: 0
+    inFlightCandidates: 2
     launchedCandidates: 0
-    rejectedCandidates: 0
-    totalSpendUsd: 67
-    productApiCostUsd: 10
-    governanceApiCostUsd: 51
-    unallocatedApiCostUsd: 6
+    rejectedCandidates: 1
+    totalSpendUsd: 20
+    productApiCostUsd: 0
+    governanceApiCostUsd: 0
+    unallocatedApiCostUsd: 0
     humanEscalationsTotal: 0
     pipelineUsdTotal: 0
     inFlightUsdTotal: 0
     launchedUsdTotal: 0
-    rejectedUsdTotal: 0
+    rejectedUsdTotal: 20
     pipelineTokensTotal: 0
     inFlightTokensTotal: 0
     launchedTokensTotal: 0
@@ -91,9 +73,55 @@ today:
     refundTokensTotal: 0
     refundCountTotal: 0
   pipelineCandidates: []
-  inFlightCandidates: []
+  inFlightCandidates:
+    - candidateId: FLOW-007-NEXT
+      candidateLabel: I-001
+      candidateTitle: To be selected by fresh market evidence under FLOW-007; no product thesis is locked before the pre-run
+        blocker set is addressed.
+      outcomeStatus: in_flight
+      totalTokensUsed: 0
+      totalUsdSpent: 0
+      launchTokens: 0
+      governanceTokens: 0
+      postLaunchSupportTokens: 0
+      refundTokens: 0
+      refundCount: 0
+      budgetHealth: green
+      processHealth: green
+    - candidateId: C-008-001-SIM
+      candidateLabel: SIM-I-001
+      candidateTitle: Scope-to-Quote Planner workbook for freelancers who need to turn project inputs into a quote amount,
+        deposit, delivery window, and next step.
+      outcomeStatus: in_flight
+      totalTokensUsed: 0
+      totalUsdSpent: 0
+      launchTokens: 0
+      governanceTokens: 0
+      postLaunchSupportTokens: 0
+      refundTokens: 0
+      refundCount: 0
+      budgetHealth: green
+      processHealth: green
   launchedCandidates: []
-  rejectedCandidates: []
+  rejectedCandidates:
+    - candidateId: C-010-001
+      candidateLabel: I-001
+      candidateTitle: Handyman Quote Readiness Planner
+      outcomeStatus: rejected
+      rejectionReason: rejected_by_human_before_marketplace_publish
+      totalTokensUsed: 0
+      totalUsdSpent: 20
+      competitorPurchaseUsd: 3
+      buildApiCostUsd: 17
+      launchTokens: 0
+      governanceTokens: 0
+      postLaunchSupportTokens: 0
+      refundTokens: 0
+      refundCount: 0
+      archivedAt: archive/candidates/C-010-001/C-010-001-REJECTED
+      failedLabelRef: records/failed_product_labels/C-010-FAILED.yaml
+      budgetHealth: green
+      processHealth: green
   activeEscalation:
     status: none
     scope: build
@@ -104,9 +132,9 @@ today:
     recommendedAction: ""
     governanceFile: governance/09_stage_dispatch_007.yaml
 period:
-  asOf: 2026-06-30 06:50 GMT+2
+  asOf: 2026-06-30 09:39 GMT+2
   from: 2026-06-22
-  to: 2026-06-29
+  to: 2026-06-30
   dataMode: event-log
   flowVersion: FLOW-007
   flowTimeline: *a1
@@ -114,27 +142,27 @@ period:
     launchedCount: 0
     readyForLaunchCount: 1
     rejectedCount: 3
-    totalSpendUsd: 234.8
+    totalSpendUsd: 266.24
     buildSpendUsd: 101.4
     governanceApiCostUsd: 126.4
-    otherSpendUsd: 7
+    otherSpendUsd: 38.44
   buckets:
     - date: 2026-06-22
       launchedCount: 0
       readyForLaunchCount: 0
       rejectedCount: 2
-      totalSpendUsd: 25.4
+      totalSpendUsd: 27.37
       buildSpendUsd: 25.4
       governanceApiCostUsd: 0
-      otherSpendUsd: 0
+      otherSpendUsd: 1.97
     - date: 2026-06-23
       launchedCount: 0
       readyForLaunchCount: 0
       rejectedCount: 0
-      totalSpendUsd: 6
+      totalSpendUsd: 9.44
       buildSpendUsd: 6
       governanceApiCostUsd: 0
-      otherSpendUsd: 0
+      otherSpendUsd: 3.44
     - date: 2026-06-24
       launchedCount: 0
       readyForLaunchCount: 1
@@ -147,10 +175,10 @@ period:
       launchedCount: 0
       readyForLaunchCount: 0
       rejectedCount: 0
-      totalSpendUsd: 8.7
+      totalSpendUsd: 12.74
       buildSpendUsd: 2
       governanceApiCostUsd: 6.7
-      otherSpendUsd: 0
+      otherSpendUsd: 4.04
     - date: 2026-06-26
       launchedCount: 0
       readyForLaunchCount: 0
@@ -179,7 +207,15 @@ period:
       launchedCount: 0
       readyForLaunchCount: 0
       rejectedCount: 1
-      totalSpendUsd: 67
+      totalSpendUsd: 86
       buildSpendUsd: 10
       governanceApiCostUsd: 51
-      otherSpendUsd: 6
+      otherSpendUsd: 25
+    - date: 2026-06-30
+      launchedCount: 0
+      readyForLaunchCount: 0
+      rejectedCount: 0
+      totalSpendUsd: 2.99
+      buildSpendUsd: 0
+      governanceApiCostUsd: 0
+      otherSpendUsd: 2.99

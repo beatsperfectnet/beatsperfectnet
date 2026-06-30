@@ -8,13 +8,6 @@ good_enough_for_humans_spec:
   product_spec_ref:
   delivery_spec_ref:
   purchased_competitor_inspection_ref:
-  domain_brief_application:
-    candidate_domain_brief_ref:
-    applied_consideration_ids:
-      - 
-    excluded_considerations:
-      - consideration_id:
-        reason:
   applied_inspection_requirement_ids:
     - 
   benchmark_listing_refs:

@@ -26,7 +26,7 @@ governance_rules:
   - SCHEMA-006
   - BLS-006
   - MODEL-006
-  - governance/09_stage_dispatch_006.yaml
+  - archive/flow-006/governance/09_stage_dispatch_006.yaml
  human_owned:
   - objective
   - constraints
@@ -65,9 +65,6 @@ governance_rules:
   - functional_mandates_are_static_flow_metadata
   - models_must_not_assign_their_own_mandates
   - competitor_broken_parts_are_just_examples_of_what_to_avoid
-  - candidate_domain_brief_is_required_before_competitor_selection
-  - candidate_domain_brief_default_model_is_medium
-  - frontier_domain_brief_review_is_escalation_only
   - market_evidence_controls_offer_and_scope
   - domain_expertise_controls_correctness_within_locked_scope
   - domain_reasoning_must_not_invent_market_demand
@@ -77,9 +74,6 @@ governance_rules:
   - prohibited_scope_expansions_must_not_enter_specs
   - build_agents_build_only_from_locked_specs
   - generic_best_in_class_persona_language_is_forbidden
-  - domain_considerations_must_be_traceable_by_ID
-  - incomplete_domain_brief_blocks_downstream_reasoning
-  - material_domain_brief_revision_requires_downstream_rerun
   - gpt_5_mini_is_not_a_current_alias_for_gpt_5_4_mini
   - gpt_5_5_pro_is_disabled_for_normal_flow
   - quality_critical_stages_must_not_downgrade_automatically
@@ -91,6 +85,11 @@ governance_rules:
   - responses_api_is_preferred_when_supported_safely
   - structured_outputs_must_be_schema_validated_when_supported
   - material_flow_or_governance_changes_must_update_company_memory_with_reason_failure_learning_and_prevention_target
+  - new_flow_007_runs_must_start_with_company_memory_preflight_and_findings_ledger
+  - new_flow_007_runs_must_check_product_lane_exclusions_before_market_evidence
+  - excluded_failed_product_asset_lanes_cannot_be_rerun_without_human_reopen_record
+  - build_findings_cannot_be_closed_by_governance_wording_only
+  - governance_findings_cannot_be_closed_by_artifact_generation_only
 
  real_launched_products_require_real_marketplace_listing_url: true
 

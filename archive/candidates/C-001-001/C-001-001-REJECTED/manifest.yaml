@@ -1,0 +1,129 @@
+build_manifest:
+  build_id: B-C-001-001
+  candidate_ref: C-001-001
+  process_dir: archive/candidates/C-001-001/C-001-001-REJECTED/process
+  runtime_launcher_ref: runtime/model-stage-launcher.mjs
+  flow_contract_ref: workflows/FLOW-004.yaml
+  model_policy_ref: MODEL-004.build_product_asset
+  pricing_snapshot_ref: specs/PRICING-004.yaml
+  generation_budget_usd: 25.0
+  shared_research_cost_usd: 0.0
+  generation_api_and_tool_cost_usd: 0.0
+  competitor_purchase_cost_usd: 1.97
+  competitor_purchase_excluded_from_generation_budget: true
+  remaining_generation_budget_usd: 25.0
+  generation_budget_pass: true
+  candidate_domain_brief_ref: records/candidate_domain_briefs/CDB-C-001-001.yaml
+  applied_domain_consideration_ids: [DC-001, DC-002, DC-003, DC-004]
+  good_enough_for_humans_spec_ref: records/good_enough_for_humans/GEH-C-001-001.yaml
+  real_product_surface_spec_ref: records/product_surfaces/RPSS-C-001-001.yaml
+  competitive_purchase_approval_ref: records/competitive_purchase_approval/CPA-C-001-001.yaml
+  purchased_competitor_inspection_ref: records/purchased_competitor_inspection/PCI-C-001-002.yaml
+  applied_inspection_requirement_ids:
+    - PCI-REQ-001
+    - PCI-REQ-002
+    - PCI-REQ-003
+    - PCI-REQ-004
+    - PCI-REQ-005
+    - PCI-REQ-006
+    - PCI-REQ-007
+  branding_ref: branding.yaml
+  delivery_method: digital_download
+  competitive_standard: independent_workbook_with_direct_delivery_and_no_external_data_warning
+  benchmark_sources:
+    - records/listing_analysis/LA-C-001-001.yaml
+    - records/product_analysis/PA-C-001-001.yaml
+    - records/purchased_competitor_inspection/PCI-C-001-002.yaml
+  status: pass_pending_marketplace_publish
+  listing_assets:
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/listing-assets/real-sheet-previews/dashboard.png
+      role: thumbnail_main_promise
+      source: real_product_surface_screenshot
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/listing-assets/real-sheet-previews/dashboard.png
+      role: dashboard_decision_summary
+      source: real_product_surface_screenshot
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/listing-assets/real-sheet-previews/weekly-planner.png
+      role: weekly_planner_workflow
+      source: real_product_surface_screenshot
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/listing-assets/real-sheet-previews/grocery-list.png
+      role: grocery_and_pantry_output
+      source: real_product_surface_screenshot
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/listing-assets/real-sheet-previews/recipes.png
+      role: recipe_setup_and_builder
+      source: real_product_surface_screenshot
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/listing-assets/real-sheet-previews/pantry.png
+      role: pantry_tracker
+      source: real_product_surface_screenshot
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/listing-assets/real-sheet-previews/start-here.png
+      role: compatibility_and_quick_start
+      source: real_product_surface_screenshot
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/listing-assets/etsy-title.txt
+      role: listing_title
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/listing-assets/etsy-description.md
+      role: listing_description
+  product_assets:
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/product/Meal-Planner-Studio.xlsx
+      role: primary_workbook
+  delivery_assets:
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/delivery-assets/README-FIRST.md
+      role: first_open_readme
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/delivery-assets/Quick-Start-and-FAQ.md
+      role: quick_start_faq
+  internal_process_artifacts:
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/process/libreoffice-check/Meal-Planner-Studio.xlsx
+      role: libreoffice_reopen_check
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/process/pdf/Meal-Planner-Studio.pdf
+      role: rendered_workbook_pdf_check
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/process/pdf-thumbnails/Meal-Planner-Studio.pdf.png
+      role: rendered_dashboard_thumbnail_check
+    - path: records/validation/QA-C-001-003.yaml
+      role: qa_result
+    - path: records/validation/FIX-C-001-003.yaml
+      role: fixing_result
+    - path: records/validation/LR-C-001-004.yaml
+      role: launch_review_result
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/listing-assets/01-thumbnail-main-promise.svg
+      role: superseded_illustrative_draft_not_for_publish
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/listing-assets/02-weekly-planner-workflow.svg
+      role: superseded_illustrative_draft_not_for_publish
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/listing-assets/03-grocery-pantry-output.svg
+      role: superseded_illustrative_draft_not_for_publish
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/listing-assets/04-dashboard-decision-summary.svg
+      role: superseded_illustrative_draft_not_for_publish
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/listing-assets/05-recipe-setup-builder.svg
+      role: superseded_illustrative_draft_not_for_publish
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/listing-assets/06-compatibility-quick-start.svg
+      role: superseded_illustrative_draft_not_for_publish
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/process/sheet-preview-workbooks/dashboard.xlsx
+      role: real_sheet_preview_source_workbook
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/process/sheet-preview-workbooks/weekly-planner.xlsx
+      role: real_sheet_preview_source_workbook
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/process/sheet-preview-workbooks/grocery-list.xlsx
+      role: real_sheet_preview_source_workbook
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/process/sheet-preview-workbooks/recipes.xlsx
+      role: real_sheet_preview_source_workbook
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/process/sheet-preview-workbooks/pantry.xlsx
+      role: real_sheet_preview_source_workbook
+    - path: archive/candidates/C-001-001/C-001-001-REJECTED/process/sheet-preview-workbooks/start-here.xlsx
+      role: real_sheet_preview_source_workbook
+  ready_for_publish_requires:
+    - listing_quality_pass
+    - product_quality_pass
+    - delivery_quality_pass
+    - good_enough_pass
+    - candidate_domain_brief_complete
+    - domain_considerations_applied
+    - domain_correctness_qa_pass
+    - prohibited_domain_scope_absent
+    - professional_boundary_claims_pass
+    - generation_budget_pass
+    - competitor_purchase_completed
+    - purchased_competitor_inspection_complete
+    - inspection_requirements_applied
+    - promise_delivery_truthfulness_pass
+    - spreadsheet_resilience_qa_pass
+    - support_by_design_qa_pass
+    - reference_based_originality_pass
+    - private_competitor_assets_excluded
+    - qa_result_pass
+    - launch_review_result_pass

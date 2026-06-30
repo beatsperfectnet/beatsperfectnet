@@ -1,0 +1,122 @@
+founder_acceptance_simulation:
+  candidate_id: C-004-001
+  artifact_tested: builds/C-004-001/product/Inventory-Tracker-Studio.xlsx
+  qa_ref: records/validation/QA-C-004-001.yaml
+  founder_rejection_corpus_ref: specs/FOUNDER-ACCEPTANCE-CORPUS-001.yaml
+  machine_checkable_product_contract_ref: records/propagation_system_spec/PSS-C-004-001.yaml#machine_checkable_product_contract
+  founder_acceptance_status: pass
+  adversarial_rejection_attempts:
+    required: true
+    attempts:
+      - corpus_pattern_id: demo_scale_rows
+        result: pass
+        reason: Workbook retains 100/300/500/100/100 buyer-usable capacity and QA verifies formulas beyond seed rows.
+      - corpus_pattern_id: formula_logic_not_stress_tested
+        result: pass
+        reason: QA runs JTBD truth-table checks and mutation dependencies for purchase, sales, lead time, safety stock, pack size, and price margin changes.
+      - corpus_pattern_id: feature_list_instead_of_promise
+        result: pass
+        reason: The KPP is not a feature list or dashboard count; it is the formula-backed replenishment decision of action, date, and quantity per SKU.
+      - corpus_pattern_id: buyer_workflow_requires_founder_explanation
+        result: pass
+        reason: Start Here and Setup explain first actions, while Inventory exposes the decision outputs directly.
+      - corpus_pattern_id: developerish_buyer_copy
+        result: pass
+        reason: In-product copy uses buyer-facing language and avoids flow, model, and artifact jargon.
+      - corpus_pattern_id: paid_rerun_same_outcome
+        result: pass
+        reason: The rerun materially changes the product from stock/pricing visibility into replenishment action/date/quantity logic.
+      - corpus_pattern_id: competitor_failure_treated_as_blocker
+        result: pass
+        reason: Purchased benchmark issues were resolved as domain failure modes and audit requirements, not copied into or used to block the shipped artifact.
+      - corpus_pattern_id: hookless_clean_listing
+        result: pass
+        reason: Listing images now center on replenishment-specific proof surfaces and per-image grid-stop reasons.
+  real_human_use_pressure:
+    status: pass
+    checks:
+      - Buyer can answer what to reorder from Inventory!S and Dashboard order-now count.
+      - Buyer can answer when to reorder from Inventory!R and projected stockout in Inventory!N.
+      - Buyer can answer how much to order from Inventory!Q.
+      - Buyer can see why the recommendation exists through velocity, lead time, safety stock, days cover, purchase roll-up, and sales roll-up columns.
+      - Buyer can distinguish yellow editable inputs from generated formula outputs.
+  product_logic_review:
+    status: pass
+    notes:
+      - Primary JTBD is replenishment planning, not generic stock visibility.
+      - Reorder-by date is formula-backed by projected stockout date minus lead time.
+      - Suggested order quantity is formula-backed by velocity, lead time, safety stock days, on-hand stock, and pack-size rounding.
+      - Purchase and sales mutations propagate into the decision outputs.
+  jtbd_decision_output_review:
+    status: pass
+    required_outputs_present:
+      - reorder_action
+      - reorder_by_date
+      - projected_stockout_date
+      - days_of_cover
+      - suggested_order_quantity
+      - sales_velocity
+      - lead_time_used
+      - safety_stock_buffer
+    proof_ref: records/validation/QA-C-004-001.yaml#primary_buyer_decision_output_results
+  missing_decision_outputs: []
+  in_product_human_wording_review:
+    status: pass
+    notes:
+      - Sheet names and headings are customer-facing.
+      - Setup copy explains practical defaults rather than internal implementation details.
+      - Delivery copy explains limitations and recovery without overclaiming protection.
+  delivery_copy_human_review:
+    status: pass
+    assets_reviewed:
+      - builds/C-004-001/delivery-assets/README-FIRST.md
+      - builds/C-004-001/delivery-assets/Quick-Start-and-FAQ.md
+    notes:
+      - Delivery copy tells the buyer to start in Setup, edit yellow cells, read reorder outputs, and preserve a clean copy.
+  direct_artifact_inspection_evidence:
+    - builds/C-004-001/product/Inventory-Tracker-Studio.xlsx
+    - builds/C-004-001/listing-assets/real-sheet-previews/02-dashboard.png
+    - builds/C-004-001/listing-assets/real-sheet-previews/04-inventory.png
+    - builds/C-004-001/listing-assets/final/01-main-promise.png
+    - builds/C-004-001/listing-assets/final/02-inventory-workflow.png
+  artifact_delta_review:
+    status: pass
+    summary: "The rebuild adds the missing replenishment decision layer: action, reorder-by date, projected stockout date, days cover, suggested order quantity, velocity, lead time, and safety stock across all inventory rows."
+  listing_hook_review:
+    status: pass
+    summary: Listing creative assembly now uses replenishment-specific buyer promises, real proof surfaces, and per-image grid-stop reasons.
+  cost_outcome_accountability:
+    status: pass
+    summary: The rerun did not spend external publish budget and produced a materially different workbook outcome instead of a timestamp/listing-only refresh.
+  corpus_pattern_results:
+    demo_scale_rows: pass
+    formula_logic_not_stress_tested: pass
+    buyer_workflow_requires_founder_explanation: pass
+    developerish_buyer_copy: pass
+    feature_list_instead_of_promise: pass
+    paid_rerun_same_outcome: pass
+    competitor_failure_treated_as_blocker: pass
+    hookless_clean_listing: pass
+  rejection_reasons: []
+  required_repair_scope:
+    status: none
+    completed_repair:
+      issue: Prior product did not answer reorder date and order quantity as the primary buyer decision.
+      files_changed:
+        - records/propagation_system_spec/PSS-C-004-001.yaml
+        - builds/C-004-001/process/build_inventory_tracker.py
+        - builds/C-004-001/process/build_listing_creatives.py
+      output_regenerated:
+        - builds/C-004-001/product/Inventory-Tracker-Studio.xlsx
+        - builds/C-004-001/listing-assets/real-sheet-previews/*.png
+        - builds/C-004-001/listing-assets/final/*.png
+  rerun_from_step: 05_one_promise_propagation_system_spec
+  human_override:
+    allowed: true
+    decision: not_used
+    decision_date: null
+    reason: ""
+    approver: null
+  publish_blockers:
+    status: pass
+    blockers: []

@@ -1,0 +1,41 @@
+product_identity_reframe:
+  product_id:
+  candidate_id:
+  flow_version: FLOW-007
+  market_category_label:
+  differentiation_strategy:
+  evidence_for_differentiation:
+    -
+  product_identity:
+  forbidden_old_product_identity:
+    - 
+  primary_buyer_decision:
+    - 
+  primary_buyer_promise:
+  prohibited_generic_promises:
+    - 
+  required_product_class_delta:
+    - 
+  rejection_rules:
+    - same_failed_product_class_blocks_build
+    - product_identity_must_not_equal_market_category_label
+    - forbidden_product_identity_terms_required
+    - product_class_change_requires_evidence_for_new_class
+    - better_execution_requires_concrete_execution_advantages
+  status:
+  allowed_statuses:
+    - PASS
+    - PRODUCT_IDENTITY_FAILED
+  hard_rule: "The product identity must describe the actual buyer-decision product. For product_class_change strategy, identity must differ from market category label and have evidence for the new class. For better_execution strategy, identity may stay in the same class but must demonstrate concrete execution advantages over the benchmark."
+  fail_if:
+    - market_category_label_matches_product_identity_when_strategy_is_product_class_change
+    - product_identity_is_a_generic_category_label
+    - candidate_remains_the_same_failed_product_class
+    - prohibited_generic_promises_are_used_as_the_primary_promise
+    - required_product_class_delta_is_missing_or_vague
+    - differentiation_strategy_is_missing
+    - better_execution_has_no_concrete_execution_advantages
+    - product_class_change_has_no_evidence_for_new_class
+  allowed_differentiation_strategies:
+    - better_execution
+    - product_class_change

@@ -1,0 +1,237 @@
+build_manifest:
+  candidate_id: C-004-001
+  attempt_id: C-004-001-R2
+  build_id: B-C-004-001-R2-FLOW-006-REPLENISHMENT
+  propagation_system_spec_ref: records/propagation_system_spec/PSS-C-004-001-R2.yaml
+  machine_checkable_product_contract_ref: records/propagation_system_spec/PSS-C-004-001-R2.yaml#machine_checkable_product_contract
+  failed_artifact_baseline_ref: records/failed_artifact_baselines/BAS-C-004-001-R1.yaml
+  active_input_policy:
+    status: clean_rerun_build
+    consumed_active_refs:
+      - records/alignment_chain/AC-C-004-001-R2.yaml
+      - records/propagation_system_spec/PSS-C-004-001-R2.yaml
+    baseline_only_refs:
+      - records/failed_artifact_baselines/BAS-C-004-001-R1.yaml
+    forbidden_active_input_refs:
+      - records/propagation_system_spec/PSS-C-004-001.yaml
+      - archive/candidates/C-004-001/failed-attempt-2026-06-28-pre-r2/builds/C-004-001/manifest.yaml
+      - records/validation/QA-C-004-001.yaml
+      - records/validation/FA-C-004-001.yaml
+  flow_contract_ref: workflows/FLOW-006.yaml
+  model_policy_ref: MODEL-006.first_pass_connected_build
+  product_artifacts:
+    - path: builds/C-004-001/product/Inventory-Tracker-Studio.xlsx
+      role: primary_workbook
+    - path: builds/C-004-001/product/Inventory-Tracker-Studio-google-sheets-import.xlsx
+      role: import_copy
+  artifact_version: Inventory-Tracker-Studio.xlsx
+  implemented_system_name: Inventory Tracker Studio
+  system_type: inventory replenishment and pricing workbook
+  primary_platform: Google Sheets and modern Excel
+  input_or_start_surfaces:
+    - Start Here
+    - Setup
+  canonical_sources_or_structure:
+    - Start Here
+    - Dashboard
+    - Setup
+    - Inventory
+    - Purchases
+    - Sales
+    - Price Calculator
+    - Price List
+    - Help
+    - Lists
+  transformations_or_use_path: Buyer confirms setup inputs, reviews seed examples, enters SKUs and transactions in blank working rows, fixes any stock-data review state, then reads Inventory/Dashboard for reorder action, reorder-by date, projected stockout date, days cover, suggested order quantity, derived reorder point, velocity, lead time, and safety stock.
+  output_or_completion_surfaces:
+    - Dashboard
+    - Inventory
+    - Price Calculator
+    - Price List
+  primary_buyer_decision_outputs:
+    decision: Know what to reorder, when to reorder, and how much to order.
+    implemented_outputs:
+      - output_id: reorder_action
+        workbook_range: Inventory!S5:S104
+      - output_id: reorder_by_date
+        workbook_range: Inventory!R5:R104
+      - output_id: projected_stockout_date
+        workbook_range: Inventory!N5:N104
+      - output_id: days_of_cover
+        workbook_range: Inventory!M5:M104
+      - output_id: derived_reorder_point
+        workbook_range: Inventory!I5:I104
+      - output_id: suggested_order_quantity
+        workbook_range: Inventory!Q5:Q104
+      - output_id: sales_velocity
+        workbook_range: Inventory!L5:L104
+      - output_id: lead_time_used
+        workbook_range: Inventory!O5:O104
+      - output_id: safety_stock_buffer
+        workbook_range: Inventory!P5:P104
+    seeded_dashboard_results_after_libreoffice_recalc:
+      seed_skus: 8
+      fix_stock_data_count: 0
+      formula_ready_inventory_rows: 100
+  jtbd_output_manifest:
+    repaired_artifact:
+      seeded_inventory_rows: 8
+      purchase_seed_rows: 16
+      sales_seed_rows: 24
+      price_seed_rows: 8
+      blank_formula_ready_capacity: true
+      derived_reorder_point_locked: true
+      negative_on_hand_blocker_state: Fix stock data / Review stock data
+  hook_surface: Dashboard and Inventory replenishment outputs
+  visual_reference_contract_applied: true
+  brandbook_ref: branding.yaml
+  protection_and_recovery: Delivered workbook uses passworded sheet protection with unlocked yellow input ranges; recovery is by duplicating a clean copy before heavy edits.
+  known_limits:
+    - The workbook does not connect to banks, live inventory services, shipping systems, or marketplaces.
+    - Reorder quantities are planning estimates from buyer-entered stock, purchase, sales, lead time, and buffer data.
+    - Google Sheets import protection behavior can vary by editor or account.
+    - It is not tax, accounting, or financial advice.
+  excluded_scope_confirmed: true
+  stage_api_cost_usd: 0
+  cumulative_api_cost_usd: 0
+  budget_remaining_usd: 25
+  artifact_integrity_manifest:
+    artifact_paths:
+      - builds/C-004-001/product/Inventory-Tracker-Studio.xlsx
+      - builds/C-004-001/product/Inventory-Tracker-Studio-google-sheets-import.xlsx
+    generated_from_real_product_surfaces: true
+    workbook_generator: builds/C-004-001/process/build_inventory_tracker.py
+    listing_generator: builds/C-004-001/process/build_listing_creatives.py
+    preview_surfaces:
+      - builds/C-004-001/listing-assets/real-sheet-previews/01-start-here.png
+      - builds/C-004-001/listing-assets/real-sheet-previews/02-dashboard.png
+      - builds/C-004-001/listing-assets/real-sheet-previews/03-setup.png
+      - builds/C-004-001/listing-assets/real-sheet-previews/04-inventory.png
+      - builds/C-004-001/listing-assets/real-sheet-previews/05-purchases.png
+      - builds/C-004-001/listing-assets/real-sheet-previews/06-sales.png
+      - builds/C-004-001/listing-assets/real-sheet-previews/07-price-calculator.png
+      - builds/C-004-001/listing-assets/real-sheet-previews/08-price-list.png
+      - builds/C-004-001/listing-assets/real-sheet-previews/09-help.png
+  formula_inventory:
+    formulas_present: true
+    formula_ranges:
+      - Inventory!F5:F104 purchase roll-up formulas
+      - Inventory!G5:G104 sales roll-up formulas
+      - Inventory!H5:H104 on-hand formulas
+      - Inventory!L5:L104 sales velocity formulas
+      - Inventory!M5:M104 days-of-cover formulas
+      - Inventory!N5:N104 projected-stockout formulas
+      - Inventory!O5:O104 lead-time-used formulas
+      - Inventory!P5:P104 safety-stock formulas
+      - Inventory!Q5:Q104 suggested-order-quantity formulas
+      - Inventory!R5:R104 reorder-by-date formulas
+      - Inventory!S5:S104 reorder-action formulas
+      - Inventory!T5:T104 stock-status formulas
+      - Dashboard!B5:N5 decision summary formulas
+      - Purchases!G5:G304 total-cost formulas
+      - Sales!G5:I504 revenue, COGS, and gross-profit formulas
+      - Price Calculator!C5:L104 suggested-price, profit, and margin formulas
+      - Price List!D5:H104 snapshot formulas
+      - Inventory!I5:I104 derived-reorder-point formulas
+    external_or_unsupported_formula_markers: []
+  editable_range_inventory:
+    buyer_editable_ranges:
+      - Setup!B4:B9 and B11:B14
+      - Inventory!A5:E104, J5:J104, U5:U104
+      - Purchases!A5:H304
+      - Sales!A5:J504
+      - Price Calculator!A5:M104
+      - Price List!A5:I104
+    generated_or_formula_ranges:
+      - Dashboard formulas and charts
+      - Inventory purchase roll-up, sales roll-up, nonnegative on-hand display, derived reorder point, value, velocity, days cover, stockout, lead-time, safety stock, order quantity, reorder-by, action, and status columns
+      - Purchases totals
+      - Sales revenue, COGS, and gross profit outputs
+      - Price Calculator outputs
+      - Price List snapshot outputs
+  setup_input_usage_manifest:
+    formula_driving_inputs:
+      - Setup!B5 review date drives stockout and reorder-by formulas
+      - Setup!B6 sales lookback days drives sales velocity formulas
+      - Setup!B7 sales tax drives price calculator suggested price
+      - Setup!B8 marketplace fee drives price calculator suggested price and profit
+      - Setup!B9 target margin drives price calculator suggested price
+      - Setup!B11 lead time days drives lead time used, reorder-by date, and suggested order quantity
+      - Setup!B12 safety stock days drives safety stock and suggested order quantity
+      - Setup!B13 default pack size drives suggested order quantity rounding
+    declared_defaults:
+      - Setup!B4 currency symbol is a display default
+      - Setup!B10 derived reorder point policy is locked guidance
+      - Setup!B14 support note is customer guidance
+    removed_unused_inputs:
+      - Start month
+      - Start year
+  working_capacity_manifest:
+    inventory_rows: 100
+    inventory_seed_rows: 8
+    purchases_rows: 300
+    purchases_seed_rows: 16
+    sales_rows: 500
+    sales_seed_rows: 24
+    price_calculator_rows: 100
+    price_calculator_seed_rows: 8
+    price_list_rows: 100
+    price_list_seed_rows: 8
+    blank_formula_ready_capacity: true
+  visible_capacity_manifest:
+    prior_failed_visible_rows:
+      inventory_rows: 12
+      purchases_rows: 12
+      sales_rows: 12
+      price_calculator_rows: 6
+      price_list_rows: 6
+    new_visible_rows:
+      inventory_formula_ready_rows: 100
+      inventory_seed_rows: 8
+      purchases_formula_ready_rows: 300
+      purchases_seed_rows: 16
+      sales_formula_ready_rows: 500
+      sales_seed_rows: 24
+      price_calculator_formula_ready_rows: 100
+      price_calculator_seed_rows: 8
+      price_list_formula_ready_rows: 100
+      price_list_seed_rows: 8
+    buyer_usable_capacity_statement: The workbook now ships with a few seed examples plus blank formula-ready rows over the full capacity floor.
+  artifact_delta_against_prior:
+    status: pass
+    summary: The rebuild removes buyer-entered reorder points, derives reorder thresholds from velocity/lead time/safety stock, blocks negative stock data before recommendations, and replaces fully populated fake capacity with seed rows plus blank formula-ready capacity.
+  human_scale_capacity_evidence:
+    - builds/C-004-001/listing-assets/real-sheet-previews/02-dashboard.png
+    - builds/C-004-001/listing-assets/real-sheet-previews/04-inventory.png
+    - builds/C-004-001/listing-assets/real-sheet-previews/05-purchases.png
+    - builds/C-004-001/listing-assets/real-sheet-previews/06-sales.png
+  protection_truthfulness:
+    formula_protection_mode: passworded_sheet_protection_with_unlocked_input_ranges
+    sheet_or_range_protection_enabled: true
+    recovery_only_labeling_used: true
+    unsupported_claims_absent: true
+  period_continuity_manifest:
+    applicable: false
+    period_type: not_applicable
+    reason: Inventory replenishment review is date-sensitive but not a rolling-period workbook.
+  delivery_assets:
+    - path: builds/C-004-001/delivery-assets/README-FIRST.md
+      role: first_open_readme
+    - path: builds/C-004-001/delivery-assets/Quick-Start-and-FAQ.md
+      role: quick_start_faq
+  listing_assets:
+    - path: builds/C-004-001/listing-assets/final/01-main-promise.png
+      role: thumbnail_main_promise
+    - path: builds/C-004-001/listing-assets/final/02-inventory-workflow.png
+      role: inventory_replenishment_surface
+    - path: builds/C-004-001/listing-assets/final/03-purchase-log.png
+      role: purchase_log_mutation_surface
+    - path: builds/C-004-001/listing-assets/final/04-sales-log.png
+      role: sales_velocity_surface
+    - path: builds/C-004-001/listing-assets/final/05-price-calculator.png
+      role: margin_check_surface
+    - path: builds/C-004-001/listing-assets/final/06-price-list.png
+      role: saved_price_snapshot_surface
+    - path: builds/C-004-001/listing-assets/final/07-start-here-and-help.png
+      role: onboarding_and_limits
+  status: pass_pending_marketplace_publish

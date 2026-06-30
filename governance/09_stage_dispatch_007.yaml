@@ -1,15 +1,19 @@
 stage_dispatch:
   purpose: exact_model_selection_per_flow_007_stage
-  rule: use_mini_by_default_and_escalate_only_for_allowed_architecture_or_founder_review
+  rule: use_baseline_by_default_and_escalate_only_for_allowed_architecture_or_founder_review
   source_of_truth:
     - workflows/FLOW-007.yaml
     - specs/MODEL-007.yaml
     - governance/08_product_generation_budget_007.yaml
+    - governance/10_flow_007_pilot_policy.yaml
   enforcement:
     exact_model_match_required: true
     if_model_unavailable: stop_and_escalate
     if_dispatch_mismatch_detected: mark_run_noncompliant_and_stop_future_stages
     repeated_rebuild_escalation_after_failed_artifacts_forbidden: true
+    first_three_pilots_require_gpt_5_5_for_frontier_required_gates: true
+    pro_model_substitution_forbidden: true
+    priority_processing_allowed: false
   allowed_runtime_actions:
     - spawn_child_session_with_model_override
     - switch_session_model
@@ -19,68 +23,142 @@ stage_dispatch:
   stage_model_map:
     00_market_evidence:
       model_policy_ref: MODEL-007.market_evidence
-      governed_model_tier: mini
-      requested_model: gpt-5.4-mini
-      runtime_resolved_model_id: openai/gpt-5.4-mini
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+      runtime_resolved_model_id: openai/gpt-5.4
       dispatch_action: switch_session_model
-    01_competitor_product_autopsy:
-      model_policy_ref: MODEL-007.competitor_product_autopsy
-      governed_model_tier: mini
-      requested_model: gpt-5.4-mini
-      runtime_resolved_model_id: openai/gpt-5.4-mini
+    01_public_shelf_read:
+      model_policy_ref: MODEL-007.public_shelf_read
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+      runtime_resolved_model_id: openai/gpt-5.4
       dispatch_action: switch_session_model
-    02_product_architecture_contract:
-      model_policy_ref: MODEL-007.product_architecture_contract
-      governed_model_tier: mini
-      requested_model: gpt-5.4-mini
-      runtime_resolved_model_id: openai/gpt-5.4-mini
+    02_target_audience_exploration:
+      model_policy_ref: MODEL-007.target_audience_exploration
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+      runtime_resolved_model_id: openai/gpt-5.4
       dispatch_action: switch_session_model
-      escalation_allowed_to: openai/gpt-5.5
-    03_scenario_matrix:
-      model_policy_ref: MODEL-007.scenario_matrix
-      governed_model_tier: mini
-      requested_model: gpt-5.4-mini
-      runtime_resolved_model_id: openai/gpt-5.4-mini
+    03_competitor_selection_purchase_approval:
+      model_policy_ref: MODEL-007.competitor_selection
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+      runtime_resolved_model_id: openai/gpt-5.4
+      dispatch_action: human_gate
+      human_gate_required: competitor_purchase_approval
+    04_purchased_competitor_inspection:
+      model_policy_ref: MODEL-007.purchased_competitor_inspection
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+      runtime_resolved_model_id: openai/gpt-5.4
       dispatch_action: switch_session_model
-    04_build_readiness_review:
-      model_policy_ref: MODEL-007.build_readiness_review
-      governed_model_tier: mini
-      requested_model: gpt-5.4-mini
-      runtime_resolved_model_id: openai/gpt-5.4-mini
+      frontier_review_ref: MODEL-007.frontier_required.competitor_benchmark_adequacy_review
+    05_target_audience_lock:
+      model_policy_ref: MODEL-007.frontier_required.target_audience_lock
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      dispatch_action: spawn_child_session_with_model_override
+    06_product_identity_reframe:
+      model_policy_ref: MODEL-007.frontier_required.product_identity_reframe
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
       dispatch_action: switch_session_model
-      escalation_allowed_to: openai/gpt-5.5
-    05_product_build:
+    07_product_architecture_contract:
+      model_policy_ref: MODEL-007.frontier_required.product_architecture_contract
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      dispatch_action: switch_session_model
+    08_scenario_matrix:
+      model_policy_ref: MODEL-007.frontier_required.scenario_matrix
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      dispatch_action: switch_session_model
+    09_workbook_or_product_blueprint:
+      model_policy_ref: MODEL-007.frontier_required.workbook_or_product_blueprint
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      dispatch_action: switch_session_model
+    10_build_readiness_review:
+      model_policy_ref: MODEL-007.frontier_required.build_readiness_review
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      dispatch_action: switch_session_model
+    11_pre_build_architecture_premortem:
+      model_policy_ref: MODEL-007.frontier_required.pre_build_architecture_premortem
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      dispatch_action: spawn_child_session_with_model_override
+    12_product_build:
       model_policy_ref: MODEL-007.product_build
-      governed_model_tier: mini
-      requested_model: gpt-5.4-mini
-      runtime_resolved_model_id: openai/gpt-5.4-mini
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+      runtime_resolved_model_id: openai/gpt-5.4
       dispatch_action: switch_session_model
-    06_real_artifact_inspection:
-      model_policy_ref: MODEL-007.real_artifact_inspection
-      governed_model_tier: mini
-      requested_model: gpt-5.4-mini
-      runtime_resolved_model_id: openai/gpt-5.4-mini
-      dispatch_action: switch_session_model
+    13_real_artifact_inspection:
+      model_policy_ref: MODEL-007.frontier_required.architecture_vs_implementation_classification
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      dispatch_action: spawn_child_session_with_model_override
       deterministic_subgates:
         - artifact_structure_inspector
         - scenario_execution_inspector
         - decision_output_inspector
-    07_blind_buyer_walkthrough:
-      model_policy_ref: MODEL-007.blind_buyer_walkthrough
-      governed_model_tier: mini
-      requested_model: gpt-5.4-mini
-      runtime_resolved_model_id: openai/gpt-5.4-mini
-      dispatch_action: switch_session_model
-    08_listing_packaging_qa:
+    14_blind_buyer_walkthrough:
+      model_policy_ref: MODEL-007.frontier_required.blind_buyer_walkthrough
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      dispatch_action: spawn_child_session_with_model_override
+    15_listing_packaging_qa:
       model_policy_ref: MODEL-007.listing_packaging_qa
-      governed_model_tier: mini
-      requested_model: gpt-5.4-mini
-      runtime_resolved_model_id: openai/gpt-5.4-mini
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+      runtime_resolved_model_id: openai/gpt-5.4
       dispatch_action: switch_session_model
-    09_founder_launch_gate:
-      model_policy_ref: MODEL-007.founder_launch_gate
-      governed_model_tier: mini
-      requested_model: gpt-5.4-mini
-      runtime_resolved_model_id: openai/gpt-5.4-mini
-      dispatch_action: switch_session_model
-      escalation_allowed_to: openai/gpt-5.5
+    16_pre_mortem_failure_analysis:
+      model_policy_ref: MODEL-007.pre_mortem_failure_analysis
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      dispatch_action: spawn_child_session_with_model_override
+    17_founder_launch_gate:
+      model_policy_ref: MODEL-007.frontier_required.launch_readiness
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      dispatch_action: spawn_child_session_with_model_override
+  pilot_mandatory_frontier_stage_model_map:
+    01_market_evidence_adequacy_final_review: &pilot_frontier
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      prohibited_models:
+        - gpt-5.5-pro
+        - gpt-5.4-pro
+        - any pro model
+      dispatch_action: spawn_child_session_with_model_override
+      if_unavailable: stop_and_report
+    02_competitor_product_autopsy_final_review: *pilot_frontier
+    03_product_identity_reframe_final_approval: *pilot_frontier
+    04_target_audience_contract_final_approval: *pilot_frontier
+    05_buyer_behavior_contract_final_approval: *pilot_frontier
+    06_domain_model_contract_final_approval: *pilot_frontier
+    07_decision_output_contract_final_approval: *pilot_frontier
+    08_scenario_matrix_adversarial_review: *pilot_frontier
+    09_workbook_or_product_blueprint_final_approval: *pilot_frontier
+    10_build_readiness_review: *pilot_frontier
+    11_pre_build_architecture_premortem: *pilot_frontier
+    12_actual_artifact_inspection_final_review: *pilot_frontier
+    13_blind_buyer_walkthrough: *pilot_frontier
+    14_architecture_vs_implementation_failure_classification: *pilot_frontier
+    15_listing_hook_and_packaging_final_review: *pilot_frontier
+    16_pre_mortem_failure_analysis: *pilot_frontier
+    17_launch_gate: *pilot_frontier

@@ -24,14 +24,18 @@ listing_spec:
       buyer_hook:
       specific_product_proof_shown:
       reason_this_image_helps_conversion:
+      grid_stop_reason:
+      product_surface_large_enough_to_prove_claim:
+      one_promise_and_matching_reason_to_believe:
+      verified_product_surface_ref:
+  listing_quality_fail_if:
+    - clean_assets_lack_real_hook
+    - report_slide_layout_as_thumbnail
+    - screenshot_presence_as_the_only_hook
+    - tiny_product_surface_that_cannot_prove_claim
+    - unverified_compatibility_or_protection_claim
+    - every_image_uses_same_visual_hierarchy_without_distinct_grid_stop_reason
   c004_listing_hook_standard: Know what to reorder, when to reorder it, and how much to buy before stock runs out.
-  domain_brief_application:
-    candidate_domain_brief_ref:
-    applied_consideration_ids:
-      - 
-    excluded_considerations:
-      - consideration_id:
-        reason:
   applied_inspection_requirement_ids:
     - 
   listing_evidence_packet:
