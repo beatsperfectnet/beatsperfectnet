@@ -149,7 +149,7 @@ export function PeriodDashboard({ state = mockPeriodState }: { state?: PeriodSta
   return (
     <Shell
       title="Period"
-      subtitle="Daily operating history for BeatsPerfect. BeatsPerfect - Focused digital products.."
+      subtitle="Daily operating history for BeatsPerfect. BeatsPerfect - Focused digital products."
       meta={
         <>
           <span className="mono muted">{state.dataMode} snapshot</span>

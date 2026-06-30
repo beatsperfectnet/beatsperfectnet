@@ -26,7 +26,7 @@ export const mockPeriodState: PeriodState = {
   ],
   totals: {
     launchedCount: 0,
-    readyForLaunchCount: 1,
+    readyForLaunchCount: 2,
     rejectedCount: 3,
     totalSpendUsd: 346.25,
     buildSpendUsd: 136.4,
@@ -57,7 +57,7 @@ export const mockPeriodState: PeriodState = {
     {
       date: "2026-06-24",
       launchedCount: 0,
-      readyForLaunchCount: 0,
+      readyForLaunchCount: 1,
       rejectedCount: 0,
       totalSpendUsd: 41.4,
       buildSpendUsd: 22,
