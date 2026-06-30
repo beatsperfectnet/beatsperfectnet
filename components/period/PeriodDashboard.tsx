@@ -149,7 +149,7 @@ export function PeriodDashboard({ state = mockPeriodState }: { state?: PeriodSta
   return (
     <Shell
       title="Period"
-      subtitle="Daily operating history for BeatsPerfect. This is the primary tracker until the product pipeline needs a true live dashboard again."
+      subtitle="Daily operating history for BeatsPerfect. BeatsPerfect - Focused digital products.."
       meta={
         <>
           <span className="mono muted">{state.dataMode} snapshot</span>
@@ -240,6 +240,19 @@ export function PeriodDashboard({ state = mockPeriodState }: { state?: PeriodSta
       </section>
 
       <FlowTimelineCard state={state} />
+
+      <section className="card panel periodPublishLink">
+        <div className="sectionHeader">
+          <div>
+            <p className="eyebrow">Publishing</p>
+            <h2>Ready for Publish / Published Products</h2>
+          </div>
+        </div>
+        <p className="panelNote">The live storefront for ready-for-publish and published BeatsPerfect products.</p>
+        <a className="periodExternalLink" href="https://beatsperfect.shop" target="_blank" rel="noreferrer">
+          beatsperfect.shop
+        </a>
+      </section>
     </Shell>
   );
 }

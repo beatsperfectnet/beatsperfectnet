@@ -841,6 +841,33 @@ input {
   color: var(--bp-text);
 }
 
+.periodPublishLink {
+  display: grid;
+  gap: 12px;
+}
+
+.periodExternalLink {
+  display: inline-flex;
+  width: fit-content;
+  padding: 14px 18px;
+  border: 1px solid rgba(31, 111, 139, 0.18);
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(31, 111, 139, 0.1), rgba(244, 124, 87, 0.08));
+  color: var(--bp-text);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.periodExternalLink:hover {
+  transform: translateY(-1px);
+  border-color: rgba(31, 111, 139, 0.38);
+  box-shadow: 0 12px 24px rgba(16, 42, 67, 0.08);
+}
+
 .humanGrid {
   grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
 }

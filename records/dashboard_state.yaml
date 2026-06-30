@@ -1,5 +1,5 @@
 today:
-  asOf: 2026-06-30 11:59 GMT+2
+  asOf: 2026-06-30 18:40 GMT+2
   dataMode: event-log
   flowVersion: FLOW-007
   flowTimeline: &a1
@@ -9,39 +9,50 @@ today:
     - stageGroup: read
       stepIds:
         - 01_public_shelf_read
-    - stageGroup: purchase
-      stepIds:
-        - 02_competitor_selection_purchase_approval
-    - stageGroup: inspect
-      stepIds:
-        - 03_purchased_competitor_inspection
     - stageGroup: architecture
       stepIds:
-        - 04_product_architecture_contract
+        - 02_target_audience_exploration
+    - stageGroup: purchase
+      stepIds:
+        - 03_competitor_selection_purchase_approval
+    - stageGroup: inspect
+      stepIds:
+        - 04_purchased_competitor_inspection
+    - stageGroup: architecture
+      stepIds:
+        - 05_target_audience_lock
+        - 06_product_identity_reframe
+        - 07_product_architecture_contract
     - stageGroup: scenarios
       stepIds:
-        - 05_scenario_matrix
-    - stageGroup: readiness
-      stepIds:
-        - 06_build_readiness_review
+        - 08_scenario_matrix
     - stageGroup: build
       stepIds:
-        - 07_product_build
-    - stageGroup: artifact_qa
+        - 09_workbook_or_product_blueprint
+    - stageGroup: readiness
       stepIds:
-        - 08_real_artifact_inspection
-    - stageGroup: walkthrough
-      stepIds:
-        - 09_blind_buyer_walkthrough
-    - stageGroup: listing
-      stepIds:
-        - 10_listing_packaging_qa
+        - 10_build_readiness_review
     - stageGroup: pre_mortem
       stepIds:
-        - 11_pre_mortem_failure_analysis
+        - 11_pre_build_architecture_premortem
+    - stageGroup: build
+      stepIds:
+        - 12_product_build
+    - stageGroup: artifact_qa
+      stepIds:
+        - 13_real_artifact_inspection
+    - stageGroup: walkthrough
+      stepIds:
+        - 14_blind_buyer_walkthrough
+    - stageGroup: listing
+      stepIds:
+        - 15_listing_packaging_qa
+    - stageGroup: pre_mortem
+      stepIds:
+        - 16_pre_mortem_failure_analysis
     - stageGroup: launch
       stepIds:
-        - 12_founder_launch_gate
+        - 17_founder_launch_gate
   sourceRefs:
     activeFlow: config/active-flow.yaml
     candidateRecords: records/candidates/*.yaml
@@ -53,8 +64,8 @@ today:
     pipelineCandidates: 0
     inFlightCandidates: 2
     launchedCandidates: 0
-    rejectedCandidates: 1
-    totalSpendUsd: 20
+    rejectedCandidates: 0
+    totalSpendUsd: 0
     productApiCostUsd: 0
     governanceApiCostUsd: 0
     unallocatedApiCostUsd: 0
@@ -62,7 +73,7 @@ today:
     pipelineUsdTotal: 0
     inFlightUsdTotal: 0
     launchedUsdTotal: 0
-    rejectedUsdTotal: 20
+    rejectedUsdTotal: 0
     pipelineTokensTotal: 0
     inFlightTokensTotal: 0
     launchedTokensTotal: 0
@@ -76,8 +87,7 @@ today:
   inFlightCandidates:
     - candidateId: FLOW-007-NEXT
       candidateLabel: I-001
-      candidateTitle: To be selected by fresh market evidence under FLOW-007; no product thesis is locked before the pre-run
-        blocker set is addressed.
+      candidateTitle: To be selected by fresh market evidence under FLOW-007; no product thesis is locked before the pre-run blocker set is addressed.
       outcomeStatus: in_flight
       totalTokensUsed: 0
       totalUsdSpent: 0
@@ -88,11 +98,12 @@ today:
       refundCount: 0
       budgetHealth: green
       processHealth: green
-    - candidateId: C-008-001-SIM
-      candidateLabel: SIM-I-001
-      candidateTitle: Scope-to-Quote Planner workbook for freelancers who need to turn project inputs into a quote amount,
-        deposit, delivery window, and next step.
+    - candidateId: C-011-001
+      candidateLabel: I-001
+      candidateTitle: Etsy Pricing Decision Planner
       outcomeStatus: in_flight
+      currentStepId: 17_founder_launch_gate
+      currentStageGroup: launch
       totalTokensUsed: 0
       totalUsdSpent: 0
       launchTokens: 0
@@ -103,25 +114,7 @@ today:
       budgetHealth: green
       processHealth: green
   launchedCandidates: []
-  rejectedCandidates:
-    - candidateId: C-010-001
-      candidateLabel: I-001
-      candidateTitle: Handyman Quote Readiness Planner
-      outcomeStatus: rejected
-      rejectionReason: rejected_by_human_before_marketplace_publish
-      totalTokensUsed: 0
-      totalUsdSpent: 20
-      competitorPurchaseUsd: 3
-      buildApiCostUsd: 17
-      launchTokens: 0
-      governanceTokens: 0
-      postLaunchSupportTokens: 0
-      refundTokens: 0
-      refundCount: 0
-      archivedAt: archive/candidates/C-010-001/C-010-001-REJECTED
-      failedLabelRef: records/failed_product_labels/C-010-FAILED.yaml
-      budgetHealth: green
-      processHealth: green
+  rejectedCandidates: []
   activeEscalation:
     status: none
     scope: build
@@ -132,7 +125,7 @@ today:
     recommendedAction: ""
     governanceFile: governance/09_stage_dispatch_007.yaml
 period:
-  asOf: 2026-06-30 09:39 GMT+2
+  asOf: 2026-06-30 18:40 GMT+2
   from: 2026-06-22
   to: 2026-06-30
   dataMode: event-log
@@ -142,10 +135,10 @@ period:
     launchedCount: 0
     readyForLaunchCount: 1
     rejectedCount: 3
-    totalSpendUsd: 266.24
-    buildSpendUsd: 101.4
-    governanceApiCostUsd: 126.4
-    otherSpendUsd: 38.44
+    totalSpendUsd: 346.25
+    buildSpendUsd: 136.4
+    governanceApiCostUsd: 163.4
+    otherSpendUsd: 46.45
   buckets:
     - date: 2026-06-22
       launchedCount: 0
@@ -165,7 +158,7 @@ period:
       otherSpendUsd: 3.44
     - date: 2026-06-24
       launchedCount: 0
-      readyForLaunchCount: 1
+      readyForLaunchCount: 0
       rejectedCount: 0
       totalSpendUsd: 41.4
       buildSpendUsd: 22
@@ -213,9 +206,9 @@ period:
       otherSpendUsd: 25
     - date: 2026-06-30
       launchedCount: 0
-      readyForLaunchCount: 0
+      readyForLaunchCount: 1
       rejectedCount: 0
-      totalSpendUsd: 2.99
-      buildSpendUsd: 0
-      governanceApiCostUsd: 0
-      otherSpendUsd: 2.99
+      totalSpendUsd: 83
+      buildSpendUsd: 35
+      governanceApiCostUsd: 37
+      otherSpendUsd: 11
