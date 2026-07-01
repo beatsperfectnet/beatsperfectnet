@@ -1,10 +1,12 @@
 FLOW-007:
   purpose: market_derived_product_architecture_contract_flow_for_build_ready_digital_products
+  active_revision: FLOW-007-001
   rule: no_product_generation_before_build_readiness
   hard_rule: Only candidates with build_readiness.status = BUILD_READY may enter product generation.
   required_inputs:
     - company.md
     - docs/FLOW-007.md
+    - docs/FLOW-007-001.md
     - docs/COMPANY-MEMORY.md
     - governance/05_governance_rules.yaml
     - governance/product_lane_exclusions.yaml
@@ -13,6 +15,7 @@ FLOW-007:
     - governance/08_product_generation_budget_007.yaml
     - governance/09_stage_dispatch_007.yaml
     - governance/10_flow_007_pilot_policy.yaml
+    - governance/11_learning_loop.yaml
     - specs/SCHEMA-007.yaml
     - specs/MODEL-007.yaml
     - specs/BLS-007.yaml
@@ -23,6 +26,13 @@ FLOW-007:
     - templates/failed-product-label-template.yaml
     - templates/company-memory-preflight-template.yaml
     - templates/findings-ledger-template.yaml
+    - templates/failure-intake-template.yaml
+    - templates/postmortem-template.yaml
+    - templates/finding-template.yaml
+    - templates/flow-patch-template.yaml
+    - templates/regression-replay-template.yaml
+    - templates/company-memory-entry-template.yaml
+    - templates/learning-closure-template.yaml
     - templates/product-identity-reframe-template.yaml
     - templates/material-product-delta-template.yaml
     - templates/competitor-autopsy-template.yaml
@@ -36,6 +46,7 @@ FLOW-007:
     - brandbook/beatsperfect-brandbook.v1.yaml
     - templates/target-audience-exploration-template.yaml
     - templates/target-audience-lock-template.yaml
+    - docs/LEARN-001.md
   run_telemetry:
     runtime_launcher_ref: runtime/model-stage-launcher.mjs
     model_usage_ledger_required: true
@@ -144,8 +155,18 @@ FLOW-007:
         - 09_workbook_or_product_blueprint
         - 10_build_readiness_review
       close_at_or_before: 10_build_readiness_review
+    - failure_mode_id: REAL_WORLD_DECISION_LAYER_UNDERFIT
+      finding_class: build
+      summary: The contract solves an intermediate metric or sub-model but misses the buyer's real decision layer that evidence already implies.
+      hard_block_stages:
+        - 04_purchased_competitor_inspection
+        - 05_target_audience_lock
+        - 07_product_architecture_contract
+        - 10_build_readiness_review
+      close_at_or_before: 10_build_readiness_review
   pre_run:
     required_before_step_id: 00_market_evidence
+    learning_loop_ref: governance/11_learning_loop.yaml
     product_lane_exclusion_ref: governance/product_lane_exclusions.yaml
     admission_rules_ref: governance/03_admission_rules.yaml
     ideas_run_template_ref: templates/ideas-run-template.yaml
@@ -165,10 +186,16 @@ FLOW-007:
       - reject_if_current_candidate_lane_is_carried_forward_without_fresh_idea_generation
       - select_candidate_from_fresh_idea_set_with_why_this_lane_not_the_others_rationale
       - read_governance_product_lane_exclusions_before_any_new_run_starts
+      - read_learning_loop_records_before_any_new_run_starts
       - load_failed_product_label_records_for_any_matched_or_related_lane
       - reject_if_candidate_thesis_matches_excluded_product_lane_without_human_reopen_record
       - read_docs_company_memory_before_any_new_run_starts
       - extract_applicable_lessons_from_company_memory
+      - extract_applicable_active_memory_guards_and_map_each_to_owner_gate
+      - read_open_failure_intake_postmortem_finding_patch_replay_and_learning_closure_records_for_related_lane
+      - block_same_lane_run_if_any_applicable_learning_closure_is_not_FAILURE_CLOSED
+      - reject_active_company_memory_rule_without_owner_gate_mapping
+      - reject_active_company_memory_entry_without_passed_regression_replay
       - classify_each_applicable_lesson_as_build_finding_governance_finding_or_both
       - translate_current_evidence_into_canonical_failure_mode_assessments
       - require_each_canonical_failure_mode_to_be_marked_open_closed_or_not_applicable_for_this_run
@@ -187,12 +214,21 @@ FLOW-007:
       excluded_product_lane_blocks_run_before_market_evidence: true
       company_memory_preflight_required: true
       findings_ledger_required: true
+      open_applicable_learning_failures_block_same_lane_run: true
+      active_company_memory_rules_must_map_to_owner_gate: true
+      memory_entry_without_regression_replay_cannot_be_active: true
       canonical_failure_modes_assessment_required: true
       applicable_findings_must_be_classified_before_market_evidence: true
       every_canonical_failure_mode_must_be_assessed_before_market_evidence: true
       open_run_blockers_must_have_owner_gate_and_due_gate: true
       build_findings_cannot_be_closed_by_governance_wording_only: true
       governance_findings_cannot_be_closed_by_artifact_generation_only: true
+  on_failure:
+    learning_loop_ref: governance/11_learning_loop.yaml
+    trigger_learning_loop: LEARN-001
+    failure_intake_required: true
+    postmortem_required_for_serious_failures: true
+    same_lane_next_run_blocked_until_learning_closure: true
   flow:
     - step_id: 00_market_evidence
       agent_tier: medium
@@ -282,6 +318,9 @@ FLOW-007:
         - note_competitor_broken_parts_as_avoidance_examples_only
         - identify_category_standard_learned
         - record_domain_standard_decision_outputs_seen_or_missing_in_benchmark
+        - identify_real_world_decision_layer_decision_objective_and_aggregation_layer_in_benchmark
+        - classify_benchmark_outputs_as_intermediate_or_terminal_decision_layers
+        - identify_misleading_partial_models_that_look_complete_but_stop_short_of_real_buyer_decision_help
         - require_exactly_one_additional_purchase_or_equivalent_benchmark_evidence_if_purchased_artifact_is_broken_inaccessible_unrepresentative_or_insufficient_for_domain_standards
         - draft_benchmark_adequacy_review_for_frontier_approval
         - handoff_benchmark_adequacy_review_to_frontier_only
@@ -296,6 +335,7 @@ FLOW-007:
         benchmark_adequacy_final_review_model_required: gpt-5.5
         broken_inaccessible_shallow_or_unrepresentative_competitor_cannot_satisfy_benchmark: true
         unresolved_benchmark_adequacy_blocks_architecture: true
+        real_world_decision_layer_extraction_required: true
     - step_id: 05_target_audience_lock
       agent_tier: frontier
       model_policy_ref: MODEL-007.frontier_required.target_audience_lock
@@ -304,9 +344,11 @@ FLOW-007:
         - refine_surviving_tas_with_competitor_usage_pattern_evidence
         - cross_out_tas_contradicted_by_actual_competitor_usage
         - lock_exactly_one_primary_ta_and_jtbd
+        - lock_decision_altitude_real_world_decision_objective_and_terminal_success_measure
         - record_evidence_chain_from_exploration_plus_competitor_inspection
         - reject_if_locked_jtbd_describes_product_not_buyer_behavior
         - reject_if_locked_ta_has_no_competitor_inspection_evidence
+        - reject_if_locked_scope_stops_at_intermediate_metric_without_real_world_decision_objective
       output_file_template: records/target_audience_lock/TAL-XXXX.yaml
       template_ref: templates/target-audience-lock-template.yaml
       frontier_review_ref: MODEL-007.frontier_required.target_audience_lock
@@ -315,6 +357,8 @@ FLOW-007:
         exactly_one_primary_ta_locked: true
         locked_ta_evidence_from_both_exploration_and_inspection: true
         locked_jtbd_is_buyer_behavior_not_product_description: true
+        real_world_decision_objective_required: true
+        terminal_success_measure_required: true
         target_audience_lock_required_before_product_identity_reframe: true
     - step_id: 06_product_identity_reframe
       agent_tier: frontier
@@ -360,14 +404,19 @@ FLOW-007:
         - define_target_audience_contract
         - define_exact_trigger_moment_capability_band_and_current_workaround_for_primary_buyer
         - define_assumed_prior_knowledge_and_irreducible_value_after_that_knowledge
+        - define_real_world_decision_objective_decision_altitude_and_terminal_success_measure
         - reject_if_declared_buyer_must_already_do_the_full_judgment_without_meaningful_product_help
         - reject_if_audience_straddles_novice_and_expert_without_distinct_product_behavior_or_explicit_exclusion
         - define_buyer_behavior_contract
         - map_buyer_behavior_steps_to_required_inputs_transformations_decision_outputs_and_next_actions
         - define_domain_model_contract
+        - define_domain_evidence_in_terms_of_intermediate_metrics_terminal_metrics_and_aggregation_layer
+        - define_decision_dependencies_and_misleading_partial_models
+        - define_domain_completion_rule_for_when_scope_reaches_real_buyer_decision_help
         - define_domain_invariants_that_must_never_be_presented_as_healthy_successful_or_no_action
         - define_setup_input_propagation_requirements_for_every_buyer_visible_setting
         - define_decision_output_contract
+        - classify_outputs_as_intermediate_or_terminal_and_require_terminal_outputs_when_implied_by_evidence
         - define_machine_checkable_decision_output_locations_formula_or_logic_sources_and_truth_table_tests
         - define_working_capacity_requirements_not_demo_sample_only
         - define_visible_human_scale_capacity_floor_for_each_core_table
@@ -383,6 +432,7 @@ FLOW-007:
         - trace_every_non_trivial_feature_sheet_or_output_to_specific_evidence_ref
         - flag_features_without_evidence_trace_as_builder_invention
         - reject_builder_inventions_unless_explicitly_human_approved
+        - reject_scope_that_solves_only_an_intermediate_metric_without_reaching_the_real_world_decision_layer
       output_file_template: records/product_architecture_contract/PAC-XXXX.yaml
       template_ref: templates/product-architecture-contract-template.yaml
       gate:
@@ -398,6 +448,9 @@ FLOW-007:
         applicable_company_memory_findings_consumed_required: true
         applicable_canonical_failure_modes_must_be_mapped_into_contract_or_later_gate: true
         support_risk_acceptable_required: true
+        real_world_decision_layer_required_when_implied_by_evidence: true
+        intermediate_vs_terminal_metric_classification_required: true
+        terminal_decision_outputs_required_when_domain_evidence_implies_them: true
         failed_baseline_material_delta_required_when_same_domain_or_repair_seeded: true
         failed_artifact_cannot_be_used_as_product_blueprint: true
         seed_data_behavior_demo_must_support_primary_decision: true
@@ -478,7 +531,10 @@ FLOW-007:
         - verify_builder_input_completeness_pass_before_build
         - verify_target_audience_exploration_pass
         - verify_target_audience_lock_pass
+        - verify_real_world_decision_layer_is_reached_or_explicitly_blocked
+        - verify_terminal_decision_outputs_exist_when_implied_by_domain_evidence
         - run_scope_proportionality_check_against_price_point_buyer_and_category
+        - fail_if_scope_solves_only_intermediate_metric_without_terminal_decision_help
         - fail_if_total_scope_is_disproportionate_to_price_point_and_buyer_sophistication
         - set_build_readiness_status
       output_file_template: records/build_readiness/BRR-XXXX.yaml
@@ -495,6 +551,8 @@ FLOW-007:
         no_build_ready_for_governance_only_delta: true
         target_audience_exploration_status_required: PASS
         target_audience_lock_status_required: PASS
+        real_world_decision_layer_reached_or_explicitly_blocked: true
+        terminal_decision_outputs_present_when_implied: true
         scope_proportionality_check_required: true
     - step_id: 11_pre_build_architecture_premortem
       agent_tier: frontier
@@ -635,6 +693,7 @@ FLOW-007:
         - require_each_image_to_have_one_promise_and_matching_reason_to_believe
         - verify_final_creatives_are_built_from_verified_product_surfaces
         - verify_product_surface_is_large_enough_to_prove_the_claim
+        - reject_clipped_truncated_overlapping_or_squeezed_buyer_facing_text
         - reject_clean_screenshots_without_buyer_hook
         - reject_report_slide_layout_or_screenshot_presence_as_the_only_hook
         - reject_unverified_compatibility_or_protection_claims
@@ -751,6 +810,7 @@ FLOW-007:
         max_attempts: 2
         rebuild_instruction_required_when_REBUILD_REQUIRED: true
         escalation_detail_required_when_REJECTED_ESCALATE: true
+        if_launch_rejected_then_LEARN_001_required: true
   statuses:
     - IDEA_RECEIVED
     - MARKET_REJECTED
@@ -768,10 +828,28 @@ FLOW-007:
     - NOT_BUILD_READY
     - BUILD_READY
     - BUILT_QA_FAILED_IMPLEMENTATION
+    - BUILT_QA_FAILED_IMPLEMENTATION_AFTER_REPAIR
     - BUILT_QA_FAILED_ARCHITECTURE
     - LISTING_FAILED
+    - FOUNDER_REJECTED
+    - LAUNCH_GATE_FAILED
+    - COST_OVERRUN
+    - REPEATED_RERUN_WITH_NO_MATERIAL_DELTA
+    - FAILURE_INTAKE_REQUIRED
+    - POSTMORTEM_REQUIRED
+    - FINDINGS_EXTRACTION_REQUIRED
+    - FLOW_PATCH_REQUIRED
+    - REGRESSION_REPLAY_REQUIRED
+    - COMPANY_MEMORY_UPDATE_REQUIRED
+    - ACTIVE_GUARD_REQUIRED
+    - FAILURE_CLOSED
     - LAUNCH_READY
     - REBUILD_REQUIRED
     - REJECTED_ESCALATE
     - LAUNCHED
     - FLOW_006_FAILURE_CASE
+  revision_history:
+    - revision_id: FLOW-007-001
+      status: ACTIVE
+      reason: tighten_domain_evidence_and_real_decision_layer_contracts_inside_FLOW_007
+      doc_ref: docs/FLOW-007-001.md

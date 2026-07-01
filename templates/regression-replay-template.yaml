@@ -1,0 +1,34 @@
+regression_replay:
+  replay_id:
+  source_failure_id:
+  source_postmortem_id:
+  source_findings:
+    -
+  source_flow_patches:
+    -
+  candidate_id:
+  flow_version: FLOW-007
+  replay_mode: dry_run
+  replay_objective:
+  original_failure_stage:
+  expected_block_stage:
+  failed_case_summary:
+  should_reach_build:
+  build_performed:
+  expected_scope_behavior:
+  autonomy_result:
+  evidence_refresh_required:
+  replay_steps:
+    -
+  expected_behavior:
+  actual_behavior:
+  pass_fail:
+  gate:
+    failed_case_must_be_blocked_earlier_than_original_failure: true
+    no_build_allowed_during_regression_replay_if_expected_no_build: true
+    failed_case_must_either_block_earlier_or_derive_correct_terminal_decision_layer: true
+  status:
+  allowed_statuses:
+    - REGRESSION_REPLAY_REQUIRED
+    - PASS
+    - FAIL

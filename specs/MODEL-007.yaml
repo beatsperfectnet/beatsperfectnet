@@ -1,5 +1,6 @@
 MODEL-007:
   purpose: governed_model_routing_for_flow_007_architecture_first_generation
+  active_revision: FLOW-007-001
   default_model_rule: Use the lowest-cost non-pro model by default. Escalate only where repository rules allow or where explicitly needed for architecture-readiness review.
   first_three_pilots_override:
     policy_ref: governance/10_flow_007_pilot_policy.yaml
@@ -41,6 +42,8 @@ MODEL-007:
         - scenario_matrix_final_approval
         - workbook_or_product_blueprint_final_approval
         - architecture_readiness_review_escalation
+        - serious_failure_postmortem
+        - learning_loop_patch_planning
         - build_readiness_review_final_approval
         - pre_build_architecture_premortem
         - founder_rejection_escalation
@@ -104,6 +107,12 @@ MODEL-007:
     launch_readiness:
       governed_model_tier: frontier
       requested_model: gpt-5.5
+    serious_failure_postmortem:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+    learning_loop_patch_planning:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
   stage_routing:
     market_evidence:
       governed_model_tier: medium
@@ -156,6 +165,23 @@ MODEL-007:
     pre_mortem_failure_analysis:
       governed_model_tier: frontier
       requested_model: gpt-5.5
+  learning_loop_routing:
+    serious_failure_postmortem:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      hard_rule: Serious failures require a frontier post-mortem before the company may repeat the lane or activate a new memory guard.
+    patch_planning:
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      hard_rule: Governance, model-routing, validator, template, schema, and memory findings require explicit flow patch planning before closure.
+    regression_replay:
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+      hard_rule: Regression replay proves the failed case is blocked earlier and must stay build-free when expected behavior says should_reach_build is false.
+    active_guard_validation:
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+      hard_rule: Company memory may activate only after replay-backed guard validation maps the rule to an owner gate.
   pilot_mandatory_frontier_stage_routing:
     market_evidence_adequacy_final_review:
       governed_model_tier: frontier
@@ -260,7 +286,7 @@ MODEL-007:
         - stronger_feature_surface_alternative_is_rejected_only_for_price_visibility
         - selected_product_could_distort_candidate_scope
     purchased_competitor_inspection:
-      hard_rule: Broken competitor parts are evidence and build requirements, not automatic proof that the market-derived opportunity is invalid.
+      hard_rule: Broken competitor parts are evidence and build requirements, not automatic proof that the market-derived opportunity is invalid. Competitor inspection must also extract the benchmark's real-world decision layer so the flow does not copy an underfit scope.
       required_classifications:
         - market_evidence
         - build_requirement
@@ -274,6 +300,7 @@ MODEL-007:
         - gpt_5_5_final_review
       fail_if:
         - medium_draft_is_treated_as_final_adequacy_approval
+        - real_world_decision_layer_not_extracted_from_benchmark
     product_identity_reframe:
       hard_rule: The product identity must distinguish the actual buyer-decision product from the market category label and the failed baseline class.
       required_outputs:
@@ -295,6 +322,12 @@ MODEL-007:
         - buyer_behavior_to_input_transformation_output_map
         - input_to_decision_map
         - next_action_map
+        - real_world_decision_objective
+        - intermediate_metrics
+        - terminal_metrics
+        - output_layer_classification
+        - terminal_decision_outputs_required
+        - domain_completion_rule
         - domain_invariants
         - setup_input_propagation_requirements
         - machine_checkable_decision_output_locations
@@ -314,11 +347,14 @@ MODEL-007:
         - audience_collapses_novice_and_expert_without_distinct_behavior_or_explicit_exclusion
         - product_value_after_assumed_prior_knowledge_is_weak_or_unstated
         - product_requires_buyer_to_already_do_the_full_judgment_without_meaningful_decision_help
+        - target_audience_is_locked_to_intermediate_metric_without_real_world_decision_objective
         - buyer_primary_decision_missing
         - buyer_behavior_loop_missing
         - buyer_behavior_does_not_improve_on_the_current_workaround
         - domain_model_missing_dated_events_for_time_changing_values
+        - terminal_decision_layer_implied_by_evidence_is_missing_from_domain_model
         - decision_outputs_missing_or_unsupported_by_domain_model
+        - decision_outputs_stop_at_intermediate_metric_without_terminal_decision_help
         - competitor_category_standard_unknown
         - product_direction_was_not_derived_from_market_evidence_and_purchased_benchmark
         - jtbd_is_defined_as_output_feature_scope_product_category_or_status_without_buyer_behavior_loop
@@ -332,6 +368,7 @@ MODEL-007:
         - applicable_canonical_failure_mode_unmapped_to_contract_or_later_gate
         - claimed_delta_is_only_governance_records_model_routing_or_cleaner_writing
         - seed_data_would_not_demonstrate_the_primary_decision_in_the_declared_demo_context
+        - mathematically_correct_submodel_is_presented_as_complete_buyer_decision_help
     scenario_matrix:
       hard_rule: Scenario Matrix must pass before build.
       required_outputs:
@@ -390,7 +427,7 @@ MODEL-007:
         - builder_must_invent_demo_fixture
         - forbidden_architecture_patterns_missing
     build_readiness_review:
-      hard_rule: Build starts only if build_readiness.status is BUILD_READY.
+      hard_rule: Build starts only if build_readiness.status is BUILD_READY. A build cannot be considered ready if it solves only an intermediate metric while leaving the buyer's real-world decision layer unresolved.
       stronger_model_escalation_rule: Stronger model escalation should happen before build-readiness approval, not after repeated failed rebuilds.
       fail_if:
         - product_identity_reframe_missing_or_failed
@@ -407,6 +444,8 @@ MODEL-007:
         - material_product_delta_missing_when_applicable
         - contract_is_a_restatement_of_failed_artifact_with_new_governance
         - material_delta_is_governance_only
+        - scope_underfit_to_real_world_decision_layer
+        - terminal_decision_outputs_missing_when_implied_by_domain_evidence
     pre_build_architecture_premortem:
       hard_rule: Assume the built product is rejected by Andrey and identify whether the same failed artifact path still survives.
       required_outputs:
@@ -544,6 +583,7 @@ MODEL-007:
         - report_slide_layout_as_thumbnail
         - screenshot_presence_as_the_only_hook
         - tiny_product_surface_that_cannot_prove_claim
+        - text_overlaps_clips_or_is_not_readable_on_buyer_facing_assets
         - unverified_compatibility_or_protection_claim
     pre_mortem_failure_analysis:
       hard_rule: "First audit whether TA, JTBD, and KPP assumptions trace to market evidence and whether each built feature serves the locked JTBD. Then identify specific preventable offer failures. On attempt 1, blockers produce rebuild_recommended; on attempt 2, any blocker produces blocked."

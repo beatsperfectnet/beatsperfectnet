@@ -2,6 +2,7 @@ product_architecture_contract:
   product_id:
   candidate_id:
   flow_version: FLOW-007
+  flow_revision: FLOW-007-001
   company_memory_preflight_ref:
   findings_ledger_ref:
   target_audience_lock_ref:
@@ -77,6 +78,10 @@ product_architecture_contract:
       - assumed_prior_knowledge
       - buyer_judgment_still_required
       - product_value_after_prior_knowledge
+      - decision_altitude
+      - success_is_measured_by
+      - real_world_decision_objective
+      - intermediate_metrics_not_optimized_directly
       - not_valuable_for
       - data_maturity_segments
       - real_use_cases_by_segment
@@ -95,6 +100,7 @@ product_architecture_contract:
         - target_audience_has_specific_trigger_moment_and_capability_band
         - current_workaround_and_value_delta_are_explicit
         - product_value_remains_material_after_assumed_prior_knowledge
+        - real_world_decision_objective_and_success_measure_are_explicit
         - product_does_not_require_the_buyer_to_already_do_the_full_job_mentally
         - excluded_buyers_and_non_scope_are_explicit
         - product_behavior_changes_by_data_maturity_when_relevant
@@ -102,6 +108,8 @@ product_architecture_contract:
         - target_audience_is_a_category_name_or_generic_small_business
         - audience_collapses_novice_and_expert_without_distinct_product_behavior_or_explicit_exclusion
         - assumed_prior_knowledge_or_capability_band_is_missing
+        - real_world_decision_objective_or_decision_altitude_is_missing
+        - target_audience_is_locked_to_intermediate_metric_only
         - product_is_only_a_faster_calculator_or_data_entry_shell_for_declared_buyer
         - exact_trigger_moment_or_current_workaround_is_missing
         - launch_blocking_mismatch_scenarios_are_missing
@@ -148,16 +156,28 @@ product_architecture_contract:
       - data_integrity_rules
       - domain_invariants
       - setup_input_propagation_requirements
-    hard_rule: If a real-world value changes over time and affects future decisions, the product must not model it only as an overwritten static field. It must be represented as a dated event or dated settings change where appropriate.
+      - real_world_decision
+      - decision_objective
+      - intermediate_metrics
+      - terminal_metrics
+      - decision_dependencies
+      - aggregation_layer
+      - misleading_partial_models
+      - domain_completion_rule
+    hard_rule: If a real-world value changes over time and affects future decisions, the product must not model it only as an overwritten static field. It must be represented as a dated event or dated settings change where appropriate. If domain evidence implies a higher real-world decision layer, the contract must represent that layer explicitly instead of stopping at a mathematically correct sub-model.
     c004_canonical_example: Opening Stock must not be treated as a static SKU field for a replenishment decision workbook. Stock is a dated physical state changed by sales, purchases/receipts, adjustments, and later counts.
     pass_fail_criteria:
       pass:
         - static_reference_data_is_separated_from_dated_events
         - time_changing_decision_values_are_modeled_as_events_or_dated_settings
         - calculated_state_is_derived_from_events_and_rules
+        - intermediate_metrics_and_terminal_metrics_are_distinguished
+        - domain_completion_rule_reaches_real_world_decision_help
       fail:
         - time_changing_values_are_overwritten_static_fields
         - invalid_static_assumptions_are_unresolved
+        - terminal_decision_layer_implied_by_evidence_is_missing
+        - domain_model_stops_at_intermediate_metric_only
     blockers:
       - 
   decision_output_contract:
@@ -169,10 +189,14 @@ product_architecture_contract:
       - explanation_required
       - unsupported_outputs
       - failure_if_missing
+      - intermediate_outputs
+      - terminal_outputs
+      - output_layer_classification
+      - terminal_decision_outputs_required
       - machine_checkable_output_locations
       - formula_or_logic_sources
       - truth_table_tests
-    hard_rule: If promised decision outputs are missing or unsupported by the domain model, status is NOT_BUILD_READY.
+    hard_rule: If promised decision outputs are missing or unsupported by the domain model, status is NOT_BUILD_READY. If domain evidence implies a terminal decision layer, outputs that stop at intermediate metrics are not enough.
     c004_required_buyer_decision: When should I reorder each SKU, and how much should I buy?
     c004_required_outputs:
       - on hand
@@ -189,9 +213,11 @@ product_architecture_contract:
         - primary_buyer_decision_is_operational
         - non_negotiable_outputs_are_supported_by_domain_model
         - warnings_and_confidence_states_are_defined
+        - terminal_outputs_exist_when_domain_evidence_implies_them
       fail:
         - promised_outputs_are_missing
         - outputs_are_unsupported_by_inputs_or_domain_model
+        - outputs_stop_at_intermediate_metric_without_terminal_decision_help
     blockers:
       - 
   canonical_failure_mode_resolution:

@@ -53,17 +53,17 @@ const flow006Timeline = [
 const flow007Timeline = [
   { stageGroup: "market", stepIds: ["00_market_evidence"] },
   { stageGroup: "read", stepIds: ["01_public_shelf_read"] },
-  { stageGroup: "purchase", stepIds: ["02_competitor_selection_purchase_approval"] },
-  { stageGroup: "inspect", stepIds: ["03_purchased_competitor_inspection"] },
-  { stageGroup: "architecture", stepIds: ["04_product_architecture_contract"] },
-  { stageGroup: "scenarios", stepIds: ["05_scenario_matrix"] },
-  { stageGroup: "readiness", stepIds: ["06_build_readiness_review"] },
-  { stageGroup: "build", stepIds: ["07_product_build"] },
-  { stageGroup: "artifact_qa", stepIds: ["08_real_artifact_inspection"] },
-  { stageGroup: "walkthrough", stepIds: ["09_blind_buyer_walkthrough"] },
-  { stageGroup: "listing", stepIds: ["10_listing_packaging_qa"] },
-  { stageGroup: "pre_mortem", stepIds: ["11_pre_mortem_failure_analysis"] },
-  { stageGroup: "launch", stepIds: ["12_founder_launch_gate"] },
+  { stageGroup: "architecture", stepIds: ["02_target_audience_exploration", "05_target_audience_lock", "06_product_identity_reframe", "07_product_architecture_contract"] },
+  { stageGroup: "purchase", stepIds: ["03_competitor_selection_purchase_approval"] },
+  { stageGroup: "inspect", stepIds: ["04_purchased_competitor_inspection"] },
+  { stageGroup: "scenarios", stepIds: ["08_scenario_matrix"] },
+  { stageGroup: "build", stepIds: ["09_workbook_or_product_blueprint", "12_product_build"] },
+  { stageGroup: "readiness", stepIds: ["10_build_readiness_review"] },
+  { stageGroup: "pre_mortem", stepIds: ["11_pre_build_architecture_premortem", "16_pre_mortem_failure_analysis"] },
+  { stageGroup: "artifact_qa", stepIds: ["13_real_artifact_inspection"] },
+  { stageGroup: "walkthrough", stepIds: ["14_blind_buyer_walkthrough"] },
+  { stageGroup: "listing", stepIds: ["15_listing_packaging_qa"] },
+  { stageGroup: "launch", stepIds: ["17_founder_launch_gate"] },
 ];
 
 const stageTimeline = activeFlowId === "FLOW-007" ? flow007Timeline : flow006Timeline;
@@ -141,11 +141,11 @@ function stageGroupForStep(stepId) {
 function stepForEscalationStage(stageGroup) {
   const normalized = String(stageGroup || "").trim().toLowerCase();
   const map = {
-    flow_governance: activeFlowId === "FLOW-007" ? "04_product_architecture_contract" : "04_alignment_synthesis",
+    flow_governance: activeFlowId === "FLOW-007" ? "07_product_architecture_contract" : "04_alignment_synthesis",
     product_quality: "07_propagation_buyer_experience_product_visual_qa",
     product_model: "05_one_promise_propagation_system_spec",
     buyer_safety: "05_one_promise_propagation_system_spec",
-    purchase: activeFlowId === "FLOW-007" ? "02_competitor_selection_purchase_approval" : "02_mandatory_competitor_purchase",
+    purchase: activeFlowId === "FLOW-007" ? "03_competitor_selection_purchase_approval" : "02_mandatory_competitor_purchase",
     mandatory_competitor_purchase: "02_mandatory_competitor_purchase",
   };
   return map[normalized] || null;
@@ -159,15 +159,29 @@ function normalizeCurrentStep(candidate) {
   if (stageTimeline.some((stage) => stage.stepIds.includes(raw))) return raw;
 
   const aliases = {
-    purchase_approval: activeFlowId === "FLOW-007" ? "02_competitor_selection_purchase_approval" : "02_mandatory_competitor_purchase",
+    purchase_approval: activeFlowId === "FLOW-007" ? "03_competitor_selection_purchase_approval" : "02_mandatory_competitor_purchase",
     mandatory_competitor_purchase: "02_mandatory_competitor_purchase",
     publish_pending: "12_delivery_launch",
     marketplace_publish: "12_delivery_launch",
     ready_for_marketplace_publish: "12_delivery_launch",
     pass_pending_marketplace_publish: "12_delivery_launch",
     published: "12_monthly_outcomes",
-    FLOW_006_FAILURE_CASE: activeFlowId === "FLOW-007" ? "06_build_readiness_review" : "04_build_readiness_review",
-    NOT_BUILD_READY: activeFlowId === "FLOW-007" ? "06_build_readiness_review" : "04_build_readiness_review",
+    FLOW_006_FAILURE_CASE: activeFlowId === "FLOW-007" ? "10_build_readiness_review" : "04_build_readiness_review",
+    NOT_BUILD_READY: activeFlowId === "FLOW-007" ? "10_build_readiness_review" : "04_build_readiness_review",
+    "02_competitor_selection_purchase_approval": "03_competitor_selection_purchase_approval",
+    "03_purchased_competitor_inspection": "04_purchased_competitor_inspection",
+    "04_product_identity_reframe": "06_product_identity_reframe",
+    "05_product_architecture_contract": "07_product_architecture_contract",
+    "06_scenario_matrix": "08_scenario_matrix",
+    "07_workbook_or_product_blueprint": "09_workbook_or_product_blueprint",
+    "08_build_readiness_review": "10_build_readiness_review",
+    "09_pre_build_architecture_premortem": "11_pre_build_architecture_premortem",
+    "10_product_build": "12_product_build",
+    "11_real_artifact_inspection": "13_real_artifact_inspection",
+    "12_blind_buyer_walkthrough": "14_blind_buyer_walkthrough",
+    "13_listing_packaging_qa": "15_listing_packaging_qa",
+    "14_pre_mortem_failure_analysis": "16_pre_mortem_failure_analysis",
+    "15_founder_launch_gate": "17_founder_launch_gate",
   };
   return aliases[raw] ?? null;
 }
@@ -502,8 +516,8 @@ function publicCandidateSnapshot(candidate) {
   const contractInvalidatesReview = activeContractChangedAfterCandidateReview(candidate);
   const stepChangeStepId = latestStepChange?.to_step_id || latestStepChange?.from_step_id || null;
   const currentStepId = validation?.build_readiness?.status === "NOT_BUILD_READY"
-    ? (activeFlowId === "FLOW-007" ? "06_build_readiness_review" : "04_build_readiness_review")
-    : stepChangeStepId || (contractInvalidatesReview ? (activeFlowId === "FLOW-007" ? "04_product_architecture_contract" : "04_alignment_synthesis") : (escalationStepId || normalizeCurrentStep(candidate)));
+      ? (activeFlowId === "FLOW-007" ? "10_build_readiness_review" : "04_build_readiness_review")
+    : stepChangeStepId || (contractInvalidatesReview ? (activeFlowId === "FLOW-007" ? "07_product_architecture_contract" : "04_alignment_synthesis") : (escalationStepId || normalizeCurrentStep(candidate)));
   const currentStageGroup = currentStepId ? stageGroupForStep(currentStepId) : null;
   const launch = launchRecord(candidate);
   const terminalReason = status === "rejected_before_launch"
@@ -573,7 +587,7 @@ function activePurchaseEscalation(candidates) {
     const purchaseStatus = String(candidate.purchase_status || "").toLowerCase();
     const isPurchaseStep =
       currentStepId === "02_mandatory_competitor_purchase" ||
-      currentStepId === "02_competitor_selection_purchase_approval";
+      currentStepId === "03_competitor_selection_purchase_approval";
     const isComplete =
       purchaseStatus === "complete" ||
       purchaseStatus === "completed" ||
@@ -582,7 +596,7 @@ function activePurchaseEscalation(candidates) {
   });
   if (!pendingPurchaseCandidate) return null;
 
-  const isFlow007 = normalizeCurrentStep(pendingPurchaseCandidate) === "02_competitor_selection_purchase_approval";
+  const isFlow007 = normalizeCurrentStep(pendingPurchaseCandidate) === "03_competitor_selection_purchase_approval";
 
   return {
     status: "pending",

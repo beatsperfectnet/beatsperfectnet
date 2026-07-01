@@ -2,8 +2,12 @@ findings_ledger:
   findings_id:
   candidate_id:
   flow_version: FLOW-007
+  learning_loop_ref: governance/11_learning_loop.yaml
   company_memory_preflight_ref:
   canonical_failure_modes_catalog_ref: workflows/FLOW-007.yaml#canonical_failure_modes
+  applicable_memory_rule_gate_map:
+    - memory_entry_id:
+      owner_gate:
   build_findings:
     - finding_id:
       failure_mode_id:
@@ -59,6 +63,9 @@ findings_ledger:
       blocker_status:
       close_only_with:
         -
+  open_learning_failure_refs:
+    - source_failure_id:
+      closure_ref:
   closure_rules:
     build_findings_cannot_be_closed_by_governance_wording_only: true
     governance_findings_cannot_be_closed_by_artifact_generation_only: true
@@ -66,6 +73,8 @@ findings_ledger:
     open_applicable_findings_must_be_carried_to_launch_gate: true
     required_pre_build_run_blockers_must_be_resolved_before_BUILD_READY: true
     no_open_run_blocker_due_by_gate_can_be_ignored: true
+    open_applicable_learning_failures_block_same_lane_run: true
+    memory_entry_without_regression_replay_cannot_be_active: true
   open_findings:
     - finding_id:
       failure_mode_id:

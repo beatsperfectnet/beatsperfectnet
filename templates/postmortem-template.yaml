@@ -1,0 +1,49 @@
+postmortem:
+  postmortem_id:
+  source_failure_id:
+  candidate_id:
+  product_id:
+  run_id:
+  flow_version: FLOW-007
+  learning_loop_ref: governance/11_learning_loop.yaml
+  seriousness: serious_failure
+  required_model: gpt-5.5
+  candidate_outcome:
+  process_outcome:
+  what_failed:
+  root_cause:
+  failure_type:
+    primary:
+    contributing_types:
+      -
+  human_intervention_type:
+  human_intervention_changed:
+    scope: false
+    decision_outputs: false
+    architecture: false
+    buyer_promise: false
+  new_market_or_domain_evidence_added:
+  existing_evidence_should_have_been_sufficient:
+  missing_real_world_decision_layer:
+  domain_evidence_gap:
+    real_world_decision:
+    intermediate_metrics:
+      -
+    terminal_metrics:
+      -
+    misleading_partial_model:
+  earliest_missed_blocking_stage:
+  original_failure_stage:
+  product_repair_allowed:
+  flow_patch_required:
+  company_memory_update_required:
+  evidence_refs:
+    -
+  closure_gates:
+    earliest_missed_blocking_stage_required: true
+    root_cause_required: true
+    failure_type_required: true
+  status:
+  allowed_statuses:
+    - POSTMORTEM_REQUIRED
+    - FINDINGS_EXTRACTION_REQUIRED

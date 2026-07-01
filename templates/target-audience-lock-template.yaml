@@ -3,6 +3,7 @@ target_audience_lock:
   candidate_id: null
   product_id: null
   flow_version: FLOW-007
+  flow_revision: FLOW-007-001
   target_audience_exploration_ref: null
   competitor_autopsy_ref: null
   competitor_usage_pattern_evidence:
@@ -18,6 +19,10 @@ target_audience_lock:
     ta_id: null
     description: null
     jtbd_locked: null
+    decision_altitude: null
+    success_is_measured_by: null
+    real_world_decision_objective: null
+    intermediate_metrics_not_optimized_directly: []
     evidence_chain: []
     evidence_density: null
   excluded_tas:
@@ -42,17 +47,21 @@ target_audience_lock:
       - exactly_one_primary_ta_locked
       - locked_ta_has_grounded_evidence_from_both_exploration_and_competitor_inspection
       - locked_jtbd_is_specific_buyer_behavior_not_product_description
+      - locked_ta_names_real_world_decision_objective_and_terminal_success_measure
       - excluded_tas_have_explicit_reasons
     fail:
       - no_primary_ta_locked
       - locked_ta_has_no_competitor_inspection_evidence
       - locked_jtbd_is_a_generic_category_promise
+      - locked_ta_stops_at_intermediate_metric_without_real_world_decision_objective
       - multiple_primary_tas_locked_without_clear_hierarchy
-  hard_rule: "Exactly one primary TA must be locked before product identity reframe. The locked JTBD must trace to specific evidence from both market/shelf evidence and competitor inspection. Product identity reframe and PAC must serve this locked TA."
+  hard_rule: "Exactly one primary TA must be locked before product identity reframe. The locked JTBD must trace to specific evidence from both market/shelf evidence and competitor inspection. The lock must also capture the buyer's real-world decision objective and terminal success measure, not only a nearby sub-metric. Product identity reframe and PAC must serve this locked TA."
   fail_if:
     - no_primary_ta_locked_before_product_identity_reframe
     - locked_ta_has_zero_grounded_evidence_refs
     - locked_jtbd_describes_the_product_not_the_buyer_behavior
     - competitor_usage_patterns_contradict_locked_ta_without_resolution
+    - real_world_decision_objective_or_terminal_success_measure_missing
+    - locked_ta_is_defined_by_intermediate_metric_only
   blockers:
     - null

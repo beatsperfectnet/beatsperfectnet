@@ -1,0 +1,41 @@
+failure_intake:
+  failure_id:
+  product_id:
+  candidate_id:
+  run_id:
+  flow_version: FLOW-007
+  learning_loop_ref: governance/11_learning_loop.yaml
+  candidate_outcome:
+  process_outcome:
+  failure_stage:
+  failure_status:
+  trigger_source:
+    status:
+    process_outcome:
+    decision_layer_gap:
+    human_labels:
+      -
+  human_intervention_type:
+  human_intervention_changed:
+    scope: false
+    decision_outputs: false
+    architecture: false
+    buyer_promise: false
+  human_notes:
+  evidence_refs:
+    -
+  model_ledger_refs:
+    -
+  artifact_refs:
+    -
+  cost_refs:
+    -
+  same_lane_blocking_scope:
+    lane_id:
+    block_new_runs_until_learning_closure: true
+  gate:
+    failure_record_required: true
+  status:
+  allowed_statuses:
+    - FAILURE_INTAKE_REQUIRED
+    - POSTMORTEM_REQUIRED

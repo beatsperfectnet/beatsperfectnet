@@ -39,7 +39,9 @@ test("FLOW-007 defines canonical future-build blocker classes and enforces them 
     "FAILED_LANE_REUSE_WITHOUT_REOPEN",
     "TARGET_AUDIENCE_PRODUCT_INVERSION",
     "SCOPE_INFLATION_WITHOUT_EVIDENCE",
+    "REAL_WORLD_DECISION_LAYER_UNDERFIT",
   ]);
+  assert.equal(flow.active_revision, "FLOW-007-001");
   assert.equal(flow.pre_run.canonical_failure_modes_catalog_ref, "workflows/FLOW-007.yaml#canonical_failure_modes");
   assert.equal(flow.pre_run.gate.canonical_failure_modes_assessment_required, true);
   assert.equal(flow.pre_run.gate.every_canonical_failure_mode_must_be_assessed_before_market_evidence, true);
@@ -61,9 +63,12 @@ test("FLOW-007 defines canonical future-build blocker classes and enforces them 
   assert.equal(buildReadiness.canonical_failure_modes_catalog_ref, "workflows/FLOW-007.yaml#canonical_failure_modes");
   assert.ok("applicable_canonical_failure_modes_assessed" in buildReadiness.checks);
   assert.ok("no_open_run_blockers_due_by_build_readiness" in buildReadiness.checks);
+  assert.ok("real_world_decision_layer_reached_or_explicitly_blocked" in buildReadiness.checks);
+  assert.ok("terminal_decision_outputs_present_when_implied" in buildReadiness.checks);
   assert.ok(Array.isArray(buildReadiness.run_blocker_resolution));
   assert.ok(buildReadiness.fail_if.includes("applicable_canonical_failure_mode_not_assessed"));
   assert.ok(buildReadiness.fail_if.includes("open_run_blocker_due_by_build_readiness_still_open"));
+  assert.ok(buildReadiness.fail_if.includes("scope_underfit_to_real_world_decision_layer"));
 
   assert.equal(pac.canonical_failure_modes_catalog_ref, "workflows/FLOW-007.yaml#canonical_failure_modes");
   assert.ok("canonical_failure_mode_resolution" in pac);
@@ -74,17 +79,24 @@ test("FLOW-007 defines canonical future-build blocker classes and enforces them 
   assert.ok(schema.product_architecture_contract.required_sections.includes("canonical_failure_mode_resolution"));
   assert.ok(schema.build_readiness_review.required_checks.includes("applicable_canonical_failure_modes_assessed"));
   assert.ok(schema.build_readiness_review.required_checks.includes("no_open_run_blockers_due_by_build_readiness"));
+  assert.ok(schema.build_readiness_review.required_checks.includes("real_world_decision_layer_reached_or_explicitly_blocked"));
+  assert.ok(schema.competitor_autopsy.required_top_level_fields.includes("real_world_decision_layer"));
   assert.ok(schema.build_readiness_review.required_top_level_fields.includes("run_blocker_resolution"));
 
   assert.ok(bls.pre_build_tracking.includes("canonical_failure_modes_catalog_ref"));
   assert.ok(bls.pre_build_tracking.includes("open_run_blocker_ids"));
   assert.ok(bls.launch_requires.includes("no_open_run_blockers_due_by_launch"));
+  assert.ok(bls.launch_requires.includes("real_world_decision_layer_reached_or_explicitly_blocked"));
   assert.equal(bls.hard_blocks.required_pre_build_run_blockers_resolved_before_BUILD_READY, true);
+  assert.equal(bls.hard_blocks.real_world_decision_layer_underfit_blocks_BUILD_READY, true);
 
   assert.ok(model.stage_quality_rules.product_architecture_contract.required_outputs.includes("canonical_failure_mode_resolution"));
   assert.ok(model.stage_quality_rules.product_architecture_contract.fail_if.includes("applicable_canonical_failure_mode_unmapped_to_contract_or_later_gate"));
   assert.ok(model.stage_quality_rules.build_readiness_review.fail_if.includes("applicable_canonical_failure_mode_not_assessed"));
   assert.ok(model.stage_quality_rules.build_readiness_review.fail_if.includes("open_run_blocker_due_by_build_readiness_still_open"));
+  assert.ok(model.stage_quality_rules.product_architecture_contract.required_outputs.includes("real_world_decision_objective"));
+  assert.ok(model.stage_quality_rules.product_architecture_contract.fail_if.includes("decision_outputs_stop_at_intermediate_metric_without_terminal_decision_help"));
+  assert.ok(model.stage_quality_rules.build_readiness_review.fail_if.includes("scope_underfit_to_real_world_decision_layer"));
   assert.ok(model.stage_quality_rules.pre_build_architecture_premortem.required_outputs.includes("run_blocker_closure_check"));
   assert.ok(model.stage_quality_rules.pre_build_architecture_premortem.fail_if.includes("premortem_repeat_path_failure_mode_still_open_at_build"));
   assert.ok(model.stage_quality_rules.founder_launch_gate.fail_if.includes("open_run_blocker_due_by_launch_still_open"));
@@ -96,6 +108,7 @@ test("FLOW-007 is the active market-derived architecture-first flow", () => {
   const steps = flow.flow.map((stage) => stage.step_id);
 
   assert.equal(active.active_flow_id, "FLOW-007");
+  assert.equal(flow.active_revision, "FLOW-007-001");
   assert.deepEqual(steps, [
     "00_market_evidence",
     "01_public_shelf_read",
@@ -123,16 +136,21 @@ test("FLOW-007 is the active market-derived architecture-first flow", () => {
   assert.equal(flow.flow.find((stage) => stage.step_id === "04_purchased_competitor_inspection").gate.benchmark_adequacy_final_review_required, true);
   assert.equal(flow.flow.find((stage) => stage.step_id === "04_purchased_competitor_inspection").gate.benchmark_adequacy_final_review_status_required, "PASS");
   assert.equal(flow.flow.find((stage) => stage.step_id === "04_purchased_competitor_inspection").gate.benchmark_adequacy_final_review_model_required, "gpt-5.5");
+  assert.equal(flow.flow.find((stage) => stage.step_id === "04_purchased_competitor_inspection").gate.real_world_decision_layer_extraction_required, true);
   assert.equal(flow.flow.find((stage) => stage.step_id === "05_target_audience_lock").gate.target_audience_lock_status_required, "PASS");
   assert.equal(flow.flow.find((stage) => stage.step_id === "05_target_audience_lock").gate.exactly_one_primary_ta_locked, true);
+  assert.equal(flow.flow.find((stage) => stage.step_id === "05_target_audience_lock").gate.real_world_decision_objective_required, true);
   assert.equal(flow.flow.find((stage) => stage.step_id === "06_product_identity_reframe").gate.product_identity_status_required, "PASS");
   assert.equal(flow.flow.find((stage) => stage.step_id === "07_product_architecture_contract").gate.target_audience_contract_status_required, "PASS");
   assert.ok(flow.flow.find((stage) => stage.step_id === "07_product_architecture_contract").action.includes("define_exact_trigger_moment_capability_band_and_current_workaround_for_primary_buyer"));
   assert.ok(flow.flow.find((stage) => stage.step_id === "07_product_architecture_contract").action.includes("define_assumed_prior_knowledge_and_irreducible_value_after_that_knowledge"));
+  assert.ok(flow.flow.find((stage) => stage.step_id === "07_product_architecture_contract").action.includes("define_real_world_decision_objective_decision_altitude_and_terminal_success_measure"));
+  assert.equal(flow.flow.find((stage) => stage.step_id === "07_product_architecture_contract").gate.real_world_decision_layer_required_when_implied_by_evidence, true);
   assert.equal(flow.flow.find((stage) => stage.step_id === "08_scenario_matrix").gate.scenario_fixtures_required_before_build, true);
   assert.equal(flow.flow.find((stage) => stage.step_id === "09_workbook_or_product_blueprint").gate.product_blueprint_status_required, "PASS");
   assert.equal(flow.flow.find((stage) => stage.step_id === "10_build_readiness_review").gate.build_readiness_status_required, "BUILD_READY");
   assert.equal(flow.flow.find((stage) => stage.step_id === "10_build_readiness_review").gate.builder_input_completeness_status_required, "PASS");
+  assert.equal(flow.flow.find((stage) => stage.step_id === "10_build_readiness_review").gate.real_world_decision_layer_reached_or_explicitly_blocked, true);
   assert.equal(flow.flow.find((stage) => stage.step_id === "11_pre_build_architecture_premortem").gate.no_same_failed_product_path_remaining, true);
   assert.equal(flow.flow.find((stage) => stage.step_id === "13_real_artifact_inspection").gate.executable_adversarial_scenario_mutations_required, true);
   assert.equal(flow.flow.find((stage) => stage.step_id === "13_real_artifact_inspection").gate.architecture_vs_implementation_classification_required, true);
@@ -146,6 +164,8 @@ test("FLOW-007 requires measured material product delta against failed baselines
   const flow = load("workflows/FLOW-007.yaml")["FLOW-007"];
   const schema = load("specs/SCHEMA-007.yaml")["SCHEMA-007"];
   const pac = load("templates/product-architecture-contract-template.yaml").product_architecture_contract;
+  const targetAudienceLock = load("templates/target-audience-lock-template.yaml").target_audience_lock;
+  const autopsy = load("templates/competitor-autopsy-template.yaml").competitor_autopsy;
   const delta = load("templates/material-product-delta-template.yaml").material_product_delta;
   const launchGate = load("templates/launch-gate-template.yaml").launch_gate;
 
@@ -162,8 +182,24 @@ test("FLOW-007 requires measured material product delta against failed baselines
   assert.ok(pac.target_audience_contract.required_fields.includes("current_workaround"));
   assert.ok(pac.target_audience_contract.required_fields.includes("assumed_prior_knowledge"));
   assert.ok(pac.target_audience_contract.required_fields.includes("product_value_after_prior_knowledge"));
+  assert.ok(pac.target_audience_contract.required_fields.includes("decision_altitude"));
+  assert.ok(pac.target_audience_contract.required_fields.includes("real_world_decision_objective"));
   assert.ok(pac.target_audience_contract.pass_fail_criteria.pass.includes("product_value_remains_material_after_assumed_prior_knowledge"));
+  assert.ok(pac.target_audience_contract.pass_fail_criteria.pass.includes("real_world_decision_objective_and_success_measure_are_explicit"));
   assert.ok(pac.target_audience_contract.pass_fail_criteria.fail.includes("product_is_only_a_faster_calculator_or_data_entry_shell_for_declared_buyer"));
+  assert.ok(pac.domain_model_contract.required_fields.includes("terminal_metrics"));
+  assert.ok(pac.domain_model_contract.required_fields.includes("domain_completion_rule"));
+  assert.ok(pac.decision_output_contract.required_fields.includes("terminal_outputs"));
+  assert.ok(pac.decision_output_contract.required_fields.includes("output_layer_classification"));
+  assert.ok(pac.decision_output_contract.pass_fail_criteria.pass.includes("terminal_outputs_exist_when_domain_evidence_implies_them"));
+  assert.ok(pac.decision_output_contract.pass_fail_criteria.fail.includes("outputs_stop_at_intermediate_metric_without_terminal_decision_help"));
+  assert.equal(targetAudienceLock.flow_revision, "FLOW-007-001");
+  assert.ok(targetAudienceLock.fail_if.includes("locked_ta_is_defined_by_intermediate_metric_only"));
+  assert.ok("decision_altitude" in targetAudienceLock.locked_primary_ta);
+  assert.equal(autopsy.flow_revision, "FLOW-007-001");
+  assert.ok("real_world_decision_layer" in autopsy);
+  assert.ok("terminal_metrics" in autopsy);
+  assert.match(autopsy.hard_rule, /real-world decision layer/);
   assert.ok(pac.buyer_behavior_contract.required_fields.includes("before_product_decision_workaround"));
   assert.ok(pac.buyer_behavior_contract.required_fields.includes("after_product_decision_delta"));
   assert.ok(pac.buyer_behavior_contract.pass_fail_criteria.pass.includes("product_changes_the_decision_quality_speed_or_consistency_vs_the_current_workaround"));
@@ -240,6 +276,67 @@ test("FLOW-007 requires company memory preflight and findings ledger before runs
   assert.ok(c004Failed.failed_asset_refs.every((assetRef) => assetRef.startsWith("archive/candidates/")));
   assert.ok(c005Failed.failed_asset_refs.every((assetRef) => assetRef.startsWith("archive/candidates/")));
   assert.ok(c005Failed.future_build_input_policy.must_not_be_used_as.includes("product_blueprint"));
+});
+
+test("LEARN-001 closes serious FLOW-007 failures through replay-backed active guards", () => {
+  const flow = load("workflows/FLOW-007.yaml")["FLOW-007"];
+  const schema = load("specs/SCHEMA-007.yaml")["SCHEMA-007"];
+  const bls = load("specs/BLS-007.yaml")["BLS-007"];
+  const model = load("specs/MODEL-007.yaml")["MODEL-007"];
+  const dispatch = load("governance/09_stage_dispatch_007.yaml").stage_dispatch;
+  const pilotPolicy = load("governance/10_flow_007_pilot_policy.yaml").flow_007_pilot_policy;
+  const learningLoop = load("governance/11_learning_loop.yaml").learning_loop;
+  const preflight = load("templates/company-memory-preflight-template.yaml").company_memory_preflight;
+  const findings = load("templates/findings-ledger-template.yaml").findings_ledger;
+  const failure = load("records/failures/FAIL-0001.yaml").failure_intake;
+  const postmortem = load("records/postmortems/PMR-0001.yaml").postmortem;
+  const replay = load("records/regression_replays/RGR-0001.yaml").regression_replay;
+  const closure = load("records/learning_closure/LCL-0001.yaml").learning_closure;
+  const companyMemory = fs.readFileSync(path.join(repoRoot, "docs/COMPANY-MEMORY.md"), "utf8");
+
+  assert.equal(flow.pre_run.learning_loop_ref, "governance/11_learning_loop.yaml");
+  assert.equal(flow.pre_run.gate.open_applicable_learning_failures_block_same_lane_run, true);
+  assert.equal(flow.pre_run.gate.active_company_memory_rules_must_map_to_owner_gate, true);
+  assert.equal(flow.pre_run.gate.memory_entry_without_regression_replay_cannot_be_active, true);
+  assert.equal(flow.on_failure.trigger_learning_loop, "LEARN-001");
+  assert.equal(flow.on_failure.same_lane_next_run_blocked_until_learning_closure, true);
+  assert.equal(flow.flow.find((stage) => stage.step_id === "17_founder_launch_gate").gate.if_launch_rejected_then_LEARN_001_required, true);
+
+  for (const status of [
+    "FAILURE_INTAKE_REQUIRED",
+    "POSTMORTEM_REQUIRED",
+    "FINDINGS_EXTRACTION_REQUIRED",
+    "FLOW_PATCH_REQUIRED",
+    "REGRESSION_REPLAY_REQUIRED",
+    "COMPANY_MEMORY_UPDATE_REQUIRED",
+    "ACTIVE_GUARD_REQUIRED",
+    "FAILURE_CLOSED",
+  ]) {
+    assert.ok(schema.allowed_statuses.includes(status));
+    assert.ok(bls.statuses.includes(status));
+  }
+
+  assert.equal(preflight.learning_loop_ref, "governance/11_learning_loop.yaml");
+  assert.ok(preflight.fail_if.includes("applicable_active_memory_rule_missing_owner_gate"));
+  assert.ok(preflight.fail_if.includes("active_memory_entry_missing_passed_regression_replay"));
+  assert.ok(preflight.fail_if.includes("same_failed_lane_has_open_learning_closure"));
+  assert.equal(findings.learning_loop_ref, "governance/11_learning_loop.yaml");
+  assert.equal(findings.closure_rules.open_applicable_learning_failures_block_same_lane_run, true);
+  assert.equal(findings.closure_rules.memory_entry_without_regression_replay_cannot_be_active, true);
+
+  assert.equal(dispatch.learning_loop_stage_model_map["01_postmortem"].requested_model, "gpt-5.5");
+  assert.equal(model.learning_loop_routing.serious_failure_postmortem.requested_model, "gpt-5.5");
+  assert.equal(pilotPolicy.learning_loop.required_on_serious_failure, "LEARN-001");
+  assert.ok(learningLoop.hard_rules.includes("the_company_has_not_learned_until_the_same_failed_case_is_blocked_earlier"));
+
+  assert.equal(failure.candidate_id, "C-007-001");
+  assert.equal(postmortem.earliest_missed_blocking_stage, "pre_run");
+  assert.equal(replay.should_reach_build, false);
+  assert.equal(replay.build_performed, false);
+  assert.equal(replay.expected_block_stage, "pre_run");
+  assert.equal(replay.pass_fail, "PASS");
+  assert.equal(closure.status, "FAILURE_CLOSED");
+  assert.match(companyMemory, /MEM-LEARN-001-0001/);
 });
 
 test("FLOW-007 first three pilots require aggressive gpt-5.5 frontier gates", () => {
@@ -327,4 +424,23 @@ test("FLOW-007 live templates no longer require candidate domain briefs", () => 
   assert.ok(!("domain_brief_application" in geh));
   assert.ok(!("candidate_domain_brief_ref" in runLedger.stages[0]));
   assert.ok(!("candidate_domain_brief_ref" in dispatchTemplate.stages[0]));
+});
+
+test("today mappings only expose active FLOW-007 step ids", () => {
+  const todayTypes = fs.readFileSync(path.join(repoRoot, "lib/today/types.ts"), "utf8");
+  const dashboardUpdater = fs.readFileSync(path.join(repoRoot, "scripts/update-dashboard-state.mjs"), "utf8");
+
+  assert.doesNotMatch(todayTypes, /"02_competitor_selection_purchase_approval"/);
+  assert.doesNotMatch(todayTypes, /"03_purchased_competitor_inspection"/);
+  assert.doesNotMatch(todayTypes, /"04_product_architecture_contract"/);
+  assert.doesNotMatch(todayTypes, /"05_scenario_matrix"/);
+  assert.doesNotMatch(todayTypes, /"06_build_readiness_review"/);
+  assert.doesNotMatch(todayTypes, /"07_product_build"/);
+  assert.doesNotMatch(todayTypes, /"08_real_artifact_inspection"/);
+  assert.doesNotMatch(todayTypes, /"09_blind_buyer_walkthrough"/);
+  assert.doesNotMatch(todayTypes, /"10_listing_packaging_qa"/);
+  assert.doesNotMatch(todayTypes, /"11_pre_mortem_failure_analysis"/);
+  assert.doesNotMatch(todayTypes, /"12_founder_launch_gate"/);
+  assert.doesNotMatch(dashboardUpdater, /activeFlowId === "FLOW-007" \? "04_product_architecture_contract"/);
+  assert.match(dashboardUpdater, /activeFlowId === "FLOW-007" \? "07_product_architecture_contract"/);
 });

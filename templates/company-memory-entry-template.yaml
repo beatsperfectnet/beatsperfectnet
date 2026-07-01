@@ -1,0 +1,24 @@
+company_memory_entry:
+  memory_entry_id:
+  source_failure_id:
+  source_postmortem_id:
+  source_findings:
+    -
+  source_flow_patch:
+    -
+  source_regression_replay:
+  failure_pattern:
+  root_cause:
+  candidate_outcome:
+  process_outcome:
+  active_rule:
+  applies_to:
+    -
+  owner_gate:
+  must_block_if:
+    -
+  must_require:
+    -
+  closure_evidence:
+    -
+  status: ACTIVE

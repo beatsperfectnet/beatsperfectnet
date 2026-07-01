@@ -10,48 +10,48 @@ export const stageLabels: Array<{ label: StageGroup; steps: FlowStepId[] }> = [
     steps: ["01_public_shelf_read"]
   },
   {
+    label: "architecture",
+    steps: ["02_target_audience_exploration", "05_target_audience_lock", "06_product_identity_reframe", "07_product_architecture_contract"]
+  },
+  {
     label: "purchase",
-    steps: ["02_competitor_selection_purchase_approval"]
+    steps: ["03_competitor_selection_purchase_approval"]
   },
   {
     label: "inspect",
-    steps: ["03_purchased_competitor_inspection"]
-  },
-  {
-    label: "architecture",
-    steps: ["04_product_architecture_contract"]
+    steps: ["04_purchased_competitor_inspection"]
   },
   {
     label: "scenarios",
-    steps: ["05_scenario_matrix"]
-  },
-  {
-    label: "readiness",
-    steps: ["06_build_readiness_review"]
+    steps: ["08_scenario_matrix"]
   },
   {
     label: "build",
-    steps: ["07_product_build"]
+    steps: ["09_workbook_or_product_blueprint", "12_product_build"]
   },
   {
-    label: "artifact_qa",
-    steps: ["08_real_artifact_inspection"]
-  },
-  {
-    label: "walkthrough",
-    steps: ["09_blind_buyer_walkthrough"]
-  },
-  {
-    label: "listing",
-    steps: ["10_listing_packaging_qa"]
+    label: "readiness",
+    steps: ["10_build_readiness_review"]
   },
   {
     label: "pre_mortem",
-    steps: ["11_pre_mortem_failure_analysis"]
+    steps: ["11_pre_build_architecture_premortem", "16_pre_mortem_failure_analysis"]
+  },
+  {
+    label: "artifact_qa",
+    steps: ["13_real_artifact_inspection"]
+  },
+  {
+    label: "walkthrough",
+    steps: ["14_blind_buyer_walkthrough"]
+  },
+  {
+    label: "listing",
+    steps: ["15_listing_packaging_qa"]
   },
   {
     label: "launch",
-    steps: ["12_founder_launch_gate"]
+    steps: ["17_founder_launch_gate"]
   },
   {
     label: "admission",

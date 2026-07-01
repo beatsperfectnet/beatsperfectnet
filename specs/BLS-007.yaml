@@ -1,5 +1,6 @@
 BLS-007:
   purpose: build_lifecycle_specification_for_flow_007
+  active_revision: FLOW-007-001
   candidate_stages:
     - market_evidence
     - public_shelf_read
@@ -34,8 +35,21 @@ BLS-007:
     - NOT_BUILD_READY
     - BUILD_READY
     - BUILT_QA_FAILED_IMPLEMENTATION
+    - BUILT_QA_FAILED_IMPLEMENTATION_AFTER_REPAIR
     - BUILT_QA_FAILED_ARCHITECTURE
     - LISTING_FAILED
+    - FOUNDER_REJECTED
+    - LAUNCH_GATE_FAILED
+    - COST_OVERRUN
+    - REPEATED_RERUN_WITH_NO_MATERIAL_DELTA
+    - FAILURE_INTAKE_REQUIRED
+    - POSTMORTEM_REQUIRED
+    - FINDINGS_EXTRACTION_REQUIRED
+    - FLOW_PATCH_REQUIRED
+    - REGRESSION_REPLAY_REQUIRED
+    - COMPANY_MEMORY_UPDATE_REQUIRED
+    - ACTIVE_GUARD_REQUIRED
+    - FAILURE_CLOSED
     - LAUNCH_READY
     - REBUILD_REQUIRED
     - REJECTED_ESCALATE
@@ -46,12 +60,15 @@ BLS-007:
     - candidate_run_ref
     - company_memory_preflight_ref
     - findings_ledger_ref
+    - learning_loop_ref
     - canonical_failure_modes_catalog_ref
     - canonical_failure_modes_assessed
     - open_run_blocker_ids
     - run_blocker_owner_gates
     - open_build_findings
     - open_governance_findings
+    - open_learning_failure_refs
+    - active_memory_owner_gate_map
     - market_evidence_ref
     - market_evidence_status
     - competitor_autopsy_ref
@@ -59,6 +76,7 @@ BLS-007:
     - product_identity_reframe_ref
     - product_identity_status
     - product_architecture_contract_ref
+    - flow_revision
     - target_audience_contract_status
     - buyer_behavior_contract_status
     - domain_model_contract_status
@@ -75,9 +93,13 @@ BLS-007:
     - material_product_delta_status
   launch_requires:
     - company_memory_preflight_passed
+    - no_open_learning_failures_for_same_lane
+    - active_company_memory_rules_mapped_to_owner_gate
     - applicable_build_findings_closed_or_carried_to_launch_gate
     - applicable_governance_findings_closed_or_carried_to_launch_gate
     - no_open_run_blockers_due_by_launch
+    - real_world_decision_layer_reached_or_explicitly_blocked
+    - terminal_decision_outputs_present_when_implied
     - product_identity_reframe_passed
     - build_readiness_status_BUILD_READY
     - product_architecture_contract_cited_by_product_spec
@@ -112,10 +134,13 @@ BLS-007:
     failed_architecture_artifact_cannot_be_launch_ready: true
     no_product_generation_without_BUILD_READY: true
     no_run_start_without_company_memory_preflight: true
+    no_same_lane_repeat_without_learning_closure: true
     no_run_start_without_fresh_idea_generation_and_candidate_admission: true
     required_pre_build_run_blockers_resolved_before_BUILD_READY: true
+    real_world_decision_layer_underfit_blocks_BUILD_READY: true
     build_findings_cannot_be_closed_by_governance_wording_only: true
     governance_findings_cannot_be_closed_by_artifact_generation_only: true
+    memory_entry_without_passed_regression_replay_cannot_be_active: true
   repair_loop_limits:
     launch_gate_max_attempts: 2
     attempt_1_failure_status: REBUILD_REQUIRED

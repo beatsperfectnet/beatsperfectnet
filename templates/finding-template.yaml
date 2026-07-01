@@ -1,0 +1,32 @@
+finding:
+  finding_id:
+  source_failure_id:
+  source_postmortem_id:
+  candidate_id:
+  product_id:
+  flow_version: FLOW-007
+  finding_type:
+  severity:
+  failure_pattern:
+  evidence_refs:
+    -
+  process_failure_classification:
+  decision_layer_classification:
+    current_layer:
+    required_layer:
+    current_layer_type:
+    required_layer_type:
+  target_control:
+  required_patch:
+  validation_test:
+  closure_requirement:
+  owner_gate:
+  hard_rules:
+    governance_findings_cannot_be_closed_by_rebuilding_an_artifact: true
+    build_findings_cannot_be_closed_by_adding_vague_governance_wording: true
+  status:
+  allowed_statuses:
+    - FINDINGS_EXTRACTION_REQUIRED
+    - FLOW_PATCH_REQUIRED
+    - REGRESSION_REPLAY_REQUIRED
+    - COMPANY_MEMORY_UPDATE_REQUIRED

@@ -2,6 +2,7 @@ competitor_autopsy:
   candidate_id:
   product_id:
   flow_version: FLOW-007
+  flow_revision: FLOW-007-001
   status:
   allowed_statuses:
     - PASS
@@ -23,6 +24,16 @@ competitor_autopsy:
   input_model:
   output_model:
   core_buyer_decision:
+  real_world_decision_layer:
+  decision_objective:
+  intermediate_metrics:
+    -
+  terminal_metrics:
+    -
+  aggregation_layer:
+  misleading_partial_models:
+    -
+  benchmark_scope_underfit_risk:
   formula_or_logic_model:
   onboarding_workflow:
   real_strengths:
@@ -38,6 +49,6 @@ competitor_autopsy:
     status:
     decision:
     reason:
-  hard_rule: A broken, inaccessible, shallow, or unrepresentative competitor can be recorded as evidence but cannot satisfy benchmark autopsy. If benchmark evidence is insufficient, the flow must stop or request approval to inspect another competitor.
+  hard_rule: A broken, inaccessible, shallow, or unrepresentative competitor can be recorded as evidence but cannot satisfy benchmark autopsy. If benchmark evidence is insufficient, the flow must stop or request approval to inspect another competitor. Benchmark autopsy must extract the real-world decision layer, intermediate metrics, terminal metrics, and misleading partial models so the flow does not copy a locally coherent but decision-underfit scope.
   blockers:
     - 

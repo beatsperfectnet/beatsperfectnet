@@ -1,0 +1,30 @@
+learning_closure:
+  closure_id:
+  source_failure_id:
+  source_postmortem_id:
+  source_findings:
+    -
+  source_flow_patches:
+    -
+  source_regression_replay:
+  company_memory_entry_id:
+  closure_type:
+  next_run_preflight_validation:
+    same_lane:
+    expected_memory_entry_detection:
+    expected_owner_gate:
+    expected_block_behavior:
+  closure_requirements:
+    failure_intake_exists: true
+    postmortem_exists: true
+    findings_extracted: true
+    governance_system_findings_have_patch_records: true
+    patches_applied: true
+    regression_replay_passed: true
+    company_memory_updated: true
+    next_same_lane_run_preflight_detects_memory_rule: true
+  status:
+  allowed_statuses:
+    - ACTIVE_GUARD_REQUIRED
+    - FAILURE_CLOSED
+    - PROCESS_GAP_CLOSED

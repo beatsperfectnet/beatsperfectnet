@@ -10,6 +10,8 @@ Every material governance or flow change must add an entry here before the chang
 
 Before any new governed product run starts, the active flow must read this file and produce a run-specific company-memory preflight. The preflight must extract applicable lessons into build findings and governance findings before market evidence, purchase approval, model calls, or artifact generation proceed.
 
+Active memory entries are guards, not notes. A memory entry may become `ACTIVE` only after its linked regression replay passes, and every active rule must map to an owner gate in the next-run preflight.
+
 Each entry should answer:
 
 - What failed or changed?
@@ -28,6 +30,26 @@ Each run should maintain a findings ledger:
 - Governance findings: flow, schema, routing, budget, dashboard, validator, memory, and record-chain lessons that must affect how the run is controlled.
 
 Build findings must not be closed by governance wording. Governance findings must not be closed by generating a cleaner artifact. If a finding applies, the run must either consume it in the relevant gate or record why it is not applicable.
+
+## Active Memory Guards
+
+### MEM-LEARN-001-0001
+
+- memory_entry_id: MEM-LEARN-001-0001
+- source_failure_id: FAIL-0001
+- source_postmortem_id: PMR-0001
+- source_findings: FND-0001, FND-0002, FND-0003, FND-0004
+- source_flow_patch: FP-0001, FP-0002, FP-0003, FP-0004
+- source_regression_replay: RGR-0001
+- failure_pattern: A failure-seeded Small Seller Reorder Planner premise re-entered FLOW-007 without a mandatory closure loop, so the company spent benchmark effort on a case that should have been blocked earlier.
+- root_cause: Post-failure learning was historical and advisory, not a required control chain with same-lane blocking, replay proof, and activation gating.
+- active_rule: Serious failures in the same lane must trigger LEARN-001, stay blocked until closure, and then remain blocked whenever the old failed premise reappears before market evidence can reset product direction.
+- applies_to: FLOW-007 pre_run, company-memory preflight, same-lane reruns, market-derived product-direction control
+- owner_gate: pre_run
+- must_block_if: same failed lane has open learning closure; active memory rule has no owner gate; the run reuses the C-007-001 reorder-planner premise as a locked product direction; regression replay evidence is missing
+- must_require: failure intake; frontier post-mortem; typed findings; flow patch records; passed dry regression replay; compact active company-memory guard
+- closure_evidence: records/failures/FAIL-0001.yaml, records/postmortems/PMR-0001.yaml, records/findings/FND-0001.yaml, records/findings/FND-0002.yaml, records/findings/FND-0003.yaml, records/findings/FND-0004.yaml, records/flow_patches/FP-0001.yaml, records/flow_patches/FP-0002.yaml, records/flow_patches/FP-0003.yaml, records/flow_patches/FP-0004.yaml, records/regression_replays/RGR-0001.yaml, records/learning_closure/LCL-0001.yaml
+- status: ACTIVE
 
 ## Flow-Change Memory
 
@@ -274,6 +296,40 @@ Evidence:
 - `governance/10_flow_007_pilot_policy.yaml`
 - `validators/flow-007-validator.mjs`
 - `tests/flow-007.test.mjs`
+
+### FLOW-007-001 - Domain Evidence And Real Decision Layer
+
+Date: 2026-07-01
+
+Reason: A candidate can become launch-stronger after human scope correction while still proving that the flow did not autonomously derive the right product scope from evidence. The key miss is not "human gave feedback." The key miss is that the flow accepted an intermediate metric layer as if it were the buyer's full decision layer.
+
+Learning:
+
+- Candidate success and process success are not the same.
+- Domain evidence must state the buyer's real-world decision objective, not only valid sub-metrics.
+- Intermediate metrics and terminal decision metrics must be separated explicitly.
+- A mathematically coherent sub-model is still under-scoped if the buyer actually acts on a higher aggregate or terminal outcome.
+
+Changed:
+
+- Created `FLOW-007-001` as the active major revision inside the `FLOW-007` family.
+- Added real-decision-layer and domain-evidence tightening to target-audience lock, competitor autopsy, product architecture contract, and build readiness review.
+- Added `REAL_WORLD_DECISION_LAYER_UNDERFIT` as a canonical blocker class for under-scoped but locally coherent product contracts.
+
+Prevents:
+
+- Treating an intermediate metric product as complete buyer decision help.
+- Mistaking human scope rescue for healthy autonomous flow behavior.
+- Passing build readiness when the contract stops before the buyer's real decision layer.
+
+Evidence:
+
+- `docs/FLOW-007-001.md`
+- `workflows/FLOW-007.yaml`
+- `templates/target-audience-lock-template.yaml`
+- `templates/competitor-autopsy-template.yaml`
+- `templates/product-architecture-contract-template.yaml`
+- `templates/build-readiness-review-template.yaml`
 
 ### FLOW-007 Patch - Preserve Proven FLOW-006 Delivery Gates Inside Architecture-First Flow
 
@@ -571,6 +627,49 @@ Evidence:
 - `archive/candidates/C-010-001/C-010-001-REJECTED/`
 - `governance/product_lane_exclusions.yaml`
 - `records/dashboard_state.yaml`
+
+## LEARN-001 - Failure Closure Loop
+
+Date: 2026-07-01
+
+Reason: FLOW-007 already read company memory before new runs, but a serious systemic failure could still be treated as "patch the flow and move on" without a mandatory closure chain proving the same case would now be blocked earlier.
+
+Learning:
+
+- The company has not learned until the same failed case is blocked earlier.
+- Serious architecture/governance/model-routing/validator failures are company-control failures first, not product-rebuild prompts.
+- Company memory must activate only after replay-backed proof, not after a good explanation alone.
+- Same-lane reruns must stay blocked until failure intake, post-mortem, findings, patch records, regression replay, and active-guard validation are complete.
+
+Changed:
+
+- Added `LEARN-001` as the mandatory post-failure closure loop.
+- Added failure intake, post-mortem, finding, flow patch, regression replay, company-memory entry, and learning-closure templates.
+- Updated FLOW-007 pre-run and on-failure controls so open applicable learning failures block same-lane reruns and active memory rules must map to owner gates.
+- Added dry LEARN-001 records for the stopped `C-007-001` Small Seller Reorder Planner pilot, with no product rebuild and a dry replay that blocks the failed case at `pre_run`.
+
+Prevents:
+
+- Treating serious failures as closed just because the repo was patched.
+- Re-entering a failed lane before the failure has been converted into a validated company guard.
+- Activating company memory entries that are still unproven by regression replay.
+
+Evidence:
+
+- `docs/LEARN-001.md`
+- `governance/11_learning_loop.yaml`
+- `records/failures/FAIL-0001.yaml`
+- `records/postmortems/PMR-0001.yaml`
+- `records/findings/FND-0001.yaml`
+- `records/findings/FND-0002.yaml`
+- `records/findings/FND-0003.yaml`
+- `records/findings/FND-0004.yaml`
+- `records/flow_patches/FP-0001.yaml`
+- `records/flow_patches/FP-0002.yaml`
+- `records/flow_patches/FP-0003.yaml`
+- `records/flow_patches/FP-0004.yaml`
+- `records/regression_replays/RGR-0001.yaml`
+- `records/learning_closure/LCL-0001.yaml`
 
 ## Open Backfill Items
 

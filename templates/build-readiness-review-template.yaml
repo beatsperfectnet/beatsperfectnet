@@ -3,6 +3,7 @@ build_readiness_review:
   candidate_id:
   product_id:
   flow_version: FLOW-007
+  flow_revision: FLOW-007-001
   product_architecture_contract_ref:
   scenario_matrix_ref:
   product_identity_reframe_ref:
@@ -42,6 +43,8 @@ build_readiness_review:
     scenario_matrix.status = PASS:
     workbook_or_product_blueprint.status = PASS:
     builder_input_completeness.status = PASS:
+    real_world_decision_layer_reached_or_explicitly_blocked:
+    terminal_decision_outputs_present_when_implied:
     support_risk acceptable:
     build_cost_estimate within limit:
     category_standard known:
@@ -72,3 +75,5 @@ build_readiness_review:
     - applicable_canonical_failure_mode_not_assessed
     - open_run_blocker_due_by_build_readiness_still_open
     - applicable_finding_has_no_owner_gate_before_build
+    - scope_underfit_to_real_world_decision_layer
+    - terminal_decision_outputs_missing_when_implied_by_domain_evidence

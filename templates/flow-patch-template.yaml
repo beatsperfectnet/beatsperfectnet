@@ -1,0 +1,24 @@
+flow_patch:
+  flow_patch_id:
+  source_findings:
+    -
+  candidate_id:
+  flow_version: FLOW-007
+  patch_objective:
+  files_to_change:
+    -
+  exact_rules_to_add:
+    -
+  affected_gates:
+    -
+  expected_regression_behavior:
+  failed_case_that_must_be_blocked:
+  changed_files:
+    -
+  gate:
+    patch_targets_required: true
+    expected_regression_behavior_required: true
+  status:
+  allowed_statuses:
+    - FLOW_PATCH_REQUIRED
+    - REGRESSION_REPLAY_REQUIRED

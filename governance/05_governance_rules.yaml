@@ -6,6 +6,7 @@ governance_rules:
   build_lifecycle: BLS-007
   model_routing: MODEL-007
   stage_dispatch: governance/09_stage_dispatch_007.yaml
+  learning_loop: governance/11_learning_loop.yaml
   company_memory: docs/COMPANY-MEMORY.md
  superseded_rule_contracts:
   - FLOW-001
@@ -41,6 +42,7 @@ governance_rules:
   - BLS-007
   - MODEL-007
   - governance/09_stage_dispatch_007.yaml
+  - governance/11_learning_loop.yaml
   - docs/COMPANY-MEMORY.md
 
  agent_owned:
@@ -90,6 +92,10 @@ governance_rules:
   - excluded_failed_product_asset_lanes_cannot_be_rerun_without_human_reopen_record
   - build_findings_cannot_be_closed_by_governance_wording_only
   - governance_findings_cannot_be_closed_by_artifact_generation_only
+  - serious_flow_failures_must_trigger_LEARN_001_before_same_lane_repeat
+  - serious_failures_are_not_closed_until_regression_replay_activates_company_memory_guard
+  - active_company_memory_entries_must_map_to_owner_gate
+  - memory_entry_without_passed_regression_replay_cannot_be_ACTIVE
 
  real_launched_products_require_real_marketplace_listing_url: true
 

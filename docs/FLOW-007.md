@@ -1,5 +1,7 @@
 # FLOW-007 Principle
 
+Current active revision: `FLOW-007-001`
+
 Do not build digital products from market ideas, category names, plausible feature lists, or post-mortem hypotheses.
 
 Build only after a Product Architecture Contract proves:
@@ -41,6 +43,10 @@ Only candidates with `build_readiness.status = BUILD_READY` may enter product ge
 
 `NOT_BUILD_READY` is not a repair prompt for the artifact. It returns to Product Architecture Contract, benchmark evidence, or scenario definition.
 
+Serious failures are not closed by rerunning the same lane. They trigger `LEARN-001`, which must convert the failure into intake, post-mortem, findings, flow patches, regression replay, and an active company-memory guard before the same failed case may try again.
+
+Major contract revisions inside the family are tracked separately. The current in-family hardening is [FLOW-007-001](./FLOW-007-001.md).
+
 ## Failed Baseline / Anti-Clone Rule
 
 When a new candidate, rerun, repair, or pilot uses a prior failed artifact as evidence, the prior artifact must be treated as a measured failure baseline, not as an implicit product blueprint.
@@ -66,11 +72,15 @@ Launch cannot pass if the new artifact is a structural clone, behavior clone, or
 ## Architecture Rules
 
 - Target audience must be locked before build.
+- Target audience must name the buyer's real-world decision objective, not only a nearby sub-metric or generic job label.
 - Buyer behavior must name the buyer situation, inputs, transformation, decision output, next action, and repeated usage loop.
 - If the product cannot name the buyer's primary decision or outcome, it is `NOT_BUILD_READY`.
 - Domain model must separate static reference data, dated events, change history, calculated state, and dashboards/views.
 - If a real-world value changes over time and affects future decisions, the product must not model it only as an overwritten static field. It must be represented as a dated event or dated settings change where appropriate.
+- Domain evidence must distinguish intermediate metrics from terminal decision metrics.
+- If evidence implies a higher real-world decision layer, the product cannot stop at an intermediate metric and still be considered complete.
 - Promised decision outputs must be supported by the domain model.
+- Decision outputs must reach the buyer's real decision layer when domain evidence says that layer is required.
 - Scenario Matrix must pass before build.
 - Product Architecture Contract must define machine-checkable output locations, formula/logic sources, next-action map, domain invariants, setup-input propagation, working-capacity requirements, and helper behavior scenario before build.
 - Artifact QA must execute buyer behavior and adversarial mutations on the actual artifact, not only inspect formula presence or records.
@@ -103,3 +113,23 @@ Repeated similar artifact regeneration is forbidden. Stronger model escalation b
 No paid rebuild may start unless the Product Architecture Contract changed materially. One implementation repair loop is allowed after build. If the product fails again after implementation repair, stop or escalate.
 
 Cost/outcome accountability is a launch requirement. A paid rerun that produces the same demo-scale product, same hookless listing, or same founder-rejected outcome cannot pass launch by updating records alone.
+
+## Post-Failure Closure
+
+`FLOW-007` now has a mandatory post-failure hook:
+
+- `on_failure -> LEARN-001`
+- failure intake is required
+- serious failures require a post-mortem
+- next same-lane runs are blocked until learning closure exists
+
+Architecture, governance, model-routing, validator, template, schema, and memory failures are company-control failures first. Patch the control, replay the failed case without rebuilding when possible, merge the proven rule into company memory, then let pre-run memory guards police the next attempt.
+
+## FLOW-007-001
+
+`FLOW-007-001` hardens the family against process-success illusions:
+
+- a candidate may become stronger after intervention
+- but the flow still fails if it did not derive the right terminal decision layer from evidence
+
+The flow now treats real-world decision-layer underfit as a first-class architecture blocker rather than as optional polish.

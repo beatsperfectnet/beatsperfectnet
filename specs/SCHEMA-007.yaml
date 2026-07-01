@@ -1,5 +1,6 @@
 SCHEMA-007:
   purpose: exact_required_fields_for_flow_007_architecture_first_artifacts
+  active_revision: FLOW-007-001
   allowed_statuses:
     - IDEA_RECEIVED
     - MARKET_REJECTED
@@ -17,8 +18,21 @@ SCHEMA-007:
     - NOT_BUILD_READY
     - BUILD_READY
     - BUILT_QA_FAILED_IMPLEMENTATION
+    - BUILT_QA_FAILED_IMPLEMENTATION_AFTER_REPAIR
     - BUILT_QA_FAILED_ARCHITECTURE
     - LISTING_FAILED
+    - FOUNDER_REJECTED
+    - LAUNCH_GATE_FAILED
+    - COST_OVERRUN
+    - REPEATED_RERUN_WITH_NO_MATERIAL_DELTA
+    - FAILURE_INTAKE_REQUIRED
+    - POSTMORTEM_REQUIRED
+    - FINDINGS_EXTRACTION_REQUIRED
+    - FLOW_PATCH_REQUIRED
+    - REGRESSION_REPLAY_REQUIRED
+    - COMPANY_MEMORY_UPDATE_REQUIRED
+    - ACTIVE_GUARD_REQUIRED
+    - FAILURE_CLOSED
     - LAUNCH_READY
     - REBUILD_REQUIRED
     - REJECTED_ESCALATE
@@ -44,6 +58,7 @@ SCHEMA-007:
       - preflight_id
       - candidate_id
       - flow_version
+      - learning_loop_ref
       - idea_run_ref
       - candidate_run_ref
       - product_lane_exclusion_ref
@@ -52,10 +67,12 @@ SCHEMA-007:
       - company_memory_ref
       - company_memory_digest
       - applicable_memory_entries
+      - applicable_open_learning_failures
       - canonical_failure_modes_assessment
       - build_findings
       - governance_findings
       - open_findings_carried_forward
+      - same_lane_learning_blockers
       - pre_run_status
     allowed_statuses:
       - PASS
@@ -66,11 +83,14 @@ SCHEMA-007:
       - findings_id
       - candidate_id
       - flow_version
+      - learning_loop_ref
       - company_memory_preflight_ref
       - canonical_failure_modes_catalog_ref
+      - applicable_memory_rule_gate_map
       - build_findings
       - governance_findings
       - run_blockers
+      - open_learning_failure_refs
       - closure_rules
       - open_findings
       - status
@@ -78,6 +98,140 @@ SCHEMA-007:
       - OPEN
       - CLOSED
       - BLOCKED
+  failure_intake:
+    template_ref: templates/failure-intake-template.yaml
+    required_top_level_fields:
+      - failure_id
+      - product_id
+      - candidate_id
+      - run_id
+      - flow_version
+      - learning_loop_ref
+      - failure_stage
+      - failure_status
+      - trigger_source
+      - human_notes
+      - evidence_refs
+      - model_ledger_refs
+      - artifact_refs
+      - cost_refs
+      - same_lane_blocking_scope
+      - gate
+      - status
+    allowed_statuses:
+      - FAILURE_INTAKE_REQUIRED
+      - POSTMORTEM_REQUIRED
+  postmortem:
+    template_ref: templates/postmortem-template.yaml
+    required_top_level_fields:
+      - postmortem_id
+      - source_failure_id
+      - candidate_id
+      - product_id
+      - run_id
+      - flow_version
+      - learning_loop_ref
+      - seriousness
+      - required_model
+      - what_failed
+      - root_cause
+      - failure_type
+      - earliest_missed_blocking_stage
+      - original_failure_stage
+      - product_repair_allowed
+      - flow_patch_required
+      - company_memory_update_required
+      - evidence_refs
+      - closure_gates
+      - status
+    allowed_statuses:
+      - POSTMORTEM_REQUIRED
+      - FINDINGS_EXTRACTION_REQUIRED
+  learning_finding:
+    template_ref: templates/finding-template.yaml
+    required_top_level_fields:
+      - finding_id
+      - source_failure_id
+      - source_postmortem_id
+      - candidate_id
+      - product_id
+      - flow_version
+      - finding_type
+      - severity
+      - failure_pattern
+      - evidence_refs
+      - target_control
+      - required_patch
+      - validation_test
+      - closure_requirement
+      - owner_gate
+      - hard_rules
+      - status
+    allowed_statuses:
+      - FINDINGS_EXTRACTION_REQUIRED
+      - FLOW_PATCH_REQUIRED
+      - REGRESSION_REPLAY_REQUIRED
+      - COMPANY_MEMORY_UPDATE_REQUIRED
+  flow_patch:
+    template_ref: templates/flow-patch-template.yaml
+    required_top_level_fields:
+      - flow_patch_id
+      - source_findings
+      - candidate_id
+      - flow_version
+      - files_to_change
+      - exact_rules_to_add
+      - affected_gates
+      - expected_regression_behavior
+      - failed_case_that_must_be_blocked
+      - changed_files
+      - gate
+      - status
+    allowed_statuses:
+      - FLOW_PATCH_REQUIRED
+      - REGRESSION_REPLAY_REQUIRED
+  regression_replay:
+    template_ref: templates/regression-replay-template.yaml
+    required_top_level_fields:
+      - replay_id
+      - source_failure_id
+      - source_postmortem_id
+      - source_findings
+      - source_flow_patches
+      - candidate_id
+      - flow_version
+      - replay_mode
+      - original_failure_stage
+      - expected_block_stage
+      - failed_case_summary
+      - should_reach_build
+      - build_performed
+      - replay_steps
+      - expected_behavior
+      - actual_behavior
+      - pass_fail
+      - gate
+      - status
+    allowed_statuses:
+      - REGRESSION_REPLAY_REQUIRED
+      - PASS
+      - FAIL
+  learning_closure:
+    template_ref: templates/learning-closure-template.yaml
+    required_top_level_fields:
+      - closure_id
+      - source_failure_id
+      - source_postmortem_id
+      - source_findings
+      - source_flow_patches
+      - source_regression_replay
+      - company_memory_entry_id
+      - next_run_preflight_validation
+      - closure_requirements
+      - status
+    allowed_statuses:
+      - ACTIVE_GUARD_REQUIRED
+      - FAILURE_CLOSED
   failed_product_label:
     template_ref: templates/failed-product-label-template.yaml
     required_top_level_fields:
@@ -131,6 +285,13 @@ SCHEMA-007:
       - input_model
       - output_model
       - core_buyer_decision
+      - real_world_decision_layer
+      - decision_objective
+      - intermediate_metrics
+      - terminal_metrics
+      - aggregation_layer
+      - misleading_partial_models
+      - benchmark_scope_underfit_risk
       - formula_or_logic_model
       - onboarding_workflow
       - real_strengths
@@ -253,6 +414,8 @@ SCHEMA-007:
       - scenario_matrix.status = PASS
       - workbook_or_product_blueprint.status = PASS
       - builder_input_completeness.status = PASS
+      - real_world_decision_layer_reached_or_explicitly_blocked
+      - terminal_decision_outputs_present_when_implied
       - applicable_canonical_failure_modes_assessed
       - no_open_run_blockers_due_by_build_readiness
       - support_risk acceptable

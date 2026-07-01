@@ -38,6 +38,12 @@ flow_007_pilot_policy:
     no_paid_rebuild_unless_product_architecture_contract_changed_materially: true
     architecture_failure_returns_to_product_architecture_contract_not_artifact_patch: true
     stronger_reasoning_before_build_not_after_failed_rebuilds: true
+  learning_loop:
+    required_on_serious_failure: LEARN-001
+    same_lane_repeat_blocked_until_learning_closure: true
+    architecture_failures_require_flow_patch_not_product_patch: true
+    governance_findings_require_regression_replay_before_company_memory_activation: true
+    memory_entry_without_passed_regression_replay_cannot_be_active: true
   pre_architecture_market_sequence:
     hard_rule: Market evidence chooses the product opportunity before architecture; a post-mortem hypothesis may guide research but must not lock product_direction before evidence.
     required_order:

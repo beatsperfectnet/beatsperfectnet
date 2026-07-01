@@ -2,6 +2,7 @@ company_memory_preflight:
   preflight_id:
   candidate_id:
   flow_version: FLOW-007
+  learning_loop_ref: governance/11_learning_loop.yaml
   run_started_at:
   idea_run_ref:
   candidate_run_ref:
@@ -23,13 +24,23 @@ company_memory_preflight:
     reviewed_by:
     digest:
   applicable_memory_entries:
-    - memory_entry:
+    - memory_entry_id:
+      source_failure_id:
+      source_regression_replay:
       applicability_reason:
       evidence_ref:
+      owner_gate:
+      active_status:
       applies_to:
         - build
         - governance
       required_run_effect:
+  applicable_open_learning_failures:
+    - source_failure_id:
+      same_lane_id:
+      open_requirement:
+      blocking_ref:
+      closure_status:
   canonical_failure_modes_assessment:
     - failure_mode_id:
       finding_class:
@@ -78,6 +89,10 @@ company_memory_preflight:
       failure_mode_id:
       required_ref_in_later_record:
       must_block_if_missing_at_gate:
+  same_lane_learning_blockers:
+    - lane_id:
+      blocking_ref:
+      unblock_condition:
   pre_run_status:
   allowed_statuses:
     - PASS
@@ -92,6 +107,9 @@ company_memory_preflight:
     - candidate_selected_without_why_this_not_that_rationale
     - company_memory_not_read
     - applicable_prior_failure_lesson_not_classified
+    - applicable_active_memory_rule_missing_owner_gate
+    - active_memory_entry_missing_passed_regression_replay
+    - same_failed_lane_has_open_learning_closure
     - canonical_failure_mode_not_assessed
     - open_run_blocker_missing_owner_gate_or_due_gate
     - build_finding_closed_by_governance_wording_only

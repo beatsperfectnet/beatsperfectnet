@@ -6,6 +6,7 @@ stage_dispatch:
     - specs/MODEL-007.yaml
     - governance/08_product_generation_budget_007.yaml
     - governance/10_flow_007_pilot_policy.yaml
+    - governance/11_learning_loop.yaml
   enforcement:
     exact_model_match_required: true
     if_model_unavailable: stop_and_escalate
@@ -135,6 +136,41 @@ stage_dispatch:
       requested_model: gpt-5.5
       runtime_resolved_model_id: openai/gpt-5.5
       dispatch_action: spawn_child_session_with_model_override
+  learning_loop_stage_model_map:
+    00_failure_intake:
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+      runtime_resolved_model_id: openai/gpt-5.4
+      dispatch_action: switch_session_model
+    01_postmortem:
+      model_policy_ref: MODEL-007.learning_loop_routing.serious_failure_postmortem
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      dispatch_action: spawn_child_session_with_model_override
+    02_findings_extraction:
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+      runtime_resolved_model_id: openai/gpt-5.4
+      dispatch_action: switch_session_model
+    03_patch_planning:
+      model_policy_ref: MODEL-007.learning_loop_routing.patch_planning
+      governed_model_tier: frontier
+      requested_model: gpt-5.5
+      runtime_resolved_model_id: openai/gpt-5.5
+      dispatch_action: switch_session_model
+    05_regression_replay:
+      model_policy_ref: MODEL-007.learning_loop_routing.regression_replay
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+      runtime_resolved_model_id: openai/gpt-5.4
+      dispatch_action: switch_session_model
+    07_active_guard_validation:
+      model_policy_ref: MODEL-007.learning_loop_routing.active_guard_validation
+      governed_model_tier: medium
+      requested_model: gpt-5.4
+      runtime_resolved_model_id: openai/gpt-5.4
+      dispatch_action: switch_session_model
   pilot_mandatory_frontier_stage_model_map:
     01_market_evidence_adequacy_final_review: &pilot_frontier
       governed_model_tier: frontier

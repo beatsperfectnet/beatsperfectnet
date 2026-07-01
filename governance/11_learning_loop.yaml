@@ -1,0 +1,194 @@
+learning_loop:
+  learning_loop_id: LEARN-001
+  purpose: convert_failures_into_validated_company_controls
+  hard_rules:
+    - failed_runs_must_not_be_repeated_until_failure_is_closed
+    - architecture_failures_require_flow_patch_not_product_patch
+    - governance_findings_require_regression_replay_before_company_memory_activation
+    - company_memory_entries_are_active_guards_not_notes
+    - the_company_has_not_learned_until_the_same_failed_case_is_blocked_earlier
+    - candidate_success_does_not_imply_process_success
+    - human_governance_correction_is_not_market_evidence
+    - human_product_management_intervention_without_new_evidence_opens_process_learning
+    - intermediate_domain_metrics_are_not_sufficient_when_domain_evidence_implies_terminal_decision_outputs
+  trigger_on_status:
+    - BUILT_QA_FAILED_ARCHITECTURE
+    - BUILT_QA_FAILED_IMPLEMENTATION_AFTER_REPAIR
+    - LISTING_FAILED
+    - FOUNDER_REJECTED
+    - LAUNCH_GATE_FAILED
+    - COST_OVERRUN
+    - SAME_FAILED_PRODUCT_CLASS_BLOCKED
+    - REPEATED_RERUN_WITH_NO_MATERIAL_DELTA
+  trigger_on_process_outcome:
+    - HUMAN_SCOPE_RESCUE
+    - HUMAN_INPUT_USED_AS_SCOPE_EVIDENCE
+    - DOMAIN_EVIDENCE_UNDERFIT
+    - CANDIDATE_SALVAGED_BUT_PROCESS_FAILED
+  trigger_on_human_label:
+    - epic_fail
+    - founder_rejected
+    - not_good_enough_for_humans
+    - same_failed_product_class
+    - flow_failed_to_block
+    - human_scope_correction_required
+    - human_input_used_as_product_direction
+    - human_input_used_as_scope_evidence_without_new_evidence
+    - candidate_salvaged_but_process_failed
+    - launch_ready_after_human_product_management_intervention
+  output_templates:
+    failure_intake: templates/failure-intake-template.yaml
+    postmortem: templates/postmortem-template.yaml
+    finding: templates/finding-template.yaml
+    flow_patch: templates/flow-patch-template.yaml
+    regression_replay: templates/regression-replay-template.yaml
+    company_memory_entry: templates/company-memory-entry-template.yaml
+    learning_closure: templates/learning-closure-template.yaml
+  output_records:
+    failures: records/failures/FAIL-XXXX.yaml
+    postmortems: records/postmortems/PMR-XXXX.yaml
+    findings: records/findings/FND-XXXX.yaml
+    flow_patches: records/flow_patches/FP-XXXX.yaml
+    regression_replays: records/regression_replays/RGR-XXXX.yaml
+    learning_closure: records/learning_closure/LCL-XXXX.yaml
+  steps:
+    00_failure_intake:
+      required_record: records/failures/FAIL-XXXX.yaml
+      required_fields:
+        - product_id
+        - candidate_id
+        - run_id
+        - flow_version
+        - candidate_outcome
+        - process_outcome
+        - failure_stage
+        - failure_status
+        - human_intervention_type
+        - human_notes
+        - evidence_refs
+        - model_ledger_refs
+        - artifact_refs
+        - cost_refs
+      gate:
+        failure_record_required: true
+    01_postmortem:
+      required_record: records/postmortems/PMR-XXXX.yaml
+      serious_failures_model: gpt-5.5
+      must_identify:
+        - what_failed
+        - root_cause
+        - earliest_stage_that_should_have_blocked_it
+        - candidate_outcome
+        - process_outcome
+        - whether_human_intervention_changed_scope_or_outputs
+        - whether_new_market_or_domain_evidence_was_added
+        - whether_existing_evidence_should_have_been_sufficient
+        - missing_real_world_decision_layer
+        - whether_product_repair_is_allowed
+        - whether_flow_patch_is_required
+        - whether_company_memory_update_is_required
+      gate:
+        earliest_missed_blocking_stage_required: true
+        root_cause_required: true
+        failure_type_required: true
+    02_findings_extraction:
+      required_record: records/findings/FND-XXXX.yaml
+      finding_types:
+        - build
+        - governance
+        - model_routing
+        - validator
+        - template
+        - schema
+        - memory
+        - domain_evidence
+        - target_audience
+        - insight
+        - decision_output
+        - budget
+        - dashboard
+        - market
+        - listing
+        - delivery
+      required_fields:
+        - source_failure_id
+        - source_postmortem_id
+        - severity
+        - failure_pattern
+        - evidence_refs
+        - process_failure_classification
+        - decision_layer_classification
+        - target_control
+        - required_patch
+        - validation_test
+        - closure_requirement
+        - owner_gate
+      hard_rules:
+        - governance_findings_cannot_be_closed_by_rebuilding_an_artifact
+        - build_findings_cannot_be_closed_by_adding_vague_governance_wording
+    03_patch_planning:
+      required_record: records/flow_patches/FP-XXXX.yaml
+      applies_to_finding_types:
+        - governance
+        - model_routing
+        - validator
+        - template
+        - schema
+        - memory
+      required_fields:
+        - source_findings
+        - files_to_change
+        - exact_rules_to_add
+        - patch_objective
+        - affected_gates
+        - expected_regression_behavior
+        - failed_case_that_must_be_blocked
+      gate:
+        patch_targets_required: true
+        expected_regression_behavior_required: true
+    04_patch_application:
+      action: apply_repo_patch_and_record_changed_files
+      rule: do_not_mark_findings_closed_yet
+    05_regression_replay:
+      required_record: records/regression_replays/RGR-XXXX.yaml
+      hard_rules:
+        - do_not_rebuild_the_product_unless_the_regression_test_explicitly_requires_build
+      gate:
+        failed_case_must_be_blocked_earlier_than_original_failure: true
+        no_build_allowed_during_regression_replay_if_expected_no_build: true
+        failed_case_must_either_block_earlier_or_derive_correct_terminal_decision_layer: true
+      failure_rule: if_regression_fails_reopen_finding_and_strengthen_patch
+    06_company_memory_merge:
+      target_file: docs/COMPANY-MEMORY.md
+      hard_rules:
+        - add_compact_active_memory_entry_not_long_essay
+      required_fields:
+        - memory_entry_id
+        - source_failure_id
+        - source_postmortem_id
+        - source_findings
+        - source_flow_patch
+        - source_regression_replay
+        - failure_pattern
+        - root_cause
+        - candidate_outcome
+        - process_outcome
+        - active_rule
+        - applies_to
+        - owner_gate
+        - must_block_if
+        - must_require
+        - closure_evidence
+        - status
+      gate:
+        regression_replay_passed_required: true
+        memory_entry_must_include_owner_gate: true
+        memory_entry_must_include_must_block_if_conditions: true
+        active_status_value: ACTIVE
+    07_active_guard_validation:
+      required_record: records/learning_closure/LCL-XXXX.yaml
+      gate:
+        next_same_lane_run_preflight_must_detect_new_memory_rule: true
+        closure_status_required:
+          - FAILURE_CLOSED
+          - PROCESS_GAP_CLOSED
