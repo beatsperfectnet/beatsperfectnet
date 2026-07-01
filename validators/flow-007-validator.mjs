@@ -207,7 +207,17 @@ export function validateFlow007Contracts() {
   assert(Array.isArray(admissionRules.tier_1?.reject_if) && admissionRules.tier_1.reject_if.includes("excluded_product_lane"), "Admission rules must reject excluded product lanes");
   assert(Array.isArray(admissionRules.candidate_creation?.requires) && admissionRules.candidate_creation.requires.includes("tier_1_passed"), "Candidate creation must require tier 1 pass");
   assert(productLaneExclusions.enforcement?.reopen_requires_human_approval === true, "Product lane exclusions must require human reopen approval");
+  assert(productLaneExclusions.enforcement?.update_triggers?.candidate_rejected_must_be_added_to_exclusions === true, "Product lane exclusions must add rejected candidates");
+  assert(productLaneExclusions.enforcement?.update_triggers?.candidate_approved_for_publish_must_be_added_to_exclusions_before_external_publish_is_live === true, "Product lane exclusions must add ready-to-publish candidates before external publish is live");
+  assert(productLaneExclusions.enforcement?.update_triggers?.candidate_actually_published_must_be_added_to_exclusions_once_external_publish_is_live === true, "Product lane exclusions must add actually published candidates once external publish is live");
+  assert(productLaneExclusions.enforcement?.update_triggers?.ready_to_publish_without_actual_publish_stops_being_an_exclusion_trigger_once_external_publish_is_live === true, "Product lane exclusions must stop using ready-to-publish as a trigger once external publish is live");
   assertIncludes(productLaneExclusions.enforcement?.hard_rules, "every_new_flow_007_run_must_check_this_file_before_market_evidence", "Product lane exclusions must be checked before market evidence");
+  assertIncludes(productLaneExclusions.enforcement?.hard_rules, "exclusion_list_must_be_updated_when_a_candidate_is_rejected", "Product lane exclusions must update on rejection");
+  assertIncludes(productLaneExclusions.enforcement?.hard_rules, "exclusion_list_must_be_updated_when_a_candidate_is_approved_for_publish_while_publish_is_still_a_manual_human_step", "Product lane exclusions must update on manual publish approval");
+  assertIncludes(productLaneExclusions.enforcement?.hard_rules, "after_external_publish_is_live_the_exclusion_list_must_be_updated_for_rejected_or_actually_published_products_not_merely_ready_to_publish_products", "Product lane exclusions must switch triggers once external publish is live");
+  assertIncludes(governance.flow_rules, "product_lane_exclusions_must_be_updated_when_a_candidate_is_rejected", "Governance must require exclusion updates on rejection");
+  assertIncludes(governance.flow_rules, "product_lane_exclusions_must_be_updated_when_a_candidate_is_approved_for_publish_while_publish_is_manual", "Governance must require exclusion updates on manual publish approval");
+  assertIncludes(governance.flow_rules, "once_external_publish_is_live_product_lane_exclusions_must_be_updated_for_rejected_or_actually_published_products", "Governance must require published-product exclusion updates once external publish is live");
   const inventoryLane = productLaneExclusions.lanes.find((lane) => lane.lane_id === "inventory_tracker_reorder_workbook");
   const pricingLane = productLaneExclusions.lanes.find((lane) => lane.lane_id === "etsy_pricing_decision_workbook");
   assert(inventoryLane, "Inventory tracker/reorder workbook lane exclusion missing");

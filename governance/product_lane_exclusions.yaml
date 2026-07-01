@@ -1,15 +1,23 @@
 product_lane_exclusions:
-  purpose: prevent rejected, failed-asset, or already-launched product lanes from re-entering future idea, pre-run, and candidate runs unless reopened by human approval
+  purpose: prevent rejected, ready-to-publish, or actually-published product lanes from re-entering future idea, pre-run, and candidate runs unless reopened by human approval
   enforcement:
     applies_to_future_idea_runs: true
     applies_to_flow_007_pre_run: true
     applies_to_candidate_admission: true
     matching_mode: conservative_keyword_and_explicit_candidate_refs
     reopen_requires_human_approval: true
+    update_triggers:
+      candidate_rejected_must_be_added_to_exclusions: true
+      candidate_approved_for_publish_must_be_added_to_exclusions_before_external_publish_is_live: true
+      candidate_actually_published_must_be_added_to_exclusions_once_external_publish_is_live: true
+      ready_to_publish_without_actual_publish_stops_being_an_exclusion_trigger_once_external_publish_is_live: true
     hard_rules:
       - every_new_flow_007_run_must_check_this_file_before_market_evidence
       - excluded_failed_product_asset_lanes_cannot_be_rerun_as_new_candidates_without_human_reopen_record
       - candidate_renaming_or_new_flow_version_does_not_bypass_product_lane_exclusion
+      - exclusion_list_must_be_updated_when_a_candidate_is_rejected
+      - exclusion_list_must_be_updated_when_a_candidate_is_approved_for_publish_while_publish_is_still_a_manual_human_step
+      - after_external_publish_is_live_the_exclusion_list_must_be_updated_for_rejected_or_actually_published_products_not_merely_ready_to_publish_products
   lanes:
     - lane_id: meal_planner_spreadsheet
       status: excluded_by_human_rejection

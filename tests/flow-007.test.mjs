@@ -240,6 +240,9 @@ test("FLOW-007 requires company memory preflight and findings ledger before runs
   assert.equal(flow.flow.find((stage) => stage.step_id === "10_build_readiness_review").gate.company_memory_preflight_pass_required, true);
   assert.ok(governance.flow_rules.includes("new_flow_007_runs_must_start_with_company_memory_preflight_and_findings_ledger"));
   assert.ok(governance.flow_rules.includes("new_flow_007_runs_must_check_product_lane_exclusions_before_market_evidence"));
+  assert.ok(governance.flow_rules.includes("product_lane_exclusions_must_be_updated_when_a_candidate_is_rejected"));
+  assert.ok(governance.flow_rules.includes("product_lane_exclusions_must_be_updated_when_a_candidate_is_approved_for_publish_while_publish_is_manual"));
+  assert.ok(governance.flow_rules.includes("once_external_publish_is_live_product_lane_exclusions_must_be_updated_for_rejected_or_actually_published_products"));
   assert.ok(schema.company_memory_preflight.required_top_level_fields.includes("idea_run_ref"));
   assert.ok(schema.company_memory_preflight.required_top_level_fields.includes("candidate_run_ref"));
   assert.ok(schema.company_memory_preflight.required_top_level_fields.includes("build_findings"));
@@ -263,6 +266,13 @@ test("FLOW-007 requires company memory preflight and findings ledger before runs
   const lane = exclusions.lanes.find((entry) => entry.lane_id === "inventory_tracker_reorder_workbook");
   const pricingLane = exclusions.lanes.find((entry) => entry.lane_id === "etsy_pricing_decision_workbook");
   assert.equal(exclusions.enforcement.applies_to_flow_007_pre_run, true);
+  assert.equal(exclusions.enforcement.update_triggers.candidate_rejected_must_be_added_to_exclusions, true);
+  assert.equal(exclusions.enforcement.update_triggers.candidate_approved_for_publish_must_be_added_to_exclusions_before_external_publish_is_live, true);
+  assert.equal(exclusions.enforcement.update_triggers.candidate_actually_published_must_be_added_to_exclusions_once_external_publish_is_live, true);
+  assert.equal(exclusions.enforcement.update_triggers.ready_to_publish_without_actual_publish_stops_being_an_exclusion_trigger_once_external_publish_is_live, true);
+  assert.ok(exclusions.enforcement.hard_rules.includes("exclusion_list_must_be_updated_when_a_candidate_is_rejected"));
+  assert.ok(exclusions.enforcement.hard_rules.includes("exclusion_list_must_be_updated_when_a_candidate_is_approved_for_publish_while_publish_is_still_a_manual_human_step"));
+  assert.ok(exclusions.enforcement.hard_rules.includes("after_external_publish_is_live_the_exclusion_list_must_be_updated_for_rejected_or_actually_published_products_not_merely_ready_to_publish_products"));
   assert.equal(lane.excluded_from_flow_007_pre_run, true);
   assert.equal(pricingLane.excluded_from_flow_007_pre_run, true);
   assert.ok(lane.source_candidate_refs.includes("C-004-001"));
