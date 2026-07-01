@@ -261,10 +261,18 @@ test("FLOW-007 requires company memory preflight and findings ledger before runs
   assert.ok(launchGate.fail_if.includes("company_memory_preflight_or_findings_ledger_missing"));
 
   const lane = exclusions.lanes.find((entry) => entry.lane_id === "inventory_tracker_reorder_workbook");
+  const pricingLane = exclusions.lanes.find((entry) => entry.lane_id === "etsy_pricing_decision_workbook");
   assert.equal(exclusions.enforcement.applies_to_flow_007_pre_run, true);
   assert.equal(lane.excluded_from_flow_007_pre_run, true);
+  assert.equal(pricingLane.excluded_from_flow_007_pre_run, true);
   assert.ok(lane.source_candidate_refs.includes("C-004-001"));
   assert.ok(lane.source_candidate_refs.includes("C-005-001"));
+  assert.ok(pricingLane.source_candidate_refs.includes("C-011-001"));
+  assert.equal(pricingLane.status, "excluded_by_ready_to_publish_candidate");
+  assert.ok(pricingLane.source_refs.includes("records/candidates/R-011.yaml"));
+  assert.ok(pricingLane.source_refs.includes("records/validation/FLG-C-011-001.yaml"));
+  assert.ok(pricingLane.product_asset_refs.includes("builds/C-011-001/product/Etsy-Pricing-Decision-Planner.xlsx"));
+  assert.ok(pricingLane.keyword_match_terms.includes("etsy fee calculator"));
   assert.ok(lane.failed_product_label_refs.includes("records/failed_product_labels/C-004-FAILED.yaml"));
   assert.ok(lane.failed_product_label_refs.includes("records/failed_product_labels/C-005-FAILED.yaml"));
   assert.ok(lane.failed_product_asset_refs.includes("archive/candidates/C-005-001/C-005-001-FAILED/product/Inventory-Tracker-Studio.xlsx"));

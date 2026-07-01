@@ -138,3 +138,35 @@ product_lane_exclusions:
         - service bid
         - handyman planner
         - handyman calculator
+    - lane_id: etsy_pricing_decision_workbook
+      status: excluded_by_ready_to_publish_candidate
+      excluded_from_future_idea_runs: true
+      excluded_from_flow_007_pre_run: true
+      excluded_from_candidate_admission: true
+      source_candidate_refs:
+        - C-011-001
+      source_refs:
+        - records/candidates/R-011.yaml
+        - records/validation/FLG-C-011-001.yaml
+        - builds/C-011-001/manifest.yaml
+        - records/dashboard_state.yaml
+      reason: C-011 produced a launch-ready Etsy Pricing Decision Planner and is already ready to publish; do not generate Etsy pricing-decision, fee-calculator, repricing, or profit-hurdle workbook variants unless Andrey explicitly reopens the lane.
+      product_asset_refs:
+        - builds/C-011-001/product/Etsy-Pricing-Decision-Planner.xlsx
+        - builds/C-011-001/product/Etsy-Pricing-Decision-Planner-google-sheets-import.xlsx
+      reopen_requires:
+        - explicit_human_reopen_record
+        - new_market_thesis_or_new_lane_rationale
+        - material_product_delta_plan_when_reusing_this_product_class
+      keyword_match_terms:
+        - etsy pricing decision
+        - etsy pricing workbook
+        - etsy pricing planner
+        - etsy fee calculator
+        - etsy fee spreadsheet
+        - etsy profit calculator
+        - etsy profit workbook
+        - etsy repricing
+        - repricing workbook
+        - price floor workbook
+        - profit hurdle matrix
