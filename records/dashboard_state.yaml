@@ -1,5 +1,5 @@
 today:
-  asOf: 2026-06-30 18:40 GMT+2
+  asOf: 2026-07-01 23:59 GMT+2
   dataMode: event-log
   flowVersion: FLOW-007
   flowTimeline: &a1
@@ -59,16 +59,36 @@ today:
     validationRecords: records/validation/*.yaml
     flow007ValidationRecords: records/flow_007_validation/*.yaml
     failureCases: records/failure-cases/*.md
-  todayLog: []
+  todayLog:
+    - id: API-2026-07-01-product
+      kind: product_cost
+      label: Product API
+      detail: Reported Jul 01 product API spend for the operating day.
+      amountUsd: 9
+    - id: API-2026-07-01-governance-flow007
+      kind: governance_cost
+      label: Governance cost
+      detail: Reported Jul 01 governance API spend for the operating day.
+      amountUsd: 31.8
+    - id: API-2026-07-01-competitor-purchase
+      kind: other
+      label: Other cost
+      detail: Competitor purchase recorded as other spend for Jul 01.
+      amountUsd: 3.5
+    - id: REJECT-2026-07-01
+      kind: other
+      label: Rejected product
+      detail: One product was rejected on Jul 01.
+      amountUsd: 0
   totals:
     pipelineCandidates: 0
     inFlightCandidates: 2
     launchedCandidates: 0
     rejectedCandidates: 0
-    totalSpendUsd: 0
-    productApiCostUsd: 0
-    governanceApiCostUsd: 0
-    unallocatedApiCostUsd: 0
+    totalSpendUsd: 44.3
+    productApiCostUsd: 9
+    governanceApiCostUsd: 31.8
+    unallocatedApiCostUsd: 3.5
     humanEscalationsTotal: 0
     pipelineUsdTotal: 0
     inFlightUsdTotal: 0
@@ -125,20 +145,20 @@ today:
     recommendedAction: ""
     governanceFile: governance/09_stage_dispatch_007.yaml
 period:
-  asOf: 2026-06-30 18:40 GMT+2
+  asOf: 2026-07-01 23:59 GMT+2
   from: 2026-06-22
-  to: 2026-06-30
+  to: 2026-07-01
   dataMode: event-log
   flowVersion: FLOW-007
   flowTimeline: *a1
   totals:
     launchedCount: 0
     readyForLaunchCount: 2
-    rejectedCount: 3
-    totalSpendUsd: 346.25
-    buildSpendUsd: 136.4
-    governanceApiCostUsd: 163.4
-    otherSpendUsd: 46.45
+    rejectedCount: 4
+    totalSpendUsd: 390.55
+    buildSpendUsd: 145.4
+    governanceApiCostUsd: 195.2
+    otherSpendUsd: 49.95
   buckets:
     - date: 2026-06-22
       launchedCount: 0
@@ -212,3 +232,11 @@ period:
       buildSpendUsd: 35
       governanceApiCostUsd: 37
       otherSpendUsd: 11
+    - date: 2026-07-01
+      launchedCount: 0
+      readyForLaunchCount: 0
+      rejectedCount: 1
+      totalSpendUsd: 44.3
+      buildSpendUsd: 9
+      governanceApiCostUsd: 31.8
+      otherSpendUsd: 3.5

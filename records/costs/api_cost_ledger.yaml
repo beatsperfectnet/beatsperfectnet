@@ -1,10 +1,10 @@
 api_cost_ledger:
   ledger_id: API-COSTS-2026-06
   currency: USD
-  accounting_ref: governance/api_cost_accounting.yaml
+  accounting_ref: operating-system/governance/api_cost_accounting.yaml
   source_mode: manual_platform_openai_reading
   source_quality: manually_estimated_from_platform_openai_spend_page
-  as_of: 2026-06-29 23:59 Europe/Berlin
+  as_of: 2026-07-01 23:59 Europe/Berlin
   notes:
     - Runtime token-derived cost accounting is incomplete for current Codex/OpenClaw sessions; platform spend is treated as the controlling source for now.
     - Andrey reported total Budget Planner API cost as approximately 28 USD: 6 USD on 2026-06-23 and 22 USD on 2026-06-24.
@@ -13,6 +13,7 @@ api_cost_ledger:
     - Current API costs for the Jun 28 operating day are 41.00 USD total: 20.00 USD C-004-001 product API, 20.00 USD governance API, and 1.00 USD unallocated reconciliation.
     - OpenAI dashboard daily API totals are the source of truth for Period totals: 2026-06-22 25.40 USD, 2026-06-23 6.00 USD, 2026-06-24 41.40 USD, 2026-06-25 8.70 USD, 2026-06-26 31.60 USD, 2026-06-27 13.70 USD, 2026-06-28 41.00 USD, and 2026-06-29 61.00 USD as of the current reading.
     - Andrey reported 2026-06-29 product API spend as 10.00 USD, governance API spend as 51.00 USD, and additional other spend as 6.00 USD for the operating day.
+    - Andrey reported 2026-07-01 product API spend as 9.00 USD, governance API spend as 31.80 USD, competitor purchase spend as 3.50 USD, and one rejected product for the operating day.
   entries:
     - entry_id: API-2026-06-22-C001-product
       date: 2026-06-22
@@ -58,7 +59,7 @@ api_cost_ledger:
       amount_usd: 5.40
       source: manual_platform_openai_reading
       confidence: residual_estimate
-      notes: Residual governance/support work after using 41.40 USD OpenAI dashboard total as daily source of truth.
+      notes: Residual operating-system/governance/support work after using 41.40 USD OpenAI dashboard total as daily source of truth.
     - entry_id: API-2026-06-25-C004-product
       date: 2026-06-25
       bucket: product_generation
@@ -185,6 +186,33 @@ api_cost_ledger:
       source: manual_human_report
       confidence: reported_by_human
       notes: Reported Jun 29 other spend outside the product/governance API split.
+    - entry_id: API-2026-07-01-product
+      date: 2026-07-01
+      bucket: product_generation
+      candidate_id:
+      product_name:
+      amount_usd: 9.00
+      source: manual_human_report
+      confidence: reported_by_human
+      notes: Reported Jul 01 product API spend for the operating day.
+    - entry_id: API-2026-07-01-governance-flow007
+      date: 2026-07-01
+      bucket: governance
+      candidate_id:
+      product_name:
+      amount_usd: 31.80
+      source: manual_human_report
+      confidence: reported_by_human
+      notes: Reported Jul 01 governance API spend for the operating day.
+    - entry_id: API-2026-07-01-competitor-purchase
+      date: 2026-07-01
+      bucket: reconciliation
+      candidate_id:
+      product_name:
+      amount_usd: 3.50
+      source: manual_human_report
+      confidence: reported_by_human
+      notes: Reported Jul 01 competitor purchase spend carried as other spend in the dashboard split.
   human_escalations:
     - escalation_id: HE-2026-06-26-FLOW-001
       date: 2026-06-26
