@@ -1,5 +1,5 @@
 today:
-  asOf: 2026-07-01 23:59 GMT+2
+  asOf: 2026-07-02 09:05 GMT+2
   dataMode: event-log
   flowVersion: FLOW-007
   flowTimeline: &a1
@@ -60,36 +60,66 @@ today:
     flow007ValidationRecords: records/flow_007_validation/*.yaml
     failureCases: records/failure-cases/*.md
   todayLog:
-    - id: API-2026-07-01-product
+    - id: API-2026-07-02-C013-product
       kind: product_cost
-      label: Product API
-      detail: Reported Jul 01 product API spend for the operating day.
+      label: Lead Follow-Up Control Center product API
+      detail: Build API spend for the founder-approved C-013-001 lead follow-up workbook.
       amountUsd: 9
-    - id: API-2026-07-01-governance-flow007
+    - id: API-2026-07-02-C014-product
+      kind: product_cost
+      label: Cleaning Quote & Client Packet Kit product API
+      detail: Build API spend for the rejected C-014-001 cleaning quote packet run.
+      amountUsd: 19.7
+    - id: API-2026-07-02-C015-product
+      kind: product_cost
+      label: Rental Property Pulse Board product API
+      detail: Build API spend for the launch-ready C-015-001 rental property tracker workbook.
+      amountUsd: 21.5
+    - id: API-2026-07-02-governance-flow007
       kind: governance_cost
       label: Governance cost
-      detail: Reported Jul 01 governance API spend for the operating day.
-      amountUsd: 31.8
-    - id: API-2026-07-01-competitor-purchase
+      detail: Reported Jul 02 governance API spend for the operating day.
+      amountUsd: 8.5
+    - id: COMP-2026-07-02-C013
       kind: other
-      label: Other cost
-      detail: Competitor purchase recorded as other spend for Jul 01.
-      amountUsd: 3.5
-    - id: REJECT-2026-07-01
+      label: Competitor purchase
+      detail: HeyMorning benchmark purchase for C-013-001.
+      amountUsd: 11.98
+    - id: COMP-2026-07-02-C014
+      kind: other
+      label: Competitor purchase
+      detail: SelfairyShop benchmark purchase for C-014-001.
+      amountUsd: 4.4
+    - id: COMP-2026-07-02-C015
+      kind: other
+      label: Competitor purchase
+      detail: TheWeeklyCrew benchmark purchase for C-015-001.
+      amountUsd: 30.18
+    - id: READY-2026-07-02-C013
+      kind: other
+      label: Ready product
+      detail: C-013-001 was founder-approved and marked ready on Jul 02.
+      amountUsd: 0
+    - id: READY-2026-07-02-C015
+      kind: other
+      label: Ready product
+      detail: C-015-001 was founder-approved and marked officially ready on Jul 02.
+      amountUsd: 0
+    - id: REJECTED-2026-07-02-C014
       kind: other
       label: Rejected product
-      detail: One product was rejected on Jul 01.
+      detail: C-014-001 was rejected on Jul 02 after the failed second launch gate attempt.
       amountUsd: 0
   totals:
     pipelineCandidates: 0
-    inFlightCandidates: 2
+    inFlightCandidates: 3
     launchedCandidates: 0
     rejectedCandidates: 0
-    totalSpendUsd: 44.3
-    productApiCostUsd: 9
-    governanceApiCostUsd: 31.8
-    unallocatedApiCostUsd: 3.5
-    humanEscalationsTotal: 0
+    totalSpendUsd: 105.26
+    productApiCostUsd: 50.2
+    governanceApiCostUsd: 8.5
+    unallocatedApiCostUsd: 46.56
+    humanEscalationsTotal: 1
     pipelineUsdTotal: 0
     inFlightUsdTotal: 0
     launchedUsdTotal: 0
@@ -105,12 +135,29 @@ today:
     refundCountTotal: 0
   pipelineCandidates: []
   inFlightCandidates:
-    - candidateId: FLOW-007-NEXT
+    - candidateId: C-013-001
       candidateLabel: I-001
-      candidateTitle: To be selected by fresh market evidence under FLOW-007; no product thesis is locked before the pre-run blocker set is addressed.
-      outcomeStatus: in_flight
+      candidateTitle: Lead Follow-Up Control Center
+      outcomeStatus: launch_ready
+      currentStepId: 17_founder_launch_gate
+      currentStageGroup: launch
       totalTokensUsed: 0
-      totalUsdSpent: 0
+      totalUsdSpent: 9
+      launchTokens: 0
+      governanceTokens: 0
+      postLaunchSupportTokens: 0
+      refundTokens: 0
+      refundCount: 0
+      budgetHealth: green
+      processHealth: green
+    - candidateId: C-015-001
+      candidateLabel: R-013-I-002
+      candidateTitle: Rental Property Pulse Board
+      outcomeStatus: launch_ready
+      currentStepId: 17_founder_launch_gate
+      currentStageGroup: launch
+      totalTokensUsed: 0
+      totalUsdSpent: 21.5
       launchTokens: 0
       governanceTokens: 0
       postLaunchSupportTokens: 0
@@ -145,20 +192,20 @@ today:
     recommendedAction: ""
     governanceFile: governance/09_stage_dispatch_007.yaml
 period:
-  asOf: 2026-07-01 23:59 GMT+2
+  asOf: 2026-07-02 09:05 GMT+2
   from: 2026-06-22
-  to: 2026-07-01
+  to: 2026-07-02
   dataMode: event-log
   flowVersion: FLOW-007
   flowTimeline: *a1
   totals:
     launchedCount: 0
-    readyForLaunchCount: 2
-    rejectedCount: 4
-    totalSpendUsd: 390.55
-    buildSpendUsd: 145.4
-    governanceApiCostUsd: 195.2
-    otherSpendUsd: 49.95
+    readyForLaunchCount: 4
+    rejectedCount: 5
+    totalSpendUsd: 495.81
+    buildSpendUsd: 195.6
+    governanceApiCostUsd: 203.7
+    otherSpendUsd: 96.51
   buckets:
     - date: 2026-06-22
       launchedCount: 0
@@ -240,3 +287,11 @@ period:
       buildSpendUsd: 9
       governanceApiCostUsd: 31.8
       otherSpendUsd: 3.5
+    - date: 2026-07-02
+      launchedCount: 0
+      readyForLaunchCount: 2
+      rejectedCount: 1
+      totalSpendUsd: 105.26
+      buildSpendUsd: 50.2
+      governanceApiCostUsd: 8.5
+      otherSpendUsd: 46.56
