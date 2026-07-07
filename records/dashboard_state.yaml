@@ -1,5 +1,5 @@
 today:
-  asOf: 2026-07-02 09:05 GMT+2
+  asOf: 2026-07-07 19:36 GMT+2
   dataMode: event-log
   flowVersion: FLOW-007
   flowTimeline: &a1
@@ -60,70 +60,40 @@ today:
     flow007ValidationRecords: records/flow_007_validation/*.yaml
     failureCases: records/failure-cases/*.md
   todayLog:
-    - id: API-2026-07-02-C013-product
+    - id: API-2026-07-07-C016-product
       kind: product_cost
-      label: Lead Follow-Up Control Center product API
-      detail: Build API spend for the founder-approved C-013-001 lead follow-up workbook.
-      amountUsd: 9
-    - id: API-2026-07-02-C014-product
-      kind: product_cost
-      label: Cleaning Quote & Client Packet Kit product API
-      detail: Build API spend for the rejected C-014-001 cleaning quote packet run.
-      amountUsd: 19.7
-    - id: API-2026-07-02-C015-product
-      kind: product_cost
-      label: Rental Property Pulse Board product API
-      detail: Build API spend for the launch-ready C-015-001 rental property tracker workbook.
-      amountUsd: 21.5
-    - id: API-2026-07-02-governance-flow007
+      label: Product API
+      detail: Product API spend recorded for the Jul 07 C-016-001 rejection day.
+      amountUsd: 6.5
+    - id: COMP-2026-07-07-C016
+      kind: other
+      label: Competitor purchase
+      detail: Competitor purchase cost recorded for C-016-001 on Jul 07.
+      amountUsd: 3.3
+    - id: API-2026-07-07-governance-flow007
       kind: governance_cost
       label: Governance cost
-      detail: Reported Jul 02 governance API spend for the operating day.
-      amountUsd: 8.5
-    - id: COMP-2026-07-02-C013
-      kind: other
-      label: Competitor purchase
-      detail: HeyMorning benchmark purchase for C-013-001.
-      amountUsd: 11.98
-    - id: COMP-2026-07-02-C014
-      kind: other
-      label: Competitor purchase
-      detail: SelfairyShop benchmark purchase for C-014-001.
-      amountUsd: 4.4
-    - id: COMP-2026-07-02-C015
-      kind: other
-      label: Competitor purchase
-      detail: TheWeeklyCrew benchmark purchase for C-015-001.
-      amountUsd: 30.18
-    - id: READY-2026-07-02-C013
-      kind: other
-      label: Ready product
-      detail: C-013-001 was founder-approved and marked ready on Jul 02.
-      amountUsd: 0
-    - id: READY-2026-07-02-C015
-      kind: other
-      label: Ready product
-      detail: C-015-001 was founder-approved and marked officially ready on Jul 02.
-      amountUsd: 0
-    - id: REJECTED-2026-07-02-C014
+      detail: Governance API spend recorded for the Jul 07 operating day.
+      amountUsd: 18
+    - id: REJECTED-2026-07-07-C016
       kind: other
       label: Rejected product
-      detail: C-014-001 was rejected on Jul 02 after the failed second launch gate attempt.
+      detail: C-016-001 was rejected on Jul 07.
       amountUsd: 0
   totals:
     pipelineCandidates: 0
     inFlightCandidates: 3
     launchedCandidates: 0
-    rejectedCandidates: 0
-    totalSpendUsd: 105.26
-    productApiCostUsd: 50.2
-    governanceApiCostUsd: 8.5
-    unallocatedApiCostUsd: 46.56
-    humanEscalationsTotal: 1
+    rejectedCandidates: 1
+    totalSpendUsd: 27.8
+    productApiCostUsd: 6.5
+    governanceApiCostUsd: 18
+    unallocatedApiCostUsd: 3.3
+    humanEscalationsTotal: 0
     pipelineUsdTotal: 0
     inFlightUsdTotal: 0
     launchedUsdTotal: 0
-    rejectedUsdTotal: 0
+    rejectedUsdTotal: 27.8
     pipelineTokensTotal: 0
     inFlightTokensTotal: 0
     launchedTokensTotal: 0
@@ -181,7 +151,27 @@ today:
       budgetHealth: green
       processHealth: green
   launchedCandidates: []
-  rejectedCandidates: []
+  rejectedCandidates:
+    - candidateId: C-016-001
+      candidateLabel: R-017
+      candidateTitle: C-016-001 rejected
+      outcomeStatus: rejected_before_launch
+      currentStepId: 17_founder_launch_gate
+      currentStageGroup: launch
+      stageReason: Jul 07 rejection recorded for the public dashboard snapshot.
+      totalTokensUsed: 0
+      totalUsdSpent: 27.8
+      launchTokens: 0
+      governanceTokens: 0
+      postLaunchSupportTokens: 0
+      refundTokens: 0
+      refundCount: 0
+      budgetHealth: red
+      processHealth: red
+      lastHealthBeforeExit:
+        budgetHealth: red
+        processHealth: red
+      terminalReason: Rejected on Jul 07 after the replay outcome was closed as a rejection rather than rerun.
   activeEscalation:
     status: none
     scope: build
@@ -192,20 +182,20 @@ today:
     recommendedAction: ""
     governanceFile: governance/09_stage_dispatch_007.yaml
 period:
-  asOf: 2026-07-02 09:05 GMT+2
+  asOf: 2026-07-07 19:36 GMT+2
   from: 2026-06-22
-  to: 2026-07-02
+  to: 2026-07-07
   dataMode: event-log
   flowVersion: FLOW-007
   flowTimeline: *a1
   totals:
     launchedCount: 0
     readyForLaunchCount: 4
-    rejectedCount: 5
-    totalSpendUsd: 495.81
-    buildSpendUsd: 195.6
-    governanceApiCostUsd: 203.7
-    otherSpendUsd: 96.51
+    rejectedCount: 6
+    totalSpendUsd: 523.61
+    buildSpendUsd: 202.1
+    governanceApiCostUsd: 221.7
+    otherSpendUsd: 99.81
   buckets:
     - date: 2026-06-22
       launchedCount: 0
@@ -295,3 +285,43 @@ period:
       buildSpendUsd: 50.2
       governanceApiCostUsd: 8.5
       otherSpendUsd: 46.56
+    - date: 2026-07-03
+      launchedCount: 0
+      readyForLaunchCount: 0
+      rejectedCount: 0
+      totalSpendUsd: 0
+      buildSpendUsd: 0
+      governanceApiCostUsd: 0
+      otherSpendUsd: 0
+    - date: 2026-07-04
+      launchedCount: 0
+      readyForLaunchCount: 0
+      rejectedCount: 0
+      totalSpendUsd: 0
+      buildSpendUsd: 0
+      governanceApiCostUsd: 0
+      otherSpendUsd: 0
+    - date: 2026-07-05
+      launchedCount: 0
+      readyForLaunchCount: 0
+      rejectedCount: 0
+      totalSpendUsd: 0
+      buildSpendUsd: 0
+      governanceApiCostUsd: 0
+      otherSpendUsd: 0
+    - date: 2026-07-06
+      launchedCount: 0
+      readyForLaunchCount: 0
+      rejectedCount: 0
+      totalSpendUsd: 0
+      buildSpendUsd: 0
+      governanceApiCostUsd: 0
+      otherSpendUsd: 0
+    - date: 2026-07-07
+      launchedCount: 0
+      readyForLaunchCount: 0
+      rejectedCount: 1
+      totalSpendUsd: 27.8
+      buildSpendUsd: 6.5
+      governanceApiCostUsd: 18
+      otherSpendUsd: 3.3
