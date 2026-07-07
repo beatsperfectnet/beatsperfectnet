@@ -1,11 +1,14 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { formatStepLabel } from "@/lib/today/flow";
 import { mockPeriodState } from "@/lib/period/mockPeriodState";
 import type { PeriodBucket, PeriodState } from "@/lib/period/types";
 import { Shell } from "@/components/site/Shell";
 import { MetricCard } from "@/components/site/MetricCard";
+
+const VISIBLE_PERIOD_DAYS = 7;
+const PERIOD_BAR_GAP_PX = 12;
 
 function isInRange(date: string, from: string, to: string) {
   return date >= from && date <= to;
@@ -29,6 +32,27 @@ function deriveTotals(buckets: PeriodBucket[]) {
 
 function money(value: number) {
   return `$${value.toFixed(2)}`;
+}
+
+function chartGridStyle(bucketCount: number) {
+  if (bucketCount === 0) {
+    return {
+      width: "100%",
+      gridTemplateColumns: "none"
+    };
+  }
+
+  const width =
+    bucketCount > VISIBLE_PERIOD_DAYS
+      ? `calc(${bucketCount} * ((100% - ${(VISIBLE_PERIOD_DAYS - 1) * PERIOD_BAR_GAP_PX}px) / ${VISIBLE_PERIOD_DAYS}) + ${
+          (bucketCount - 1) * PERIOD_BAR_GAP_PX
+        }px)`
+      : "100%";
+
+  return {
+    width,
+    gridTemplateColumns: `repeat(${bucketCount}, minmax(0, 1fr))`
+  };
 }
 
 function SpendBar({ bucket, max }: { bucket: PeriodBucket; max: number }) {
@@ -131,6 +155,9 @@ function FlowTimelineCard({ state }: { state: PeriodState }) {
 export function PeriodDashboard({ state = mockPeriodState }: { state?: PeriodState }) {
   const [from, setFrom] = useState(state.from);
   const [to, setTo] = useState(state.to);
+  const spendScrollerRef = useRef<HTMLDivElement | null>(null);
+  const productScrollerRef = useRef<HTMLDivElement | null>(null);
+  const syncingScrollRef = useRef(false);
   const visibleBuckets = useMemo(
     () => state.buckets.filter((bucket) => isInRange(bucket.date, from, to)),
     [from, state.buckets, to]
@@ -145,6 +172,39 @@ export function PeriodDashboard({ state = mockPeriodState }: { state?: PeriodSta
       ),
     [visibleBuckets]
   );
+  const gridStyle = useMemo(() => chartGridStyle(visibleBuckets.length), [visibleBuckets.length]);
+
+  useEffect(() => {
+    const scrollers = [spendScrollerRef.current, productScrollerRef.current].filter(
+      (value): value is HTMLDivElement => Boolean(value)
+    );
+
+    if (scrollers.length === 0) {
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      for (const scroller of scrollers) {
+        scroller.scrollLeft = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+      }
+    });
+  }, [from, to, visibleBuckets.length]);
+
+  function syncScroll(source: "spend" | "product") {
+    const sourceScroller = source === "spend" ? spendScrollerRef.current : productScrollerRef.current;
+    const targetScroller = source === "spend" ? productScrollerRef.current : spendScrollerRef.current;
+
+    if (!sourceScroller || !targetScroller || syncingScrollRef.current) {
+      return;
+    }
+
+    syncingScrollRef.current = true;
+    targetScroller.scrollLeft = sourceScroller.scrollLeft;
+
+    requestAnimationFrame(() => {
+      syncingScrollRef.current = false;
+    });
+  }
 
   return (
     <Shell
@@ -208,10 +268,12 @@ export function PeriodDashboard({ state = mockPeriodState }: { state?: PeriodSta
             { label: "Other", className: "other" }
           ]}
         />
-        <div className="periodGrid">
-          {visibleBuckets.map((bucket) => (
-            <SpendBar key={bucket.date} bucket={bucket} max={maxSpend} />
-          ))}
+        <div className="periodScroller" ref={spendScrollerRef} onScroll={() => syncScroll("spend")}>
+          <div className="periodGrid" style={gridStyle}>
+            {visibleBuckets.map((bucket) => (
+              <SpendBar key={bucket.date} bucket={bucket} max={maxSpend} />
+            ))}
+          </div>
         </div>
       </section>
 
@@ -232,10 +294,12 @@ export function PeriodDashboard({ state = mockPeriodState }: { state?: PeriodSta
             { label: "Rejected", className: "rejected" }
           ]}
         />
-        <div className="periodGrid">
-          {visibleBuckets.map((bucket) => (
-            <ProductBar key={bucket.date} bucket={bucket} max={maxProducts} />
-          ))}
+        <div className="periodScroller" ref={productScrollerRef} onScroll={() => syncScroll("product")}>
+          <div className="periodGrid" style={gridStyle}>
+            {visibleBuckets.map((bucket) => (
+              <ProductBar key={bucket.date} bucket={bucket} max={maxProducts} />
+            ))}
+          </div>
         </div>
       </section>
 

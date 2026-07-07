@@ -707,13 +707,8 @@ input {
   color: var(--bp-text);
 }
 
-.periodGrid {
+.periodScroller {
   margin-top: 18px;
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(96px, 96px);
-  gap: 12px;
-  align-items: end;
   overflow-x: auto;
   overflow-y: hidden;
   padding-bottom: 8px;
@@ -721,22 +716,28 @@ input {
   -webkit-overflow-scrolling: touch;
 }
 
-.periodGrid::-webkit-scrollbar {
+.periodScroller::-webkit-scrollbar {
   height: 10px;
 }
 
-.periodGrid::-webkit-scrollbar-track {
+.periodScroller::-webkit-scrollbar-track {
   background: rgba(217, 226, 236, 0.55);
   border-radius: 999px;
 }
 
-.periodGrid::-webkit-scrollbar-thumb {
+.periodScroller::-webkit-scrollbar-thumb {
   background: rgba(16, 42, 67, 0.24);
   border-radius: 999px;
 }
 
-.periodGrid::-webkit-scrollbar-thumb:hover {
+.periodScroller::-webkit-scrollbar-thumb:hover {
   background: rgba(16, 42, 67, 0.36);
+}
+
+.periodGrid {
+  display: grid;
+  gap: 12px;
+  align-items: end;
 }
 
 .periodBar,
