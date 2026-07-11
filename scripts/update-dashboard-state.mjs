@@ -123,6 +123,18 @@ function currentBerlinDate() {
   }).format(new Date());
 }
 
+function dateRange(fromDate, toDate) {
+  const start = Date.parse(`${fromDate}T00:00:00Z`);
+  const end = Date.parse(`${toDate}T00:00:00Z`);
+  if (!Number.isFinite(start) || !Number.isFinite(end) || start > end) return [];
+
+  const dates = [];
+  for (let cursor = start; cursor <= end; cursor += 24 * 60 * 60 * 1000) {
+    dates.push(new Date(cursor).toISOString().slice(0, 10));
+  }
+  return dates;
+}
+
 function ledgerAsOfText() {
   const asOf = String(apiCostLedger().as_of || "").trim();
   return asOf || null;
@@ -794,19 +806,22 @@ function periodState() {
   const allCosts = costBreakdown(allEntries);
   const competitorSpend = competitorPurchaseSpendEntries();
   const productOutcomes = currentProductOutcomes();
-  const dates = Array.from(new Set([
+  const activityDates = Array.from(new Set([
     ...allEntries.map(ledgerEntryDate).filter(Boolean),
     ...competitorSpend.map((entry) => entry.date).filter(Boolean),
     ...productOutcomes.map((entry) => entry.date).filter(Boolean),
     today,
   ])).sort();
+  const fromDate = activityDates[0] || today;
+  const toDate = activityDates[activityDates.length - 1] || today;
+  const dates = dateRange(fromDate, toDate);
   const totalCompetitorSpend = sumLedger(competitorSpend.map((entry) => ({ amount_usd: entry.amount_usd })));
   const totalSpendUsd = Number((allCosts.totalApiCostUsd + totalCompetitorSpend).toFixed(2));
 
   return {
     asOf: nowBerlin(),
-    from: dates[0] || today,
-    to: dates[dates.length - 1] || today,
+    from: fromDate,
+    to: toDate,
     dataMode: "event-log",
     flowVersion: activeFlowId,
     flowTimeline: stageTimeline,

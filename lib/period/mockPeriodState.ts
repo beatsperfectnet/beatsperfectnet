@@ -205,6 +205,26 @@ export const mockPeriodState: PeriodState = {
       otherSpendUsd: 16.79
     },
     {
+      date: "2026-07-09",
+      launchedCount: 0,
+      readyForLaunchCount: 0,
+      rejectedCount: 0,
+      totalSpendUsd: 0,
+      buildSpendUsd: 0,
+      governanceApiCostUsd: 0,
+      otherSpendUsd: 0
+    },
+    {
+      date: "2026-07-10",
+      launchedCount: 0,
+      readyForLaunchCount: 0,
+      rejectedCount: 0,
+      totalSpendUsd: 0,
+      buildSpendUsd: 0,
+      governanceApiCostUsd: 0,
+      otherSpendUsd: 0
+    },
+    {
       date: "2026-07-11",
       launchedCount: 0,
       readyForLaunchCount: 1,

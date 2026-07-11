@@ -467,3 +467,28 @@ test("today mappings only expose active FLOW-007 step ids", () => {
   assert.doesNotMatch(dashboardUpdater, /activeFlowId === "FLOW-007" \? "04_product_architecture_contract"/);
   assert.match(dashboardUpdater, /activeFlowId === "FLOW-007" \? "07_product_architecture_contract"/);
 });
+
+test("period dashboard keeps continuous zero-activity days", () => {
+  const dashboard = load("records/dashboard_state.yaml");
+  const buckets = dashboard.period.buckets;
+  const bucketByDate = new Map(buckets.map((bucket) => [String(bucket.date), bucket]));
+
+  for (let index = 1; index < buckets.length; index += 1) {
+    const previous = Date.parse(`${buckets[index - 1].date}T00:00:00Z`);
+    const current = Date.parse(`${buckets[index].date}T00:00:00Z`);
+    assert.equal(current - previous, 24 * 60 * 60 * 1000);
+  }
+
+  for (const date of ["2026-07-09", "2026-07-10"]) {
+    assert.deepEqual(bucketByDate.get(date), {
+      date,
+      launchedCount: 0,
+      readyForLaunchCount: 0,
+      rejectedCount: 0,
+      totalSpendUsd: 0,
+      buildSpendUsd: 0,
+      governanceApiCostUsd: 0,
+      otherSpendUsd: 0,
+    });
+  }
+});
