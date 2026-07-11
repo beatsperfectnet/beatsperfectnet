@@ -1,0 +1,33 @@
+postmortem:
+  postmortem_id: PMR-0001
+  source_failure_id: FAIL-0001
+  candidate_id: C-007-001
+  product_id: P-C-007-001
+  run_id: PR-FLOW-007-001
+  flow_version: FLOW-007
+  learning_loop_ref: operating-system/governance/11_learning_loop.yaml
+  seriousness: serious_failure
+  required_model: gpt-5.5
+  what_failed: FLOW-007 let a post-mortem-seeded Small Seller Reorder Planner thesis behave like a target product instead of forcing the category evidence to choose the product direction first.
+  root_cause: The run carried forward a failure-derived product hypothesis without a mandatory post-failure closure loop, so benchmark effort and model routing were spent on validating a premise that should have been blocked or reset earlier by flow controls.
+  failure_type:
+    primary: governance
+    contributing_types:
+      - architecture
+      - model_routing
+      - validator
+      - memory
+  earliest_missed_blocking_stage: pre_run
+  original_failure_stage: 02_competitor_product_autopsy_final_review
+  product_repair_allowed: false
+  flow_patch_required: true
+  company_memory_update_required: true
+  evidence_refs:
+    - records/pilot_runs/PR-FLOW-007-001.yaml
+    - records/flow_reviews/FLOW-007-vs-FLOW-006-market-evidence-review-2026-06-29.yaml
+    - records/competitor_autopsy/AUT-C-007-001.yaml
+  closure_gates:
+    earliest_missed_blocking_stage_required: true
+    root_cause_required: true
+    failure_type_required: true
+  status: FINDINGS_EXTRACTION_REQUIRED

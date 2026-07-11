@@ -1,0 +1,22 @@
+finding:
+  finding_id: FND-0001
+  source_failure_id: FAIL-0001
+  source_postmortem_id: PMR-0001
+  candidate_id: C-007-001
+  product_id: P-C-007-001
+  flow_version: FLOW-007
+  finding_type: governance
+  severity: high
+  failure_pattern: Same-lane systemic failure surfaced during benchmark review because no mandatory after-failure closure loop blocked the next similar run before market evidence.
+  evidence_refs:
+    - records/pilot_runs/PR-FLOW-007-001.yaml
+    - records/flow_reviews/FLOW-007-vs-FLOW-006-market-evidence-review-2026-06-29.yaml
+  target_control: operating-system/flow/FLOW-007.yaml pre_run and on_failure contracts
+  required_patch: Add LEARN-001 pre-run same-lane blocker and post-failure hook so serious failures cannot be rerun before closure.
+  validation_test: Dry replay of the failed C-007-001 premise must now block at pre_run before market evidence or competitor work starts.
+  closure_requirement: patch_applied_and_regression_replay_passed
+  owner_gate: pre_run
+  hard_rules:
+    governance_findings_cannot_be_closed_by_rebuilding_an_artifact: true
+    build_findings_cannot_be_closed_by_adding_vague_governance_wording: true
+  status: FLOW_PATCH_REQUIRED

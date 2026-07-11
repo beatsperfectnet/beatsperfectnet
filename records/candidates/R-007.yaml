@@ -1,0 +1,50 @@
+run_id: R-007
+source_idea_run: R-007
+queue_ordering: FIFO
+pilot_run_ref: records/pilot_runs/PR-FLOW-007-001.yaml
+candidates:
+  - candidate_id: C-007-001
+    pilot_number: 1
+    idea_ref: I-001
+    product_thesis: Small Seller Reorder Planner workbook for small physical-product sellers deciding what to reorder, when to reorder it, and how much to buy before stock runs out.
+    marketplace: Etsy
+    current_stage: stopped_for_flow_policy_review_before_architecture
+    original_flow_contract_ref: operating-system/flow/FLOW-007.yaml
+    model_policy: aggressive_frontier_pilot
+    frontier_model: gpt-5.5
+    prohibited_models:
+      - gpt-5.5-pro
+      - gpt-5.4-pro
+      - any pro model
+    stage_iteration: 1
+    cumulative_prompt_tokens: 0
+    cumulative_completion_tokens: 0
+    cumulative_total_tokens: 0
+    cumulative_api_cost_usd: 4.75
+    pricing_snapshot_ref: null
+    generation_budget_usd: 40
+    shared_research_cost_usd: 0
+    generation_api_and_tool_cost_usd: 4.75
+    competitor_purchase_cost_usd: unknown
+    remaining_generation_budget_usd: 35.25
+    generation_budget_pass: true
+    market_evidence_ref: records/market_evidence/ME-C-007-001.yaml
+    market_evidence_status: PASS
+    competitor_autopsy_ref: records/competitor_autopsy/AUT-C-007-001.yaml
+    competitor_autopsy_status: BENCHMARK_INSUFFICIENT
+    product_architecture_contract_ref: null
+    scenario_matrix_ref: null
+    build_readiness_review_ref: null
+    product_spec_ref: null
+    build_manifest_ref: null
+    artifact_qa_ref: null
+    blind_buyer_walkthrough_ref: null
+    listing_spec_ref: null
+    launch_gate_ref: null
+    build_reached: false
+    artifact_generated: false
+    external_publish_status: not_run
+    stop_status: BENCHMARK_INSUFFICIENT
+    stop_reason: E-commerce template delivered workbook lacks claimed Reorder Planner, lead time, safety stock, sales velocity, suggested reorder quantity, stockout date, and reorder-by date.
+    policy_review_stop_ref: records/flow_reviews/FLOW-007-vs-FLOW-006-market-evidence-review-2026-06-29.yaml
+    next_recommended_action: Revise or clarify FLOW-007 pre-architecture market evidence and competitor selection sequence before resuming; do not buy another competitor or build from the current pre-hypothesized product direction.

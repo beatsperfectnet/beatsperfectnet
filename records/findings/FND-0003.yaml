@@ -1,0 +1,22 @@
+finding:
+  finding_id: FND-0003
+  source_failure_id: FAIL-0001
+  source_postmortem_id: PMR-0001
+  candidate_id: C-007-001
+  product_id: P-C-007-001
+  flow_version: FLOW-007
+  finding_type: validator
+  severity: high
+  failure_pattern: The contracts had company-memory preflight and findings ledger coverage, but no validator/schema/test requirement that a serious failure must produce intake, patch, replay, and closure records before the next same-lane run.
+  evidence_refs:
+    - operating-system/execution/validators/flow-007-validator.mjs
+    - operating-system/execution/tests/flow-007.test.mjs
+  target_control: operating-system/specs/SCHEMA-007.yaml plus validator and test coverage
+  required_patch: Add LEARN-001 schemas, statuses, required templates, dry-case records, and assertions that active memory cannot activate without passed regression replay.
+  validation_test: Validator and tests must fail if LEARN-001 files, statuses, or dry-case closure proof are missing.
+  closure_requirement: schema_validator_and_test_controls_updated_and_regression_replay_passed
+  owner_gate: 07_active_guard_validation
+  hard_rules:
+    governance_findings_cannot_be_closed_by_rebuilding_an_artifact: true
+    build_findings_cannot_be_closed_by_adding_vague_governance_wording: true
+  status: FLOW_PATCH_REQUIRED

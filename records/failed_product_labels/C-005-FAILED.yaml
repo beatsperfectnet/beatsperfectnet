@@ -1,0 +1,36 @@
+failed_product_label:
+  label_id: C-005-FAILED
+  candidate_id: C-005-001
+  product_lane_id: inventory_tracker_reorder_workbook
+  canonical_status: FAILED_PRODUCT_ASSET
+  product_name: Inventory Tracker Studio
+  flow_version: FLOW-007
+  failure_class: governance_wrapper_without_material_product_delta
+  failure_summary: C-005 produced a FLOW-007-governed package around substantially the same buyer-facing workbook as repaired C-004, with the same core sheets, same capacity, same formula count, same decision outputs, and weaker seed-data behavior for the 30-day reorder demo.
+  failed_asset_refs:
+    - archive/candidates/C-005-001/C-005-001-FAILED/product/Inventory-Tracker-Studio.xlsx
+    - archive/candidates/C-005-001/C-005-001-FAILED/product/Inventory-Tracker-Studio-google-sheets-import.xlsx
+  supporting_record_refs:
+    - portfolio/rejected/C-005-001/manifest.yaml
+    - records/validation/FLG-C-005-001.yaml
+    - company-memory/current-memory.md
+  exclusion_ref: operating-system/governance/product_lane_exclusions.yaml#inventory_tracker_reorder_workbook
+  future_build_input_policy:
+    may_be_used_as:
+      - failed_baseline
+      - anti_clone_input
+      - exclusion_match_evidence
+      - company_memory_finding_source
+    must_not_be_used_as:
+      - product_blueprint
+      - build_seed
+      - direct_repair_target_without_reopened_architecture
+      - proof_that_the_lane_is_build_ready
+    reopen_requires:
+      - explicit_human_reopen_record
+      - company_memory_preflight_acknowledges_failed_label
+      - material_product_delta_plan
+  status: ACTIVE_FAILED_LABEL
+  allowed_statuses:
+    - ACTIVE_FAILED_LABEL
+    - SUPERSEDED_BY_HUMAN_REOPEN

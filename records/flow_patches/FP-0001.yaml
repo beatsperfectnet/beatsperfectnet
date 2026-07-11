@@ -1,0 +1,28 @@
+flow_patch:
+  flow_patch_id: FP-0001
+  source_findings:
+    - FND-0001
+  candidate_id: C-007-001
+  flow_version: FLOW-007
+  files_to_change:
+    - operating-system/flow/FLOW-007.yaml
+    - operating-system/flow/FLOW-007.md
+    - operating-system/governance/05_governance_rules.yaml
+  exact_rules_to_add:
+    - FLOW-007 serious failures trigger LEARN-001 on failure.
+    - Same-lane runs are blocked until learning closure exists.
+    - Founder launch rejection requires LEARN-001.
+  affected_gates:
+    - pre_run
+    - on_failure
+    - 17_founder_launch_gate
+  expected_regression_behavior: The original C-007-001 premise is blocked at pre_run instead of surfacing later at competitor autopsy final review.
+  failed_case_that_must_be_blocked: Small Seller Reorder Planner lane reuse without learning closure and without market-derived reset.
+  changed_files:
+    - operating-system/flow/FLOW-007.yaml
+    - operating-system/flow/FLOW-007.md
+    - operating-system/governance/05_governance_rules.yaml
+  gate:
+    patch_targets_required: true
+    expected_regression_behavior_required: true
+  status: REGRESSION_REPLAY_REQUIRED

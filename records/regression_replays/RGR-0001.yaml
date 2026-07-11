@@ -1,0 +1,34 @@
+regression_replay:
+  replay_id: RGR-0001
+  source_failure_id: FAIL-0001
+  source_postmortem_id: PMR-0001
+  source_findings:
+    - FND-0001
+    - FND-0002
+    - FND-0003
+    - FND-0004
+  source_flow_patches:
+    - FP-0001
+    - FP-0002
+    - FP-0003
+    - FP-0004
+  candidate_id: C-007-001
+  flow_version: FLOW-007
+  replay_mode: dry_run
+  original_failure_stage: 02_competitor_product_autopsy_final_review
+  expected_block_stage: pre_run
+  failed_case_summary: Recreate the original C-007-001 premise where the Small Seller Reorder Planner lane re-enters FLOW-007 from a failure-seeded product thesis before market evidence fully resets the product direction.
+  should_reach_build: false
+  build_performed: false
+  replay_steps:
+    - Read open failure intake, postmortem, findings, patches, and company-memory active guard.
+    - Simulate next same-lane run using the old C-007-001 product thesis and lane match terms.
+    - Run company-memory preflight with active memory rule mapping.
+    - Verify same-lane closure and must_block_if conditions trigger before market evidence.
+  expected_behavior: The run is blocked at pre_run because LEARN-001 now requires an active memory guard with owner gate mapping, and the old hypothesis-locked failed case matches the must_block_if conditions.
+  actual_behavior: Dry replay blocks the failed case at pre_run, no market evidence or competitor work starts, and no build is performed.
+  pass_fail: PASS
+  gate:
+    failed_case_must_be_blocked_earlier_than_original_failure: true
+    no_build_allowed_during_regression_replay_if_expected_no_build: true
+  status: PASS

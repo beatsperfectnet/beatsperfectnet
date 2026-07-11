@@ -1,0 +1,22 @@
+finding:
+  finding_id: FND-0004
+  source_failure_id: FAIL-0001
+  source_postmortem_id: PMR-0001
+  candidate_id: C-007-001
+  product_id: P-C-007-001
+  flow_version: FLOW-007
+  finding_type: memory
+  severity: high
+  failure_pattern: The company recorded historical lessons, but lacked a compact active guard proving the failed case would be blocked earlier on the next run.
+  evidence_refs:
+    - company-memory/current-memory.md
+    - operating-system/templates/company-memory-preflight-template.yaml
+  target_control: company-memory/current-memory.md active memory guard layer
+  required_patch: Add compact active memory entries with owner-gate mapping, must_block_if conditions, and regression-backed activation.
+  validation_test: Next-run preflight simulation must detect the new memory entry, map it to pre_run, and block the old C-007-001 premise earlier.
+  closure_requirement: active_memory_guard_added_after_passed_regression_replay
+  owner_gate: pre_run
+  hard_rules:
+    governance_findings_cannot_be_closed_by_rebuilding_an_artifact: true
+    build_findings_cannot_be_closed_by_adding_vague_governance_wording: true
+  status: FLOW_PATCH_REQUIRED

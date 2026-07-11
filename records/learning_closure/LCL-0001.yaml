@@ -1,0 +1,31 @@
+learning_closure:
+  closure_id: LCL-0001
+  source_failure_id: FAIL-0001
+  source_postmortem_id: PMR-0001
+  source_findings:
+    - FND-0001
+    - FND-0002
+    - FND-0003
+    - FND-0004
+  source_flow_patches:
+    - FP-0001
+    - FP-0002
+    - FP-0003
+    - FP-0004
+  source_regression_replay: RGR-0001
+  company_memory_entry_id: MEM-LEARN-001-0001
+  next_run_preflight_validation:
+    same_lane: inventory_tracker_reorder_workbook
+    expected_memory_entry_detection: MEM-LEARN-001-0001 is applicable to the same failed lane and must be loaded during company-memory preflight.
+    expected_owner_gate: pre_run
+    expected_block_behavior: Block if the lane re-enters before closure, if the old failure pattern reappears, or if the active memory rule lacks owner-gate mapping.
+  closure_requirements:
+    failure_intake_exists: true
+    postmortem_exists: true
+    findings_extracted: true
+    governance_system_findings_have_patch_records: true
+    patches_applied: true
+    regression_replay_passed: true
+    company_memory_updated: true
+    next_same_lane_run_preflight_detects_memory_rule: true
+  status: FAILURE_CLOSED

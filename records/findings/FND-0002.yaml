@@ -1,0 +1,22 @@
+finding:
+  finding_id: FND-0002
+  source_failure_id: FAIL-0001
+  source_postmortem_id: PMR-0001
+  candidate_id: C-007-001
+  product_id: P-C-007-001
+  flow_version: FLOW-007
+  finding_type: model_routing
+  severity: high
+  failure_pattern: Serious failure analysis and regression proof were not first-class routed controls, so the company could patch files without a governed frontier post-mortem and replay pass.
+  evidence_refs:
+    - records/model_runs/MR-C-007-001.yaml
+    - records/flow_reviews/FLOW-007-vs-FLOW-006-market-evidence-review-2026-06-29.yaml
+  target_control: operating-system/specs/MODEL-007.yaml and operating-system/governance/09_stage_dispatch_007.yaml
+  required_patch: Route serious postmortems and learning-loop patch planning through frontier review, with explicit dry regression replay and active-guard validation routing.
+  validation_test: Learning-loop routing must require gpt-5.5 for serious postmortem and patch planning, and a dry regression replay path with should_reach_build false for this case.
+  closure_requirement: routed_controls_updated_and_regression_replay_passed
+  owner_gate: 01_postmortem
+  hard_rules:
+    governance_findings_cannot_be_closed_by_rebuilding_an_artifact: true
+    build_findings_cannot_be_closed_by_adding_vague_governance_wording: true
+  status: FLOW_PATCH_REQUIRED

@@ -1,0 +1,31 @@
+failure_intake:
+  failure_id: FAIL-0001
+  product_id: P-C-007-001
+  candidate_id: C-007-001
+  run_id: PR-FLOW-007-001
+  flow_version: FLOW-007
+  learning_loop_ref: operating-system/governance/11_learning_loop.yaml
+  failure_stage: 02_competitor_product_autopsy_final_review
+  failure_status: BENCHMARK_INSUFFICIENT
+  trigger_source:
+    status: SAME_FAILED_PRODUCT_CLASS_BLOCKED
+    human_labels:
+      - flow_failed_to_block
+      - same_failed_product_class
+  human_notes: The pilot stayed too close to the Small Seller Reorder Planner hypothesis and consumed benchmark effort before the flow forced a market-derived product reset.
+  evidence_refs:
+    - records/pilot_runs/PR-FLOW-007-001.yaml
+    - records/flow_reviews/FLOW-007-vs-FLOW-006-market-evidence-review-2026-06-29.yaml
+    - records/competitor_autopsy/AUT-C-007-001.yaml
+    - records/market_evidence/ME-C-007-001.yaml
+  model_ledger_refs:
+    - records/model_runs/MR-C-007-001.yaml
+  artifact_refs: []
+  cost_refs:
+    - records/pilot_runs/PR-FLOW-007-001.yaml#cost_control_state
+  same_lane_blocking_scope:
+    lane_id: inventory_tracker_reorder_workbook
+    block_new_runs_until_learning_closure: true
+  gate:
+    failure_record_required: true
+  status: POSTMORTEM_REQUIRED
