@@ -1,9 +1,9 @@
 import type { PeriodState } from "./types";
 
 export const mockPeriodState: PeriodState = {
-  asOf: "2026-07-11 11:41 GMT+2",
+  asOf: "2026-07-11 16:45 GMT+2",
   from: "2026-06-22",
-  to: "2026-07-08",
+  to: "2026-07-11",
   dataMode: "mock",
   flowVersion: "FLOW-007",
   flowTimeline: [
@@ -26,12 +26,12 @@ export const mockPeriodState: PeriodState = {
   ],
   totals: {
     launchedCount: 0,
-    readyForLaunchCount: 5,
+    readyForLaunchCount: 6,
     rejectedCount: 6,
-    totalSpendUsd: 554.1,
-    buildSpendUsd: 215.8,
-    governanceApiCostUsd: 221.7,
-    otherSpendUsd: 116.6
+    totalSpendUsd: 590.7,
+    buildSpendUsd: 231.15,
+    governanceApiCostUsd: 228.5,
+    otherSpendUsd: 131.05
   },
   buckets: [
     {
@@ -203,6 +203,16 @@ export const mockPeriodState: PeriodState = {
       buildSpendUsd: 13.7,
       governanceApiCostUsd: 0,
       otherSpendUsd: 16.79
+    },
+    {
+      date: "2026-07-11",
+      launchedCount: 0,
+      readyForLaunchCount: 1,
+      rejectedCount: 0,
+      totalSpendUsd: 36.6,
+      buildSpendUsd: 15.35,
+      governanceApiCostUsd: 6.8,
+      otherSpendUsd: 14.45
     }
   ]
 };

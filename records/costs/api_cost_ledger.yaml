@@ -15,6 +15,7 @@ api_cost_ledger:
     - Andrey reported 2026-06-29 product API spend as 10.00 USD, governance API spend as 51.00 USD, and additional other spend as 6.00 USD for the operating day.
     - Andrey reported 2026-07-01 product API spend as 9.00 USD, governance API spend as 31.80 USD, competitor purchase spend as 3.50 USD, and one rejected product for the operating day.
     - Andrey set Jul 02 build API cost at 9.00 USD for C-013-001, 19.70 USD for rejected C-014-001, and 21.50 USD for C-015-001, plus 8.50 USD governance API spend for the operating day. Exact competitor purchases remain tracked from approval records at 11.98 USD, 4.40 USD, and 30.18 USD.
+    - Andrey reported Jul 11 C-018-001 as Ready with 15.35 USD product API spend, 14.45 USD competitor purchase spend, and 6.80 USD governance API spend for the operating day.
   entries:
     - entry_id: API-2026-06-22-C001-product
       date: 2026-06-22
@@ -250,6 +251,33 @@ api_cost_ledger:
       source: manual_human_report
       confidence: reported_by_human
       notes: Reported Jul 02 governance API spend for the operating day.
+    - entry_id: API-2026-07-11-C018-product
+      date: 2026-07-11
+      bucket: product_generation
+      candidate_id: C-018-001
+      product_name: Attendance Action Board
+      amount_usd: 15.35
+      source: manual_human_report
+      confidence: reported_by_human
+      notes: Reported Jul 11 product API spend for the launch-ready C-018-001 Attendance Action Board.
+    - entry_id: API-2026-07-11-governance-flow007
+      date: 2026-07-11
+      bucket: governance
+      candidate_id: C-018-001
+      product_name: Attendance Action Board
+      amount_usd: 6.80
+      source: manual_human_report
+      confidence: reported_by_human
+      notes: Reported Jul 11 governance API spend for the C-018-001 FLOW-007 run and dashboard update.
+    - entry_id: API-2026-07-11-C018-competitor-purchase
+      date: 2026-07-11
+      bucket: reconciliation
+      candidate_id: C-018-001
+      product_name: Attendance Action Board
+      amount_usd: 14.45
+      source: manual_human_report
+      confidence: reported_by_human
+      notes: Reported Jul 11 competitor purchase spend for C-018-001.
   human_escalations:
     - escalation_id: HE-2026-06-26-FLOW-001
       date: 2026-06-26
