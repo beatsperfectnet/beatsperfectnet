@@ -70,6 +70,7 @@ Good enough means:
 - launched within constraints
 - capable of generating real outcome data
 - product decisions stay anchored to observed market evidence, not copied competitor assets
+- public dashboard, counts, and spend reporting reconcile against source records when exposed on the company site
 
 Good Enough build philosophy:
 
@@ -81,6 +82,7 @@ product:
 
 improvements:
 - addresses major recurring actionable complaints
+- correct recurring public-state, totals, or reporting drift before cosmetic polish
 
 forbidden:
 - add unsupported claims

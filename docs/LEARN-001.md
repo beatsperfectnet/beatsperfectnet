@@ -35,6 +35,24 @@ Example pattern:
 
 The company should not treat "artifact ended up good" as proof that the active flow worked well enough.
 
+## Operational Truth Failures
+
+LEARN-001 also applies when the public operating surface reports the wrong truth even if no candidate rebuild is happening.
+
+Example pattern:
+
+- `public_outcome: READY_COUNT_UNDERSTATED`
+- `process_outcome: PUBLIC_STATE_DRIFT`
+- `learning_required: true`
+
+Typical cases:
+
+- a one-day bucket edit leaves cumulative totals wrong
+- `records/dashboard_state.yaml` and fallback state disagree
+- a public snapshot or fallback reports a terminal count/spend state that no longer matches source records
+
+These are governance/process failures because the company is publishing the wrong operating truth.
+
 ## When LEARN-001 Triggers
 
 - `BUILT_QA_FAILED_ARCHITECTURE`
@@ -54,6 +72,7 @@ Additional process-gap triggers:
 - `human_input_used_as_scope_evidence_without_new_evidence`
 - `candidate_salvaged_but_process_failed`
 - `launch_ready_after_human_product_management_intervention`
+- `public_state_drift_detected`
 
 ## Hard Rules
 
@@ -66,6 +85,7 @@ Additional process-gap triggers:
 - Human governance correction is not market evidence.
 - If human intervention upgrades the product from an intermediate domain layer to the real-world decision layer without new evidence, the flow missed a domain-evidence implication.
 - A mathematically correct sub-model is not enough when domain evidence implies a higher decision layer.
+- Public dashboard and fallback state are governed truth; drift between them counts as process failure, not cosmetic cleanup.
 
 ## Required Record Chain
 

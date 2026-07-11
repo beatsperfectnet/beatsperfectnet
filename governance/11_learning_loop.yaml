@@ -11,6 +11,7 @@ learning_loop:
     - human_governance_correction_is_not_market_evidence
     - human_product_management_intervention_without_new_evidence_opens_process_learning
     - intermediate_domain_metrics_are_not_sufficient_when_domain_evidence_implies_terminal_decision_outputs
+    - public_dashboard_and_fallback_state_are_governed_truth_and_drift_counts_as_process_failure
   trigger_on_status:
     - BUILT_QA_FAILED_ARCHITECTURE
     - BUILT_QA_FAILED_IMPLEMENTATION_AFTER_REPAIR
@@ -25,6 +26,7 @@ learning_loop:
     - HUMAN_INPUT_USED_AS_SCOPE_EVIDENCE
     - DOMAIN_EVIDENCE_UNDERFIT
     - CANDIDATE_SALVAGED_BUT_PROCESS_FAILED
+    - PUBLIC_STATE_DRIFT
   trigger_on_human_label:
     - epic_fail
     - founder_rejected
@@ -36,6 +38,7 @@ learning_loop:
     - human_input_used_as_scope_evidence_without_new_evidence
     - candidate_salvaged_but_process_failed
     - launch_ready_after_human_product_management_intervention
+    - public_state_drift_detected
   output_templates:
     failure_intake: templates/failure-intake-template.yaml
     postmortem: templates/postmortem-template.yaml

@@ -311,6 +311,7 @@ test("LEARN-001 closes serious FLOW-007 failures through replay-backed active gu
   const replay = load("records/regression_replays/RGR-0001.yaml").regression_replay;
   const closure = load("records/learning_closure/LCL-0001.yaml").learning_closure;
   const companyMemory = fs.readFileSync(path.join(repoRoot, "docs/COMPANY-MEMORY.md"), "utf8");
+  const companyPrinciples = fs.readFileSync(path.join(repoRoot, "company.md"), "utf8");
 
   assert.equal(flow.pre_run.learning_loop_ref, "governance/11_learning_loop.yaml");
   assert.equal(flow.pre_run.gate.open_applicable_learning_failures_block_same_lane_run, true);
@@ -346,6 +347,8 @@ test("LEARN-001 closes serious FLOW-007 failures through replay-backed active gu
   assert.equal(model.learning_loop_routing.serious_failure_postmortem.requested_model, "gpt-5.5");
   assert.equal(pilotPolicy.learning_loop.required_on_serious_failure, "LEARN-001");
   assert.ok(learningLoop.hard_rules.includes("the_company_has_not_learned_until_the_same_failed_case_is_blocked_earlier"));
+  assert.ok(learningLoop.hard_rules.includes("public_dashboard_and_fallback_state_are_governed_truth_and_drift_counts_as_process_failure"));
+  assert.ok(learningLoop.trigger_on_process_outcome.includes("PUBLIC_STATE_DRIFT"));
 
   assert.equal(failure.candidate_id, "C-007-001");
   assert.equal(postmortem.earliest_missed_blocking_stage, "pre_run");
@@ -355,6 +358,8 @@ test("LEARN-001 closes serious FLOW-007 failures through replay-backed active gu
   assert.equal(replay.pass_fail, "PASS");
   assert.equal(closure.status, "FAILURE_CLOSED");
   assert.match(companyMemory, /MEM-LEARN-001-0001/);
+  assert.match(companyMemory, /FLOW-007 Patch - Dashboard State Reconciliation And Fallback Parity/);
+  assert.match(companyPrinciples, /correct recurring public-state, totals, or reporting drift before cosmetic polish/);
 });
 
 test("FLOW-007 first three pilots require aggressive gpt-5.5 frontier gates", () => {

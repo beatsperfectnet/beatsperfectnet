@@ -671,6 +671,39 @@ Evidence:
 - `records/regression_replays/RGR-0001.yaml`
 - `records/learning_closure/LCL-0001.yaml`
 
+### FLOW-007 Patch - Dashboard State Reconciliation And Fallback Parity
+
+Date: 2026-07-11
+
+Reason: A Jul 8 Period update initially made the edited day look correct while leaving the cumulative public tally at `4 READY` instead of `5 READY`. The missing historical ready count on Jun 24 had not been reconciled, and the site can render from either `records/dashboard_state.yaml` or the fallback `lib/period/mockPeriodState.ts`, so drift between those files can publish conflicting truths.
+
+Learning:
+
+- Public dashboard state and fallback state are governed operating truth, not throwaway mock data.
+- A one-day reporting patch is incomplete until cumulative totals reconcile against the full period history.
+- Historical bucket integrity matters as much as the changed day because READY/rejected/spend totals are cumulative stories, not isolated cells.
+- Snapshot/fallback parity must be preserved whenever public metrics are edited.
+
+Changed:
+
+- Corrected the Period history so Jul 8 stays `Ready 1` while the cumulative tally remains `5 READY`.
+- Synced `records/dashboard_state.yaml` and `lib/period/mockPeriodState.ts` to the same period totals and daily buckets.
+- Updated LEARN-001 and the active learning loop so public-state drift is classified as a real process failure instead of cosmetic cleanup.
+
+Prevents:
+
+- Understating READY counts or spend after seemingly small dashboard edits.
+- Deploys that show one truth when the snapshot file exists and another when the app falls back.
+- Treating public reporting drift as polish instead of governance work.
+
+Evidence:
+
+- `records/dashboard_state.yaml`
+- `lib/period/mockPeriodState.ts`
+- `lib/dashboard/loadDashboardState.ts`
+- `docs/LEARN-001.md`
+- `governance/11_learning_loop.yaml`
+
 ## Open Backfill Items
 
 - Reconstruct FLOW-003 reason from older history or records.

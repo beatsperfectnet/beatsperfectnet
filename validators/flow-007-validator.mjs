@@ -40,6 +40,7 @@ export function validateFlow007Contracts() {
   const validation = loadYaml("records/flow_007_validation/F7V-C-004-001.yaml").flow_007_validation;
   const failureCase = loadText("records/failure-cases/C-004-001-FLOW-006-postmortem.md");
   const companyMemoryText = loadText("docs/COMPANY-MEMORY.md");
+  const companyPrinciplesText = loadText("company.md");
   const c004FailedLabel = loadYaml("records/failed_product_labels/C-004-FAILED.yaml").failed_product_label;
   const c005FailedLabel = loadYaml("records/failed_product_labels/C-005-FAILED.yaml").failed_product_label;
   const failureIntakeTemplate = loadYaml("templates/failure-intake-template.yaml").failure_intake;
@@ -86,6 +87,10 @@ export function validateFlow007Contracts() {
   assertIncludes(governance.flow_rules, "serious_flow_failures_must_trigger_LEARN_001_before_same_lane_repeat", "Governance must require LEARN-001 on serious failures");
   assertIncludes(governance.flow_rules, "active_company_memory_entries_must_map_to_owner_gate", "Governance must require active memory owner-gate mapping");
   assertIncludes(governance.flow_rules, "memory_entry_without_passed_regression_replay_cannot_be_ACTIVE", "Governance must block unproven active memory entries");
+  assertIncludes(learningLoop.hard_rules, "public_dashboard_and_fallback_state_are_governed_truth_and_drift_counts_as_process_failure", "LEARN-001 must treat public-state drift as a process failure");
+  assertIncludes(learningLoop.trigger_on_process_outcome, "PUBLIC_STATE_DRIFT", "LEARN-001 must trigger on public-state drift");
+  assert(/FLOW-007 Patch - Dashboard State Reconciliation And Fallback Parity/.test(companyMemoryText), "Company memory must record the dashboard reconciliation lesson");
+  assert(/correct recurring public-state, totals, or reporting drift before cosmetic polish/.test(companyPrinciplesText), "Company principles must treat reporting drift as an improvement priority");
 
   for (const relativePath of [
     "docs/FLOW-007.md",
