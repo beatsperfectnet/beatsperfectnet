@@ -182,20 +182,20 @@ today:
     recommendedAction: ""
     governanceFile: governance/09_stage_dispatch_007.yaml
 period:
-  asOf: 2026-07-07 19:36 GMT+2
+  asOf: 2026-07-11 11:41 GMT+2
   from: 2026-06-22
-  to: 2026-07-07
+  to: 2026-07-08
   dataMode: event-log
   flowVersion: FLOW-007
   flowTimeline: *a1
   totals:
     launchedCount: 0
-    readyForLaunchCount: 4
+    readyForLaunchCount: 5
     rejectedCount: 6
-    totalSpendUsd: 523.61
-    buildSpendUsd: 202.1
+    totalSpendUsd: 554.1
+    buildSpendUsd: 215.8
     governanceApiCostUsd: 221.7
-    otherSpendUsd: 99.81
+    otherSpendUsd: 116.6
   buckets:
     - date: 2026-06-22
       launchedCount: 0
@@ -325,3 +325,11 @@ period:
       buildSpendUsd: 6.5
       governanceApiCostUsd: 18
       otherSpendUsd: 3.3
+    - date: 2026-07-08
+      launchedCount: 0
+      readyForLaunchCount: 1
+      rejectedCount: 0
+      totalSpendUsd: 30.49
+      buildSpendUsd: 13.7
+      governanceApiCostUsd: 0
+      otherSpendUsd: 16.79

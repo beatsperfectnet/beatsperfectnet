@@ -1,9 +1,9 @@
 import type { PeriodState } from "./types";
 
 export const mockPeriodState: PeriodState = {
-  asOf: "2026-06-30 18:40 GMT+2",
+  asOf: "2026-07-11 11:41 GMT+2",
   from: "2026-06-22",
-  to: "2026-06-30",
+  to: "2026-07-08",
   dataMode: "mock",
   flowVersion: "FLOW-007",
   flowTimeline: [
@@ -26,12 +26,12 @@ export const mockPeriodState: PeriodState = {
   ],
   totals: {
     launchedCount: 0,
-    readyForLaunchCount: 2,
-    rejectedCount: 3,
-    totalSpendUsd: 346.25,
-    buildSpendUsd: 136.4,
-    governanceApiCostUsd: 163.4,
-    otherSpendUsd: 46.45
+    readyForLaunchCount: 5,
+    rejectedCount: 6,
+    totalSpendUsd: 554.1,
+    buildSpendUsd: 215.8,
+    governanceApiCostUsd: 221.7,
+    otherSpendUsd: 116.6
   },
   buckets: [
     {
@@ -123,6 +123,86 @@ export const mockPeriodState: PeriodState = {
       buildSpendUsd: 35,
       governanceApiCostUsd: 37,
       otherSpendUsd: 11
+    },
+    {
+      date: "2026-07-01",
+      launchedCount: 0,
+      readyForLaunchCount: 0,
+      rejectedCount: 1,
+      totalSpendUsd: 44.3,
+      buildSpendUsd: 9,
+      governanceApiCostUsd: 31.8,
+      otherSpendUsd: 3.5
+    },
+    {
+      date: "2026-07-02",
+      launchedCount: 0,
+      readyForLaunchCount: 2,
+      rejectedCount: 1,
+      totalSpendUsd: 105.26,
+      buildSpendUsd: 50.2,
+      governanceApiCostUsd: 8.5,
+      otherSpendUsd: 46.56
+    },
+    {
+      date: "2026-07-03",
+      launchedCount: 0,
+      readyForLaunchCount: 0,
+      rejectedCount: 0,
+      totalSpendUsd: 0,
+      buildSpendUsd: 0,
+      governanceApiCostUsd: 0,
+      otherSpendUsd: 0
+    },
+    {
+      date: "2026-07-04",
+      launchedCount: 0,
+      readyForLaunchCount: 0,
+      rejectedCount: 0,
+      totalSpendUsd: 0,
+      buildSpendUsd: 0,
+      governanceApiCostUsd: 0,
+      otherSpendUsd: 0
+    },
+    {
+      date: "2026-07-05",
+      launchedCount: 0,
+      readyForLaunchCount: 0,
+      rejectedCount: 0,
+      totalSpendUsd: 0,
+      buildSpendUsd: 0,
+      governanceApiCostUsd: 0,
+      otherSpendUsd: 0
+    },
+    {
+      date: "2026-07-06",
+      launchedCount: 0,
+      readyForLaunchCount: 0,
+      rejectedCount: 0,
+      totalSpendUsd: 0,
+      buildSpendUsd: 0,
+      governanceApiCostUsd: 0,
+      otherSpendUsd: 0
+    },
+    {
+      date: "2026-07-07",
+      launchedCount: 0,
+      readyForLaunchCount: 0,
+      rejectedCount: 1,
+      totalSpendUsd: 27.8,
+      buildSpendUsd: 6.5,
+      governanceApiCostUsd: 18,
+      otherSpendUsd: 3.3
+    },
+    {
+      date: "2026-07-08",
+      launchedCount: 0,
+      readyForLaunchCount: 1,
+      rejectedCount: 0,
+      totalSpendUsd: 30.49,
+      buildSpendUsd: 13.7,
+      governanceApiCostUsd: 0,
+      otherSpendUsd: 16.79
     }
   ]
 };
