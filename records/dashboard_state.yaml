@@ -182,20 +182,20 @@ today:
     recommendedAction: ""
     governanceFile: governance/09_stage_dispatch_007.yaml
 period:
-  asOf: 2026-07-11 16:45 GMT+2
+  asOf: 2026-07-17 19:46 GMT+2
   from: 2026-06-22
-  to: 2026-07-11
+  to: 2026-07-17
   dataMode: event-log
   flowVersion: FLOW-007
   flowTimeline: *a1
   totals:
     launchedCount: 0
-    readyForLaunchCount: 6
+    readyForLaunchCount: 7
     rejectedCount: 6
-    totalSpendUsd: 590.7
-    buildSpendUsd: 231.15
-    governanceApiCostUsd: 228.5
-    otherSpendUsd: 131.05
+    totalSpendUsd: 685.7
+    buildSpendUsd: 269.15
+    governanceApiCostUsd: 251.5
+    otherSpendUsd: 165.05
   buckets:
     - date: 2026-06-22
       launchedCount: 0
@@ -357,3 +357,51 @@ period:
       buildSpendUsd: 15.35
       governanceApiCostUsd: 6.8
       otherSpendUsd: 14.45
+    - date: 2026-07-12
+      launchedCount: 0
+      readyForLaunchCount: 0
+      rejectedCount: 0
+      totalSpendUsd: 0
+      buildSpendUsd: 0
+      governanceApiCostUsd: 0
+      otherSpendUsd: 0
+    - date: 2026-07-13
+      launchedCount: 0
+      readyForLaunchCount: 0
+      rejectedCount: 0
+      totalSpendUsd: 0
+      buildSpendUsd: 0
+      governanceApiCostUsd: 0
+      otherSpendUsd: 0
+    - date: 2026-07-14
+      launchedCount: 0
+      readyForLaunchCount: 0
+      rejectedCount: 0
+      totalSpendUsd: 0
+      buildSpendUsd: 0
+      governanceApiCostUsd: 0
+      otherSpendUsd: 0
+    - date: 2026-07-15
+      launchedCount: 0
+      readyForLaunchCount: 0
+      rejectedCount: 0
+      totalSpendUsd: 0
+      buildSpendUsd: 0
+      governanceApiCostUsd: 0
+      otherSpendUsd: 0
+    - date: 2026-07-16
+      launchedCount: 0
+      readyForLaunchCount: 0
+      rejectedCount: 0
+      totalSpendUsd: 0
+      buildSpendUsd: 0
+      governanceApiCostUsd: 0
+      otherSpendUsd: 0
+    - date: 2026-07-17
+      launchedCount: 0
+      readyForLaunchCount: 1
+      rejectedCount: 0
+      totalSpendUsd: 95
+      buildSpendUsd: 38
+      governanceApiCostUsd: 23
+      otherSpendUsd: 34
